@@ -20,26 +20,50 @@ export class AdminStack extends cdk.Stack {
             autoDeleteObjects: true,
         });
 
-        // 2. CloudFront Distribution
+        // 2. CloudFront Origin Access Control (OAC)
+        const oac = new cloudfront.CfnOriginAccessControl(this, 'AdminOAC', {
+            originAccessControlConfig: {
+                name: `AdminOAC-${this.node.addr}`,
+                originAccessControlOriginType: 's3',
+                signingBehavior: 'always',
+                signingProtocol: 'sigv4',
+            },
+        });
+
+        // 3. CloudFront Distribution using OAC
         const distribution = new cloudfront.Distribution(this, 'AdminPanelDist', {
             defaultBehavior: {
-                origin: new origins.S3Origin(siteBucket),
+                origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket, {
+                    originAccessControlId: oac.attrId,
+                }),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                functionAssociations: [], // Could add internal router if needed for SPA
+                functionAssociations: [],
             },
             errorResponses: [
                 {
                     httpStatus: 403,
                     responseHttpStatus: 200,
-                    responsePagePath: '/index.html', // SPA fallback
+                    responsePagePath: '/index.html',
                 },
                 {
                     httpStatus: 404,
                     responseHttpStatus: 200,
-                    responsePagePath: '/index.html', // SPA fallback
+                    responsePagePath: '/index.html',
                 },
             ],
         });
+
+        // 4. Add Bucket Policy for OAC
+        siteBucket.addToResourcePolicy(new cdk.aws_iam.PolicyStatement({
+            actions: ['s3:GetObject'],
+            resources: [siteBucket.arnForObjects('*')],
+            principals: [new cdk.aws_iam.ServicePrincipal('cloudfront.amazonaws.com')],
+            conditions: {
+                StringEquals: {
+                    'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${distribution.distributionId}`
+                }
+            }
+        }));
 
         // 3. Deploy site contents
         new s3deploy.BucketDeployment(this, 'DeployAdminPanel', {
