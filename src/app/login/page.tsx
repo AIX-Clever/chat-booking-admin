@@ -51,9 +51,8 @@ export default function LoginPage() {
             if (isSignedIn) {
                 router.push('/dashboard');
             } else {
-                // Handle challenges like NEW_PASSWORD_REQUIRED if needed in the future
                 console.log('Login incomplete, next step:', nextStep);
-                setError('Login incompleto. Revisa la consola.');
+                setError(`Login incompleto. Paso requerido: ${nextStep.signInStep}`);
             }
         } catch (err: any) {
             console.error('Login error:', err);

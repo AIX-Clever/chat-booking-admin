@@ -1,6 +1,7 @@
 'use client';
 
 import { Amplify } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import React, { ReactNode } from 'react';
 
@@ -23,6 +24,8 @@ Amplify.configure({
 
 export default function AmplifyProvider({ children }: { children: ReactNode }) {
     return (
-        <>{children}</>
+        <Authenticator.Provider>
+            {children}
+        </Authenticator.Provider>
     );
 }
