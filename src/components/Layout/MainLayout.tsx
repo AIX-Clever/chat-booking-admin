@@ -118,7 +118,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
     const router = useRouter();
-    const { authStatus, signOut } = useAuthenticator(context => [context.authStatus]);
+    const { authStatus, signOut } = useAuthenticator();
 
     React.useEffect(() => {
         if (authStatus === 'unauthenticated' && pathname !== '/login') {
