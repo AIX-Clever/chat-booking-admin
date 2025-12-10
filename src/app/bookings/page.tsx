@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import { generateClient } from 'aws-amplify/api';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING } from '../../graphql/queries';
 
 import {
     Typography,
@@ -27,7 +29,8 @@ import {
     InputAdornment,
     Paper,
     ToggleButton,
-    ToggleButtonGroup
+    ToggleButtonGroup,
+    CircularProgress
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BlockIcon from '@mui/icons-material/Block';
@@ -49,74 +52,18 @@ interface Booking {
     clientName: string;
     clientEmail: string;
     clientPhone?: string; // Added phone
-    serviceName: string;
+    serviceName: string; // Placeholder until we fetch service details or enrichment
     providerName: string;
     start: string; // ISO Date String
     status: BookingStatus;
     notes?: string;
+    providerId?: string;
 }
 
-// --- Mock Data ---
-const MOCK_BOOKINGS: Booking[] = [
-    {
-        id: '1',
-        clientName: 'Juan Pérez',
-        clientEmail: 'juan@example.com',
-        clientPhone: '5491112345678',
-        serviceName: 'Consulta General',
-        providerName: 'Dr. Mario Alvarez',
-        start: '2025-12-06T10:00:00',
-        status: 'confirmed',
-        notes: 'Primera visita, dolor de cabeza constante.'
-    },
-    {
-        id: '2',
-        clientName: 'María Rodríguez',
-        clientEmail: 'maria@example.com',
-        clientPhone: '5491187654321', // Added phone
-        serviceName: 'Dermatología',
-        providerName: 'Dr. Mario Alvarez',
-        start: '2025-12-06T11:30:00',
-        status: 'pending',
-    },
-    {
-        id: '3',
-        clientName: 'Carlos López',
-        clientEmail: 'carlos@example.com',
-        serviceName: 'Masaje Relajante',
-        providerName: 'Ana García',
-        start: '2025-12-07T15:00:00',
-        status: 'confirmed',
-        notes: 'Prefiere presión suave.'
-    },
-    {
-        id: '4',
-        clientName: 'Luisa Mendoza',
-        clientEmail: 'luisa@example.com',
-        serviceName: 'Limpieza Facial',
-        providerName: 'Ana García',
-        start: '2025-12-05T09:00:00',
-        status: 'completed',
-    },
-    {
-        id: '5',
-        clientName: 'Roberto Gómez',
-        clientEmail: 'roberto@example.com',
-        serviceName: 'Consulta General',
-        providerName: 'Dr. Mario Alvarez',
-        start: '2025-12-07T09:30:00',
-        status: 'confirmed',
-    },
-    {
-        id: '6',
-        clientName: 'Elena Torres',
-        clientEmail: 'elena@example.com',
-        serviceName: 'Pediatría',
-        providerName: 'Dr. Mario Alvarez',
-        start: '2025-12-25T14:00:00',
-        status: 'pending',
-    }
-];
+interface Provider {
+    providerId: string;
+    name: string;
+}
 
 const STATUS_COLORS: Record<BookingStatus, 'success' | 'warning' | 'error' | 'default' | 'info'> = {
     confirmed: 'success',
@@ -125,11 +72,14 @@ const STATUS_COLORS: Record<BookingStatus, 'success' | 'warning' | 'error' | 'de
     completed: 'default'
 };
 
-const PROVIDERS = ['All', 'Dr. Mario Alvarez', 'Ana García'];
 const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed'];
 
+const client = generateClient();
+
 export default function BookingsPage() {
-    const [bookings, setBookings] = React.useState<Booking[]>(MOCK_BOOKINGS);
+    const [bookings, setBookings] = React.useState<Booking[]>([]);
+    const [providers, setProviders] = React.useState<Provider[]>([]);
+    const [loading, setLoading] = React.useState(true);
     const [filterProvider, setFilterProvider] = React.useState('All');
     const [filterStatus, setFilterStatus] = React.useState('All');
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -155,7 +105,79 @@ export default function BookingsPage() {
 
     React.useEffect(() => {
         setHasMounted(true);
+        fetchProviders();
     }, []);
+
+    const fetchProviders = async () => {
+        try {
+            const response: any = await client.graphql({ query: LIST_PROVIDERS });
+            const fetchedProviders = response.data.listProviders;
+            setProviders(fetchedProviders);
+            // Fetch bookings for all providers initially
+            fetchBookings(fetchedProviders);
+        } catch (error) {
+            console.error('Error fetching providers:', error);
+            setLoading(false);
+        }
+    };
+
+    const fetchBookings = async (currentProviders: Provider[]) => {
+        setLoading(true);
+        try {
+            const today = new Date();
+            const startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString(); // Last month
+            const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1).toISOString(); // Next 2 months
+
+            // If filterProvider is 'All', fetch for all. Else fetch for specific.
+            const providersToFetch = filterProvider === 'All'
+                ? currentProviders
+                : currentProviders.filter(p => p.name === filterProvider);
+
+            const allBookings: Booking[] = [];
+
+            for (const provider of providersToFetch) {
+                const response: any = await client.graphql({
+                    query: LIST_BOOKINGS_BY_PROVIDER,
+                    variables: {
+                        input: {
+                            providerId: provider.providerId,
+                            startDate,
+                            endDate
+                        }
+                    }
+                });
+
+                const providerBookings = response.data.listBookingsByProvider.map((b: any) => ({
+                    id: b.bookingId,
+                    clientName: b.clientName,
+                    clientEmail: b.clientEmail,
+                    clientPhone: b.clientPhone,
+                    serviceName: b.serviceId, // TODO: Resolve Service Name
+                    providerName: provider.name,
+                    start: b.start,
+                    status: b.status.toLowerCase() as BookingStatus,
+                    notes: b.notes,
+                    providerId: provider.providerId
+                }));
+                allBookings.push(...providerBookings);
+            }
+
+            setBookings(allBookings);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Refetch when provider filter changes (optimization: could filter locally if we fetched all)
+    // But for now let's just re-fetch to be safe and consistent with "Backend Integration" task
+    React.useEffect(() => {
+        if (providers.length > 0) {
+            fetchBookings(providers);
+        }
+    }, [filterProvider, providers]);
+
 
     // Detail Dialog State
     const [detailOpen, setDetailOpen] = React.useState(false);
@@ -175,17 +197,30 @@ export default function BookingsPage() {
         setConfirmOpen(true);
     };
 
-    const confirmCancel = () => {
+    const confirmCancel = async () => {
         if (bookingToCancel) {
-            setBookings(prev => prev.map(b =>
-                b.id === bookingToCancel.id ? { ...b, status: 'cancelled' } : b
-            ));
-            setConfirmOpen(false);
-            setBookingToCancel(null);
+            try {
+                await client.graphql({
+                    query: CANCEL_BOOKING,
+                    variables: {
+                        input: {
+                            bookingId: bookingToCancel.id,
+                            reason: 'Cancelled by Admin'
+                        }
+                    }
+                });
 
-            // If viewing details of the cancelled booking, close details or update it?
-            // Let's close it to be safe
-            setDetailOpen(false);
+                setBookings(prev => prev.map(b =>
+                    b.id === bookingToCancel.id ? { ...b, status: 'cancelled' } : b
+                ));
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                // Optionally show error toast
+            } finally {
+                setConfirmOpen(false);
+                setBookingToCancel(null);
+                setDetailOpen(false);
+            }
         }
     };
 
@@ -291,13 +326,12 @@ export default function BookingsPage() {
     // No, consistent filtering is better. If I search "Juan", I only see Juan's bookings on the calendar.
 
     const statusFilteredBookings = bookings.filter(b => {
+        // filterProvider is handled by fetch, but check here just in case of state lag? 
+        // Actually fetch handles it. But wait, if I have 'All', fetch gets all. If I have specific, fetch gets specific.
+        // So this filter check is redundant but safe.
         const matchesProvider = filterProvider === 'All' || b.providerName === filterProvider;
         const matchesStatus = filterStatus === 'All' || b.status === filterStatus;
         return matchesProvider && matchesStatus;
-        // Note: I'm not using searchTerm here for the calendar to ensure the calendar looks populated 
-        // as per standard UX, or should I? Let's stick to status/provider filters for calendar for now 
-        // as "Search" is usually a List operation. 
-        // User didn't specify, but "visual calendar" implies seeing capacity.
     });
 
     // Filter AND Sort Logic
@@ -356,9 +390,11 @@ export default function BookingsPage() {
                         onChange={(e) => setFilterProvider(e.target.value)}
                         sx={{ minWidth: 200 }}
                         size="small"
+                        disabled={loading}
                     >
-                        {PROVIDERS.map((p) => (
-                            <MenuItem key={p} value={p}>{p}</MenuItem>
+                        <MenuItem value="All">All</MenuItem>
+                        {providers.map((p) => (
+                            <MenuItem key={p.providerId} value={p.name}>{p.name}</MenuItem>
                         ))}
                     </TextField>
 
@@ -407,7 +443,11 @@ export default function BookingsPage() {
             </Card>
 
             <Card sx={{ p: viewMode === 'calendar' ? 2 : 0 }}>
-                {viewMode === 'list' ? (
+                {loading ? (
+                    <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
+                        <CircularProgress />
+                    </Box>
+                ) : viewMode === 'list' ? (
                     <TableContainer>
                         <Table>
                             <TableHead>
@@ -459,7 +499,7 @@ export default function BookingsPage() {
                                             <TableCell>
                                                 <Chip
                                                     label={row.status}
-                                                    color={STATUS_COLORS[row.status]}
+                                                    color={STATUS_COLORS[row.status] || 'default'}
                                                     size="small"
                                                     sx={{ textTransform: 'capitalize' }}
                                                 />
@@ -517,7 +557,7 @@ export default function BookingsPage() {
                                 <Typography variant="subtitle2" color="text.secondary">Status</Typography>
                                 <Chip
                                     label={selectedBooking.status}
-                                    color={STATUS_COLORS[selectedBooking.status]}
+                                    color={STATUS_COLORS[selectedBooking.status] || 'default'}
                                     size="small"
                                     sx={{ textTransform: 'capitalize' }}
                                 />
