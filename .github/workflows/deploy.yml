@@ -29,9 +29,11 @@ jobs:
         run: |
           npm ci
           npm run build
-        # Environment variables would go here if/when the app supports real backend integration
-        # env:
-        #   NEXT_PUBLIC_API_URL: ${{ secrets.API_URL }}
+        env:
+          NEXT_PUBLIC_USER_POOL_ID: us-east-1_dG9vi0gz5
+          NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
+          NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://p4mgpaaptzeppfuszun4jdn6vy.appsync-api.us-east-1.amazonaws.com/graphql
+          NEXT_PUBLIC_AWS_REGION: us-east-1
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

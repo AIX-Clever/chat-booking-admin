@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     description: 'Admin panel for Chat Booking SaaS',
 };
 
+import AmplifyProvider from '../components/AmplifyProvider';
+
+// ...
+
 export default function RootLayout({
     children,
 }: {
@@ -19,9 +23,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <ThemeRegistry>
-                    <MainLayout>{children}</MainLayout>
-                </ThemeRegistry>
+                <AmplifyProvider>
+                    <ThemeRegistry>
+                        <MainLayout>{children}</MainLayout>
+                    </ThemeRegistry>
+                </AmplifyProvider>
             </body>
         </html>
     );

@@ -111,11 +111,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+import { useAuthenticator } from '@aws-amplify/ui-react';
+
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
     const router = useRouter();
+    const { authStatus, signOut } = useAuthenticator(context => [context.authStatus]);
+
+    React.useEffect(() => {
+        if (authStatus === 'unauthenticated' && pathname !== '/login') {
+            router.push('/login');
+        }
+    }, [authStatus, pathname, router]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -126,8 +135,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     };
 
     const handleLogout = () => {
-        // Here you would clear tokens/session
-        router.push('/login');
+        signOut();
     };
 
     const menuItems = [

@@ -20,6 +20,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import EmailOutlineIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlineIcon from '@mui/icons-material/LockOutlined';
+import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -37,19 +38,29 @@ export default function LoginPage() {
         setError('');
     };
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate network request
-        setTimeout(() => {
-            if (formData.email === 'admin@lucia.com' && formData.password === 'admin123') {
-                router.push('/dashboard'); // Or '/' depending on setup
+        try {
+            const { isSignedIn, nextStep } = await signIn({
+                username: formData.email,
+                password: formData.password,
+            });
+
+            if (isSignedIn) {
+                router.push('/dashboard');
             } else {
-                setError('Credenciales inválidas');
-                setLoading(false);
+                // Handle challenges like NEW_PASSWORD_REQUIRED if needed in the future
+                console.log('Login incomplete, next step:', nextStep);
+                setError('Login incompleto. Revisa la consola.');
             }
-        }, 1500);
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.message || 'Error al iniciar sesión');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
