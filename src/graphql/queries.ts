@@ -43,3 +43,36 @@ export const CANCEL_BOOKING = `
     }
   }
 `;
+
+export const REGISTER_TENANT = `
+  mutation RegisterTenant($input: RegisterTenantInput!) {
+    registerTenant(input: $input) {
+      tenantId
+      name
+      billingEmail
+      status
+    }
+  }
+`;
+
+export const UPDATE_TENANT = `
+  mutation UpdateTenant($input: UpdateTenantInput!) {
+    updateTenant(input: $input) {
+      tenantId
+      name
+      plan
+      billingEmail
+    }
+  }
+`;
+
+export const CREATE_SERVICE = `
+  mutation CreateService($input: CreateServiceInput!) {
+    createService(input: $input) {
+      serviceId
+      name
+      durationMinutes
+      price
+    }
+  }
+`;

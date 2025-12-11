@@ -18,6 +18,7 @@ Amplify.configure({
             endpoint: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || '',
             region: 'us-east-1',
             defaultAuthMode: 'userPool',
+            apiKey: process.env.NEXT_PUBLIC_GRAPHQL_API_KEY,
         }
     }
 });
