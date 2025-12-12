@@ -99,3 +99,25 @@ export const CREATE_BOOKING = `
     }
   }
 `;
+
+export const UPDATE_SERVICE = `
+  mutation UpdateService($input: UpdateServiceInput!) {
+    updateService(input: $input) {
+      serviceId
+      name
+      description
+      category
+      durationMinutes
+      price
+      available
+    }
+  }
+`;
+
+export const DELETE_SERVICE = `
+  mutation DeleteService($serviceId: ID!) {
+    deleteService(serviceId: $serviceId) {
+      serviceId
+    }
+  }
+`;

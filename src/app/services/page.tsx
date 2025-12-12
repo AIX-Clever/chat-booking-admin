@@ -2,6 +2,8 @@
 
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import * as React from 'react';
+import { generateClient } from 'aws-amplify/api';
+import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE } from '../../graphql/queries';
 import {
     Typography,
     Button,
@@ -28,7 +30,8 @@ import {
     List,
     ListItem,
     ListItemText,
-    Divider
+    Divider,
+    CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -38,28 +41,23 @@ import CategoryIcon from '@mui/icons-material/Category';
 
 // --- Types ---
 interface Service {
-    id: string;
+    serviceId: string;
     name: string;
     description: string;
     durationMinutes: number;
     category: string;
     price: number;
-    active: boolean;
+    available: boolean;
 }
 
-// --- Mock Data ---
-const MOCK_SERVICES: Service[] = [
-    { id: '1', name: 'Consulta General', description: 'Evaluación inicial del paciente', durationMinutes: 15, category: 'Medicina', price: 0, active: true },
-    { id: '2', name: 'Dermatología', description: 'Consulta especialista piel', durationMinutes: 30, category: 'Especialidad', price: 50, active: true },
-    { id: '3', name: 'Masaje Relajante', description: 'Terapia manual completa', durationMinutes: 60, category: 'Bienestar', price: 80, active: true },
-    { id: '4', name: 'Limpieza Facial', description: 'Tratamiento profundo', durationMinutes: 45, category: 'Estética', price: 40, active: false },
-];
+const CATEGORIES = ['Medicina', 'Especialidad', 'Bienestar', 'Estética', 'General'];
 
-const MOCK_CATEGORIES = ['Medicina', 'Especialidad', 'Bienestar', 'Estética'];
+const client = generateClient();
 
 export default function ServicesPage() {
-    const [services, setServices] = React.useState<Service[]>(MOCK_SERVICES);
-    const [categories, setCategories] = React.useState<string[]>(MOCK_CATEGORIES);
+    const [services, setServices] = React.useState<Service[]>([]);
+    const [loading, setLoading] = React.useState(true);
+    const [categories, setCategories] = React.useState<string[]>(CATEGORIES);
 
     // Dialog States
     const [open, setOpen] = React.useState(false);
@@ -79,14 +77,30 @@ export default function ServicesPage() {
 
     // Form State
     const [formData, setFormData] = React.useState<Service>({
-        id: '',
+        serviceId: '',
         name: '',
         description: '',
         durationMinutes: 30,
         category: '',
         price: 0,
-        active: true,
+        available: true,
     });
+
+    React.useEffect(() => {
+        fetchServices();
+    }, []);
+
+    const fetchServices = async () => {
+        setLoading(true);
+        try {
+            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } });
+            setServices(response.data.searchServices);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleOpen = (service?: Service) => {
         if (service) {
@@ -94,13 +108,13 @@ export default function ServicesPage() {
             setCurrentService(service);
         } else {
             setFormData({
-                id: '',
+                serviceId: '',
                 name: '',
                 description: '',
                 durationMinutes: 30,
                 category: categories[0] || '',
                 price: 0,
-                active: true,
+                available: true,
             });
             setCurrentService(null);
         }
@@ -111,29 +125,67 @@ export default function ServicesPage() {
         setOpen(false);
     };
 
-    const handleSave = () => {
-        if (currentService) {
-            // Edit
-            setServices((prev) =>
-                prev.map((s) => (s.id === currentService.id ? { ...formData, id: currentService.id } : s))
-            );
-        } else {
-            // Create
-            setServices((prev) => [
-                ...prev,
-                { ...formData, id: Math.random().toString(36).substr(2, 9) },
-            ]);
+    const handleSave = async () => {
+        try {
+            if (currentService) {
+                // Edit
+                const response: any = await client.graphql({
+                    query: UPDATE_SERVICE,
+                    variables: {
+                        input: {
+                            serviceId: currentService.serviceId,
+                            name: formData.name,
+                            description: formData.description,
+                            category: formData.category,
+                            durationMinutes: formData.durationMinutes,
+                            price: formData.price,
+                            available: formData.available
+                        }
+                    }
+                });
+                const updated = response.data.updateService;
+                setServices((prev) =>
+                    prev.map((s) => (s.serviceId === currentService.serviceId ? updated : s))
+                );
+            } else {
+                // Create
+                const response: any = await client.graphql({
+                    query: CREATE_SERVICE,
+                    variables: {
+                        input: {
+                            name: formData.name,
+                            description: formData.description,
+                            category: formData.category,
+                            durationMinutes: formData.durationMinutes,
+                            price: formData.price
+                        }
+                    }
+                });
+                const created = response.data.createService;
+                // Backend default available to true usually, but checking schema
+                setServices((prev) => [...prev, { ...created, available: true }]);
+            }
+            setOpen(false);
+        } catch (error) {
+            console.error('Error saving service:', error);
         }
-        setOpen(false);
     };
 
     const handleDelete = (id: string) => {
         setConfirmConfig({
             title: 'Delete Service',
             content: 'Are you sure you want to delete this service? This action cannot be undone.',
-            action: () => {
-                setServices((prev) => prev.filter((s) => s.id !== id));
-                setConfirmOpen(false);
+            action: async () => {
+                try {
+                    await client.graphql({
+                        query: DELETE_SERVICE,
+                        variables: { serviceId: id }
+                    });
+                    setServices((prev) => prev.filter((s) => s.serviceId !== id));
+                    setConfirmOpen(false);
+                } catch (error) {
+                    console.error('Error deleting service:', error);
+                }
             }
         });
         setConfirmOpen(true);
@@ -203,63 +255,69 @@ export default function ServicesPage() {
                     />
                 </Box>
 
-                <TableContainer sx={{ minWidth: 800 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Category</TableCell>
-                                <TableCell>Duration</TableCell>
-                                <TableCell>Price</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell align="right">Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredServices.map((row) => (
-                                <TableRow key={row.id} hover>
-                                    <TableCell>
-                                        <Typography variant="subtitle2" noWrap>
-                                            {row.name}
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                                            {row.description}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>{row.category}</TableCell>
-                                    <TableCell>{row.durationMinutes} min</TableCell>
-                                    <TableCell>${row.price}</TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={row.active ? 'Active' : 'Inactive'}
-                                            color={row.active ? 'success' : 'default'}
-                                            size="small"
-                                            variant="filled"
-                                            sx={{ borderRadius: 1 }}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
-                                            <EditIcon fontSize="small" />
-                                        </IconButton>
-                                        <IconButton size="small" onClick={() => handleDelete(row.id)} color="error">
-                                            <DeleteIcon fontSize="small" />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                            {filteredServices.length === 0 && (
+                {loading ? (
+                    <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <TableContainer sx={{ minWidth: 800 }}>
+                        <Table>
+                            <TableHead>
                                 <TableRow>
-                                    <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
-                                        <Typography variant="body1" color="text.secondary">
-                                            No services found.
-                                        </Typography>
-                                    </TableCell>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Category</TableCell>
+                                    <TableCell>Duration</TableCell>
+                                    <TableCell>Price</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell align="right">Actions</TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {filteredServices.map((row) => (
+                                    <TableRow key={row.serviceId} hover>
+                                        <TableCell>
+                                            <Typography variant="subtitle2" noWrap>
+                                                {row.name}
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                                                {row.description}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>{row.category}</TableCell>
+                                        <TableCell>{row.durationMinutes} min</TableCell>
+                                        <TableCell>${row.price}</TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={row.available ? 'Active' : 'Inactive'}
+                                                color={row.available ? 'success' : 'default'}
+                                                size="small"
+                                                variant="filled"
+                                                sx={{ borderRadius: 1 }}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
+                                                <EditIcon fontSize="small" />
+                                            </IconButton>
+                                            <IconButton size="small" onClick={() => handleDelete(row.serviceId)} color="error">
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {filteredServices.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
+                                            <Typography variant="body1" color="text.secondary">
+                                                No services found.
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
             </Card>
 
             {/* Service Dialog */}
@@ -316,8 +374,8 @@ export default function ServicesPage() {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    checked={formData.active}
-                                    onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                                    checked={formData.available}
+                                    onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
                                 />
                             }
                             label="Active Service"
