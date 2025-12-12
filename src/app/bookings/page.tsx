@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING } from '../../graphql/queries';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING } from '../../graphql/queries';
 
 import {
     Typography,
@@ -30,7 +30,8 @@ import {
     Paper,
     ToggleButton,
     ToggleButtonGroup,
-    CircularProgress
+    CircularProgress,
+    FormControl
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BlockIcon from '@mui/icons-material/Block';
@@ -42,6 +43,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AddIcon from '@mui/icons-material/Add';
 
 // --- Types ---
 type BookingStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed';
@@ -178,6 +180,93 @@ export default function BookingsPage() {
         }
     }, [filterProvider, providers]);
 
+
+
+    // New Booking State
+    const [newBookingOpen, setNewBookingOpen] = React.useState(false);
+    const [createLoading, setCreateLoading] = React.useState(false);
+    const [newBookingData, setNewBookingData] = React.useState({
+        clientName: '',
+        clientEmail: '',
+        clientPhone: '',
+        serviceId: '',
+        providerId: '',
+        date: '',
+        time: '',
+        notes: ''
+    });
+    const [availableServices, setAvailableServices] = React.useState<{ serviceId: string, name: string, durationMinutes: number }[]>([]);
+
+    React.useEffect(() => {
+        if (newBookingOpen) {
+            fetchServices();
+        }
+    }, [newBookingOpen]);
+
+    const fetchServices = async () => {
+        try {
+            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } }); // Fetch all
+            setAvailableServices(response.data.searchServices);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
+
+    const handleOpenNewBooking = () => {
+        // Default to a sane date/time (tomorrow 9am)
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(9, 0, 0, 0);
+
+        setNewBookingData({
+            clientName: '',
+            clientEmail: '',
+            clientPhone: '',
+            serviceId: '',
+            providerId: '',
+            date: tomorrow.toISOString().split('T')[0],
+            time: '09:00',
+            notes: ''
+        });
+        setNewBookingOpen(true);
+    };
+
+    const handleCreateBooking = async () => {
+        setCreateLoading(true);
+        try {
+            const startDateTime = new Date(`${newBookingData.date}T${newBookingData.time}`);
+            const service = availableServices.find(s => s.serviceId === newBookingData.serviceId);
+            const duration = service ? service.durationMinutes : 60; // Default or fetched
+            const endDateTime = new Date(startDateTime.getTime() + duration * 60000);
+
+            await client.graphql({
+                query: CREATE_BOOKING,
+                variables: {
+                    input: {
+                        serviceId: newBookingData.serviceId,
+                        providerId: newBookingData.providerId,
+                        start: startDateTime.toISOString(),
+                        end: endDateTime.toISOString(),
+                        clientName: newBookingData.clientName,
+                        clientEmail: newBookingData.clientEmail,
+                        clientPhone: newBookingData.clientPhone || null,
+                        notes: newBookingData.notes || null
+                    }
+                }
+            });
+
+            setNewBookingOpen(false);
+            // Refresh list
+            if (providers.length > 0) {
+                fetchBookings(providers);
+            }
+        } catch (error) {
+            console.error('Error creating booking:', error);
+            alert('Error creating booking. Please check console.');
+        } finally {
+            setCreateLoading(false);
+        }
+    };
 
     // Detail Dialog State
     const [detailOpen, setDetailOpen] = React.useState(false);
@@ -366,19 +455,28 @@ export default function BookingsPage() {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 5 }}>
                 <Typography variant="h4">Bookings</Typography>
-                <ToggleButtonGroup
-                    value={viewMode}
-                    exclusive
-                    onChange={(e, newView) => { if (newView) setViewMode(newView); }}
-                    size="small"
-                >
-                    <ToggleButton value="list" aria-label="list view">
-                        <TableRowsIcon />
-                    </ToggleButton>
-                    <ToggleButton value="calendar" aria-label="calendar view">
-                        <CalendarMonthIcon />
-                    </ToggleButton>
-                </ToggleButtonGroup>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => handleOpenNewBooking()}
+                    >
+                        New Booking
+                    </Button>
+                    <ToggleButtonGroup
+                        value={viewMode}
+                        exclusive
+                        onChange={(e, newView) => { if (newView) setViewMode(newView); }}
+                        size="small"
+                    >
+                        <ToggleButton value="list" aria-label="list view">
+                            <TableRowsIcon />
+                        </ToggleButton>
+                        <ToggleButton value="calendar" aria-label="calendar view">
+                            <CalendarMonthIcon />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                </Box>
             </Box>
 
             <Card sx={{ mb: 3, p: 2 }}>
@@ -598,6 +696,106 @@ export default function BookingsPage() {
                             Cancel Booking
                         </Button>
                     )}
+                </DialogActions>
+            </Dialog>
+
+            {/* New Booking Dialog */}
+            <Dialog open={newBookingOpen} onClose={() => setNewBookingOpen(false)} maxWidth="sm" fullWidth>
+                <DialogTitle>New Booking</DialogTitle>
+                <DialogContent dividers>
+                    <Grid container spacing={2} sx={{ pt: 1 }}>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Client Name"
+                                fullWidth
+                                value={newBookingData.clientName}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, clientName: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Client Email"
+                                fullWidth
+                                value={newBookingData.clientEmail}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, clientEmail: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Client Phone (Optional)"
+                                fullWidth
+                                value={newBookingData.clientPhone}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, clientPhone: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                select
+                                label="Service"
+                                fullWidth
+                                value={newBookingData.serviceId}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, serviceId: e.target.value })}
+                            >
+                                {availableServices.map((s) => (
+                                    <MenuItem key={s.serviceId} value={s.serviceId}>{s.name} ({s.durationMinutes} min)</MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                select
+                                label="Provider"
+                                fullWidth
+                                value={newBookingData.providerId}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, providerId: e.target.value })}
+                            >
+                                {providers.map((p) => (
+                                    <MenuItem key={p.providerId} value={p.providerId}>{p.name}</MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={6} />
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Date"
+                                type="date"
+                                fullWidth
+                                InputLabelProps={{ shrink: true }}
+                                value={newBookingData.date}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, date: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Time"
+                                type="time"
+                                fullWidth
+                                InputLabelProps={{ shrink: true }}
+                                value={newBookingData.time}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, time: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Notes"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                value={newBookingData.notes}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, notes: e.target.value })}
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setNewBookingOpen(false)}>Cancel</Button>
+                    <Button
+                        variant="contained"
+                        onClick={handleCreateBooking}
+                        disabled={createLoading || !newBookingData.clientName || !newBookingData.clientEmail || !newBookingData.serviceId || !newBookingData.providerId || !newBookingData.date || !newBookingData.time}
+                    >
+                        {createLoading ? <CircularProgress size={24} /> : 'Create Booking'}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

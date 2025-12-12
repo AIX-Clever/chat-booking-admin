@@ -76,3 +76,26 @@ export const CREATE_SERVICE = `
     }
   }
 `;
+
+export const SEARCH_SERVICES = `
+  query SearchServices($text: String) {
+    searchServices(text: $text) {
+      serviceId
+      name
+      durationMinutes
+      price
+    }
+  }
+`;
+
+export const CREATE_BOOKING = `
+  mutation CreateBooking($input: CreateBookingInput!) {
+    createBooking(input: $input) {
+      bookingId
+      clientName
+      clientEmail
+      start
+      status
+    }
+  }
+`;
