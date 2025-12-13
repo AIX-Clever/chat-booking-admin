@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import { generateClient } from 'aws-amplify/api';
+import { LIST_PROVIDERS, CREATE_PROVIDER, UPDATE_PROVIDER, DELETE_PROVIDER, SEARCH_SERVICES } from '../../graphql/queries';
 import {
     Typography,
     Button,
@@ -58,6 +60,8 @@ interface Provider {
 }
 
 // --- Mock Data ---
+const client = generateClient();
+
 // Replicating some services for assignment
 const MOCK_AVAILABLE_SERVICES: Service[] = [
     { id: '1', name: 'Consulta General' },
@@ -132,7 +136,8 @@ function CustomTabPanel(props: CustomTabPanelProps) {
 }
 
 export default function ProvidersPage() {
-    const [providers, setProviders] = React.useState<Provider[]>(MOCK_PROVIDERS);
+    const [providers, setProviders] = React.useState<Provider[]>([]);
+    const [availableServices, setAvailableServices] = React.useState<Service[]>([]);
     const [open, setOpen] = React.useState(false);
     const [currentProvider, setCurrentProvider] = React.useState<Provider | null>(null);
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -163,8 +168,49 @@ export default function ProvidersPage() {
         }
     });
 
+    React.useEffect(() => {
+        fetchProviders();
+        fetchServices();
+    }, []);
+
+    const fetchProviders = async () => {
+        try {
+            const response: any = await client.graphql({ query: LIST_PROVIDERS });
+            // Map backend response to local state if needed, or adjust types
+            // Backend returns: providerId, name, timezone, available. Bio & serviceIds might be missing in list? 
+            // The LIST_PROVIDERS query in queries.ts only has { providerId, name, timezone, available }. 
+            // We might need to update the query to get more details or fetch detail on open.
+            // For now let's work with what we have and assume bio/services might be empty on list.
+            const fetched = response.data.listProviders.map((p: any) => ({
+                id: p.providerId,
+                name: p.name,
+                bio: p.bio || '', // Handle missing fields gracefully
+                serviceIds: p.serviceIds || [],
+                timezone: p.timezone,
+                active: p.available,
+                aiDrivers: { traits: [], languages: ['Español'], specialties: [] } // Defaults for now
+            }));
+            setProviders(fetched);
+        } catch (error) {
+            console.error('Error fetching providers:', error);
+        }
+    };
+
+    const fetchServices = async () => {
+        try {
+            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } });
+            const services = response.data.searchServices.map((s: any) => ({
+                id: s.serviceId,
+                name: s.name
+            }));
+            setAvailableServices(services);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
+
     const handleOpen = (provider?: Provider) => {
-        setTabValue(0); // Reset to first tab
+        setTabValue(0);
         if (provider) {
             setFormData(provider);
             setCurrentProvider(provider);
@@ -191,29 +237,61 @@ export default function ProvidersPage() {
         setOpen(false);
     };
 
-    const handleSave = () => {
-        if (currentProvider) {
-            // Edit
-            setProviders((prev) =>
-                prev.map((p) => (p.id === currentProvider.id ? { ...formData, id: currentProvider.id } : p))
-            );
-        } else {
-            // Create
-            setProviders((prev) => [
-                ...prev,
-                { ...formData, id: Math.random().toString(36).substr(2, 9) },
-            ]);
+    const handleSave = async () => {
+        try {
+            if (currentProvider) {
+                // Update
+                const input = {
+                    providerId: currentProvider.id,
+                    name: formData.name,
+                    bio: formData.bio,
+                    serviceIds: formData.serviceIds,
+                    timezone: formData.timezone,
+                    available: formData.active
+                };
+
+                await client.graphql({
+                    query: UPDATE_PROVIDER,
+                    variables: { input }
+                });
+            } else {
+                // Create
+                const input = {
+                    name: formData.name,
+                    bio: formData.bio,
+                    serviceIds: formData.serviceIds,
+                    timezone: formData.timezone
+                };
+
+                await client.graphql({
+                    query: CREATE_PROVIDER,
+                    variables: { input }
+                });
+            }
+            fetchProviders(); // Refresh list
+            setOpen(false);
+        } catch (error) {
+            console.error('Error saving provider:', error);
+            alert('Failed to save provider. Please check console.');
         }
-        setOpen(false);
     };
 
     const handleDelete = (id: string, name: string) => {
         setConfirmConfig({
             title: 'Delete Provider',
             content: `Are you sure you want to delete ${name}? They will be removed from all future bookings.`,
-            action: () => {
-                setProviders((prev) => prev.filter((p) => p.id !== id));
-                setConfirmOpen(false);
+            action: async () => {
+                try {
+                    await client.graphql({
+                        query: DELETE_PROVIDER,
+                        variables: { providerId: id }
+                    });
+                    setProviders((prev) => prev.filter((p) => p.id !== id));
+                    setConfirmOpen(false);
+                } catch (error) {
+                    console.error('Error deleting provider:', error);
+                    alert('Failed to delete provider.');
+                }
             }
         });
         setConfirmOpen(true);
@@ -406,9 +484,9 @@ export default function ProvidersPage() {
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <Autocomplete
                                 multiple
-                                options={MOCK_AVAILABLE_SERVICES}
+                                options={availableServices}
                                 getOptionLabel={(option) => option.name}
-                                value={MOCK_AVAILABLE_SERVICES.filter(s => formData.serviceIds.includes(s.id))}
+                                value={availableServices.filter(s => formData.serviceIds.includes(s.id))}
                                 onChange={(event, newValue) => {
                                     setFormData({ ...formData, serviceIds: newValue.map(s => s.id) });
                                 }}

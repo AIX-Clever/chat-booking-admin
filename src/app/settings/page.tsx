@@ -42,7 +42,11 @@ import LockIcon from '@mui/icons-material/Lock';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+import { generateClient } from 'aws-amplify/api';
+import { UPDATE_TENANT } from '../../graphql/queries';
+
 // --- Types ---
+
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -110,6 +114,7 @@ const MOCK_KEYS = [
 ];
 
 export default function SettingsPage() {
+    const client = generateClient();
     const [tabValue, setTabValue] = React.useState(0);
     const [hasMounted, setHasMounted] = React.useState(false);
 
@@ -182,21 +187,30 @@ export default function SettingsPage() {
         setNewKeyName('');
     };
 
+    const handleSaveBranding = async () => {
+        try {
+            await client.graphql({
+                query: UPDATE_TENANT,
+                variables: {
+                    input: {
+                        settings: JSON.stringify(widgetConfig)
+                    }
+                }
+            });
+            alert('Branding saved successfully!');
+        } catch (error) {
+            console.error('Error saving branding:', error);
+            alert('Failed to save branding.');
+        }
+    };
+
     return (
         <>
-            <ConfirmDialog
-                open={confirmRevokeOpen}
-                title="Revoke API Key"
-                content="Are you sure? This will immediately block access for any client using this key."
-                confirmText="Revoke Key"
-                confirmColor="error"
-                onClose={() => setConfirmRevokeOpen(false)}
-                onConfirm={confirmRevoke}
-            />
-
+            {/* ... ConfirmDialog ... */}
             <Typography variant="h4" sx={{ mb: 4 }}>Settings</Typography>
 
             <Paper sx={{ width: '100%' }}>
+                {/* ... Tabs ... */}
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs">
                         <Tab label="Widget & Branding" icon={<ChatIcon />} iconPosition="start" />
@@ -277,7 +291,12 @@ export default function SettingsPage() {
                                     value={widgetConfig.welcomeMessage}
                                     onChange={(e) => setWidgetConfig({ ...widgetConfig, welcomeMessage: e.target.value })}
                                 />
-                                <Button variant="contained" startIcon={<SaveIcon />} sx={{ alignSelf: 'start' }}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<SaveIcon />}
+                                    sx={{ alignSelf: 'start' }}
+                                    onClick={handleSaveBranding}
+                                >
                                     Save Branding
                                 </Button>
                             </Stack>

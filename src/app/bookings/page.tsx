@@ -107,6 +107,7 @@ export default function BookingsPage() {
 
     React.useEffect(() => {
         setHasMounted(true);
+        fetchServices();
         fetchProviders();
     }, []);
 
@@ -154,7 +155,7 @@ export default function BookingsPage() {
                     clientName: b.clientName,
                     clientEmail: b.clientEmail,
                     clientPhone: b.clientPhone,
-                    serviceName: b.serviceId, // TODO: Resolve Service Name
+                    serviceName: b.serviceId, // Storing ID here, resolved in render
                     providerName: provider.name,
                     start: b.start,
                     status: b.status.toLowerCase() as BookingStatus,
@@ -197,11 +198,6 @@ export default function BookingsPage() {
     });
     const [availableServices, setAvailableServices] = React.useState<{ serviceId: string, name: string, durationMinutes: number }[]>([]);
 
-    React.useEffect(() => {
-        if (newBookingOpen) {
-            fetchServices();
-        }
-    }, [newBookingOpen]);
 
     const fetchServices = async () => {
         try {
@@ -592,7 +588,9 @@ export default function BookingsPage() {
                                                 <Typography variant="subtitle2">{row.clientName}</Typography>
                                                 <Typography variant="caption" color="text.secondary">{row.clientEmail}</Typography>
                                             </TableCell>
-                                            <TableCell>{row.serviceName}</TableCell>
+                                            <TableCell>
+                                                {availableServices.find(s => s.serviceId === row.serviceName)?.name || availableServices.find(s => s.serviceId === (row as any).serviceId)?.name || row.serviceName}
+                                            </TableCell>
                                             <TableCell>{row.providerName}</TableCell>
                                             <TableCell>
                                                 <Chip

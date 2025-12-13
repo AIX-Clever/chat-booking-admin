@@ -151,3 +151,81 @@ export const SET_PROVIDER_AVAILABILITY = `
     }
   }
 `;
+
+export const LIST_CATEGORIES = `
+  query ListCategories($activeOnly: Boolean) {
+  listCategories(activeOnly: $activeOnly) {
+    categoryId
+    name
+    description
+    isActive
+    displayOrder
+  }
+}
+`;
+
+export const CREATE_CATEGORY = `
+  mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    categoryId
+    name
+    description
+    isActive
+    displayOrder
+  }
+}
+`;
+
+export const UPDATE_CATEGORY = `
+  mutation UpdateCategory($input: UpdateCategoryInput!) {
+  updateCategory(input: $input) {
+    categoryId
+    name
+    description
+    isActive
+    displayOrder
+  }
+}
+`;
+
+export const DELETE_CATEGORY = `
+  mutation DeleteCategory($categoryId: ID!) {
+  deleteCategory(categoryId: $categoryId) {
+    categoryId
+  }
+}
+`;
+
+export const CREATE_PROVIDER = `
+  mutation CreateProvider($input: CreateProviderInput!) {
+    createProvider(input: $input) {
+      providerId
+      name
+      bio
+      serviceIds
+      timezone
+      available
+    }
+  }
+`;
+
+export const UPDATE_PROVIDER = `
+  mutation UpdateProvider($input: UpdateProviderInput!) {
+    updateProvider(input: $input) {
+      providerId
+      name
+      bio
+      serviceIds
+      timezone
+      available
+    }
+  }
+`;
+
+export const DELETE_PROVIDER = `
+  mutation DeleteProvider($providerId: ID!) {
+    deleteProvider(providerId: $providerId) {
+      providerId
+    }
+  }
+`;

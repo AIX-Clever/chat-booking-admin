@@ -3,7 +3,7 @@
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
-import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE } from '../../graphql/queries';
+import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE, LIST_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY } from '../../graphql/queries';
 import {
     Typography,
     Button,
@@ -50,14 +50,20 @@ interface Service {
     available: boolean;
 }
 
-const CATEGORIES = ['Medicina', 'Especialidad', 'Bienestar', 'Estética', 'General'];
+interface Category {
+    categoryId: string;
+    name: string;
+    description?: string;
+    isActive: boolean;
+    displayOrder: number;
+}
 
 const client = generateClient();
 
 export default function ServicesPage() {
     const [services, setServices] = React.useState<Service[]>([]);
     const [loading, setLoading] = React.useState(true);
-    const [categories, setCategories] = React.useState<string[]>(CATEGORIES);
+    const [categories, setCategories] = React.useState<Category[]>([]);
 
     // Dialog States
     const [open, setOpen] = React.useState(false);
@@ -88,7 +94,17 @@ export default function ServicesPage() {
 
     React.useEffect(() => {
         fetchServices();
+        fetchCategories();
     }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const response: any = await client.graphql({ query: LIST_CATEGORIES });
+            setCategories(response.data.listCategories);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
 
     const fetchServices = async () => {
         setLoading(true);
@@ -112,7 +128,7 @@ export default function ServicesPage() {
                 name: '',
                 description: '',
                 durationMinutes: 30,
-                category: categories[0] || '',
+                category: categories.length > 0 ? categories[0].name : '',
                 price: 0,
                 available: true,
             });
@@ -192,20 +208,44 @@ export default function ServicesPage() {
     };
 
     // --- Category Management ---
-    const handleAddCategory = () => {
-        if (newCategory && !categories.includes(newCategory)) {
-            setCategories(prev => [...prev, newCategory]);
-            setNewCategory('');
+    const handleAddCategory = async () => {
+        if (newCategory) {
+            try {
+                const response: any = await client.graphql({
+                    query: CREATE_CATEGORY,
+                    variables: {
+                        input: {
+                            name: newCategory,
+                            description: '',
+                            isActive: true,
+                            displayOrder: categories.length + 1
+                        }
+                    }
+                });
+                const created = response.data.createCategory;
+                setCategories(prev => [...prev, created]);
+                setNewCategory('');
+            } catch (error) {
+                console.error('Error creating category:', error);
+            }
         }
     };
 
-    const handleDeleteCategory = (cat: string) => {
+    const handleDeleteCategory = (category: Category) => {
         setConfirmConfig({
             title: 'Delete Category',
-            content: `Are you sure you want to delete the category "${cat}"?`,
-            action: () => {
-                setCategories(prev => prev.filter(c => c !== cat));
-                setConfirmOpen(false);
+            content: `Are you sure you want to delete the category "${category.name}"?`,
+            action: async () => {
+                try {
+                    await client.graphql({
+                        query: DELETE_CATEGORY,
+                        variables: { categoryId: category.categoryId }
+                    });
+                    setCategories(prev => prev.filter(c => c.categoryId !== category.categoryId));
+                    setConfirmOpen(false);
+                } catch (error) {
+                    console.error('Error deleting category:', error);
+                }
             }
         });
         setConfirmOpen(true);
@@ -365,8 +405,8 @@ export default function ServicesPage() {
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         >
                             {categories.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
+                                <MenuItem key={option.categoryId} value={option.name}>
+                                    {option.name}
                                 </MenuItem>
                             ))}
                         </TextField>
@@ -412,14 +452,14 @@ export default function ServicesPage() {
                     <List>
                         {categories.map((cat) => (
                             <ListItem
-                                key={cat}
+                                key={cat.categoryId}
                                 secondaryAction={
                                     <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteCategory(cat)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 }
                             >
-                                <ListItemText primary={cat} />
+                                <ListItemText primary={cat.name} />
                             </ListItem>
                         ))}
                     </List>
