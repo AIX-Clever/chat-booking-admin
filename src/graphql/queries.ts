@@ -121,3 +121,33 @@ export const DELETE_SERVICE = `
     }
   }
 `;
+
+export const GET_PROVIDER_AVAILABILITY = `
+  query GetProviderAvailability($providerId: ID!) {
+    getProviderAvailability(providerId: $providerId) {
+      providerId
+      dayOfWeek
+      timeRanges {
+        startTime
+        endTime
+      }
+      breaks {
+        startTime
+        endTime
+      }
+    }
+  }
+`;
+
+export const SET_PROVIDER_AVAILABILITY = `
+  mutation SetProviderAvailability($input: SetAvailabilityInput!) {
+    setProviderAvailability(input: $input) {
+      providerId
+      dayOfWeek
+      timeRanges {
+        startTime
+        endTime
+      }
+    }
+  }
+`;
