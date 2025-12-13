@@ -181,15 +181,28 @@ export default function ProvidersPage() {
             // The LIST_PROVIDERS query in queries.ts only has { providerId, name, timezone, available }. 
             // We might need to update the query to get more details or fetch detail on open.
             // For now let's work with what we have and assume bio/services might be empty on list.
-            const fetched = response.data.listProviders.map((p: any) => ({
-                id: p.providerId,
-                name: p.name,
-                bio: p.bio || '', // Handle missing fields gracefully
-                serviceIds: p.serviceIds || [],
-                timezone: p.timezone,
-                active: p.available,
-                aiDrivers: { traits: [], languages: ['Español'], specialties: [] } // Defaults for now
-            }));
+            const fetched = response.data.listProviders.map((p: any) => {
+                // Parse metadata if valid JSON string, or use object if already parsed
+                let aiDrivers = { traits: [], languages: ['Español'], specialties: [] };
+                try {
+                    if (p.metadata) {
+                        const meta = typeof p.metadata === 'string' ? JSON.parse(p.metadata) : p.metadata;
+                        if (meta.aiDrivers) aiDrivers = meta.aiDrivers;
+                    }
+                } catch (e) {
+                    console.warn('Failed to parse metadata for provider', p.providerId, e);
+                }
+
+                return {
+                    id: p.providerId,
+                    name: p.name,
+                    bio: p.bio || '',
+                    serviceIds: p.serviceIds || [],
+                    timezone: p.timezone,
+                    active: p.available,
+                    aiDrivers: aiDrivers
+                };
+            });
             setProviders(fetched);
         } catch (error) {
             console.error('Error fetching providers:', error);
@@ -247,6 +260,7 @@ export default function ProvidersPage() {
                     bio: formData.bio,
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
+                    metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
                     available: formData.active
                 };
 
@@ -260,7 +274,8 @@ export default function ProvidersPage() {
                     name: formData.name,
                     bio: formData.bio,
                     serviceIds: formData.serviceIds,
-                    timezone: formData.timezone
+                    timezone: formData.timezone,
+                    metadata: JSON.stringify({ aiDrivers: formData.aiDrivers })
                 };
 
                 await client.graphql({

@@ -4,7 +4,10 @@ export const LIST_PROVIDERS = `
     listProviders {
       providerId
       name
+      bio
+      serviceIds
       timezone
+      metadata
       available
     }
   }
@@ -204,6 +207,7 @@ export const CREATE_PROVIDER = `
       bio
       serviceIds
       timezone
+      metadata
       available
     }
   }
@@ -217,6 +221,7 @@ export const UPDATE_PROVIDER = `
       bio
       serviceIds
       timezone
+      metadata
       available
     }
   }
