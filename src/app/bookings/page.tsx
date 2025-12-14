@@ -660,7 +660,9 @@ export default function BookingsPage() {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography variant="subtitle2" color="text.secondary">Service</Typography>
-                                <Typography variant="body1">{selectedBooking.serviceName}</Typography>
+                                <Typography variant="body1">
+                                    {availableServices.find(s => s.serviceId === selectedBooking.serviceName)?.name || selectedBooking.serviceName}
+                                </Typography>
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography variant="subtitle2" color="text.secondary">Provider</Typography>
