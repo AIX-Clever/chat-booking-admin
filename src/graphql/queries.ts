@@ -138,6 +138,7 @@ export const GET_PROVIDER_AVAILABILITY = `
         startTime
         endTime
       }
+      exceptions
     }
   }
 `;
@@ -151,6 +152,7 @@ export const SET_PROVIDER_AVAILABILITY = `
         startTime
         endTime
       }
+      exceptions
     }
   }
 `;

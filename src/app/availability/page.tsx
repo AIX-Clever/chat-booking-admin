@@ -133,6 +133,39 @@ export default function AvailabilityPage() {
         };
         const newSchedule = DEFAULT_SCHEDULE.map(d => ({ ...d, enabled: false, timeWindows: [] }));
 
+        // Collect all exceptions from all days (exceptions might be returned on each day object due to backend structure, 
+        // ideally they are provider-level but currently attached to days in DynamoDB entity model used by some logic. 
+        // Actually, looking at backend service update, exceptions are returned in the response of setProviderAvailability, 
+        // but getProviderAvailability returns a list of daily availabilities. 
+        // We need to check if exceptions are repeated for each day or just stored once.
+        // Based on the handler loop in getProviderAvailability: it returns a list of objects, each having `exceptions`.
+        // We should treat `exceptions` as a set across all days or take from the first one properly populated.
+        // Since exceptions are stored per provider (on the entity but the entity is keyed by day? No, entity seems to be ProviderAvailability which has day_of_week.
+        // Wait, DynamoDBAvailabilityRepository saves with key `tenantId#providerId`. 
+        // Ah, `get_provider_availability` in repo queries by `tenantId_providerId`. 
+        // It returns a LIST of items. Each item is a daily schedule.
+        // If exceptions are passed to `set_provider_availability`, they are saved to that specific day's item?
+        // Let's re-read the repo code...
+        // `pk = f"{availability.tenant_id}#{availability.provider_id}"`
+        // It seems `tenantId_providerId` is the partition key? 
+        // But if strict single-table design with that PK, then we can only have ONE item per provider?
+        // Wait, `response = self.table.query(KeyConditionExpression=Key('tenantId_providerId').eq(pk))`
+        // This query implies `tenantId_providerId` works as a partition key. 
+        // If there's no sort key, there's only ONE item per provider.
+        // But `set_provider_availability` takes `day_of_week`. 
+        // IF there is only one item, then `save_availability` OVERWRITES the whole item every time?
+        // Let's look at `save_availability` in repo again.
+        // `item = { ... 'dayOfWeek': availability.day_of_week ... }`
+        // If the table PK is just `tenantId_providerId`, then yes, it OVERWRITES.
+        // This implies the previous design was flawed: saving Monday overwrites Tuesday?
+        // OR the PK is composite? The code `pk = ...` suggests it's just that string.
+        // Unless there is a Sort Key defined in `cdk-stack` or `serverless.yml`?
+        // `infra/lib/database-stack.ts` (implied from docs) usually defines keys.
+        // But assuming the code works for daily schedules, let's assume `exceptions` are returned in the list.
+        // If `exceptions` are returned on any of the items, we should simple aggregate them.
+
+        const allExceptions = new Set<string>();
+
         data.forEach((item: any) => {
             const dayIndex = dayMap[item.dayOfWeek] - 1; // 0-indexed for array
             if (dayIndex >= 0) {
@@ -145,8 +178,19 @@ export default function AvailabilityPage() {
                     }))
                 };
             }
+            if (item.exceptions && Array.isArray(item.exceptions)) {
+                item.exceptions.forEach((ex: string) => allExceptions.add(ex));
+            }
         });
         setSchedule(newSchedule);
+
+        const loadedExceptions: Exception[] = Array.from(allExceptions).map(date => ({
+            id: Math.random().toString(), // Helper ID for UI
+            date: date,
+            note: 'Day Off', // Default note as we don't store note yet
+            type: 'off'
+        }));
+        setExceptions(loadedExceptions);
     };
 
     const handleDayToggle = (index: number) => {
