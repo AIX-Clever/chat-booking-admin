@@ -33,6 +33,15 @@ export default function LoginPage() {
         password: ''
     });
 
+
+    React.useEffect(() => {
+        // Check for error params from redirection
+        const searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.get('error') === 'no_tenant') {
+            setError('Tu cuenta no está asociada a ningún tenant. Contacta a soporte.');
+        }
+    }, []);
+
     const handleChange = (prop: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [prop]: event.target.value });
         setError('');

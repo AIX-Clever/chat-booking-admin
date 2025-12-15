@@ -112,6 +112,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const theme = useTheme();
@@ -137,6 +138,25 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const handleLogout = () => {
         signOut();
     };
+
+    React.useEffect(() => {
+        async function checkTenantAuthorization() {
+            if (authStatus === 'authenticated') {
+                try {
+                    const attributes = await fetchUserAttributes();
+                    if (!attributes['custom:tenantId']) {
+                        console.warn('User has no tenant association. Signing out.');
+                        signOut();
+                        router.push('/login?error=no_tenant');
+                    }
+                } catch (error) {
+                    console.error('Error verifying tenant authorization:', error);
+                }
+            }
+        }
+
+        checkTenantAuthorization();
+    }, [authStatus, signOut, router]);
 
     const menuItems = [
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },

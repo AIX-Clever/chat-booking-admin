@@ -138,7 +138,7 @@ export default function AvailabilityPage() {
             if (dayIndex >= 0) {
                 newSchedule[dayIndex] = {
                     ...newSchedule[dayIndex],
-                    enabled: true,
+                    enabled: item.timeRanges.length > 0,
                     timeWindows: item.timeRanges.map((tr: any) => ({
                         start: tr.startTime,
                         end: tr.endTime

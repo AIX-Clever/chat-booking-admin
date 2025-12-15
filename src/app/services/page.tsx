@@ -393,7 +393,11 @@ export default function ServicesPage() {
                                 type="number"
                                 fullWidth
                                 value={formData.price}
-                                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                                onChange={(e) => {
+                                    // Strip leading zero if followed by a digit (e.g. "04" -> "4")
+                                    const val = e.target.value.replace(/^0+(?=\d)/, '');
+                                    setFormData({ ...formData, price: val === '' ? 0 : Number(val) });
+                                }}
                             />
                         </Box>
 
