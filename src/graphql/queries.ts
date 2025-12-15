@@ -234,3 +234,18 @@ export const DELETE_PROVIDER = `
     }
   }
 `;
+
+export const GET_TENANT = `
+  query GetTenant($tenantId: ID) {
+    getTenant(tenantId: $tenantId) {
+      tenantId
+      name
+      status
+      plan
+      billingEmail
+      settings
+      createdAt
+      updatedAt
+    }
+  }
+`;
