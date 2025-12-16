@@ -86,6 +86,7 @@ export const SEARCH_SERVICES = `
       serviceId
       name
       durationMinutes
+      category
       price
     }
   }
