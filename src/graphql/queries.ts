@@ -152,6 +152,14 @@ export const SET_PROVIDER_AVAILABILITY = `
         startTime
         endTime
       }
+    }
+  }
+`;
+
+export const SET_PROVIDER_EXCEPTIONS = `
+  mutation SetProviderExceptions($input: SetExceptionsInput!) {
+    setProviderExceptions(input: $input) {
+      providerId
       exceptions
     }
   }

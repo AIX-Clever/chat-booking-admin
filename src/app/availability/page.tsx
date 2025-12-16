@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
-import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
+import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY, SET_PROVIDER_EXCEPTIONS } from '../../graphql/queries';
 import {
     Typography,
     Box,
@@ -244,23 +244,15 @@ export default function AvailabilityPage() {
         if (!selectedProvider) return;
         setLoading(true);
         try {
-            // Save each day that is enabled (or disabled?)
-            // Backend setProviderAvailability sets availability for a specific day.
-            // If we disable a day, we might need to send empty timeRanges?
-            // Current backend logic: it iterates existing data. If we want to clear a day, we send empty timeRanges.
-
             const dayMapReverse = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-            const promises = schedule.map((day, index) => {
+            // 1. Save weekly schedule (availability per day)
+            const schedulePromises = schedule.map((day, index) => {
                 const dayStr = dayMapReverse[index];
                 const timeRanges = day.enabled ? day.timeWindows.map(tw => ({
                     startTime: tw.start,
                     endTime: tw.end
                 })) : [];
-
-                // If disabled, we send empty list to "clear" availability for that day
-                // Only saving if it differs from initial would be optimization, but mapping logic is complex.
-                // For now, save all.
 
                 return client.graphql({
                     query: SET_PROVIDER_AVAILABILITY,
@@ -269,13 +261,27 @@ export default function AvailabilityPage() {
                             providerId: selectedProvider,
                             dayOfWeek: dayStr,
                             timeRanges: timeRanges,
-                            breaks: [] // Breaks not in UI yet
+                            breaks: []
                         }
                     }
                 });
             });
 
-            await Promise.all(promises);
+            // 2. Save exceptions separately (provider-level)
+            const exceptionDates = exceptions.map(ex => ex.date);
+            const exceptionsPromise = client.graphql({
+                query: SET_PROVIDER_EXCEPTIONS,
+                variables: {
+                    input: {
+                        providerId: selectedProvider,
+                        exceptions: exceptionDates
+                    }
+                }
+            });
+
+            // Execute all in parallel
+            await Promise.all([...schedulePromises, exceptionsPromise]);
+
             setIsSaved(true);
             alert('Availability saved!');
         } catch (error) {
