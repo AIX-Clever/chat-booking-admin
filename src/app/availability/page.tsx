@@ -225,8 +225,24 @@ export default function AvailabilityPage() {
     };
 
     const handleAddException = () => {
-        // Not implemented in backend yet
         if (!newExceptionDate) return;
+
+        // Validate: don't allow past dates
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const selectedDate = new Date(newExceptionDate + 'T00:00:00');
+
+        if (selectedDate < today) {
+            alert('Cannot add past dates as exceptions');
+            return;
+        }
+
+        // Check for duplicates
+        if (exceptions.some(ex => ex.date === newExceptionDate)) {
+            alert('This date is already added');
+            return;
+        }
+
         setExceptions(prev => [
             ...prev,
             { id: Math.random().toString(), date: newExceptionDate, note: 'Day Off', type: 'off' }
@@ -405,6 +421,7 @@ export default function AvailabilityPage() {
                                 value={newExceptionDate}
                                 onChange={(e) => setNewExceptionDate(e.target.value)}
                                 InputLabelProps={{ shrink: true }}
+                                inputProps={{ min: new Date().toISOString().split('T')[0] }}
                             />
                             <Button variant="contained" size="small" onClick={handleAddException} disabled={!newExceptionDate}>
                                 Add
