@@ -29,6 +29,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { format } from 'date-fns';
 
 // --- Types ---
 interface TimeWindow {
@@ -414,15 +418,21 @@ export default function AvailabilityPage() {
                         </Typography>
 
                         <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
-                            <TextField
-                                type="date"
-                                size="small"
-                                fullWidth
-                                value={newExceptionDate}
-                                onChange={(e) => setNewExceptionDate(e.target.value)}
-                                InputLabelProps={{ shrink: true }}
-                                inputProps={{ min: new Date().toISOString().split('T')[0] }}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Add Exception Date"
+                                    value={newExceptionDate ? new Date(newExceptionDate + 'T00:00:00') : null}
+                                    onChange={(newValue) => {
+                                        if (newValue) {
+                                            setNewExceptionDate(format(newValue, 'yyyy-MM-dd'));
+                                        } else {
+                                            setNewExceptionDate('');
+                                        }
+                                    }}
+                                    disablePast
+                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                                />
+                            </LocalizationProvider>
                             <Button variant="contained" size="small" onClick={handleAddException} disabled={!newExceptionDate}>
                                 Add
                             </Button>
