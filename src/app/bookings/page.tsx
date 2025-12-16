@@ -33,6 +33,8 @@ import {
     CircularProgress,
     FormControl
 } from '@mui/material';
+import { DatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BlockIcon from '@mui/icons-material/Block';
 import SearchIcon from '@mui/icons-material/Search';
@@ -756,24 +758,39 @@ export default function BookingsPage() {
                         </Grid>
                         <Grid item xs={6} />
                         <Grid item xs={6}>
-                            <TextField
-                                label="Date"
-                                type="date"
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                value={newBookingData.date}
-                                onChange={(e) => setNewBookingData({ ...newBookingData, date: e.target.value })}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Date"
+                                    value={newBookingData.date ? new Date(newBookingData.date + 'T00:00:00') : null}
+                                    onChange={(newValue) => {
+                                        if (newValue) {
+                                            const dateStr = newValue.toISOString().split('T')[0];
+                                            setNewBookingData({ ...newBookingData, date: dateStr });
+                                        }
+                                    }}
+                                    slotProps={{
+                                        textField: { fullWidth: true }
+                                    }}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField
-                                label="Time"
-                                type="time"
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                value={newBookingData.time}
-                                onChange={(e) => setNewBookingData({ ...newBookingData, time: e.target.value })}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <TimePicker
+                                    label="Time"
+                                    value={newBookingData.time ? new Date(`2000-01-01T${newBookingData.time}:00`) : null}
+                                    onChange={(newValue) => {
+                                        if (newValue) {
+                                            const hours = String(newValue.getHours()).padStart(2, '0');
+                                            const minutes = String(newValue.getMinutes()).padStart(2, '0');
+                                            setNewBookingData({ ...newBookingData, time: `${hours}:${minutes}` });
+                                        }
+                                    }}
+                                    slotProps={{
+                                        textField: { fullWidth: true }
+                                    }}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
