@@ -251,3 +251,57 @@ export const GET_TENANT = `
     }
   }
 `;
+
+export const GET_DASHBOARD_METRICS = `
+  query GetDashboardMetrics {
+    getDashboardMetrics {
+      period
+      summary {
+        revenue
+        bookings
+        messages
+        tokensIA
+        conversionsChat
+        aiResponses
+        conversionRate
+        autoAttendanceRate
+      }
+      daily {
+        date
+        bookings
+        messages
+      }
+      topServices {
+        serviceId
+        name
+        bookings
+      }
+      topProviders {
+        providerId
+        name
+        bookings
+      }
+      bookingStatus {
+        CONFIRMED
+        PENDING
+        CANCELLED
+        NO_SHOW
+      }
+      errors {
+        type
+        count
+        lastOccurred
+      }
+    }
+  }
+`;
+
+export const GET_PLAN_USAGE = `
+  query GetPlanUsage {
+    getPlanUsage {
+      messages
+      bookings
+      tokensIA
+    }
+  }
+`;
