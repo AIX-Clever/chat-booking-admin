@@ -97,6 +97,15 @@ export default function SettingsPage() {
                 if (tenant.settings) {
                     try {
                         const settings = JSON.parse(tenant.settings);
+
+                        // Compatibility with Onboarding data structure
+                        if (settings.theme && settings.theme.primaryColor && !settings.widgetConfig) {
+                            setWidgetConfig(prev => ({
+                                ...prev,
+                                primaryColor: settings.theme.primaryColor
+                            }));
+                        }
+
                         if (settings.widgetConfig) setWidgetConfig(settings.widgetConfig);
                         if (settings.aiMode) setAiMode(settings.aiMode);
                     } catch (e) {
