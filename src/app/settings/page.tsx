@@ -240,18 +240,7 @@ export default function SettingsPage() {
                         </CustomTabPanel>
                     </>
                 )}
-                {/* Debug Section */}
-                <Box sx={{ p: 2, mt: 4, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-                    <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
-                        DEBUG INFO:
-                    </Typography>
-                    <pre style={{ fontSize: '10px', overflow: 'auto' }}>
-                        {JSON.stringify({
-                            loadedSettings: tenantId ? "Loaded" : "No Tenant",
-                            widgetConfigState: widgetConfig
-                        }, null, 2)}
-                    </pre>
-                </Box>
+
             </Paper>
         </>
     );
