@@ -115,6 +115,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
+import { generateClient } from 'aws-amplify/api';
+const GET_TENANT_NAME = `
+  query GetTenant($tenantId: ID) {
+    getTenant(tenantId: $tenantId) {
+      tenantId
+      name
+    }
+  }
+`;
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const theme = useTheme();
@@ -122,6 +131,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const pathname = usePathname();
     const router = useRouter();
     const { authStatus, signOut } = useAuthenticator();
+    const [tenantName, setTenantName] = React.useState<string>('');
 
     React.useEffect(() => {
         if (authStatus === 'unauthenticated' && pathname !== '/login') {
@@ -146,11 +156,30 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             if (authStatus === 'authenticated') {
                 try {
                     const attributes = await fetchUserAttributes();
-                    if (!attributes['custom:tenantId']) {
+                    const tenantId = attributes['custom:tenantId'];
+
+                    if (!tenantId) {
                         console.warn('User has no tenant association. Signing out.');
                         signOut();
                         router.push('/login?error=no_tenant');
+                        return;
                     }
+
+                    // Fetch tenant details to get name
+                    try {
+                        const client = generateClient();
+                        const response: any = await client.graphql({
+                            query: GET_TENANT_NAME,
+                            variables: { tenantId }
+                        });
+
+                        if (response.data && response.data.getTenant) {
+                            setTenantName(response.data.getTenant.name);
+                        }
+                    } catch (err) {
+                        console.error('Error fetching tenant details:', err);
+                    }
+
                 } catch (error) {
                     console.error('Error verifying tenant authorization:', error);
                 }
@@ -203,9 +232,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        {menuItems.find(item => pathname.startsWith(item.path))?.text || 'Dashboard'}
-                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="h6" noWrap component="div">
+                            {menuItems.find(item => pathname.startsWith(item.path))?.text || 'Dashboard'}
+                        </Typography>
+                        {tenantName && (
+                            <Typography variant="subtitle1" component="div" sx={{
+                                opacity: 0.7,
+                                borderLeft: '1px solid rgba(255,255,255,0.3)',
+                                pl: 2,
+                                fontWeight: 'medium'
+                            }}>
+                                {tenantName}
+                            </Typography>
+                        )}
+                    </Box>
                     <ThemeSwitcher />
                 </Toolbar>
             </AppBar>
