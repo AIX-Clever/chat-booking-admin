@@ -314,3 +314,47 @@ export const GET_PLAN_USAGE = `
     }
   }
 `;
+
+export const LIST_FAQS = `
+  query ListFAQs {
+    listFAQs {
+      faqId
+      question
+      answer
+      category
+      active
+    }
+  }
+`;
+
+export const CREATE_FAQ = `
+  mutation CreateFAQ($input: CreateFAQInput!) {
+    createFAQ(input: $input) {
+      faqId
+      question
+      answer
+      category
+      active
+    }
+  }
+`;
+
+export const UPDATE_FAQ = `
+  mutation UpdateFAQ($input: UpdateFAQInput!) {
+    updateFAQ(input: $input) {
+      faqId
+      question
+      answer
+      category
+      active
+    }
+  }
+`;
+
+export const DELETE_FAQ = `
+  mutation DeleteFAQ($faqId: ID!) {
+     deleteFAQ(faqId: $faqId) {
+       faqId
+     }
+  }
+`;
