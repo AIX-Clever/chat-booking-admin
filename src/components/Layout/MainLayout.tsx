@@ -25,6 +25,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import QuizIcon from '@mui/icons-material/Quiz';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
@@ -158,8 +160,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         checkTenantAuthorization();
     }, [authStatus, signOut, router]);
 
+    React.useEffect(() => {
+        if (authStatus === 'unauthenticated' && pathname !== '/login') {
+            router.push('/login');
+        }
+    }, [authStatus, pathname, router]);
+
     const menuItems = [
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+        { text: 'Workflows', icon: <AccountTreeIcon />, path: '/workflows' },
+        { text: 'FAQs', icon: <QuizIcon />, path: '/faqs' },
         { text: 'Services', icon: <DesignServicesIcon />, path: '/services' },
         { text: 'Providers', icon: <PeopleIcon />, path: '/providers' },
         { text: 'Availability', icon: <CalendarMonthIcon />, path: '/availability' },
