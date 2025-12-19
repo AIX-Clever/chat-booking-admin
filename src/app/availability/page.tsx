@@ -6,6 +6,8 @@ import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY, S
 import {
     Typography,
     Box,
+    // Card, // Unused
+    // FormControl, // Unused? No, used in line 333
     Card,
     FormControl,
     InputLabel,
@@ -17,12 +19,13 @@ import {
     Button,
     IconButton,
     Paper,
-    Divider,
+    // Divider, // Unused
     Stack,
     Chip,
     Alert,
     FormControlLabel,
-    CircularProgress
+    // CircularProgress // Unused
+
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -52,12 +55,6 @@ interface Exception {
     date: string; // YYYY-MM-DD
     note: string;
     type: 'off' | 'custom';
-}
-
-interface ProviderAvailability {
-    providerId: string;
-    weeklySchedule: DaySchedule[];
-    exceptions: Exception[];
 }
 
 interface Provider {
@@ -94,14 +91,11 @@ export default function AvailabilityPage() {
         fetchProviders();
     }, []);
 
-    React.useEffect(() => {
-        if (selectedProvider) {
-            fetchAvailability(selectedProvider);
-        }
-    }, [selectedProvider]);
+
 
     const fetchProviders = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_PROVIDERS });
             const fetchedProviders = response.data.listProviders;
             setProviders(fetchedProviders);
@@ -113,9 +107,10 @@ export default function AvailabilityPage() {
         }
     };
 
-    const fetchAvailability = async (providerId: string) => {
+    const fetchAvailability = React.useCallback(async (providerId: string) => {
         setLoading(true);
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: GET_PROVIDER_AVAILABILITY,
                 variables: { providerId }
@@ -129,9 +124,18 @@ export default function AvailabilityPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+    // Actually mapBackend relies on nothing external.
 
+    React.useEffect(() => {
+        if (selectedProvider) {
+            fetchAvailability(selectedProvider);
+        }
+    }, [selectedProvider, fetchAvailability]);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mapBackendToSchedule = (data: any[]) => {
+
         const dayMap: { [key: string]: number } = {
             'MON': 1, 'TUE': 2, 'WED': 3, 'THU': 4, 'FRI': 5, 'SAT': 6, 'SUN': 7
         };
@@ -170,12 +174,14 @@ export default function AvailabilityPage() {
 
         const allExceptions = new Set<string>();
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data.forEach((item: any) => {
             const dayIndex = dayMap[item.dayOfWeek] - 1; // 0-indexed for array
             if (dayIndex >= 0) {
                 newSchedule[dayIndex] = {
                     ...newSchedule[dayIndex],
                     enabled: item.timeRanges.length > 0,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     timeWindows: item.timeRanges.map((tr: any) => ({
                         start: tr.startTime,
                         end: tr.endTime

@@ -31,7 +31,8 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     CircularProgress,
-    FormControl
+    // FormControl // Unused
+
 } from '@mui/material';
 import { DatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -114,10 +115,12 @@ export default function BookingsPage() {
         setHasMounted(true);
         fetchServices();
         fetchProviders();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchProviders = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_PROVIDERS });
             const fetchedProviders = response.data.listProviders;
             setProviders(fetchedProviders);
@@ -144,6 +147,7 @@ export default function BookingsPage() {
             const allBookings: Booking[] = [];
 
             for (const provider of providersToFetch) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: LIST_BOOKINGS_BY_PROVIDER,
                     variables: {
@@ -155,6 +159,7 @@ export default function BookingsPage() {
                     }
                 });
 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const providerBookings = response.data.listBookingsByProvider.map((b: any) => ({
                     id: b.bookingId,
                     clientName: b.clientName,
@@ -184,6 +189,7 @@ export default function BookingsPage() {
         if (providers.length > 0) {
             fetchBookings(providers);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterProvider, providers]);
 
 
@@ -206,6 +212,7 @@ export default function BookingsPage() {
 
     const fetchServices = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } }); // Fetch all
             setAvailableServices(response.data.searchServices);
         } catch (error) {
@@ -361,7 +368,7 @@ export default function BookingsPage() {
         // Adjust for Monday start (0=Sun, 1=Mon...). Request wants Mon-Sun.
         // JS getDay(): 0=Sun, 1=Mon...6=Sat.
         // We want Mon=0, Sun=6.
-        let day = new Date(year, month, 1).getDay();
+        const day = new Date(year, month, 1).getDay();
         return day === 0 ? 6 : day - 1;
     };
 
@@ -624,7 +631,7 @@ export default function BookingsPage() {
                                                 <Typography variant="caption" color="text.secondary">{row.clientEmail}</Typography>
                                             </TableCell>
                                             <TableCell>
-                                                {availableServices.find(s => s.serviceId === row.serviceName)?.name || availableServices.find(s => s.serviceId === (row as any).serviceId)?.name || row.serviceName}
+                                                {availableServices.find(s => s.serviceId === row.serviceName)?.name || availableServices.find(s => s.serviceId === (row as unknown as { serviceId: string }).serviceId)?.name || row.serviceName}
                                             </TableCell>
                                             <TableCell>{row.providerName}</TableCell>
                                             <TableCell>

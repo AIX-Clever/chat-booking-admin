@@ -56,7 +56,7 @@ export default function SettingsPage() {
     const [successMsg, setSuccessMsg] = React.useState<string | null>(null);
 
     // Tenant State
-    const [tenantId, setTenantId] = React.useState<string>('');
+    // const [tenantId, setTenantId] = React.useState<string>(''); // Removed unused state
     const [currentPlan, setCurrentPlan] = React.useState('PRO'); // Default fallback
 
     // Widget State
@@ -70,29 +70,26 @@ export default function SettingsPage() {
     // AI State
     const [aiMode, setAiMode] = React.useState('nlp');
 
-    React.useEffect(() => {
-        setHasMounted(true);
-        fetchTenantData();
-    }, []);
-
-    const fetchTenantData = async () => {
+    const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
         try {
             // Retrieving tenantId from local storage if available, but it's optional now
             const storedTenantId = localStorage.getItem('tenantId');
-            if (storedTenantId) {
-                setTenantId(storedTenantId);
-            }
+            // if (storedTenantId) {
+            //    setTenantId(storedTenantId);
+            // }
 
             // Always call GET_TENANT. If tenantId is not provided, backend infers from auth context.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response = await client.graphql({
                 query: GET_TENANT,
                 variables: { tenantId: storedTenantId || null }
-            }) as any;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            }) as { data: { getTenant: any } };
 
             const tenant = response.data.getTenant;
             if (tenant) {
-                if (tenant.tenantId) setTenantId(tenant.tenantId);
+                // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
                 if (tenant.settings) {
                     try {
@@ -117,13 +114,18 @@ export default function SettingsPage() {
                 console.warn("No tenant data returned");
             }
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error fetching tenant data:', err);
             // Don't block UI on error, just log it. Data will be defaults.
         } finally {
             setLoading(false);
         }
-    };
+    }, [client]);
+
+    React.useEffect(() => {
+        setHasMounted(true);
+        fetchTenantData();
+    }, [fetchTenantData]);
 
     const handleSaveSettings = async () => {
         try {

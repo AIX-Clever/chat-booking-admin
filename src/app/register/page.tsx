@@ -2,9 +2,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Alert, CircularProgress, Container, Grid, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Alert, CircularProgress, Grid, Paper } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
-import { signIn, autoSignIn } from 'aws-amplify/auth';
+import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { REGISTER_TENANT } from '../../graphql/queries';
 
@@ -52,7 +52,7 @@ export default function RegisterPage() {
                 router.push('/login');
             }
 
-        } catch (err: any) {
+        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
             console.error('Registration failed:', err);
             // Parse error message
             const msg = err.message || JSON.stringify(err);

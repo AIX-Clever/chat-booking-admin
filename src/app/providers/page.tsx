@@ -15,7 +15,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     IconButton,
     Chip,
     Dialog,
@@ -63,42 +62,11 @@ interface Provider {
 const client = generateClient();
 
 // Replicating some services for assignment
-const MOCK_AVAILABLE_SERVICES: Service[] = [
-    { id: '1', name: 'Consulta General' },
-    { id: '2', name: 'Dermatología' },
-    { id: '3', name: 'Masaje Relajante' },
-    { id: '4', name: 'Limpieza Facial' },
-    { id: '5', name: 'Pediatría' },
-];
+// MOCK_AVAILABLE_SERVICES removed
 
-const MOCK_PROVIDERS: Provider[] = [
-    {
-        id: '1',
-        name: 'Dr. Mario Alvarez',
-        bio: 'Médico cirujano con 10 años de experiencia.',
-        serviceIds: ['1', '2'],
-        timezone: 'America/Santiago',
-        active: true,
-        aiDrivers: {
-            traits: ['Empático', 'Detallista', 'Formal'],
-            languages: ['Español', 'Inglés'],
-            specialties: ['Cirugía menor', 'Acné severo']
-        }
-    },
-    {
-        id: '2',
-        name: 'Ana García',
-        bio: 'Especialista en terapias de relajación y bienestar.',
-        serviceIds: ['3', '4'],
-        timezone: 'America/Buenos_Aires',
-        active: true,
-        aiDrivers: {
-            traits: ['Calmada', 'Paciente', 'Holística'],
-            languages: ['Español', 'Portugués'],
-            specialties: ['Aromaterapia', 'Masaje descontracturante']
-        }
-    },
-];
+
+// Unused mock data removed
+
 
 const TIMEZONES = [
     'America/Santiago',
@@ -175,12 +143,14 @@ export default function ProvidersPage() {
 
     const fetchProviders = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_PROVIDERS });
             // Map backend response to local state if needed, or adjust types
             // Backend returns: providerId, name, timezone, available. Bio & serviceIds might be missing in list? 
             // The LIST_PROVIDERS query in queries.ts only has { providerId, name, timezone, available }. 
             // We might need to update the query to get more details or fetch detail on open.
             // For now let's work with what we have and assume bio/services might be empty on list.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const fetched = response.data.listProviders.map((p: any) => {
                 // Parse metadata if valid JSON string, or use object if already parsed
                 let aiDrivers = { traits: [], languages: ['Español'], specialties: [] };
@@ -211,7 +181,9 @@ export default function ProvidersPage() {
 
     const fetchServices = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const services = response.data.searchServices.map((s: any) => ({
                 id: s.serviceId,
                 name: s.name

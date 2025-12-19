@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, Box, Typography, LinearProgress, Stack, Chip, useTheme, alpha } from '@mui/material';
+import { Card, Box, Typography, LinearProgress, Stack, Chip, useTheme, alpha } from '@mui/material';
 
 interface Limit {
     label: string;
@@ -36,7 +36,7 @@ export default function AppPlanUsage({ planName, limits }: Props) {
 
             <Stack spacing={3} sx={{ p: 3, pt: 0 }}>
                 {limits.map((limit) => {
-                    const percent = (limit.usage / limit.limit) * 100;
+
 
                     return (
                         <Box key={limit.label}>
@@ -45,13 +45,13 @@ export default function AppPlanUsage({ planName, limits }: Props) {
                                     {limit.label}
                                 </Typography>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                                    {percent.toFixed(0)}%
+                                    {((limit.usage / limit.limit) * 100).toFixed(0)}%
                                 </Typography>
                             </Stack>
 
                             <LinearProgress
                                 variant="determinate"
-                                value={percent}
+                                value={(limit.usage / limit.limit) * 100}
                                 color={limit.color}
                                 sx={{
                                     height: 8,

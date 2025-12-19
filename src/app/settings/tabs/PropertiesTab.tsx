@@ -7,8 +7,7 @@ import {
     Button,
     Typography,
     Box,
-    Grid,
-    Card
+    Grid
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 
@@ -22,7 +21,9 @@ const COLOR_PRESETS = [
 ];
 
 interface PropertiesTabProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     widgetConfig: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setWidgetConfig: (config: any) => void;
     onSave: () => void;
 }

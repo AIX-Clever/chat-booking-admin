@@ -80,9 +80,10 @@ export function useDashboardMetrics() {
             }) as { data: { getDashboardMetrics: DashboardMetrics } };
 
             setMetrics(response.data.getDashboardMetrics);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error fetching dashboard metrics:', err);
-            setError(err?.message || 'Failed to load metrics');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load metrics';
+            setError(errorMessage);
 
             // Return mock data as fallback for new tenants
             setMetrics({
@@ -136,9 +137,10 @@ export function usePlanUsage() {
             }) as { data: { getPlanUsage: PlanUsage } };
 
             setUsage(response.data.getPlanUsage);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error fetching plan usage:', err);
-            setError(err?.message || 'Failed to load usage');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load usage';
+            setError(errorMessage);
 
             // Return empty usage as fallback
             setUsage({ messages: 0, bookings: 0, tokensIA: 0 });

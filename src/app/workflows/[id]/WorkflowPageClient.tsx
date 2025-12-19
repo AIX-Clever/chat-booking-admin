@@ -5,6 +5,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SaveIcon from '@mui/icons-material/Save';
 import WorkflowEditor from '../../../components/workflow/WorkflowEditor';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function WorkflowPageClient({ id }: { id: string }) {
     return (
         <Box sx={{ p: 3, height: '100vh', display: 'flex', flexDirection: 'column' }}>

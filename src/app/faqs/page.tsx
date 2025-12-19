@@ -75,6 +75,7 @@ export default function FAQsPage() {
     const fetchFAQs = async () => {
         setLoading(true);
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_FAQS });
             setFaqs(response.data.listFAQs);
         } catch (error) {
@@ -113,6 +114,7 @@ export default function FAQsPage() {
         try {
             if (currentFAQ) {
                 // Edit
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: UPDATE_FAQ,
                     variables: {
@@ -131,6 +133,7 @@ export default function FAQsPage() {
                 );
             } else {
                 // Create
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: CREATE_FAQ,
                     variables: {

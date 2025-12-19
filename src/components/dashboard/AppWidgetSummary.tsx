@@ -11,7 +11,7 @@ interface Props {
     chartData?: number[];
 }
 
-export default function AppWidgetSummary({ title, total, icon, color = 'primary', percent, chartData = [] }: Props) {
+export default function AppWidgetSummary({ title, total, icon, color = 'primary', chartData = [] }: Props) {
     const theme = useTheme();
 
     // Map 'color' prop to actual theme palette color

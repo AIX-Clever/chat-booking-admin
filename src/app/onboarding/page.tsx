@@ -82,7 +82,7 @@ export default function OnboardingPage() {
             }
 
             setActiveStep((prev) => prev + 1);
-        } catch (err: any) {
+        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
             console.error('Step failed:', err);
             setError(err.message || 'Operation failed');
         } finally {
@@ -196,7 +196,7 @@ export default function OnboardingPage() {
                                 <Box sx={{ mt: 1 }}>
                                     <Typography variant="h6" gutterBottom>Launch your Widget</Typography>
                                     <Typography variant="body1" paragraph>
-                                        Copy and paste this code into your website's <code>&lt;head&gt;</code> tag:
+                                        Copy and paste this code into your website&apos;s <code>&lt;head&gt;</code> tag:
                                     </Typography>
                                     <Card variant="outlined" sx={{ bgcolor: 'grey.100', mb: 3 }}>
                                         <CardContent>

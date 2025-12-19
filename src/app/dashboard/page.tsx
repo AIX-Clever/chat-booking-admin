@@ -1,6 +1,6 @@
 'use client';
 
-import { Typography, Grid, Stack, CircularProgress, Box, Alert } from '@mui/material';
+import { Typography, Grid, CircularProgress, Box, Alert } from '@mui/material';
 import AppWidgetSummary from '../../components/dashboard/AppWidgetSummary';
 import AppWebsiteVisits from '../../components/dashboard/AppWebsiteVisits';
 import AppCurrentVisits from '../../components/dashboard/AppCurrentVisits';

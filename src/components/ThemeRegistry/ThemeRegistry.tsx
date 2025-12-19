@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ThemeProvider, createTheme, ThemeOptions } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import NextAppDirEmotionCacheProvider from './EmotionCache';
 import { ThemeContextProvider, useThemeContext } from '../../context/ThemeContext';
@@ -57,6 +57,7 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
             shape: {
                 borderRadius: 16,
             },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             shadows: customShadows(mode) as any, // Cast to any to bypass strict tuple check for now
             components: {
                 MuiCssBaseline: {

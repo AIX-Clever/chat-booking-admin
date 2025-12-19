@@ -20,7 +20,8 @@ export default function AppWebsiteVisits({ title, subheader, chartData }: Props)
 
     // Transformation for Recharts: array of objects { name: label, series1: val, series2: val }
     const data = chartData.labels.map((label, index) => {
-        const point: any = { name: label };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const point: Record<string, any> = { name: label };
         chartData.series.forEach((s) => {
             point[s.name] = s.data[index];
         });

@@ -63,7 +63,7 @@ export default function LoginPage() {
                 console.log('Login incomplete, next step:', nextStep);
                 setError(`Login incompleto. Paso requerido: ${nextStep.signInStep}`);
             }
-        } catch (err: any) {
+        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
             console.error('Login error:', err);
             setError(err.message || 'Error al iniciar sesión');
         } finally {

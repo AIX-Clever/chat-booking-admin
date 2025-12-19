@@ -15,7 +15,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     IconButton,
     Chip,
     Dialog,
@@ -99,6 +98,7 @@ export default function ServicesPage() {
 
     const fetchCategories = async () => {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_CATEGORIES });
             setCategories(response.data.listCategories);
         } catch (error) {
@@ -109,6 +109,7 @@ export default function ServicesPage() {
     const fetchServices = async () => {
         setLoading(true);
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } });
             setServices(response.data.searchServices);
         } catch (error) {
@@ -145,6 +146,7 @@ export default function ServicesPage() {
         try {
             if (currentService) {
                 // Edit
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: UPDATE_SERVICE,
                     variables: {
@@ -165,6 +167,7 @@ export default function ServicesPage() {
                 );
             } else {
                 // Create
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: CREATE_SERVICE,
                     variables: {
@@ -211,6 +214,7 @@ export default function ServicesPage() {
     const handleAddCategory = async () => {
         if (newCategory) {
             try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: CREATE_CATEGORY,
                     variables: {

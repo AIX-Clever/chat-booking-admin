@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, Box, useTheme, styled } from '@mui/material';
+import { Card, CardHeader, Box, styled } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
     }[];
 }
 
-const StyledLegend = styled('ul')(({ theme }) => ({
+const StyledLegend = styled('ul')(() => ({
     listStyle: 'none',
     display: 'flex',
     flexDirection: 'column',
@@ -23,17 +23,19 @@ const StyledLegend = styled('ul')(({ theme }) => ({
     fontSize: '0.875rem'
 }));
 
-const LegendItem = styled('li')(({ theme }) => ({
+const LegendItem = styled('li')(() => ({
     display: 'flex',
     alignItems: 'center',
     gap: 8,
 }));
 
 // Custom Legend Component
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderLegend = (props: any) => {
     const { payload } = props;
     return (
         <StyledLegend>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {payload.map((entry: any, index: number) => (
                 <LegendItem key={`item-${index}`}>
                     <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: entry.color }} />
@@ -48,7 +50,7 @@ const renderLegend = (props: any) => {
 };
 
 export default function AppCurrentVisits({ title, subheader, chartData }: Props) {
-    const theme = useTheme();
+    // const theme = useTheme(); // Unused
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
