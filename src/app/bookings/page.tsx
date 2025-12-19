@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING } from '../../graphql/queries';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW } from '../../graphql/queries';
 
 import {
     Typography,
@@ -46,9 +46,11 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 
 // --- Types ---
-type BookingStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed';
+type BookingStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed' | 'no_show';
 type ViewMode = 'list' | 'calendar';
 
 interface Booking {
@@ -73,10 +75,11 @@ const STATUS_COLORS: Record<BookingStatus, 'success' | 'warning' | 'error' | 'de
     confirmed: 'success',
     pending: 'warning',
     cancelled: 'error',
-    completed: 'default'
+    completed: 'info',
+    no_show: 'default'
 };
 
-const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed'];
+const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed', 'no_show'];
 
 const client = generateClient();
 
@@ -308,6 +311,36 @@ export default function BookingsPage() {
                 setBookingToCancel(null);
                 setDetailOpen(false);
             }
+        }
+    };
+
+    const handleConfirmBooking = async (booking: Booking) => {
+        try {
+            await client.graphql({
+                query: CONFIRM_BOOKING,
+                variables: { input: { bookingId: booking.id } }
+            });
+            setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'confirmed' } : b));
+            if (selectedBooking?.id === booking.id) {
+                setSelectedBooking(prev => prev ? { ...prev, status: 'confirmed' } : null);
+            }
+        } catch (error) {
+            console.error('Error confirming booking:', error);
+        }
+    };
+
+    const handleNoShowBooking = async (booking: Booking) => {
+        try {
+            await client.graphql({
+                query: MARK_AS_NO_SHOW,
+                variables: { input: { bookingId: booking.id } }
+            });
+            setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'no_show' } : b));
+            if (selectedBooking?.id === booking.id) {
+                setSelectedBooking(prev => prev ? { ...prev, status: 'no_show' } : null);
+            }
+        } catch (error) {
+            console.error('Error marking as no show:', error);
         }
     };
 
@@ -606,6 +639,19 @@ export default function BookingsPage() {
                                                 <IconButton size="small" onClick={() => handleViewDetail(row)}>
                                                     <VisibilityIcon />
                                                 </IconButton>
+                                                {row.status === 'pending' && (
+                                                    <IconButton size="small" color="success" onClick={() => handleConfirmBooking(row)}>
+                                                        <CheckCircleIcon />
+                                                    </IconButton>
+                                                )}
+                                                <IconButton
+                                                    size="small"
+                                                    color="default"
+                                                    onClick={() => handleNoShowBooking(row)}
+                                                    disabled={['cancelled', 'completed', 'no_show'].includes(row.status)}
+                                                >
+                                                    <PersonOffIcon />
+                                                </IconButton>
                                                 <IconButton
                                                     size="small"
                                                     color="error"
@@ -693,6 +739,16 @@ export default function BookingsPage() {
                         </Button>
                     )}
                     <Button onClick={() => setDetailOpen(false)}>Close</Button>
+                    {selectedBooking && selectedBooking.status === 'pending' && (
+                        <Button color="success" onClick={() => handleConfirmBooking(selectedBooking)}>
+                            Confirm
+                        </Button>
+                    )}
+                    {selectedBooking && !['cancelled', 'completed', 'no_show'].includes(selectedBooking.status) && (
+                        <Button color="warning" onClick={() => handleNoShowBooking(selectedBooking)}>
+                            No Show
+                        </Button>
+                    )}
                     {selectedBooking && selectedBooking.status !== 'cancelled' && selectedBooking.status !== 'completed' && (
                         <Button color="error" onClick={() => { setDetailOpen(false); handleCancelClick(selectedBooking); }}>
                             Cancel Booking

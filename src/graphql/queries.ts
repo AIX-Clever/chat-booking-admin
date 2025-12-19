@@ -104,6 +104,24 @@ export const CREATE_BOOKING = `
   }
 `;
 
+export const CONFIRM_BOOKING = `
+  mutation ConfirmBooking($input: ConfirmBookingInput!) {
+    confirmBooking(input: $input) {
+      bookingId
+      status
+    }
+  }
+`;
+
+export const MARK_AS_NO_SHOW = `
+  mutation MarkAsNoShow($input: MarkAsNoShowInput!) {
+    markAsNoShow(input: $input) {
+      bookingId
+      status
+    }
+  }
+`;
+
 export const UPDATE_SERVICE = `
   mutation UpdateService($input: UpdateServiceInput!) {
     updateService(input: $input) {
