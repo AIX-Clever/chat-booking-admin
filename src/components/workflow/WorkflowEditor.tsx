@@ -12,6 +12,7 @@ import {
     Connection,
     NodeTypes,
     Node,
+    Edge,
     ReactFlowProvider
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -21,6 +22,7 @@ import { StartNode } from './nodes/StartNode';
 import { MessageNode } from './nodes/MessageNode';
 import { DecisionNode } from './nodes/DecisionNode';
 import { ToolNode } from './nodes/ToolNode';
+import { DynamicOptionsNode } from './nodes/DynamicOptionsNode';
 import Sidebar from './Sidebar';
 import PropertiesPanel from './PropertiesPanel';
 
@@ -29,50 +31,57 @@ const nodeTypes: NodeTypes = {
     message: MessageNode,
     decision: DecisionNode,
     tool: ToolNode,
+    dynamic_options: DynamicOptionsNode,
 };
 
-const initialNodes: Node[] = [
-    {
-        id: 'start-1',
-        type: 'start',
-        position: { x: 250, y: 5 },
-        data: { label: 'Start' },
-    },
-    {
-        id: 'msg-1',
-        type: 'message',
-        position: { x: 250, y: 150 },
-        data: { label: 'Welcome', message: 'Hello! How can I help you today?' },
-    },
-    {
-        id: 'dec-1',
-        type: 'decision',
-        position: { x: 250, y: 300 },
-        data: { label: 'Is Member?', question: 'User is registered?' },
-    },
-];
 
-const initialEdges = [
-    { id: 'e1-2', source: 'start-1', target: 'msg-1' },
-    { id: 'e2-3', source: 'msg-1', target: 'dec-1' }
-];
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-export default function WorkflowEditor() {
-    return (
-        <ReactFlowProvider>
-            <WorkflowEditorContent />
-        </ReactFlowProvider>
-    );
+
+interface WorkflowEditorProps {
+    initialNodes?: Node[];
+    initialEdges?: Edge[];
 }
 
-function WorkflowEditorContent() {
+export interface WorkflowEditorRef {
+    getFlow: () => { nodes: Node[]; edges: Edge[] };
+}
+
+const WorkflowEditor = React.forwardRef<WorkflowEditorRef, WorkflowEditorProps>(({ initialNodes = [], initialEdges = [] }, ref) => {
+    return (
+        <ReactFlowProvider>
+            <WorkflowEditorContent initialNodes={initialNodes} initialEdges={initialEdges} editorRef={ref} />
+        </ReactFlowProvider>
+    );
+});
+
+WorkflowEditor.displayName = 'WorkflowEditor';
+export default WorkflowEditor;
+
+interface ContentProps {
+    initialNodes: Node[];
+    initialEdges: Edge[];
+    editorRef: React.ForwardedRef<WorkflowEditorRef>;
+}
+
+function WorkflowEditorContent({ initialNodes, initialEdges, editorRef }: ContentProps) {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+
+    // Update internal state when props change (loading from backend)
+    React.useEffect(() => {
+        setNodes(initialNodes);
+        setEdges(initialEdges);
+    }, [initialNodes, initialEdges, setNodes, setEdges]);
+
+    // Expose methods to parent
+    React.useImperativeHandle(editorRef, () => ({
+        getFlow: () => ({ nodes, edges })
+    }));
 
     const onConnect = useCallback(
         (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -95,9 +104,9 @@ function WorkflowEditorContent() {
                 return;
             }
 
-            // projected position not working precisely without instance, simple approximation
+            // simple approximation
             const position = {
-                x: event.clientX - 200, // adjust for sidebar width approximation
+                x: event.clientX - 200,
                 y: event.clientY - 100,
             };
 
@@ -133,7 +142,6 @@ function WorkflowEditorContent() {
                 return node;
             })
         );
-        // Update selected node reference to reflect changes immediately in panel if needed
         setSelectedNode((prev) => prev ? { ...prev, data: { ...prev.data, ...data } } : null);
     };
 

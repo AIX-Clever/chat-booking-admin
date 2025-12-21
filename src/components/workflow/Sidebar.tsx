@@ -4,6 +4,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import MessageIcon from '@mui/icons-material/Message';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import BuildIcon from '@mui/icons-material/Build';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 
 export default function Sidebar() {
     const onDragStart = (event: React.DragEvent, nodeType: string) => {
@@ -70,6 +71,19 @@ export default function Sidebar() {
                             <BuildIcon color="secondary" />
                         </ListItemIcon>
                         <ListItemText primary="Tool Call" secondary="Execute Action" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={{ mb: 1, border: '1px solid #9c27b0', borderRadius: 1 }}>
+                    <ListItemButton
+                        onDragStart={(event) => onDragStart(event, 'dynamic_options')}
+                        draggable
+                        sx={{ cursor: 'grab' }}
+                    >
+                        <ListItemIcon>
+                            <DashboardCustomizeIcon color="secondary" sx={{ color: '#9c27b0' }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Dynamic Options" secondary="Interactive Menu" />
                     </ListItemButton>
                 </ListItem>
             </List>

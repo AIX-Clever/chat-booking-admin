@@ -376,3 +376,65 @@ export const DELETE_FAQ = `
      }
   }
 `;
+
+export const LIST_WORKFLOWS = `
+  query ListWorkflows {
+    listWorkflows {
+      workflowId
+      name
+      description
+      isActive
+      steps
+      updatedAt
+    }
+  }
+`;
+
+export const GET_WORKFLOW = `
+  query GetWorkflow($workflowId: ID!) {
+    getWorkflow(workflowId: $workflowId) {
+      workflowId
+      name
+      description
+      isActive
+      steps
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_WORKFLOW = `
+  mutation CreateWorkflow($input: CreateWorkflowInput!) {
+    createWorkflow(input: $input) {
+      workflowId
+      name
+      description
+      isActive
+      steps
+    }
+  }
+`;
+
+export const UPDATE_WORKFLOW = `
+  mutation UpdateWorkflow($input: UpdateWorkflowInput!) {
+    updateWorkflow(input: $input) {
+      workflowId
+      name
+      description
+      isActive
+      steps
+      metadata
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_WORKFLOW = `
+  mutation DeleteWorkflow($workflowId: ID!) {
+     deleteWorkflow(workflowId: $workflowId) {
+       workflowId
+     }
+  }
+`;
