@@ -143,7 +143,7 @@ export default function WorkflowPageClient({ id }: { id: string }) {
         if (!editorRef.current || !workflow) return;
         setSaving(true);
         try {
-            const { nodes } = editorRef.current.getFlow();
+            const { nodes, edges } = editorRef.current.getFlow();
 
             // Serealize Nodes -> Backend Steps
             // Note: Currently we only update CONTENT and POSITION (metadata).
@@ -156,41 +156,60 @@ export default function WorkflowPageClient({ id }: { id: string }) {
                 positionsMap[node.id] = node.position;
 
                 // Reconstruct step object
-                // We need to preserve existing step data if possible, or build from node data
-                // Simplified: Build from node data
-
                 let backendType = 'MESSAGE';
                 if (node.type === 'dynamic_options') backendType = 'DYNAMIC_OPTIONS';
                 else if (node.type === 'decision') backendType = 'QUESTION';
                 else if (node.type === 'tool') backendType = 'TOOL';
+                else if (node.type === 'start') backendType = 'MESSAGE'; // Start node treated as message/trigger
 
                 const content: Record<string, any> = {};
                 if (node.data.message) content.text = node.data.message;
                 if (node.data.text) content.text = node.data.text;
                 if (node.data.sources) content.sources = node.data.sources;
 
-                // TODO: Reconstruct 'options_mapping' from Edges?
-                // For this MVP, we might lose edge connections if we don't parse edges back.
-                // Assuming we just edit properties for now.
-                // To do proper structural editing, we need to map Edges -> next/mapping properties.
-
-                // Quick fix: Retain original mapping if not editing structure?
-                // The user ASKED for the Editor. Structure editing implies converting edges to 'next'.
-                // I'll skip complex edge-to-json mapping for this exact moment to ensure safe save.
-                // I will carry over 'options_mapping' from original state if available for that step.
-
                 let originalStep: any = {};
-                if (typeof workflow.steps === 'string') {
+                if (workflow.steps && typeof workflow.steps === 'string') {
                     try { originalStep = JSON.parse(workflow.steps)[node.id] || {}; } catch { }
-                } else {
+                } else if (workflow.steps) {
                     originalStep = workflow.steps[node.id] || {};
+                }
+
+                // Map Edges to 'next' or 'options_mapping'
+                let nextStepId = originalStep.next;
+                let optionsMapping = originalStep.content?.options_mapping || {};
+
+                const nodeEdges = edges.filter(e => e.source === node.id);
+
+                if (nodeEdges.length > 0) {
+                    if (backendType === 'DYNAMIC_OPTIONS') {
+                        // Update mappings based on edges
+                        nodeEdges.forEach(edge => {
+                            if (edge.sourceHandle && edge.sourceHandle.startsWith('source-')) {
+                                const key = edge.sourceHandle.replace('source-', '');
+                                // Ensure structure exists
+                                if (!optionsMapping[key]) optionsMapping[key] = { label: key, value: `flow_${key}` };
+                                optionsMapping[key].next = edge.target;
+                            } else if (!edge.sourceHandle) {
+                                // default next?
+                                nextStepId = edge.target;
+                            }
+                        });
+                        content.options_mapping = optionsMapping;
+                    } else {
+                        // Simple next
+                        // Take the first edge without a source handle (or just first one)
+                        const directEdge = nodeEdges.find(e => !e.sourceHandle) || nodeEdges[0];
+                        if (directEdge) {
+                            nextStepId = directEdge.target;
+                        }
+                    }
                 }
 
                 stepsMap[node.id] = {
                     stepId: node.id,
                     type: backendType,
-                    content: { ...originalStep.content, ...content }, // Merge
-                    next: originalStep.next // Preserve next
+                    content: { ...originalStep.content, ...content },
+                    next: nextStepId
                 };
             });
 
