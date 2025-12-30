@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import {
     Typography,
     Box,
@@ -49,6 +50,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 export default function SettingsPage() {
+    const t = useTranslations('settings');
     const searchParams = useSearchParams();
     const client = generateClient();
 
@@ -203,8 +205,8 @@ export default function SettingsPage() {
             <Paper sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs">
-                        <Tab label="Widget & Branding" icon={<ChatIcon />} iconPosition="start" />
-                        <Tab label="AI Configuration" icon={<AutoAwesomeIcon />} iconPosition="start" />
+                        <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
+                        <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label="API Keys" icon={<VpnKeyIcon />} iconPosition="start" />
                     </Tabs>
                 </Box>
