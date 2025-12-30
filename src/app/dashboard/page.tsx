@@ -61,12 +61,12 @@ export default function DashboardPage() {
 
     // Booking status for pie chart
     const bookingStatusData = metrics ? [
-        { label: 'Confirmados', value: metrics.bookingStatus.CONFIRMED, color: '#00A76F' },
+        { label: t('bookingsTrend'), value: metrics.bookingStatus.CONFIRMED, color: '#00A76F' },
         { label: 'Pendientes', value: metrics.bookingStatus.PENDING, color: '#FFAB00' },
         { label: 'Cancelados', value: metrics.bookingStatus.CANCELLED, color: '#FF5630' },
         { label: 'No Show', value: metrics.bookingStatus.NO_SHOW, color: '#00B8D9' },
     ] : [
-        { label: 'Confirmados', value: 0, color: '#00A76F' },
+        { label: t('bookingsTrend'), value: 0, color: '#00A76F' },
         { label: 'Pendientes', value: 0, color: '#FFAB00' },
         { label: 'Cancelados', value: 0, color: '#FF5630' },
         { label: 'No Show', value: 0, color: '#00B8D9' },
@@ -132,7 +132,7 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} sm={6} md={3}>
                     <AppWidgetSummary
-                        title="Tasa de Conversión"
+                        title={t('conversionRate')}
                         total={Math.round(metrics?.summary.conversionRate || 0)}
                         color="warning"
                         icon={<TrendingUpIcon fontSize="large" />}
@@ -177,7 +177,7 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} md={6} lg={4}>
                     <AppWidgetSummary
-                        title="Reservas del Mes"
+                        title={t('totalBookings')}
                         total={metrics?.summary.bookings || 0}
                         color="secondary"
                         icon={<EventIcon fontSize="large" />}
