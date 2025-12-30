@@ -74,6 +74,17 @@ export function useDashboardMetrics() {
             setLoading(true);
             setError(null);
 
+            // Check if user is authenticated before making the request
+            const { getCurrentUser } = await import('aws-amplify/auth');
+            try {
+                await getCurrentUser();
+            } catch (authError) {
+                // User is not authenticated, don't make the request
+                console.log('User not authenticated, skipping metrics fetch');
+                setLoading(false);
+                return;
+            }
+
             const response = await client.graphql({
                 query: GET_DASHBOARD_METRICS,
                 authMode: 'userPool'
@@ -130,6 +141,17 @@ export function usePlanUsage() {
         try {
             setLoading(true);
             setError(null);
+
+            // Check if user is authenticated before making the request
+            const { getCurrentUser } = await import('aws-amplify/auth');
+            try {
+                await getCurrentUser();
+            } catch (authError) {
+                // User is not authenticated, don't make the request
+                console.log('User not authenticated, skipping usage fetch');
+                setLoading(false);
+                return;
+            }
 
             const response = await client.graphql({
                 query: GET_PLAN_USAGE,
