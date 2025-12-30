@@ -1,0 +1,193 @@
+{
+    "common": {
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "add": "Adicionar",
+        "search": "Pesquisar",
+        "loading": "Carregando...",
+        "error": "Erro",
+        "success": "Sucesso",
+        "noData": "Sem dados",
+        "actions": "Ações",
+        "confirm": "Confirmar",
+        "close": "Fechar"
+    },
+    "nav": {
+        "dashboard": "Painel",
+        "bookings": "Reservas",
+        "services": "Serviços",
+        "providers": "Profissionais",
+        "availability": "Disponibilidade",
+        "knowledge": "Conhecimento",
+        "faqs": "FAQs",
+        "settings": "Configurações",
+        "workflows": "Fluxos",
+        "logout": "Sair"
+    },
+    "dashboard": {
+        "title": "Painel de Controle",
+        "welcome": "Bem-vindo",
+        "totalBookings": "Total de Reservas",
+        "activeServices": "Serviços Ativos",
+        "totalRevenue": "Receita Total",
+        "conversionRate": "Taxa de Conversão",
+        "recentBookings": "Reservas Recentes",
+        "bookingsTrend": "Tendência de Reservas",
+        "noBookings": "Ainda não há reservas"
+    },
+    "bookings": {
+        "title": "Gestão de Reservas",
+        "newBooking": "Nova Reserva",
+        "viewDetails": "Ver Detalhes",
+        "status": {
+            "pending": "Pendente",
+            "confirmed": "Confirmada",
+            "cancelled": "Cancelada",
+            "completed": "Concluída",
+            "noShow": "Não Compareceu"
+        },
+        "columns": {
+            "id": "ID",
+            "customer": "Cliente",
+            "service": "Serviço",
+            "provider": "Profissional",
+            "date": "Data",
+            "time": "Hora",
+            "status": "Status",
+            "actions": "Ações"
+        },
+        "filters": {
+            "all": "Todas",
+            "today": "Hoje",
+            "week": "Esta Semana",
+            "month": "Este Mês"
+        }
+    },
+    "services": {
+        "title": "Serviços",
+        "addService": "Adicionar Serviço",
+        "editService": "Editar Serviço",
+        "deleteService": "Excluir Serviço",
+        "name": "Nome",
+        "category": "Categoria",
+        "duration": "Duração (min)",
+        "price": "Preço",
+        "description": "Descrição",
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "noServices": "Nenhum serviço criado"
+    },
+    "providers": {
+        "title": "Profissionais",
+        "addProvider": "Adicionar Profissional",
+        "editProvider": "Editar Profissional",
+        "name": "Nome",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "specialties": "Especialidades",
+        "noProviders": "Nenhum profissional"
+    },
+    "availability": {
+        "title": "Disponibilidade",
+        "weeklySchedule": "Horário Semanal",
+        "exceptions": "Exceções",
+        "addException": "Adicionar Exceção",
+        "selectProvider": "Selecionar Profissional",
+        "days": {
+            "monday": "Segunda-feira",
+            "tuesday": "Terça-feira",
+            "wednesday": "Quarta-feira",
+            "thursday": "Quinta-feira",
+            "friday": "Sexta-feira",
+            "saturday": "Sábado",
+            "sunday": "Domingo"
+        }
+    },
+    "knowledge": {
+        "title": "Base de Conhecimento",
+        "addDocument": "Adicionar Documento",
+        "uploadFile": "Enviar Arquivo",
+        "fileName": "Nome do Arquivo",
+        "fileSize": "Tamanho",
+        "uploadDate": "Data de Envio",
+        "noDocuments": "Nenhum documento"
+    },
+    "faqs": {
+        "title": "Perguntas Frequentes",
+        "addFaq": "Adicionar FAQ",
+        "editFaq": "Editar FAQ",
+        "question": "Pergunta",
+        "answer": "Resposta",
+        "category": "Categoria",
+        "noFaqs": "Nenhuma FAQ"
+    },
+    "settings": {
+        "title": "Configurações",
+        "tabs": {
+            "general": "Geral",
+            "ai": "Inteligência Artificial",
+            "providers": "Profissionais",
+            "notifications": "Notificações"
+        },
+        "general": {
+            "title": "Configurações Gerais",
+            "companyName": "Nome da Empresa",
+            "email": "E-mail",
+            "phone": "Telefone",
+            "timezone": "Fuso Horário",
+            "language": "Idioma",
+            "currency": "Moeda"
+        },
+        "ai": {
+            "title": "Configurações de IA",
+            "mode": "Modo de IA",
+            "ragEnabled": "RAG Habilitado",
+            "temperature": "Temperatura",
+            "maxTokens": "Tokens Máximos",
+            "model": "Modelo"
+        },
+        "saveSuccess": "Configurações salvas com sucesso",
+        "saveError": "Erro ao salvar configurações"
+    },
+    "workflows": {
+        "title": "Editor de Fluxos",
+        "newWorkflow": "Novo Fluxo",
+        "saveWorkflow": "Salvar Fluxo",
+        "deleteWorkflow": "Excluir Fluxo",
+        "nodes": {
+            "start": "Início",
+            "message": "Mensagem",
+            "question": "Pergunta",
+            "action": "Ação",
+            "condition": "Condição",
+            "end": "Fim"
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Entrar",
+            "subtitle": "Painel de Administração",
+            "email": "E-mail",
+            "password": "Senha",
+            "forgotPassword": "Esqueceu a senha?",
+            "noAccount": "Não tem uma conta?",
+            "signUp": "Cadastrar-se",
+            "signIn": "Entrar"
+        },
+        "register": {
+            "title": "Criar Conta",
+            "companyName": "Nome da Empresa",
+            "alreadyHaveAccount": "Já tem uma conta?",
+            "signIn": "Entrar"
+        }
+    },
+    "planGuard": {
+        "upgradeRequired": "Atualização Necessária",
+        "upgradeMessage": "Este recurso requer o plano {plan} ou superior.",
+        "currentPlan": "Plano Atual",
+        "upgradeButton": "Atualizar Plano",
+        "learnMore": "Saiba mais"
+    }
+}

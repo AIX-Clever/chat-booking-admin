@@ -1,0 +1,193 @@
+{
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "add": "Add",
+        "search": "Search",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "noData": "No data",
+        "actions": "Actions",
+        "confirm": "Confirm",
+        "close": "Close"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "bookings": "Bookings",
+        "services": "Services",
+        "providers": "Providers",
+        "availability": "Availability",
+        "knowledge": "Knowledge",
+        "faqs": "FAQs",
+        "settings": "Settings",
+        "workflows": "Workflows",
+        "logout": "Logout"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "welcome": "Welcome",
+        "totalBookings": "Total Bookings",
+        "activeServices": "Active Services",
+        "totalRevenue": "Total Revenue",
+        "conversionRate": "Conversion Rate",
+        "recentBookings": "Recent Bookings",
+        "bookingsTrend": "Bookings Trend",
+        "noBookings": "No bookings yet"
+    },
+    "bookings": {
+        "title": "Bookings Management",
+        "newBooking": "New Booking",
+        "viewDetails": "View Details",
+        "status": {
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "cancelled": "Cancelled",
+            "completed": "Completed",
+            "noShow": "No Show"
+        },
+        "columns": {
+            "id": "ID",
+            "customer": "Customer",
+            "service": "Service",
+            "provider": "Provider",
+            "date": "Date",
+            "time": "Time",
+            "status": "Status",
+            "actions": "Actions"
+        },
+        "filters": {
+            "all": "All",
+            "today": "Today",
+            "week": "This Week",
+            "month": "This Month"
+        }
+    },
+    "services": {
+        "title": "Services",
+        "addService": "Add Service",
+        "editService": "Edit Service",
+        "deleteService": "Delete Service",
+        "name": "Name",
+        "category": "Category",
+        "duration": "Duration (min)",
+        "price": "Price",
+        "description": "Description",
+        "active": "Active",
+        "inactive": "Inactive",
+        "noServices": "No services created"
+    },
+    "providers": {
+        "title": "Providers",
+        "addProvider": "Add Provider",
+        "editProvider": "Edit Provider",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "specialties": "Specialties",
+        "noProviders": "No providers"
+    },
+    "availability": {
+        "title": "Availability",
+        "weeklySchedule": "Weekly Schedule",
+        "exceptions": "Exceptions",
+        "addException": "Add Exception",
+        "selectProvider": "Select Provider",
+        "days": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
+        }
+    },
+    "knowledge": {
+        "title": "Knowledge Base",
+        "addDocument": "Add Document",
+        "uploadFile": "Upload File",
+        "fileName": "File Name",
+        "fileSize": "Size",
+        "uploadDate": "Upload Date",
+        "noDocuments": "No documents"
+    },
+    "faqs": {
+        "title": "Frequently Asked Questions",
+        "addFaq": "Add FAQ",
+        "editFaq": "Edit FAQ",
+        "question": "Question",
+        "answer": "Answer",
+        "category": "Category",
+        "noFaqs": "No FAQs"
+    },
+    "settings": {
+        "title": "Settings",
+        "tabs": {
+            "general": "General",
+            "ai": "Artificial Intelligence",
+            "providers": "Providers",
+            "notifications": "Notifications"
+        },
+        "general": {
+            "title": "General Settings",
+            "companyName": "Company Name",
+            "email": "Email",
+            "phone": "Phone",
+            "timezone": "Timezone",
+            "language": "Language",
+            "currency": "Currency"
+        },
+        "ai": {
+            "title": "AI Settings",
+            "mode": "AI Mode",
+            "ragEnabled": "RAG Enabled",
+            "temperature": "Temperature",
+            "maxTokens": "Max Tokens",
+            "model": "Model"
+        },
+        "saveSuccess": "Settings saved successfully",
+        "saveError": "Error saving settings"
+    },
+    "workflows": {
+        "title": "Workflow Editor",
+        "newWorkflow": "New Workflow",
+        "saveWorkflow": "Save Workflow",
+        "deleteWorkflow": "Delete Workflow",
+        "nodes": {
+            "start": "Start",
+            "message": "Message",
+            "question": "Question",
+            "action": "Action",
+            "condition": "Condition",
+            "end": "End"
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Sign In",
+            "subtitle": "Admin Panel",
+            "email": "Email",
+            "password": "Password",
+            "forgotPassword": "Forgot password?",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up",
+            "signIn": "Sign In"
+        },
+        "register": {
+            "title": "Create Account",
+            "companyName": "Company Name",
+            "alreadyHaveAccount": "Already have an account?",
+            "signIn": "Sign in"
+        }
+    },
+    "planGuard": {
+        "upgradeRequired": "Upgrade Required",
+        "upgradeMessage": "This feature requires the {plan} plan or higher.",
+        "currentPlan": "Current Plan",
+        "upgradeButton": "Upgrade Plan",
+        "learnMore": "Learn more"
+    }
+}

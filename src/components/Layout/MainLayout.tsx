@@ -31,6 +31,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
+import LanguageSelector from '../LanguageSelector';
 
 const drawerWidth = 240;
 
@@ -250,7 +251,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                             </Typography>
                         )}
                     </Box>
-                    <ThemeSwitcher />
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <ThemeSwitcher />
+                        <LanguageSelector />
+                    </Box>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
