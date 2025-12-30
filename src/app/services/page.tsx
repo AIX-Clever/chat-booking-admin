@@ -276,10 +276,10 @@ export default function ServicesPage() {
                 <Typography variant="h4">{t('title')}</Typography>
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <Button variant="outlined" startIcon={<CategoryIcon />} onClick={() => setOpenCategories(true)}>
-                        Manage Categories
+                        {t('category')}
                     </Button>
                     <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
-                        New Service
+                        {t('addService')}
                     </Button>
                 </Box>
             </Box>
@@ -310,10 +310,10 @@ export default function ServicesPage() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Duration</TableCell>
-                                    <TableCell>Price</TableCell>
+                                    <TableCell>{t('name')}</TableCell>
+                                    <TableCell>{t('category')}</TableCell>
+                                    <TableCell>{t('duration')}</TableCell>
+                                    <TableCell>{t('price')}</TableCell>
                                     <TableCell>Status</TableCell>
                                     <TableCell align="right">Actions</TableCell>
                                 </TableRow>
@@ -334,7 +334,7 @@ export default function ServicesPage() {
                                         <TableCell>${row.price}</TableCell>
                                         <TableCell>
                                             <Chip
-                                                label={row.available ? 'Active' : 'Inactive'}
+                                                label={row.available ? t('active') : t('inactive')}
                                                 color={row.available ? 'success' : 'default'}
                                                 size="small"
                                                 variant="filled"
