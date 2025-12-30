@@ -22,9 +22,11 @@ import EmailOutlineIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlineIcon from '@mui/icons-material/LockOutlined';
 import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
     const router = useRouter();
+    const t = useTranslations('auth.login');
     const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
@@ -112,10 +114,10 @@ export default function LoginPage() {
 
                 <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 480 }}>
                     <Typography variant="h3" fontWeight="bold" gutterBottom>
-                        Gestiona tus Reservas con IA
+                        {t('title')}
                     </Typography>
                     <Typography variant="h6" sx={{ opacity: 0.8, mb: 4, fontWeight: 'normal' }}>
-                        Automatiza citas, gestiona proveedores y ofrece un servicio excepcional.
+                        {t('subtitle')}
                     </Typography>
                 </Box>
             </Box>
@@ -159,7 +161,7 @@ export default function LoginPage() {
                         <Stack spacing={3}>
                             <TextField
                                 fullWidth
-                                label="Correo Electrónico"
+                                label={t('email')}
                                 placeholder="admin@lucia.com"
                                 value={formData.email}
                                 onChange={handleChange('email')}
@@ -174,7 +176,7 @@ export default function LoginPage() {
 
                             <TextField
                                 fullWidth
-                                label="Contraseña"
+                                label={t('password')}
                                 type={showPassword ? 'text' : 'password'}
                                 value={formData.password}
                                 onChange={handleChange('password')}
@@ -204,7 +206,7 @@ export default function LoginPage() {
                                     label={<Typography variant="body2">Recordarme</Typography>}
                                 />
                                 <Link component="button" variant="body2" underline="hover" onClick={() => { }}>
-                                    ¿Olvidaste tu contraseña?
+                                    {t('forgotPassword')}
                                 </Link>
                             </Box>
 
@@ -225,16 +227,16 @@ export default function LoginPage() {
                                     }
                                 }}
                             >
-                                {loading ? <CircularProgress size={24} color="inherit" /> : 'Iniciar Sesión'}
+                                {loading ? <CircularProgress size={24} color="inherit" /> : t('signIn')}
                             </Button>
                         </Stack>
                     </form>
 
                     <Box sx={{ mt: 4, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
-                            ¿No tienes una cuenta?{' '}
+                            {t('noAccount')}{' '}
                             <Link href="#" underline="hover" fontWeight="medium">
-                                Contactar Soporte
+                                {t('signUp')}
                             </Link>
                         </Typography>
                     </Box>
