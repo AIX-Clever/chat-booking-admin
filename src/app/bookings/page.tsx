@@ -501,7 +501,7 @@ export default function BookingsPage() {
                         startIcon={<AddIcon />}
                         onClick={() => handleOpenNewBooking()}
                     >
-                        New Booking
+                        {t('newBooking')}
                     </Button>
                     <ToggleButtonGroup
                         value={viewMode}
@@ -523,14 +523,14 @@ export default function BookingsPage() {
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                         select
-                        label="Provider"
+                        label={t('filters.all')}
                         value={filterProvider}
                         onChange={(e) => setFilterProvider(e.target.value)}
                         sx={{ minWidth: 200 }}
                         size="small"
                         disabled={loading}
                     >
-                        <MenuItem value="All">All</MenuItem>
+                        <MenuItem value="All">{t('filters.all')}</MenuItem>
                         {providers.map((p) => (
                             <MenuItem key={p.providerId} value={p.name}>{p.name}</MenuItem>
                         ))}
@@ -538,7 +538,7 @@ export default function BookingsPage() {
 
                     <TextField
                         select
-                        label="Status"
+                        label={t('status.confirmed')}
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
                         sx={{ minWidth: 150 }}
@@ -590,13 +590,13 @@ export default function BookingsPage() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Date</TableCell>
+                                    <TableCell>{t('columns.date')}</TableCell>
                                     <TableCell>Time Left</TableCell> {/* New Column */}
-                                    <TableCell>Client</TableCell>
-                                    <TableCell>Service</TableCell>
-                                    <TableCell>Provider</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell align="right">Actions</TableCell>
+                                    <TableCell>{t('columns.customer')}</TableCell>
+                                    <TableCell>{t('columns.service')}</TableCell>
+                                    <TableCell>{t('columns.provider')}</TableCell>
+                                    <TableCell>{t('columns.status')}</TableCell>
+                                    <TableCell align="right">{t('columns.actions')}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
