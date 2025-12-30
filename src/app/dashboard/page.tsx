@@ -1,6 +1,7 @@
 'use client';
 
 import { Typography, Grid, CircularProgress, Box, Alert } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import AppWidgetSummary from '../../components/dashboard/AppWidgetSummary';
 import AppWebsiteVisits from '../../components/dashboard/AppWebsiteVisits';
 import AppCurrentVisits from '../../components/dashboard/AppCurrentVisits';
@@ -23,6 +24,7 @@ const PLAN_LIMITS: Record<string, { tokensIA: number; bookings: number; apiCalls
 };
 
 export default function DashboardPage() {
+    const t = useTranslations('dashboard');
     const { metrics, loading: metricsLoading, error: metricsError } = useDashboardMetrics();
     const { usage, loading: usageLoading } = usePlanUsage();
 
@@ -98,7 +100,7 @@ export default function DashboardPage() {
     return (
         <>
             <Typography variant="h4" sx={{ mb: 5 }}>
-                Hi, Welcome back 👋
+                {t('welcome')} 👋
             </Typography>
 
             {metricsError && (
@@ -110,7 +112,7 @@ export default function DashboardPage() {
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6} md={3}>
                     <AppWidgetSummary
-                        title="Ingresos Generados"
+                        title={t('totalRevenue')}
                         total={Math.round(metrics?.summary.revenue || 0)}
                         color="primary"
                         icon={<PaidIcon fontSize="large" />}
