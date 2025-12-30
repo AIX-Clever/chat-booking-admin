@@ -30,6 +30,7 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import LanguageSelector from '../LanguageSelector';
 
@@ -129,6 +130,7 @@ const GET_TENANT_NAME = `
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const theme = useTheme();
+    const t = useTranslations('nav');
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
     const router = useRouter();
@@ -199,15 +201,15 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }, [authStatus, pathname, router]);
 
     const menuItems = [
-        { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-        { text: 'Workflows', icon: <AccountTreeIcon />, path: '/workflows' },
-        { text: 'Knowledge Base', icon: <MenuBookIcon />, path: '/knowledge' },
-        { text: 'FAQs', icon: <QuizIcon />, path: '/faqs' },
-        { text: 'Services', icon: <DesignServicesIcon />, path: '/services' },
-        { text: 'Providers', icon: <PeopleIcon />, path: '/providers' },
-        { text: 'Availability', icon: <CalendarMonthIcon />, path: '/availability' },
-        { text: 'Bookings', icon: <BookOnlineIcon />, path: '/bookings' },
-        { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
+        { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
+        { text: t('workflows'), icon: <AccountTreeIcon />, path: '/workflows' },
+        { text: t('knowledge'), icon: <MenuBookIcon />, path: '/knowledge' },
+        { text: t('faqs'), icon: <QuizIcon />, path: '/faqs' },
+        { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
+        { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
+        { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
+        { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
+        { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
 
     if (pathname === '/login') {
@@ -316,7 +318,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                                 <ExitToAppIcon />
                             </ListItemIcon>
                             <ListItemText
-                                primary="Cerrar Sesión"
+                                primary={t('logout')}
                                 sx={{
                                     opacity: open ? 1 : 0,
                                     color: theme.palette.error.main
