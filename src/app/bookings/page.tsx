@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW } from '../../graphql/queries';
@@ -85,6 +86,7 @@ const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed', 'no_s
 const client = generateClient();
 
 export default function BookingsPage() {
+    const t = useTranslations('bookings');
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -492,7 +494,7 @@ export default function BookingsPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 5 }}>
-                <Typography variant="h4">Bookings</Typography>
+                <Typography variant="h4">{t('title')}</Typography>
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <Button
                         variant="contained"
