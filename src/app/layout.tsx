@@ -12,8 +12,7 @@ export const metadata: Metadata = {
 };
 
 import AmplifyProvider from '../components/AmplifyProvider';
-
-// ...
+import { TenantProvider } from '../context/TenantContext';
 
 export default function RootLayout({
     children,
@@ -24,9 +23,11 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <AmplifyProvider>
-                    <ThemeRegistry>
-                        <MainLayout>{children}</MainLayout>
-                    </ThemeRegistry>
+                    <TenantProvider>
+                        <ThemeRegistry>
+                            <MainLayout>{children}</MainLayout>
+                        </ThemeRegistry>
+                    </TenantProvider>
                 </AmplifyProvider>
             </body>
         </html>

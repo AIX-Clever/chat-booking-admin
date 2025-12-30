@@ -15,6 +15,7 @@ import {
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChatIcon from '@mui/icons-material/Chat';
+import { useSearchParams } from 'next/navigation';
 
 import { generateClient } from 'aws-amplify/api';
 import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
@@ -48,8 +49,18 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 export default function SettingsPage() {
+    const searchParams = useSearchParams();
     const client = generateClient();
-    const [tabValue, setTabValue] = React.useState(0);
+
+    // Initial tab logic
+    const getInitialTab = () => {
+        const tabParam = searchParams.get('tab');
+        if (tabParam === 'ai') return 1;
+        if (tabParam === 'keys') return 2;
+        return 0;
+    };
+
+    const [tabValue, setTabValue] = React.useState(getInitialTab);
     const [hasMounted, setHasMounted] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -69,6 +80,7 @@ export default function SettingsPage() {
 
     // AI State
     const [aiMode, setAiMode] = React.useState('nlp');
+    const [ragEnabled, setRagEnabled] = React.useState(false);
 
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
@@ -105,6 +117,9 @@ export default function SettingsPage() {
 
                         if (settings.widgetConfig) setWidgetConfig(settings.widgetConfig);
                         if (settings.aiMode) setAiMode(settings.aiMode);
+                        if (settings.ai && typeof settings.ai.enabled !== 'undefined') {
+                            setRagEnabled(settings.ai.enabled);
+                        }
                     } catch (e) {
                         console.warn("Failed to parse tenant settings JSON", e);
                     }
@@ -132,7 +147,10 @@ export default function SettingsPage() {
             setLoading(true);
             const settingsJson = JSON.stringify({
                 widgetConfig,
-                aiMode
+                aiMode,
+                ai: {
+                    enabled: ragEnabled
+                }
             });
 
             await client.graphql({
@@ -212,17 +230,9 @@ export default function SettingsPage() {
                                 aiMode={aiMode}
                                 setAiMode={(mode) => {
                                     setAiMode(mode);
-                                    // Make it feel instant, but we might want to verify user intent to save immediately or explicitly
-                                    // Previous code had specific save button for branding but logic for AI mode was immediate?
-                                    // Let's rely on explicit save for better UX or auto-save.
-                                    // To keep consistency with PropertiesTab, let's add a save button inside AiConfigTab or save immediately.
-                                    // The previous impl had no save button in AI tab, implying auto-save or mock.
-                                    // We'll stick to local state change, user can navigate back to Tab 1 to save? 
-                                    // UX Decision: Adding auto-save for AI mode or shared save button? 
-                                    // Let's simply trigger save when mode changes? No, unsafe. 
-                                    // Let's add a Save button to the page or handle it inside tab.
-                                    // For now, we update local state.
                                 }}
+                                ragEnabled={ragEnabled}
+                                setRagEnabled={setRagEnabled}
                                 currentPlan={currentPlan}
                                 onUpgradeClick={() => {
                                     // Mock upgrade implementation
