@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY, SET_PROVIDER_EXCEPTIONS } from '../../graphql/queries';

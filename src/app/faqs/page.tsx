@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_FAQS, CREATE_FAQ, UPDATE_FAQ, DELETE_FAQ } from '../../graphql/queries';

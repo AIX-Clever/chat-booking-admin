@@ -1,5 +1,7 @@
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useTranslations } from 'next-intl';
+
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Paper, Grid, CircularProgress, IconButton } from '@mui/material';

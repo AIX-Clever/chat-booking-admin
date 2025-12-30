@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_PROVIDERS, CREATE_PROVIDER, UPDATE_PROVIDER, DELETE_PROVIDER, SEARCH_SERVICES } from '../../graphql/queries';
@@ -104,6 +105,7 @@ function CustomTabPanel(props: CustomTabPanelProps) {
 }
 
 export default function ProvidersPage() {
+    const t = useTranslations('providers');
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [availableServices, setAvailableServices] = React.useState<Service[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -303,7 +305,7 @@ export default function ProvidersPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Typography variant="h4">Providers</Typography>
+                <Typography variant="h4">{t('title')}</Typography>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
                     New Provider
                 </Button>
