@@ -2,7 +2,6 @@
 
 import { useLocale } from 'next-intl';
 import { IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
-import { Language as LanguageIcon } from '@mui/icons-material';
 import { useState } from 'react';
 
 const languages = [

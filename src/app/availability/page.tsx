@@ -1,6 +1,6 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useTranslations } from 'next-intl';
 
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
@@ -104,75 +104,18 @@ export default function AvailabilityPage() {
             if (fetchedProviders.length > 0) {
                 setSelectedProvider(fetchedProviders[0].providerId);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error fetching providers:', error);
         }
     };
 
-    const fetchAvailability = React.useCallback(async (providerId: string) => {
-        setLoading(true);
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({
-                query: GET_PROVIDER_AVAILABILITY,
-                variables: { providerId }
-            });
-            const availabilityData = response.data.getProviderAvailability;
-            mapBackendToSchedule(availabilityData);
-        } catch (error) {
-            console.error('Error fetching availability:', error);
-            // On error or empty, reset to default (all disabled)
-            setSchedule(DEFAULT_SCHEDULE.map(d => ({ ...d, enabled: false, timeWindows: [] })));
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-    // Actually mapBackend relies on nothing external.
-
-    React.useEffect(() => {
-        if (selectedProvider) {
-            fetchAvailability(selectedProvider);
-        }
-    }, [selectedProvider, fetchAvailability]);
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mapBackendToSchedule = (data: any[]) => {
+    const mapBackendToSchedule = React.useCallback((data: any[]) => {
 
         const dayMap: { [key: string]: number } = {
             'MON': 1, 'TUE': 2, 'WED': 3, 'THU': 4, 'FRI': 5, 'SAT': 6, 'SUN': 7
         };
         const newSchedule = DEFAULT_SCHEDULE.map(d => ({ ...d, enabled: false, timeWindows: [] }));
-
-        // Collect all exceptions from all days (exceptions might be returned on each day object due to backend structure, 
-        // ideally they are provider-level but currently attached to days in DynamoDB entity model used by some logic. 
-        // Actually, looking at backend service update, exceptions are returned in the response of setProviderAvailability, 
-        // but getProviderAvailability returns a list of daily availabilities. 
-        // We need to check if exceptions are repeated for each day or just stored once.
-        // Based on the handler loop in getProviderAvailability: it returns a list of objects, each having `exceptions`.
-        // We should treat `exceptions` as a set across all days or take from the first one properly populated.
-        // Since exceptions are stored per provider (on the entity but the entity is keyed by day? No, entity seems to be ProviderAvailability which has day_of_week.
-        // Wait, DynamoDBAvailabilityRepository saves with key `tenantId#providerId`. 
-        // Ah, `get_provider_availability` in repo queries by `tenantId_providerId`. 
-        // It returns a LIST of items. Each item is a daily schedule.
-        // If exceptions are passed to `set_provider_availability`, they are saved to that specific day's item?
-        // Let's re-read the repo code...
-        // `pk = f"{availability.tenant_id}#{availability.provider_id}"`
-        // It seems `tenantId_providerId` is the partition key? 
-        // But if strict single-table design with that PK, then we can only have ONE item per provider?
-        // Wait, `response = self.table.query(KeyConditionExpression=Key('tenantId_providerId').eq(pk))`
-        // This query implies `tenantId_providerId` works as a partition key. 
-        // If there's no sort key, there's only ONE item per provider.
-        // But `set_provider_availability` takes `day_of_week`. 
-        // IF there is only one item, then `save_availability` OVERWRITES the whole item every time?
-        // Let's look at `save_availability` in repo again.
-        // `item = { ... 'dayOfWeek': availability.day_of_week ... }`
-        // If the table PK is just `tenantId_providerId`, then yes, it OVERWRITES.
-        // This implies the previous design was flawed: saving Monday overwrites Tuesday?
-        // OR the PK is composite? The code `pk = ...` suggests it's just that string.
-        // Unless there is a Sort Key defined in `cdk-stack` or `serverless.yml`?
-        // `infra/lib/database-stack.ts` (implied from docs) usually defines keys.
-        // But assuming the code works for daily schedules, let's assume `exceptions` are returned in the list.
-        // If `exceptions` are returned on any of the items, we should simple aggregate them.
 
         const allExceptions = new Set<string>();
 
@@ -203,7 +146,32 @@ export default function AvailabilityPage() {
             type: 'off'
         }));
         setExceptions(loadedExceptions);
-    };
+    }, []);
+
+    const fetchAvailability = React.useCallback(async (providerId: string) => {
+        setLoading(true);
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GET_PROVIDER_AVAILABILITY,
+                variables: { providerId }
+            });
+            const availabilityData = response.data.getProviderAvailability;
+            mapBackendToSchedule(availabilityData);
+        } catch (error: any) {
+            console.error('Error fetching availability:', error);
+            // On error or empty, reset to default (all disabled)
+            setSchedule(DEFAULT_SCHEDULE.map(d => ({ ...d, enabled: false, timeWindows: [] })));
+        } finally {
+            setLoading(false);
+        }
+    }, [mapBackendToSchedule]);
+
+    React.useEffect(() => {
+        if (selectedProvider) {
+            fetchAvailability(selectedProvider);
+        }
+    }, [selectedProvider, fetchAvailability]);
 
     const handleDayToggle = (index: number) => {
         const newSchedule = [...schedule];
@@ -312,7 +280,7 @@ export default function AvailabilityPage() {
 
             setIsSaved(true);
             alert('Availability saved!');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving availability:', error);
             alert('Failed to save availability.');
         } finally {

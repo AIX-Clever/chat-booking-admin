@@ -78,7 +78,7 @@ export function useDashboardMetrics() {
             const { getCurrentUser } = await import('aws-amplify/auth');
             try {
                 await getCurrentUser();
-            } catch (authError) {
+            } catch {
                 // User is not authenticated, don't make the request
                 console.log('User not authenticated, skipping metrics fetch');
                 setLoading(false);
@@ -146,7 +146,7 @@ export function usePlanUsage() {
             const { getCurrentUser } = await import('aws-amplify/auth');
             try {
                 await getCurrentUser();
-            } catch (authError) {
+            } catch {
                 // User is not authenticated, don't make the request
                 console.log('User not authenticated, skipping usage fetch');
                 setLoading(false);

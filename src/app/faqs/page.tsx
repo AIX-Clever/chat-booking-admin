@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';

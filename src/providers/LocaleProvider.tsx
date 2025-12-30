@@ -50,8 +50,9 @@ export default function LocaleProvider({ children }: LocaleProviderProps) {
 
     // Listen for language changes
     useEffect(() => {
-        const handleLanguageChange = (event: CustomEvent) => {
-            const newLocale = event.detail.locale;
+        const handleLanguageChange = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            const newLocale = customEvent.detail.locale;
             setLocale(newLocale);
             localStorage.setItem('lucia-language', newLocale);
 
@@ -64,9 +65,9 @@ export default function LocaleProvider({ children }: LocaleProviderProps) {
                 });
         };
 
-        window.addEventListener('languageChange' as any, handleLanguageChange);
+        window.addEventListener('languageChange', handleLanguageChange);
         return () => {
-            window.removeEventListener('languageChange' as any, handleLanguageChange);
+            window.removeEventListener('languageChange', handleLanguageChange);
         };
     }, []);
 

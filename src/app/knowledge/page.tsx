@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 
 import React, { useState } from 'react';
 import {
@@ -10,7 +9,6 @@ import {
     Button,
     Card,
     CardContent,
-    TextField,
     Alert,
     CircularProgress,
     List,
@@ -43,11 +41,7 @@ export default function KnowledgePage() {
 
     const client = generateClient();
 
-    React.useEffect(() => {
-        checkRagStatus();
-    }, []);
-
-    const checkRagStatus = async () => {
+    const checkRagStatus = React.useCallback(async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
@@ -66,7 +60,11 @@ export default function KnowledgePage() {
         } catch (error) {
             console.error('Error fetching tenant settings:', error);
         }
-    };
+    }, [client]);
+
+    React.useEffect(() => {
+        checkRagStatus();
+    }, [checkRagStatus]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -132,7 +130,7 @@ export default function KnowledgePage() {
 
                 {ragEnabled === false && (
                     <Alert severity="warning" sx={{ mb: 3 }}>
-                        <strong>RAG is currently disabled.</strong> Uploaded documents will be stored but the AI Agent won't use them until you enable "Knowledge Retrieval" in Settings.
+                        <strong>RAG is currently disabled.</strong> Uploaded documents will be stored but the AI Agent won&apos;t use them until you enable &quot;Knowledge Retrieval&quot; in Settings.
                     </Alert>
                 )}
 

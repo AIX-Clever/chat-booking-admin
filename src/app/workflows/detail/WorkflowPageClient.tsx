@@ -28,31 +28,7 @@ export default function WorkflowPageClient({ id }: { id: string }) {
     const [saving, setSaving] = useState(false);
     const [toast, setToast] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
-    useEffect(() => {
-        fetchWorkflow();
-    }, [id]);
-
-    const fetchWorkflow = async () => {
-        setLoading(true);
-        try {
-            const response: any = await client.graphql({
-                query: GET_WORKFLOW,
-                variables: { workflowId: id }
-            });
-            const data = response.data.getWorkflow;
-            if (data) {
-                setWorkflow(data);
-                parseWorkflowData(data);
-            }
-        } catch (error) {
-            console.error('Error fetching workflow:', error);
-            setToast({ open: true, message: 'Error loading workflow', severity: 'error' });
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const parseWorkflowData = (data: WorkflowData) => {
+    const parseWorkflowData = React.useCallback((data: WorkflowData) => {
         let steps = data.steps;
         if (typeof steps === 'string') {
             try {
@@ -137,7 +113,31 @@ export default function WorkflowPageClient({ id }: { id: string }) {
 
         setInitialNodes(nodes);
         setInitialEdges(edges);
-    };
+    }, []);
+
+    const fetchWorkflow = React.useCallback(async () => {
+        setLoading(true);
+        try {
+            const response: any = await client.graphql({
+                query: GET_WORKFLOW,
+                variables: { workflowId: id }
+            });
+            const data = response.data.getWorkflow;
+            if (data) {
+                setWorkflow(data);
+                parseWorkflowData(data);
+            }
+        } catch (error) {
+            console.error('Error fetching workflow:', error);
+            setToast({ open: true, message: 'Error loading workflow', severity: 'error' });
+        } finally {
+            setLoading(false);
+        }
+    }, [id, parseWorkflowData]);
+
+    useEffect(() => {
+        fetchWorkflow();
+    }, [fetchWorkflow]);
 
     const handleSave = async () => {
         if (!editorRef.current || !workflow) return;
@@ -176,7 +176,7 @@ export default function WorkflowPageClient({ id }: { id: string }) {
 
                 // Map Edges to 'next' or 'options_mapping'
                 let nextStepId = originalStep.next;
-                let optionsMapping = originalStep.content?.options_mapping || {};
+                const optionsMapping = originalStep.content?.options_mapping || {};
 
                 const nodeEdges = edges.filter(e => e.source === node.id);
 
