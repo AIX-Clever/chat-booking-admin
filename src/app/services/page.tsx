@@ -2,6 +2,7 @@
 
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE, LIST_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY } from '../../graphql/queries';
 import {
@@ -60,6 +61,7 @@ interface Category {
 const client = generateClient();
 
 export default function ServicesPage() {
+    const t = useTranslations('services');
     const [services, setServices] = React.useState<Service[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [categories, setCategories] = React.useState<Category[]>([]);
@@ -271,7 +273,7 @@ export default function ServicesPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Typography variant="h4">Services</Typography>
+                <Typography variant="h4">{t('title')}</Typography>
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <Button variant="outlined" startIcon={<CategoryIcon />} onClick={() => setOpenCategories(true)}>
                         Manage Categories
