@@ -107,7 +107,12 @@ export default function SettingsPage() {
                 if (tenant.plan) setCurrentPlan(tenant.plan);
                 if (tenant.settings) {
                     try {
-                        const settings = JSON.parse(tenant.settings);
+                        let settings;
+                        if (typeof tenant.settings === 'string') {
+                            settings = JSON.parse(tenant.settings);
+                        } else {
+                            settings = tenant.settings;
+                        }
 
                         // Compatibility with Onboarding data structure
                         if (settings.theme && settings.theme.primaryColor && !settings.widgetConfig) {
