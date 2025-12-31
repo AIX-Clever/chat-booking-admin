@@ -32,6 +32,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslations } from 'next-intl';
 
 // --- Types ---
 interface FAQ {
@@ -45,6 +46,8 @@ interface FAQ {
 const client = generateClient();
 
 export default function FAQsPage() {
+    const t = useTranslations('faqs');
+    const tCommon = useTranslations('common');
     const [faqs, setFaqs] = React.useState<FAQ[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -157,8 +160,8 @@ export default function FAQsPage() {
 
     const handleDelete = (id: string) => {
         setConfirmConfig({
-            title: 'Delete FAQ',
-            content: 'Are you sure you want to delete this FAQ? This action cannot be undone.',
+            title: t('deleteDialog.title'),
+            content: t('deleteDialog.message'),
             action: async () => {
                 try {
                     await client.graphql({
@@ -191,9 +194,9 @@ export default function FAQsPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Typography variant="h4">FAQs</Typography>
+                <Typography variant="h4">{t('title')}</Typography>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
-                    New FAQ
+                    {t('newFaq')}
                 </Button>
             </Box>
 
@@ -201,7 +204,7 @@ export default function FAQsPage() {
                 <Box sx={{ p: 3 }}>
                     <TextField
                         fullWidth
-                        placeholder="Search FAQs..."
+                        placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         InputProps={{
@@ -223,11 +226,11 @@ export default function FAQsPage() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Question</TableCell>
-                                    <TableCell>Answer</TableCell>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell align="right">Actions</TableCell>
+                                    <TableCell>{t('question')}</TableCell>
+                                    <TableCell>{t('answer')}</TableCell>
+                                    <TableCell>{t('category')}</TableCell>
+                                    <TableCell>{t('status')}</TableCell>
+                                    <TableCell align="right">{tCommon('actions')}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -246,7 +249,7 @@ export default function FAQsPage() {
                                         <TableCell>{row.category}</TableCell>
                                         <TableCell>
                                             <Chip
-                                                label={row.active ? 'Active' : 'Inactive'}
+                                                label={row.active ? t('active') : t('inactive')}
                                                 color={row.active ? 'success' : 'default'}
                                                 size="small"
                                                 variant="filled"
@@ -267,7 +270,7 @@ export default function FAQsPage() {
                                     <TableRow>
                                         <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
                                             <Typography variant="body1" color="text.secondary">
-                                                No FAQs found.
+                                                {t('noFaqsFound')}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -280,7 +283,7 @@ export default function FAQsPage() {
 
             {/* FAQ Dialog */}
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                <DialogTitle>{currentFAQ ? 'Edit FAQ' : 'New FAQ'}</DialogTitle>
+                <DialogTitle>{currentFAQ ? t('editFaq') : t('newFaq')}</DialogTitle>
                 <DialogContent dividers>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
                         <TextField
@@ -312,16 +315,16 @@ export default function FAQsPage() {
                                     onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
                                 />
                             }
-                            label="Active"
+                            label={t('active')}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="inherit">
-                        Cancel
+                        {tCommon('cancel')}
                     </Button>
                     <Button onClick={handleSave} variant="contained" disabled={!formData.question || !formData.answer}>
-                        Save
+                        {tCommon('save')}
                     </Button>
                 </DialogActions>
             </Dialog>

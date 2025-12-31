@@ -62,6 +62,7 @@ const client = generateClient();
 
 export default function ServicesPage() {
     const t = useTranslations('services');
+    const tCommon = useTranslations('common');
     const [services, setServices] = React.useState<Service[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [categories, setCategories] = React.useState<Category[]>([]);
@@ -194,8 +195,8 @@ export default function ServicesPage() {
 
     const handleDelete = (id: string) => {
         setConfirmConfig({
-            title: 'Delete Service',
-            content: 'Are you sure you want to delete this service? This action cannot be undone.',
+            title: t('deleteService'),
+            content: t('deleteConfirmation'),
             action: async () => {
                 try {
                     await client.graphql({
@@ -239,8 +240,8 @@ export default function ServicesPage() {
 
     const handleDeleteCategory = (category: Category) => {
         setConfirmConfig({
-            title: 'Delete Category',
-            content: `Are you sure you want to delete the category "${category.name}"?`,
+            title: t('deleteCategoryTitle'),
+            content: t('deleteCategoryConfirmation', { name: category.name }),
             action: async () => {
                 try {
                     await client.graphql({
@@ -288,7 +289,7 @@ export default function ServicesPage() {
                 <Box sx={{ p: 3 }}>
                     <TextField
                         fullWidth
-                        placeholder="Search service..."
+                        placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         InputProps={{
@@ -314,8 +315,8 @@ export default function ServicesPage() {
                                     <TableCell>{t('category')}</TableCell>
                                     <TableCell>{t('duration')}</TableCell>
                                     <TableCell>{t('price')}</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell align="right">Actions</TableCell>
+                                    <TableCell>{t('status')}</TableCell>
+                                    <TableCell align="right">{tCommon('actions')}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -355,7 +356,7 @@ export default function ServicesPage() {
                                     <TableRow>
                                         <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
                                             <Typography variant="body1" color="text.secondary">
-                                                No services found.
+                                                {t('noServicesFound')}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -368,17 +369,17 @@ export default function ServicesPage() {
 
             {/* Service Dialog */}
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                <DialogTitle>{currentService ? 'Edit Service' : 'New Service'}</DialogTitle>
+                <DialogTitle>{currentService ? t('editService') : t('newService')}</DialogTitle>
                 <DialogContent dividers>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
                         <TextField
-                            label="Service Name"
+                            label={t('serviceName')}
                             fullWidth
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         />
                         <TextField
-                            label="Description"
+                            label={t('description')}
                             fullWidth
                             multiline
                             rows={3}
@@ -388,14 +389,14 @@ export default function ServicesPage() {
 
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             <TextField
-                                label="Duration (min)"
+                                label={t('durationMin')}
                                 type="number"
                                 fullWidth
                                 value={formData.durationMinutes}
                                 onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
                             />
                             <TextField
-                                label="Price ($)"
+                                label={t('priceLabel')}
                                 type="number"
                                 fullWidth
                                 value={formData.price}
@@ -408,7 +409,7 @@ export default function ServicesPage() {
                         </Box>
 
                         <TextField
-                            label="Category"
+                            label={t('category')}
                             fullWidth
                             select
                             value={formData.category}
@@ -428,34 +429,34 @@ export default function ServicesPage() {
                                     onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
                                 />
                             }
-                            label="Active Service"
+                            label={t('activeService')}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="inherit">
-                        Cancel
+                        {tCommon('cancel')}
                     </Button>
                     <Button onClick={handleSave} variant="contained" disabled={!formData.name}>
-                        Save
+                        {tCommon('save')}
                     </Button>
                 </DialogActions>
             </Dialog>
 
             {/* Manage Categories Dialog */}
             <Dialog open={openCategories} onClose={() => setOpenCategories(false)} maxWidth="xs" fullWidth>
-                <DialogTitle>Manage Categories</DialogTitle>
+                <DialogTitle>{t('manageCategories')}</DialogTitle>
                 <DialogContent dividers>
                     <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                         <TextField
                             size="small"
                             fullWidth
-                            placeholder="New category name"
+                            placeholder={t('newCategoryPlaceholder')}
                             value={newCategory}
                             onChange={(e) => setNewCategory(e.target.value)}
                         />
                         <Button variant="contained" onClick={handleAddCategory} disabled={!newCategory}>
-                            Add
+                            {t('add')}
                         </Button>
                     </Box>
                     <Divider />
@@ -475,7 +476,7 @@ export default function ServicesPage() {
                     </List>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenCategories(false)}>Close</Button>
+                    <Button onClick={() => setOpenCategories(false)}>{tCommon('close')}</Button>
                 </DialogActions>
             </Dialog>
         </>

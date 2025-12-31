@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_WORKFLOWS, DELETE_WORKFLOW } from '../../graphql/queries';
+import { useTranslations } from 'next-intl';
 
 const client = generateClient();
 
@@ -22,6 +23,7 @@ interface Workflow {
 
 export default function WorkflowsListPage() {
     const router = useRouter();
+    const t = useTranslations('workflows');
     const [workflows, setWorkflows] = useState<Workflow[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -43,7 +45,7 @@ export default function WorkflowsListPage() {
 
     const handleDelete = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation();
-        if (confirm('Are you sure you want to delete this workflow?')) {
+        if (confirm(t('deleteConfirmation'))) {
             try {
                 await client.graphql({
                     query: DELETE_WORKFLOW,
@@ -60,14 +62,14 @@ export default function WorkflowsListPage() {
         <Box sx={{ p: 3 }}>
             <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="h4" fontWeight="bold">
-                    Workflows
+                    {t('title')}
                 </Typography>
                 <Button
                     variant="contained"
                     startIcon={<AddIcon />}
                     onClick={() => router.push('/workflows/new')}
                 >
-                    New Workflow
+                    {t('newWorkflow')}
                 </Button>
             </Box>
 
@@ -92,7 +94,7 @@ export default function WorkflowsListPage() {
                                     {workflow.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap sx={{ mb: 2 }}>
-                                    {workflow.description || 'No description'}
+                                    {workflow.description || t('noDescription')}
                                 </Typography>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -113,7 +115,7 @@ export default function WorkflowsListPage() {
                     {workflows.length === 0 && (
                         <Grid item xs={12}>
                             <Paper sx={{ p: 4, textAlign: 'center' }}>
-                                <Typography color="text.secondary">No workflows found.</Typography>
+                                <Typography color="text.secondary">{t('noWorkflowsFound')}</Typography>
                             </Paper>
                         </Grid>
                     )}

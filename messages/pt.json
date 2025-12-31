@@ -28,14 +28,37 @@
     },
     "dashboard": {
         "title": "Painel de Controle",
-        "welcome": "Bem-vindo",
-        "totalBookings": "Total de Reservas",
+        "welcome": "Olá, Bem-vindo de volta",
+        "totalBookings": "Reservas Totais",
         "activeServices": "Serviços Ativos",
         "totalRevenue": "Receita Total",
         "conversionRate": "Taxa de Conversão",
         "recentBookings": "Reservas Recentes",
-        "bookingsTrend": "Tendência de Reservas",
-        "noBookings": "Ainda não há reservas"
+        "bookingsTrend": "Confirmadas",
+        "noBookings": "Ainda não há reservas",
+        "week": "Semana",
+        "hoursSaved": "Horas Economizadas",
+        "autoAttendance": "Atendimento Automático",
+        "topServicesPerformance": "Desempenho dos Principais Serviços",
+        "period": "Período",
+        "bookingStatus": "Status das Reservas",
+        "planUsage": "Uso do Plano",
+        "plan": "Plano",
+        "metricsError": "Não foi possível carregar as métricas. Mostrando dados iniciais.",
+        "unknownService": "Desconhecido",
+        "noData": "Sem dados",
+        "status": {
+            "pending": "Pendentes",
+            "confirmed": "Confirmadas",
+            "cancelled": "Canceladas",
+            "completed": "Concluídas",
+            "noShow": "Não Compareceu"
+        },
+        "planMetrics": {
+            "tokensIA": "Tokens IA (Mensal)",
+            "bookings": "Reservas (Mensal)",
+            "messages": "Mensagens"
+        }
     },
     "bookings": {
         "title": "Gestão de Reservas",
@@ -63,7 +86,46 @@
             "today": "Hoje",
             "week": "Esta Semana",
             "month": "Este Mês"
-        }
+        },
+        "timeLeft": {
+            "ended": "Finalizado",
+            "inMinutes": "Em {minutes}m",
+            "inHours": "Em {hours}h",
+            "inDays": "Em {days}d",
+            "header": "Tempo Restante"
+        },
+        "dialogs": {
+            "detailsTitle": "Detalhes da Reserva",
+            "newBookingTitle": "Nova Reserva",
+            "cancelTitle": "Cancelar Reserva",
+            "cancelContent": "Tem certeza que deseja cancelar a reserva de {name}?"
+        },
+        "form": {
+            "clientName": "Nome do Cliente",
+            "clientEmail": "E-mail do Cliente",
+            "clientPhone": "Telefone (Opcional)",
+            "service": "Serviço",
+            "provider": "Profissional",
+            "date": "Data",
+            "time": "Hora",
+            "notes": "Notas",
+            "dateTime": "Data e Hora"
+        },
+        "actions": {
+            "whatsAppReminder": "Lembrete WhatsApp",
+            "confirm": "Confirmar",
+            "noShow": "Não Compareceu",
+            "cancelBooking": "Cancelar Reserva",
+            "prev": "Ant",
+            "next": "Próx"
+        },
+        "sorting": {
+            "label": "Ordenar por",
+            "closest": "Mais próxima",
+            "furthest": "Mais distante"
+        },
+        "searchPlaceholder": "Buscar cliente...",
+        "noBookingsFound": "Nenhuma reserva encontrada."
     },
     "services": {
         "title": "Serviços",
@@ -77,17 +139,75 @@
         "description": "Descrição",
         "active": "Ativo",
         "inactive": "Inativo",
-        "noServices": "Nenhum serviço criado"
+        "noServices": "Nenhum serviço criado",
+        "searchPlaceholder": "Buscar serviço...",
+        "noServicesFound": "Nenhum serviço encontrado.",
+        "status": "Status",
+        "actions": "Ações",
+        "newService": "Novo Serviço",
+        "serviceName": "Nome do Serviço",
+        "durationMin": "Duração (min)",
+        "priceLabel": "Preço ($)",
+        "activeService": "Serviço Ativo",
+        "deleteConfirmation": "Tem certeza que deseja excluir este serviço? Esta ação não pode ser desfeita.",
+        "manageCategories": "Gerenciar Categorias",
+        "newCategoryPlaceholder": "Nome da nova categoria",
+        "add": "Adicionar",
+        "deleteCategoryTitle": "Excluir Categoria",
+        "deleteCategoryConfirmation": "Tem certeza que deseja excluir a categoria \"{name}\"?"
     },
     "providers": {
         "title": "Profissionais",
-        "addProvider": "Adicionar Profissional",
+        "newProvider": "Novo Profissional",
         "editProvider": "Editar Profissional",
-        "name": "Nome",
-        "email": "E-mail",
-        "phone": "Telefone",
-        "specialties": "Especialidades",
-        "noProviders": "Nenhum profissional"
+        "searchPlaceholder": "Buscar profissional...",
+        "noProvidersFound": "Nenhum profissional encontrado.",
+        "columns": {
+            "name": "Nome",
+            "assignedServices": "Serviços Atribuídos",
+            "aiDrivers": "Drivers de IA",
+            "timezone": "Fuso Horário",
+            "status": "Status",
+            "actions": "Ações"
+        },
+        "status": {
+            "active": "Ativo",
+            "inactive": "Inativo"
+        },
+        "servicesCount": "{count} Serviços",
+        "dialog": {
+            "tabs": {
+                "general": "Geral",
+                "services": "Serviços",
+                "aiContext": "Contexto IA"
+            },
+            "general": {
+                "fullName": "Nome Completo",
+                "biography": "Biografia",
+                "timezone": "Fuso Horário",
+                "providerIsActive": "Profissional Ativo"
+            },
+            "services": {
+                "assignedServices": "Serviços Atribuídos",
+                "selectServices": "Selecionar serviços",
+                "description": "Serviços que este profissional está qualificado para realizar.",
+                "helperText": "Atribua serviços específicos para garantir que este profissional receba apenas reservas relevantes."
+            },
+            "aiContext": {
+                "personalityTraits": "Traços de Personalidade",
+                "traitsPlaceholder": "ex. Paciente, Enérgico",
+                "traitsHelper": "Adjetivos que descrevem o estilo do profissional.",
+                "granularSpecialties": "Especialidades Específicas",
+                "specialtiesPlaceholder": "ex. Dor nas costas, Ansiedade social",
+                "specialtiesHelper": "Condições específicas ou áreas de especialização.",
+                "languages": "Idiomas",
+                "languagesPlaceholder": "Selecionar ou digitar idiomas"
+            }
+        },
+        "deleteDialog": {
+            "title": "Excluir Profissional",
+            "message": "Tem certeza de que deseja excluir {name}? Ele será removido de todas as reservas futuras."
+        }
     },
     "availability": {
         "title": "Disponibilidade",
@@ -103,59 +223,142 @@
             "friday": "Sexta-feira",
             "saturday": "Sábado",
             "sunday": "Domingo"
-        }
+        },
+        "saveChanges": "Salvar Alterações",
+        "saved": "Salvo",
+        "addSlot": "Adicionar Horário",
+        "noExceptions": "Nenhuma exceção configurada.",
+        "configuringFor": "Configurando Disponibilidade para",
+        "visibilityWarning": "Isso afetará sua visibilidade no Widget de Reservas.",
+        "alertPastDate": "Não é possível adicionar datas passadas como exceções",
+        "alertDuplicateDate": "Esta data já foi adicionada",
+        "alertSaveSuccess": "Disponibilidade salva!",
+        "alertSaveError": "Erro ao salvar disponibilidade.",
+        "dayOff": "Dia de Folga",
+        "addExceptionDate": "Data da Exceção"
     },
     "knowledge": {
         "title": "Base de Conhecimento",
-        "addDocument": "Adicionar Documento",
-        "uploadFile": "Enviar Arquivo",
-        "fileName": "Nome do Arquivo",
-        "fileSize": "Tamanho",
-        "uploadDate": "Data de Envio",
-        "noDocuments": "Nenhum documento"
+        "subtitle": "Carregue documentos (PDF, Texto) para treinar seu agente de IA.",
+        "ragDisabled": "RAG está atualmente desabilitado.",
+        "ragDisabledMessage": "Os documentos carregados serão armazenados, mas o Agente de IA não os usará até que você habilite \"Recuperação de Conhecimento\" nas Configurações.",
+        "uploadSection": "Carregar Novo Documento",
+        "selectFile": "Selecionar Arquivo",
+        "uploadDocument": "Carregar Documento",
+        "uploading": "Carregando...",
+        "uploadSuccess": "Documento carregado com sucesso! Processamento iniciado.",
+        "uploadError": "Falha ao carregar o documento. Por favor, tente novamente.",
+        "recentDocuments": "Documentos Recentes",
+        "fileSize": "{size} KB"
     },
     "faqs": {
         "title": "Perguntas Frequentes",
-        "addFaq": "Adicionar FAQ",
+        "newFaq": "Nova FAQ",
         "editFaq": "Editar FAQ",
+        "searchPlaceholder": "Buscar FAQs...",
         "question": "Pergunta",
         "answer": "Resposta",
         "category": "Categoria",
-        "noFaqs": "Nenhuma FAQ"
+        "status": "Status",
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "noFaqsFound": "Nenhuma FAQ encontrada.",
+        "deleteDialog": {
+            "title": "Excluir FAQ",
+            "message": "Tem certeza de que deseja excluir esta FAQ? Esta ação não pode ser desfeita."
+        }
     },
     "settings": {
         "title": "Configurações",
+        "saveSuccess": "Configurações salvas com sucesso!",
+        "saveError": "Erro ao salvar configurações.",
+        "upgradeAlert": "Entre em contato com vendas para atualizar!",
         "tabs": {
             "general": "Geral",
             "ai": "Inteligência Artificial",
-            "providers": "Profissionais",
-            "notifications": "Notificações"
+            "apiKeys": "Chaves API"
         },
         "general": {
             "title": "Configurações Gerais",
-            "companyName": "Nome da Empresa",
-            "email": "E-mail",
-            "phone": "Telefone",
-            "timezone": "Fuso Horário",
+            "primaryColor": "Cor Primária",
+            "custom": "Personalizado:",
+            "position": "Posição",
             "language": "Idioma",
-            "currency": "Moeda"
+            "welcomeMessage": "Mensagem de Boas-Vindas",
+            "saveBranding": "Salvar Marca",
+            "positions": {
+                "bottomRight": "Inferior Direita",
+                "bottomLeft": "Inferior Esquerda"
+            },
+            "languages": {
+                "es": "Español",
+                "en": "English",
+                "pt": "Português"
+            },
+            "colorPresets": {
+                "defaultBlue": "Azul Padrão",
+                "royalPurple": "Roxo Real",
+                "teal": "Verde-Azulado",
+                "fieryOrange": "Laranja Intenso",
+                "midnight": "Meia-Noite"
+            }
         },
         "ai": {
             "title": "Configurações de IA",
-            "mode": "Modo de IA",
-            "ragEnabled": "RAG Habilitado",
-            "temperature": "Temperatura",
-            "maxTokens": "Tokens Máximos",
-            "model": "Modelo"
+            "intelligenceMode": "Modo de Inteligência",
+            "currentPlan": "Plano Atual: {plan}",
+            "description": "Selecione o modelo de IA que alimenta seu agente conversacional. Níveis superiores requerem planos avançados.",
+            "knowledgeBase": "Base de Conhecimento (RAG)",
+            "enableKnowledge": "Habilitar Recuperação de Conhecimento",
+            "knowledgeDescription": "Permite que o agente de IA pesquise seus documentos carregados e responda perguntas com base no conhecimento específico do seu negócio.",
+            "requiresUpgrade": "Requer {plan}",
+            "ragRequirement": "Os recursos RAG requerem modo NLP ou Agente Completo.",
+            "changeNotice": "As alterações no Modo de IA geralmente se aplicam instantaneamente, mas as conversas ativas podem terminar sua sessão com o modelo anterior.",
+            "saveAiSettings": "Salvar Configurações de IA",
+            "modes": {
+                "fsm": {
+                    "name": "FSM (Básico)",
+                    "description": "Árvore de decisão determinística. Ideal para fluxos fixos e controle total."
+                },
+                "nlp": {
+                    "name": "NLP Assistido",
+                    "description": "Usa IA leve para detectar intenção e entidades, mas segue regras estritas."
+                },
+                "agent": {
+                    "name": "Agente Full AI",
+                    "description": "Agente autônomo com raciocínio (Bedrock + Sonnet). Conversação natural."
+                }
+            },
+            "plans": {
+                "lite": "Plano LITE",
+                "pro": "Plano PRO",
+                "business": "Plano BUSINESS"
+            }
         },
-        "saveSuccess": "Configurações salvas com sucesso",
-        "saveError": "Erro ao salvar configurações"
+        "apiKeys": {
+            "title": "Chaves API Ativas",
+            "createKey": "Criar Chave",
+            "name": "Nome",
+            "keyPrefix": "Prefixo da Chave",
+            "created": "Criado",
+            "status": "Status",
+            "actions": "Ações",
+            "active": "Ativo",
+            "revoked": "Revogado",
+            "createDialog": {
+                "title": "Criar Nova Chave API",
+                "label": "Nome da Chave (ex. Produção Web)"
+            }
+        }
     },
     "workflows": {
         "title": "Editor de Fluxos",
         "newWorkflow": "Novo Fluxo",
         "saveWorkflow": "Salvar Fluxo",
         "deleteWorkflow": "Excluir Fluxo",
+        "deleteConfirmation": "Tem certeza que deseja excluir este fluxo?",
+        "noDescription": "Sem descrição",
+        "noWorkflowsFound": "Nenhum fluxo encontrado.",
         "nodes": {
             "start": "Início",
             "message": "Mensagem",
@@ -180,14 +383,21 @@
             "title": "Criar Conta",
             "companyName": "Nome da Empresa",
             "alreadyHaveAccount": "Já tem uma conta?",
-            "signIn": "Entrar"
+            "signIn": "Entrar",
+            "heroTitle": "Inicie seu Negócio de Chat",
+            "heroSubtitle": "Crie agentes de agendamento com IA para qualquer negócio em segundos.",
+            "getStarted": "Começar",
+            "noCreditCard": "Sem cartão de crédito. Plano gratuito para sempre.",
+            "email": "Endereço de E-mail",
+            "password": "Senha",
+            "createAccount": "Criar Conta",
+            "errorAccountExists": "A conta já existe. Por favor faça login.",
+            "errorRegistrationFailed": "O registro falhou. Por favor tente novamente."
         }
     },
     "planGuard": {
-        "upgradeRequired": "Atualização Necessária",
-        "upgradeMessage": "Este recurso requer o plano {plan} ou superior.",
-        "currentPlan": "Plano Atual",
-        "upgradeButton": "Atualizar Plano",
-        "learnMore": "Saiba mais"
+        "unlockPremium": "Desbloquear Recursos Premium",
+        "featureAvailable": "{featureName} está disponível exclusivamente no plano {plan} e superior. Atualize para acessar recursos avançados de automação e IA.",
+        "upgradeTo": "Atualizar para {plan}"
     }
 }

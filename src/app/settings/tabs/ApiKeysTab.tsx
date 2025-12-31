@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useTranslations } from 'next-intl';
 
 // Mock Data
 const MOCK_KEYS = [
@@ -33,6 +34,9 @@ interface ApiKeysTabProps {
 }
 
 export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
+    const t = useTranslations('settings.apiKeys');
+    const tCommon = useTranslations('common');
+
     const [apiKeys, setApiKeys] = React.useState(MOCK_KEYS);
     const [createKeyOpen, setCreateKeyOpen] = React.useState(false);
     const [newKeyName, setNewKeyName] = React.useState('');
@@ -63,19 +67,19 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                <Typography variant="h6">Active API Keys</Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => setCreateKeyOpen(true)}>Create Key</Button>
+                <Typography variant="h6">{t('title')}</Typography>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => setCreateKeyOpen(true)}>{t('createKey')}</Button>
             </Box>
 
             <TableContainer component={Card} variant="outlined">
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Key Prefix</TableCell>
-                            <TableCell>Created</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell align="right">Actions</TableCell>
+                            <TableCell>{t('name')}</TableCell>
+                            <TableCell>{t('keyPrefix')}</TableCell>
+                            <TableCell>{t('created')}</TableCell>
+                            <TableCell>{t('status')}</TableCell>
+                            <TableCell align="right">{tCommon('actions')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -85,7 +89,7 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
                                 <TableCell sx={{ fontFamily: 'monospace' }}>{key.prefix}</TableCell>
                                 <TableCell>{hasMounted ? new Date(key.created).toLocaleDateString() : key.created}</TableCell>
                                 <TableCell>
-                                    <Chip label={key.status} color={key.status === 'active' ? 'success' : 'default'} size="small" sx={{ textTransform: 'capitalize' }} />
+                                    <Chip label={key.status === 'active' ? t('active') : t('revoked')} color={key.status === 'active' ? 'success' : 'default'} size="small" sx={{ textTransform: 'capitalize' }} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <IconButton
@@ -105,20 +109,20 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
 
             {/* Create Key Dialog */}
             <Dialog open={createKeyOpen} onClose={() => setCreateKeyOpen(false)}>
-                <DialogTitle>Create New API Key</DialogTitle>
+                <DialogTitle>{t('createDialog.title')}</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin="dense"
-                        label="Key Name (e.g. Website Production)"
+                        label={t('createDialog.label')}
                         fullWidth
                         value={newKeyName}
                         onChange={(e) => setNewKeyName(e.target.value)}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setCreateKeyOpen(false)}>Cancel</Button>
-                    <Button onClick={handleCreateKey} variant="contained">Create</Button>
+                    <Button onClick={() => setCreateKeyOpen(false)}>{tCommon('cancel')}</Button>
+                    <Button onClick={handleCreateKey} variant="contained">{tCommon('add')}</Button>
                 </DialogActions>
             </Dialog>
         </Box>

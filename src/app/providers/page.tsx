@@ -106,6 +106,7 @@ function CustomTabPanel(props: CustomTabPanelProps) {
 
 export default function ProvidersPage() {
     const t = useTranslations('providers');
+    const tCommon = useTranslations('common');
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [availableServices, setAvailableServices] = React.useState<Service[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -267,8 +268,8 @@ export default function ProvidersPage() {
 
     const handleDelete = (id: string, name: string) => {
         setConfirmConfig({
-            title: 'Delete Provider',
-            content: `Are you sure you want to delete ${name}? They will be removed from all future bookings.`,
+            title: t('deleteDialog.title'),
+            content: t('deleteDialog.message', { name }),
             action: async () => {
                 try {
                     await client.graphql({
@@ -307,7 +308,7 @@ export default function ProvidersPage() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
                 <Typography variant="h4">{t('title')}</Typography>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
-                    New Provider
+                    {t('newProvider')}
                 </Button>
             </Box>
 
@@ -315,7 +316,7 @@ export default function ProvidersPage() {
                 <Box sx={{ p: 3 }}>
                     <TextField
                         fullWidth
-                        placeholder="Search provider..."
+                        placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         InputProps={{
@@ -332,12 +333,12 @@ export default function ProvidersPage() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Assigned Services</TableCell>
-                                <TableCell>AI Drivers</TableCell>
-                                <TableCell>Timezone</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell align="right">Actions</TableCell>
+                                <TableCell>{t('columns.name')}</TableCell>
+                                <TableCell>{t('columns.assignedServices')}</TableCell>
+                                <TableCell>{t('columns.aiDrivers')}</TableCell>
+                                <TableCell>{t('columns.timezone')}</TableCell>
+                                <TableCell>{t('columns.status')}</TableCell>
+                                <TableCell align="right">{tCommon('actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -360,7 +361,7 @@ export default function ProvidersPage() {
                                         <Stack direction="row" spacing={1}>
                                             {row.serviceIds.length > 0 ? (
                                                 <>
-                                                    <Chip label={`${row.serviceIds.length} Services`} size="small" variant="outlined" />
+                                                    <Chip label={t('servicesCount', { count: row.serviceIds.length })} size="small" variant="outlined" />
                                                 </>
                                             ) : (
                                                 <Typography variant="caption" color="text.secondary">No services</Typography>
@@ -384,7 +385,7 @@ export default function ProvidersPage() {
                                     <TableCell>{row.timezone}</TableCell>
                                     <TableCell>
                                         <Chip
-                                            label={row.active ? 'Active' : 'Inactive'}
+                                            label={row.active ? t('status.active') : t('status.inactive')}
                                             color={row.active ? 'success' : 'default'}
                                             size="small"
                                             variant="filled"
@@ -405,7 +406,7 @@ export default function ProvidersPage() {
                                 <TableRow>
                                     <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
                                         <Typography variant="body1" color="text.secondary">
-                                            No providers found.
+                                            {t('noProvidersFound')}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
@@ -416,12 +417,12 @@ export default function ProvidersPage() {
             </Card>
 
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                <DialogTitle>{currentProvider ? 'Edit Provider' : 'New Provider'}</DialogTitle>
+                <DialogTitle>{currentProvider ? t('editProvider') : t('newProvider')}</DialogTitle>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tabValue} onChange={handleTabChange} aria-label="provider tabs">
-                        <Tab label="General" />
-                        <Tab label="Services" />
-                        <Tab label="AI Context" />
+                        <Tab label={t('dialog.tabs.general')} />
+                        <Tab label={t('dialog.tabs.services')} />
+                        <Tab label={t('dialog.tabs.aiContext')} />
                     </Tabs>
                 </Box>
                 <DialogContent dividers={false} sx={{ minHeight: 320 }}>
@@ -430,13 +431,13 @@ export default function ProvidersPage() {
                     <CustomTabPanel value={tabValue} index={0}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <TextField
-                                label="Full Name"
+                                label={t('dialog.general.fullName')}
                                 fullWidth
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             />
                             <TextField
-                                label="Biography"
+                                label={t('dialog.general.biography')}
                                 fullWidth
                                 multiline
                                 rows={3}
@@ -444,7 +445,7 @@ export default function ProvidersPage() {
                                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                             />
                             <TextField
-                                label="Timezone"
+                                label={t('dialog.general.timezone')}
                                 fullWidth
                                 select
                                 value={formData.timezone}
@@ -463,7 +464,7 @@ export default function ProvidersPage() {
                                         onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
                                     />
                                 }
-                                label={formData.active ? "Provider is Active" : "Provider is Inactive"}
+                                label={formData.active ? t('dialog.general.providerIsActive') : t('dialog.general.providerIsActive')}
                             />
                         </Box>
                     </CustomTabPanel>
@@ -482,14 +483,14 @@ export default function ProvidersPage() {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Assigned Services"
-                                        placeholder="Select services"
-                                        helperText="Services this provider is qualified to perform."
+                                        label={t('dialog.services.assignedServices')}
+                                        placeholder={t('dialog.services.selectServices')}
+                                        helperText={t('dialog.services.description')}
                                     />
                                 )}
                             />
                             <Typography variant="body2" color="text.secondary">
-                                Assign specific services to ensure this provider only receives relevant bookings.
+                                {t('dialog.services.helperText')}
                             </Typography>
                         </Box>
                     </CustomTabPanel>
@@ -511,9 +512,9 @@ export default function ProvidersPage() {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Personality Traits"
-                                        placeholder="e.g. Patient, Energetic"
-                                        helperText="Adjectives that describe the provider's style."
+                                        label={t('dialog.aiContext.personalityTraits')}
+                                        placeholder={t('dialog.aiContext.traitsPlaceholder')}
+                                        helperText={t('dialog.aiContext.traitsHelper')}
                                     />
                                 )}
                             />
@@ -532,9 +533,9 @@ export default function ProvidersPage() {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Granular Specialties"
-                                        placeholder="e.g. Back pain, Social anxiety"
-                                        helperText="Specific conditions or areas of expertise."
+                                        label={t('dialog.aiContext.granularSpecialties')}
+                                        placeholder={t('dialog.aiContext.specialtiesPlaceholder')}
+                                        helperText={t('dialog.aiContext.specialtiesHelper')}
                                     />
                                 )}
                             />
@@ -553,8 +554,8 @@ export default function ProvidersPage() {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Languages"
-                                        placeholder="Select or type languages"
+                                        label={t('dialog.aiContext.languages')}
+                                        placeholder={t('dialog.aiContext.languagesPlaceholder')}
                                     />
                                 )}
                             />
@@ -564,10 +565,10 @@ export default function ProvidersPage() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="inherit">
-                        Cancel
+                        {tCommon('cancel')}
                     </Button>
                     <Button onClick={handleSave} variant="contained" disabled={!formData.name}>
-                        Save
+                        {tCommon('save')}
                     </Button>
                 </DialogActions>
             </Dialog>

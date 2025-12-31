@@ -165,10 +165,10 @@ export default function SettingsPage() {
                     }
                 }
             });
-            setSuccessMsg('Settings saved successfully!');
+            setSuccessMsg(t('saveSuccess'));
         } catch (error) {
             console.error('Error saving branding:', error);
-            setError('Failed to save settings.');
+            setError(t('saveError'));
         } finally {
             setLoading(false);
         }
@@ -182,7 +182,7 @@ export default function SettingsPage() {
 
     return (
         <>
-            <Typography variant="h4" sx={{ mb: 4 }}>Settings</Typography>
+            <Typography variant="h4" sx={{ mb: 4 }}>{t('title')}</Typography>
 
             <Snackbar
                 open={!!error}
@@ -207,7 +207,7 @@ export default function SettingsPage() {
                     <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs">
                         <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
-                        <Tab label="API Keys" icon={<VpnKeyIcon />} iconPosition="start" />
+                        <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
                     </Tabs>
                 </Box>
 
@@ -238,12 +238,12 @@ export default function SettingsPage() {
                                 currentPlan={currentPlan}
                                 onUpgradeClick={() => {
                                     // Mock upgrade implementation
-                                    alert("Contact sales to upgrade!");
+                                    alert(t('upgradeAlert'));
                                 }}
                             />
                             <Box sx={{ mt: 2 }}>
                                 <Button variant="contained" startIcon={<React.Fragment><Typography variant="button" sx={{ mr: 1 }}>💾</Typography></React.Fragment>} onClick={handleSaveSettings}>
-                                    Save AI Settings
+                                    {t('ai.saveAiSettings')}
                                 </Button>
                             </Box>
                         </CustomTabPanel>

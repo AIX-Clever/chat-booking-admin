@@ -10,6 +10,7 @@ import {
     Grid
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import { useTranslations } from 'next-intl';
 
 /* --- Constants could be moved to a shared config --- */
 const COLOR_PRESETS = [
@@ -29,12 +30,14 @@ interface PropertiesTabProps {
 }
 
 export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }: PropertiesTabProps) {
+    const t = useTranslations('settings.general');
+
     return (
         <Grid container spacing={4}>
             <Grid item xs={12} md={7}>
                 <Stack spacing={3}>
                     <div>
-                        <Typography variant="subtitle2" gutterBottom>Primary Color</Typography>
+                        <Typography variant="subtitle2" gutterBottom>{t('primaryColor')}</Typography>
                         <Stack direction="row" spacing={2} alignItems="center">
                             {COLOR_PRESETS.map((preset) => (
                                 <Box
@@ -55,7 +58,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                                 />
                             ))}
                             <Box sx={{ position: 'relative', ml: 2, display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>Custom:</Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>{t('custom')}</Typography>
                                 <input
                                     type="color"
                                     value={widgetConfig.primaryColor}
@@ -76,25 +79,25 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                     </div>
                     <TextField
                         select
-                        label="Position"
+                        label={t('position')}
                         value={widgetConfig.position}
                         onChange={(e) => setWidgetConfig({ ...widgetConfig, position: e.target.value })}
                     >
-                        <MenuItem value="bottom-right">Bottom Right</MenuItem>
-                        <MenuItem value="bottom-left">Bottom Left</MenuItem>
+                        <MenuItem value="bottom-right">{t('positions.bottomRight')}</MenuItem>
+                        <MenuItem value="bottom-left">{t('positions.bottomLeft')}</MenuItem>
                     </TextField>
                     <TextField
                         select
-                        label="Language"
+                        label={t('language')}
                         value={widgetConfig.language}
                         onChange={(e) => setWidgetConfig({ ...widgetConfig, language: e.target.value })}
                     >
-                        <MenuItem value="es">Español</MenuItem>
-                        <MenuItem value="en">English</MenuItem>
-                        <MenuItem value="pt">Português</MenuItem>
+                        <MenuItem value="es">{t('languages.es')}</MenuItem>
+                        <MenuItem value="en">{t('languages.en')}</MenuItem>
+                        <MenuItem value="pt">{t('languages.pt')}</MenuItem>
                     </TextField>
                     <TextField
-                        label="Welcome Message"
+                        label={t('welcomeMessage')}
                         multiline
                         rows={3}
                         value={widgetConfig.welcomeMessage}
@@ -106,7 +109,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                         sx={{ alignSelf: 'start' }}
                         onClick={onSave}
                     >
-                        Save Branding
+                        {t('saveBranding')}
                     </Button>
                 </Stack>
             </Grid>

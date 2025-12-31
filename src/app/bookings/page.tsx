@@ -87,6 +87,7 @@ const client = generateClient();
 
 export default function BookingsPage() {
     const t = useTranslations('bookings');
+    const tCommon = useTranslations('common');
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -101,16 +102,17 @@ export default function BookingsPage() {
         const now = new Date().getTime();
         const diff = target - now;
 
-        if (diff < 0) return { text: 'Ended', color: 'default' as const };
+        if (diff < 0) return { text: t('timeLeft.ended'), color: 'default' as const };
 
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const days = Math.floor(hours / 24);
+        const minutes = Math.floor(diff / (1000 * 60));
 
-        if (hours < 2) return { text: `In ${Math.floor(diff / (1000 * 60))}m`, color: 'error' as const };
-        if (hours < 24) return { text: `In ${hours}h`, color: 'warning' as const };
-        if (days < 7) return { text: `In ${days}d`, color: 'primary' as const };
+        if (hours < 2) return { text: t('timeLeft.inMinutes', { minutes }), color: 'error' as const };
+        if (hours < 24) return { text: t('timeLeft.inHours', { hours }), color: 'warning' as const };
+        if (days < 7) return { text: t('timeLeft.inDays', { days }), color: 'primary' as const };
 
-        return { text: `In ${days}d`, color: 'default' as const };
+        return { text: t('timeLeft.inDays', { days }), color: 'default' as const };
     };
 
     React.useEffect(() => {
@@ -272,7 +274,7 @@ export default function BookingsPage() {
             }
         } catch (error) {
             console.error('Error creating booking:', error);
-            alert('Error creating booking. Please check console.');
+            alert(tCommon('error'));
         } finally {
             setCreateLoading(false);
         }
@@ -425,17 +427,17 @@ export default function BookingsPage() {
         return (
             <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Button onClick={handlePrevMonth} startIcon={<ArrowBackIosNewIcon />}>Prev</Button>
+                    <Button onClick={handlePrevMonth} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
                     <Typography variant="h6">
                         {currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
                     </Typography>
-                    <Button onClick={handleNextMonth} endIcon={<ArrowForwardIosIcon />}>Next</Button>
+                    <Button onClick={handleNextMonth} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
                 </Box>
                 {/* Weekday Headers */}
                 <Grid container>
-                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(d => (
                         <Grid item xs={1.7} key={d} sx={{ p: 1, textAlign: 'center', bgcolor: '#f5f5f5', border: '1px solid #eee' }}>
-                            <Typography variant="subtitle2">{d}</Typography>
+                            <Typography variant="subtitle2">{t(`availability.days.${d.toLowerCase()}`).substring(0, 3)}</Typography>
                         </Grid>
                     ))}
                     {days}
@@ -485,9 +487,9 @@ export default function BookingsPage() {
         <>
             <ConfirmDialog
                 open={confirmOpen}
-                title="Cancel Booking"
-                content={`Are you sure you want to cancel the booking for ${bookingToCancel?.clientName}?`}
-                confirmText="Cancel Booking"
+                title={t('dialogs.cancelTitle')}
+                content={t('dialogs.cancelContent', { name: bookingToCancel?.clientName })}
+                confirmText={t('actions.cancelBooking')}
                 confirmColor="error"
                 onClose={() => setConfirmOpen(false)}
                 onConfirm={confirmCancel}
@@ -538,7 +540,7 @@ export default function BookingsPage() {
 
                     <TextField
                         select
-                        label={t('status.confirmed')}
+                        label={t('columns.status')}
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
                         sx={{ minWidth: 150 }}
@@ -551,19 +553,19 @@ export default function BookingsPage() {
 
                     <TextField
                         select
-                        label="Sort By"
+                        label={t('sorting.label')}
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as 'closest' | 'furthest')}
                         sx={{ minWidth: 150 }}
                         size="small"
                     >
-                        <MenuItem value="closest">Closest</MenuItem>
-                        <MenuItem value="furthest">Furthest</MenuItem>
+                        <MenuItem value="closest">{t('sorting.closest')}</MenuItem>
+                        <MenuItem value="furthest">{t('sorting.furthest')}</MenuItem>
                     </TextField>
 
                     {viewMode === 'list' && (
                         <TextField
-                            placeholder="Search client..."
+                            placeholder={t('searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             size="small"
@@ -591,7 +593,7 @@ export default function BookingsPage() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>{t('columns.date')}</TableCell>
-                                    <TableCell>Time Left</TableCell> {/* New Column */}
+                                    <TableCell>{t('timeLeft.header')}</TableCell> {/* New Column */}
                                     <TableCell>{t('columns.customer')}</TableCell>
                                     <TableCell>{t('columns.service')}</TableCell>
                                     <TableCell>{t('columns.provider')}</TableCell>
@@ -677,7 +679,7 @@ export default function BookingsPage() {
                                     <TableRow>
                                         <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
                                             <Typography variant="body1" color="text.secondary">
-                                                No bookings found.
+                                                {t('noBookingsFound')}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -692,22 +694,22 @@ export default function BookingsPage() {
 
             {/* Booking Detail Dialog */}
             <Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Booking Details</DialogTitle>
+                <DialogTitle>{t('dialogs.detailsTitle')}</DialogTitle>
                 <DialogContent dividers>
                     {selectedBooking && (
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="subtitle2" color="text.secondary">Client</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">{t('columns.customer')}</Typography>
                                 <Typography variant="body1">{selectedBooking.clientName} ({selectedBooking.clientEmail})</Typography>
                             </Grid>
                             <Grid item xs={6}>
-                                <Typography variant="subtitle2" color="text.secondary">Date & Time</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">{t('form.dateTime')}</Typography>
                                 <Typography variant="body1">
                                     {hasMounted ? new Date(selectedBooking.start).toLocaleString() : selectedBooking.start}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
-                                <Typography variant="subtitle2" color="text.secondary">Status</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">{t('columns.status')}</Typography>
                                 <Chip
                                     label={selectedBooking.status}
                                     color={STATUS_COLORS[selectedBooking.status] || 'default'}
@@ -716,18 +718,18 @@ export default function BookingsPage() {
                                 />
                             </Grid>
                             <Grid item xs={6}>
-                                <Typography variant="subtitle2" color="text.secondary">Service</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">{t('form.service')}</Typography>
                                 <Typography variant="body1">
                                     {availableServices.find(s => s.serviceId === selectedBooking.serviceName)?.name || selectedBooking.serviceName}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
-                                <Typography variant="subtitle2" color="text.secondary">Provider</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">{t('form.provider')}</Typography>
                                 <Typography variant="body1">{selectedBooking.providerName}</Typography>
                             </Grid>
                             {selectedBooking.notes && (
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle2" color="text.secondary">Notes</Typography>
+                                    <Typography variant="subtitle2" color="text.secondary">{t('form.notes')}</Typography>
                                     <Paper variant="outlined" sx={{ p: 1, bgcolor: 'action.hover' }}>
                                         <Typography variant="body2">{selectedBooking.notes}</Typography>
                                     </Paper>
@@ -744,23 +746,23 @@ export default function BookingsPage() {
                             onClick={handleWhatsAppReminder}
                             sx={{ mr: 'auto' }}
                         >
-                            WhatsApp Reminder
+                            {t('actions.whatsAppReminder')}
                         </Button>
                     )}
-                    <Button onClick={() => setDetailOpen(false)}>Close</Button>
+                    <Button onClick={() => setDetailOpen(false)}>{tCommon('close')}</Button>
                     {selectedBooking && selectedBooking.status === 'pending' && (
                         <Button color="success" onClick={() => handleConfirmBooking(selectedBooking)}>
-                            Confirm
+                            {t('actions.confirm')}
                         </Button>
                     )}
                     {selectedBooking && !['cancelled', 'completed', 'no_show'].includes(selectedBooking.status) && (
                         <Button color="warning" onClick={() => handleNoShowBooking(selectedBooking)}>
-                            No Show
+                            {t('actions.noShow')}
                         </Button>
                     )}
                     {selectedBooking && selectedBooking.status !== 'cancelled' && selectedBooking.status !== 'completed' && (
                         <Button color="error" onClick={() => { setDetailOpen(false); handleCancelClick(selectedBooking); }}>
-                            Cancel Booking
+                            {t('actions.cancelBooking')}
                         </Button>
                     )}
                 </DialogActions>
@@ -768,12 +770,12 @@ export default function BookingsPage() {
 
             {/* New Booking Dialog */}
             <Dialog open={newBookingOpen} onClose={() => setNewBookingOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>New Booking</DialogTitle>
+                <DialogTitle>{t('dialogs.newBookingTitle')}</DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={2} sx={{ pt: 1 }}>
                         <Grid item xs={6}>
                             <TextField
-                                label="Client Name"
+                                label={t('form.clientName')}
                                 fullWidth
                                 value={newBookingData.clientName}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, clientName: e.target.value })}
@@ -781,7 +783,7 @@ export default function BookingsPage() {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                label="Client Email"
+                                label={t('form.clientEmail')}
                                 fullWidth
                                 value={newBookingData.clientEmail}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, clientEmail: e.target.value })}
@@ -789,7 +791,7 @@ export default function BookingsPage() {
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
-                                label="Client Phone (Optional)"
+                                label={t('form.clientPhone')}
                                 fullWidth
                                 value={newBookingData.clientPhone}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, clientPhone: e.target.value })}
@@ -798,7 +800,7 @@ export default function BookingsPage() {
                         <Grid item xs={6}>
                             <TextField
                                 select
-                                label="Service"
+                                label={t('form.service')}
                                 fullWidth
                                 value={newBookingData.serviceId}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, serviceId: e.target.value })}
@@ -811,7 +813,7 @@ export default function BookingsPage() {
                         <Grid item xs={6}>
                             <TextField
                                 select
-                                label="Provider"
+                                label={t('form.provider')}
                                 fullWidth
                                 value={newBookingData.providerId}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, providerId: e.target.value })}
@@ -825,7 +827,7 @@ export default function BookingsPage() {
                         <Grid item xs={6}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
-                                    label="Date"
+                                    label={t('form.date')}
                                     value={newBookingData.date ? new Date(newBookingData.date + 'T00:00:00') : null}
                                     onChange={(newValue) => {
                                         if (newValue) {
@@ -842,7 +844,7 @@ export default function BookingsPage() {
                         <Grid item xs={6}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <TimePicker
-                                    label="Time"
+                                    label={t('form.time')}
                                     value={newBookingData.time ? new Date(`2000-01-01T${newBookingData.time}:00`) : null}
                                     onChange={(newValue) => {
                                         if (newValue) {
@@ -859,7 +861,7 @@ export default function BookingsPage() {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Notes"
+                                label={t('form.notes')}
                                 fullWidth
                                 multiline
                                 rows={3}
@@ -870,13 +872,13 @@ export default function BookingsPage() {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setNewBookingOpen(false)}>Cancel</Button>
+                    <Button onClick={() => setNewBookingOpen(false)}>{tCommon('cancel')}</Button>
                     <Button
                         variant="contained"
                         onClick={handleCreateBooking}
                         disabled={createLoading || !newBookingData.clientName || !newBookingData.clientEmail || !newBookingData.serviceId || !newBookingData.providerId || !newBookingData.date || !newBookingData.time}
                     >
-                        {createLoading ? <CircularProgress size={24} /> : 'Create Booking'}
+                        {createLoading ? <CircularProgress size={24} /> : t('newBooking')}
                     </Button>
                 </DialogActions>
             </Dialog>

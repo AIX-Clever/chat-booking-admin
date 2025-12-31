@@ -8,8 +8,6 @@ import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY, S
 import {
     Typography,
     Box,
-    // Card, // Unused
-    // FormControl, // Unused? No, used in line 333
     Card,
     FormControl,
     InputLabel,
@@ -21,12 +19,10 @@ import {
     Button,
     IconButton,
     Paper,
-    // Divider, // Unused
     Stack,
     Chip,
     Alert,
     FormControlLabel,
-    // CircularProgress // Unused
 
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -38,6 +34,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 // --- Types ---
 interface TimeWindow {
@@ -47,7 +44,7 @@ interface TimeWindow {
 
 interface DaySchedule {
     dayOfWeek: number; // 1=Mon, 7=Sun
-    dayName: string;
+    dayName: string; // Keep for internal reference, but display via i18n
     enabled: boolean;
     timeWindows: TimeWindow[];
 }
@@ -66,6 +63,7 @@ interface Provider {
 
 const client = generateClient();
 
+// Initial structure, names will be overridden by i18n in UI
 const DEFAULT_SCHEDULE: DaySchedule[] = [
     { dayOfWeek: 1, dayName: 'Monday', enabled: false, timeWindows: [] },
     { dayOfWeek: 2, dayName: 'Tuesday', enabled: false, timeWindows: [] },
@@ -76,9 +74,12 @@ const DEFAULT_SCHEDULE: DaySchedule[] = [
     { dayOfWeek: 7, dayName: 'Sunday', enabled: false, timeWindows: [] },
 ];
 
-
+const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 export default function AvailabilityPage() {
+    const t = useTranslations('availability');
+    const tCommon = useTranslations('common');
+
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [selectedProvider, setSelectedProvider] = React.useState('');
     const [isSaved, setIsSaved] = React.useState(true);
@@ -213,19 +214,19 @@ export default function AvailabilityPage() {
         const selectedDate = new Date(newExceptionDate + 'T00:00:00');
 
         if (selectedDate < today) {
-            alert('Cannot add past dates as exceptions');
+            alert(t('alertPastDate'));
             return;
         }
 
         // Check for duplicates
         if (exceptions.some(ex => ex.date === newExceptionDate)) {
-            alert('This date is already added');
+            alert(t('alertDuplicateDate'));
             return;
         }
 
         setExceptions(prev => [
             ...prev,
-            { id: Math.random().toString(), date: newExceptionDate, note: 'Day Off', type: 'off' }
+            { id: Math.random().toString(), date: newExceptionDate, note: t('dayOff'), type: 'off' }
         ]);
         setNewExceptionDate('');
         setIsSaved(false);
@@ -279,26 +280,30 @@ export default function AvailabilityPage() {
             await Promise.all([...schedulePromises, exceptionsPromise]);
 
             setIsSaved(true);
-            alert('Availability saved!');
+            alert(t('alertSaveSuccess'));
         } catch (error: any) {
             console.error('Error saving availability:', error);
-            alert('Failed to save availability.');
+            alert(t('alertSaveError'));
         } finally {
             setLoading(false);
         }
     };
 
+    const getDayLabel = (index: number) => {
+        return t(`days.${dayKeys[index]}`);
+    };
+
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, alignItems: 'center' }}>
-                <Typography variant="h4">Availability</Typography>
+                <Typography variant="h4">{t('title')}</Typography>
                 <Button
                     variant="contained"
                     startIcon={<SaveIcon />}
                     onClick={handleSave}
                     disabled={isSaved}
                 >
-                    {isSaved ? 'Saved' : 'Save Changes'}
+                    {isSaved ? t('saved') : t('saveChanges')}
                 </Button>
             </Box>
 
@@ -307,10 +312,10 @@ export default function AvailabilityPage() {
                 <Grid item xs={12}>
                     <Card sx={{ p: 3 }}>
                         <FormControl fullWidth disabled={loading && providers.length === 0}>
-                            <InputLabel>Select Provider</InputLabel>
+                            <InputLabel>{t('selectProvider')}</InputLabel>
                             <Select
                                 value={selectedProvider || ''}
-                                label="Select Provider"
+                                label={t('selectProvider')}
                                 onChange={(e) => setSelectedProvider(e.target.value)}
                             >
                                 {providers.map((p) => (
@@ -325,12 +330,12 @@ export default function AvailabilityPage() {
                 <Grid item xs={12} md={8}>
                     <Card sx={{ p: 3 }}>
                         <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <AccessTimeIcon color="primary" /> Weekly Schedule
+                            <AccessTimeIcon color="primary" /> {t('weeklySchedule')}
                         </Typography>
 
                         <Stack spacing={2}>
                             {schedule.map((day, dayIndex) => (
-                                <Paper key={day.dayName} variant="outlined" sx={{ p: 2, bgcolor: day.enabled ? 'background.paper' : 'action.hover' }}>
+                                <Paper key={dayIndex} variant="outlined" sx={{ p: 2, bgcolor: day.enabled ? 'background.paper' : 'action.hover' }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: day.enabled ? 2 : 0 }}>
                                         <FormControlLabel
                                             control={
@@ -339,11 +344,11 @@ export default function AvailabilityPage() {
                                                     onChange={() => handleDayToggle(dayIndex)}
                                                 />
                                             }
-                                            label={<Typography variant="subtitle1" fontWeight="bold">{day.dayName}</Typography>}
+                                            label={<Typography variant="subtitle1" fontWeight="bold">{getDayLabel(dayIndex)}</Typography>}
                                         />
                                         {day.enabled && (
                                             <Button size="small" startIcon={<AddIcon />} onClick={() => addTimeWindow(dayIndex)}>
-                                                Add Slot
+                                                {t('addSlot')}
                                             </Button>
                                         )}
                                     </Box>
@@ -390,13 +395,13 @@ export default function AvailabilityPage() {
                 <Grid item xs={12} md={4}>
                     <Card sx={{ p: 3 }}>
                         <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <EventBusyIcon color="error" /> Exceptions
+                            <EventBusyIcon color="error" /> {t('exceptions')}
                         </Typography>
 
                         <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
-                                    label="Add Exception Date"
+                                    label={t('addExceptionDate')}
                                     value={newExceptionDate ? new Date(newExceptionDate + 'T00:00:00') : null}
                                     onChange={(newValue) => {
                                         if (newValue) {
@@ -410,14 +415,14 @@ export default function AvailabilityPage() {
                                 />
                             </LocalizationProvider>
                             <Button variant="contained" size="small" onClick={handleAddException} disabled={!newExceptionDate}>
-                                Add
+                                {tCommon('add')}
                             </Button>
                         </Box>
 
                         <Stack spacing={2}>
                             {exceptions.length === 0 && (
                                 <Typography variant="body2" color="text.secondary" align="center">
-                                    No exceptions configured.
+                                    {t('noExceptions')}
                                 </Typography>
                             )}
                             {exceptions.map((ex) => (
@@ -425,7 +430,7 @@ export default function AvailabilityPage() {
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                                         <Box>
                                             <Typography variant="subtitle2">{ex.date}</Typography>
-                                            <Chip label={ex.note} size="small" color="error" variant="outlined" sx={{ mt: 0.5 }} />
+                                            <Chip label={t('dayOff')} size="small" color="error" variant="outlined" sx={{ mt: 0.5 }} />
                                         </Box>
                                         <IconButton size="small" onClick={() => handleDeleteException(ex.id)}>
                                             <DeleteIcon fontSize="small" />
@@ -437,8 +442,8 @@ export default function AvailabilityPage() {
                     </Card>
 
                     <Alert severity="info" sx={{ mt: 3 }}>
-                        Configuring Availability for <strong>{providers.find(p => p.providerId === selectedProvider)?.name}</strong>.
-                        This will affect their visibility in the Booking Widget.
+                        {t('configuringFor')} <strong>{providers.find(p => p.providerId === selectedProvider)?.name}</strong>.
+                        {t('visibilityWarning')}
                     </Alert>
                 </Grid>
             </Grid>

@@ -1,6 +1,8 @@
 
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Alert, CircularProgress, Grid, Paper } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
@@ -11,6 +13,8 @@ import { REGISTER_TENANT } from '../../graphql/queries';
 const client = generateClient();
 
 export default function RegisterPage() {
+    const t = useTranslations('auth.register');
+    const tCommon = useTranslations('common');
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -57,8 +61,8 @@ export default function RegisterPage() {
             // Parse error message
             const msg = err.message || JSON.stringify(err);
             setError(msg.includes('User with this email already exists')
-                ? 'Account already exists. Please login.'
-                : 'Registration failed. Please try again.');
+                ? t('errorAccountExists')
+                : t('errorRegistrationFailed'));
         } finally {
             setLoading(false);
         }
@@ -89,10 +93,10 @@ export default function RegisterPage() {
             >
                 <Box sx={{ backgroundColor: 'rgba(0,0,0,0.6)', p: 4, borderRadius: 2, textAlign: 'center' }}>
                     <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom>
-                        Start Your Chat Business
+                        {t('heroTitle')}
                     </Typography>
                     <Typography variant="h5">
-                        Create AI-powered booking agents for any business in seconds.
+                        {t('heroSubtitle')}
                     </Typography>
                 </Box>
             </Grid>
@@ -112,10 +116,10 @@ export default function RegisterPage() {
                     }}
                 >
                     <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
-                        Get Started
+                        {t('getStarted')}
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                        No credit card required. Free forever plan.
+                        {t('noCreditCard')}
                     </Typography>
 
                     {error && <Alert severity="error" sx={{ width: '100%', mb: 2 }}>{error}</Alert>}
@@ -126,7 +130,7 @@ export default function RegisterPage() {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label={t('email')}
                             name="email"
                             autoComplete="email"
                             autoFocus
@@ -137,7 +141,7 @@ export default function RegisterPage() {
                             margin="normal"
                             fullWidth
                             id="companyName"
-                            label="Company Name (Optional)"
+                            label={t('companyName')}
                             name="companyName"
                             autoComplete="organization"
                             value={companyName}
@@ -148,7 +152,7 @@ export default function RegisterPage() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label={t('password')}
                             type="password"
                             id="password"
                             autoComplete="new-password"
@@ -164,12 +168,12 @@ export default function RegisterPage() {
                             sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1.1rem' }}
                             disabled={loading}
                         >
-                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
+                            {loading ? <CircularProgress size={24} color="inherit" /> : t('createAccount')}
                         </Button>
                         <Grid container justifyContent="center">
                             <Grid item>
                                 <Button href="/login" variant="text">
-                                    Already have an account? Sign in
+                                    {t('alreadyHaveAccount')} {t('signIn')}
                                 </Button>
                             </Grid>
                         </Grid>

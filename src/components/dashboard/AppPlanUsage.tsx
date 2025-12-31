@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Box, Typography, LinearProgress, Stack, Chip, useTheme, alpha } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 interface Limit {
     label: string;
@@ -15,11 +16,12 @@ interface Props {
 
 export default function AppPlanUsage({ planName, limits }: Props) {
     const theme = useTheme();
+    const t = useTranslations('dashboard');
 
     return (
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="h6">Uso del Plan</Typography>
+                <Typography variant="h6">{t('planUsage')}</Typography>
                 <Chip
                     label={planName}
                     color="primary"

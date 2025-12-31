@@ -26,6 +26,7 @@ import { generateClient } from 'aws-amplify/api';
 // In settings page it was: import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
 import { GET_TENANT } from '../../graphql/queries';
 import PlanGuard from '../../components/PlanGuard';
+import { useTranslations } from 'next-intl';
 
 const GET_UPLOAD_URL = `
   mutation GetUploadUrl($fileName: String!, $contentType: String!) {
@@ -34,6 +35,7 @@ const GET_UPLOAD_URL = `
 `;
 
 export default function KnowledgePage() {
+    const t = useTranslations('knowledge');
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -107,12 +109,12 @@ export default function KnowledgePage() {
                 throw new Error('Failed to upload file to S3');
             }
 
-            setMessage({ type: 'success', text: 'Document uploaded successfully! Processing started.' });
+            setMessage({ type: 'success', text: t('uploadSuccess') });
             setFile(null);
 
         } catch (error) {
             console.error('Upload error:', error);
-            setMessage({ type: 'error', text: 'Failed to upload document. Please try again.' });
+            setMessage({ type: 'error', text: t('uploadError') });
         } finally {
             setUploading(false);
         }
@@ -122,21 +124,21 @@ export default function KnowledgePage() {
         <PlanGuard minPlan="PRO" featureName="The Knowledge Base">
             <Box>
                 <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                    Knowledge Base
+                    {t('title')}
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
-                    Upload documents (PDF, Text) to train your AI agent.
+                    {t('subtitle')}
                 </Typography>
 
                 {ragEnabled === false && (
                     <Alert severity="warning" sx={{ mb: 3 }}>
-                        <strong>RAG is currently disabled.</strong> Uploaded documents will be stored but the AI Agent won&apos;t use them until you enable &quot;Knowledge Retrieval&quot; in Settings.
+                        <strong>{t('ragDisabled')}</strong> {t('ragDisabledMessage')}
                     </Alert>
                 )}
 
                 <Paper sx={{ p: 3, mb: 4 }}>
                     <Typography variant="h6" gutterBottom>
-                        Upload New Document
+                        {t('uploadSection')}
                     </Typography>
 
                     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mt: 2 }}>
@@ -145,7 +147,7 @@ export default function KnowledgePage() {
                             component="label"
                             startIcon={<InsertDriveFileIcon />}
                         >
-                            Select File
+                            {t('selectFile')}
                             <input
                                 type="file"
                                 hidden
@@ -156,7 +158,7 @@ export default function KnowledgePage() {
 
                         {file && (
                             <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-                                {file.name} ({(file.size / 1024).toFixed(2)} KB)
+                                {file.name} ({t('fileSize', { size: (file.size / 1024).toFixed(2) })})
                             </Typography>
                         )}
                     </Box>
@@ -168,7 +170,7 @@ export default function KnowledgePage() {
                             disabled={!file || uploading}
                             startIcon={uploading ? <CircularProgress size={20} color="inherit" /> : <CloudUploadIcon />}
                         >
-                            {uploading ? 'Uploading...' : 'Upload Document'}
+                            {uploading ? t('uploading') : t('uploadDocument')}
                         </Button>
                     </Box>
 
@@ -182,7 +184,7 @@ export default function KnowledgePage() {
                 <Card>
                     <CardContent>
                         <Typography variant="h6" gutterBottom>
-                            Recent Documents
+                            {t('recentDocuments')}
                         </Typography>
                         <Divider sx={{ mb: 2 }} />
 

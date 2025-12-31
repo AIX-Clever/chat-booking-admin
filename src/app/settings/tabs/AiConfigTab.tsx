@@ -11,6 +11,7 @@ import {
     Switch
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
+import { useTranslations } from 'next-intl';
 
 // Could be imported from a constants file
 const AI_MODES = [
@@ -54,6 +55,8 @@ interface AiConfigTabProps {
 }
 
 export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabled, currentPlan, onUpgradeClick }: AiConfigTabProps) {
+    const t = useTranslations('settings.ai');
+
     const isPlanSufficient = (minPlan: string) => {
         return PLAN_LEVELS[currentPlan] >= PLAN_LEVELS[minPlan];
     };
@@ -69,11 +72,11 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
     return (
         <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6" sx={{ mr: 2 }}>Intelligence Mode</Typography>
-                <Chip label={`Current Plan: ${currentPlan}`} color="primary" variant="outlined" size="small" />
+                <Typography variant="h6" sx={{ mr: 2 }}>{t('intelligenceMode')}</Typography>
+                <Chip label={t('currentPlan', { plan: currentPlan })} color="primary" variant="outlined" size="small" />
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                Select the AI model that powers your conversational agent. Higher tiers require advanced plans.
+                {t('description')}
             </Typography>
 
             <Grid container spacing={3}>
@@ -103,7 +106,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                                 {locked && (
                                     <Chip
                                         icon={<LockIcon sx={{ fontSize: 14 }} />}
-                                        label={`Requires ${mode.minPlan}`}
+                                        label={t('requiresUpgrade', { plan: mode.minPlan })}
                                         size="small"
                                         color="warning"
                                         sx={{ position: 'absolute', top: 12, right: 12, fontWeight: 'bold' }}
@@ -112,15 +115,15 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: locked ? 2 : 0 }}>
                                     <Typography variant="subtitle1" fontWeight="bold" color={locked ? 'text.secondary' : 'text.primary'}>
-                                        {mode.name}
+                                        {mode.id === 'fsm' ? t('modes.fsm.name') : mode.id === 'nlp' ? t('modes.nlp.name') : t('modes.agent.name')}
                                     </Typography>
                                     {!locked && <Radio checked={active} value={mode.id} size="small" />}
                                 </Box>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3, minHeight: 40 }}>
-                                    {mode.desc}
+                                    {mode.id === 'fsm' ? t('modes.fsm.description') : mode.id === 'nlp' ? t('modes.nlp.description') : t('modes.agent.description')}
                                 </Typography>
                                 <Chip
-                                    label={mode.price}
+                                    label={mode.id === 'fsm' ? t('plans.lite') : mode.id === 'nlp' ? t('plans.pro') : t('plans.business')}
                                     size="small"
                                     variant={mode.id === 'agent' ? 'filled' : 'outlined'}
                                     color={mode.id === 'agent' ? 'primary' : 'default'}
@@ -134,15 +137,15 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
 
             {/* RAG Toggle Section */}
             <Box sx={{ mt: 6 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Knowledge Base (RAG)</Typography>
+                <Typography variant="h6" sx={{ mb: 2 }}>{t('knowledgeBase')}</Typography>
                 <Card variant="outlined" sx={{ p: 3 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Box>
                             <Typography variant="subtitle1" fontWeight="bold">
-                                Enable Knowledge Retrieval
+                                {t('enableKnowledge')}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                Allow the AI agent to search your uploaded documents and answer questions based on your specific business knowledge.
+                                {t('knowledgeDescription')}
                             </Typography>
                         </Box>
                         <Switch
@@ -153,7 +156,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                     </Box>
                     {aiMode === 'fsm' && (
                         <Alert severity="warning" sx={{ mt: 2 }}>
-                            RAG features require NLP or Full Agent mode.
+                            {t('ragRequirement')}
                         </Alert>
                     )}
                 </Card>
@@ -161,7 +164,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
 
             <Box sx={{ mt: 4, bgcolor: 'action.hover', p: 2, borderRadius: 1 }}>
                 <Alert severity="info">
-                    Changes to AI Mode generally apply instantly, but active conversations might finish their session with the previous model.
+                    {t('changeNotice')}
                 </Alert>
             </Box>
         </Box>

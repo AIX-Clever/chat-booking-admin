@@ -43,51 +43,51 @@ export default function DashboardPage() {
     // Prepare chart data from daily metrics
     const weekLabels = metrics?.daily.slice(-4).map(d => {
         const date = new Date(d.date);
-        return `Semana ${Math.ceil(date.getDate() / 7)}`;
-    }) || ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+        return `${t('week')} ${Math.ceil(date.getDate() / 7)}`;
+    }) || [`${t('week')} 1`, `${t('week')} 2`, `${t('week')} 3`, `${t('week')} 4`];
 
     const chartSeries = metrics?.topServices.slice(0, 2).map(service => ({
-        name: service.name || 'Service',
+        name: service.name || t('unknownService'),
         data: metrics.daily.slice(-4).map(() => Math.floor(service.bookings / 4) || 0),
     })) || [
-            { name: 'Service 1', data: [0, 0, 0, 0] },
-            { name: 'Service 2', data: [0, 0, 0, 0] },
+            { name: `${t('topServices')} 1`, data: [0, 0, 0, 0] },
+            { name: `${t('topServices')} 2`, data: [0, 0, 0, 0] },
         ];
 
     // If no chart data, use defaults
     if (chartSeries.length === 0) {
-        chartSeries.push({ name: 'Sin datos', data: [0, 0, 0, 0] });
+        chartSeries.push({ name: t('noData'), data: [0, 0, 0, 0] });
     }
 
     // Booking status for pie chart
     const bookingStatusData = metrics ? [
-        { label: t('bookingsTrend'), value: metrics.bookingStatus.CONFIRMED, color: '#00A76F' },
-        { label: 'Pendientes', value: metrics.bookingStatus.PENDING, color: '#FFAB00' },
-        { label: 'Cancelados', value: metrics.bookingStatus.CANCELLED, color: '#FF5630' },
-        { label: 'No Show', value: metrics.bookingStatus.NO_SHOW, color: '#00B8D9' },
+        { label: t('status.confirmed'), value: metrics.bookingStatus.CONFIRMED, color: '#00A76F' },
+        { label: t('status.pending'), value: metrics.bookingStatus.PENDING, color: '#FFAB00' },
+        { label: t('status.cancelled'), value: metrics.bookingStatus.CANCELLED, color: '#FF5630' },
+        { label: t('status.noShow'), value: metrics.bookingStatus.NO_SHOW, color: '#00B8D9' },
     ] : [
-        { label: t('bookingsTrend'), value: 0, color: '#00A76F' },
-        { label: 'Pendientes', value: 0, color: '#FFAB00' },
-        { label: 'Cancelados', value: 0, color: '#FF5630' },
-        { label: 'No Show', value: 0, color: '#00B8D9' },
+        { label: t('status.confirmed'), value: 0, color: '#00A76F' },
+        { label: t('status.pending'), value: 0, color: '#FFAB00' },
+        { label: t('status.cancelled'), value: 0, color: '#FF5630' },
+        { label: t('status.noShow'), value: 0, color: '#00B8D9' },
     ];
 
     // Plan usage data
     const planLimitsData = [
         {
-            label: 'Tokens IA (Mensual)',
+            label: t('planMetrics.tokensIA'),
             usage: usage?.tokensIA || 0,
             limit: limits.tokensIA,
             color: 'warning' as const
         },
         {
-            label: 'Reservas (Mensual)',
+            label: t('planMetrics.bookings'),
             usage: usage?.bookings || 0,
             limit: limits.bookings,
             color: 'primary' as const
         },
         {
-            label: 'Mensajes',
+            label: t('planMetrics.messages'),
             usage: usage?.messages || 0,
             limit: limits.apiCalls,
             color: 'info' as const
@@ -105,7 +105,7 @@ export default function DashboardPage() {
 
             {metricsError && (
                 <Alert severity="warning" sx={{ mb: 3 }}>
-                    No se pudieron cargar las métricas. Mostrando datos iniciales.
+                    {t('metricsError')}
                 </Alert>
             )}
 
@@ -122,7 +122,7 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} sm={6} md={3}>
                     <AppWidgetSummary
-                        title="Horas Ahorradas"
+                        title={t('hoursSaved')}
                         total={hoursSaved}
                         color="info"
                         icon={<AccessTimeIcon fontSize="large" />}
@@ -142,7 +142,7 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} sm={6} md={3}>
                     <AppWidgetSummary
-                        title="Atención Automática"
+                        title={t('autoAttendance')}
                         total={Math.round(metrics?.summary.autoAttendanceRate || 0)}
                         color="success"
                         icon={<SmartToyIcon fontSize="large" />}
@@ -152,8 +152,8 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} md={6} lg={8}>
                     <AppWebsiteVisits
-                        title="Top Services Performance"
-                        subheader={`Período: ${metrics?.period || 'actual'}`}
+                        title={t('topServicesPerformance')}
+                        subheader={`${t('period')}: ${metrics?.period || 'actual'}`}
                         chartData={{
                             labels: weekLabels,
                             series: chartSeries,
@@ -163,14 +163,14 @@ export default function DashboardPage() {
 
                 <Grid item xs={12} md={6} lg={4}>
                     <AppCurrentVisits
-                        title="Estado de Reservas"
+                        title={t('bookingStatus')}
                         chartData={bookingStatusData}
                     />
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
                     <AppPlanUsage
-                        planName={`${planName} Plan`}
+                        planName={`${planName} ${t('plan')}`}
                         limits={planLimitsData}
                     />
                 </Grid>

@@ -28,14 +28,37 @@
     },
     "dashboard": {
         "title": "Dashboard",
-        "welcome": "Welcome",
+        "welcome": "Hi, Welcome back",
         "totalBookings": "Total Bookings",
         "activeServices": "Active Services",
         "totalRevenue": "Total Revenue",
         "conversionRate": "Conversion Rate",
         "recentBookings": "Recent Bookings",
-        "bookingsTrend": "Bookings Trend",
-        "noBookings": "No bookings yet"
+        "bookingsTrend": "Confirmed",
+        "noBookings": "No bookings yet",
+        "week": "Week",
+        "hoursSaved": "Hours Saved",
+        "autoAttendance": "Auto Attendance",
+        "topServicesPerformance": "Top Services Performance",
+        "period": "Period",
+        "bookingStatus": "Booking Status",
+        "planUsage": "Plan Usage",
+        "plan": "Plan",
+        "metricsError": "Could not load metrics. Showing initial data.",
+        "unknownService": "Unknown",
+        "noData": "No data",
+        "status": {
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "cancelled": "Cancelled",
+            "completed": "Completed",
+            "noShow": "No Show"
+        },
+        "planMetrics": {
+            "tokensIA": "AI Tokens (Monthly)",
+            "bookings": "Bookings (Monthly)",
+            "messages": "Messages"
+        }
     },
     "bookings": {
         "title": "Bookings Management",
@@ -63,7 +86,46 @@
             "today": "Today",
             "week": "This Week",
             "month": "This Month"
-        }
+        },
+        "timeLeft": {
+            "ended": "Ended",
+            "inMinutes": "In {minutes}m",
+            "inHours": "In {hours}h",
+            "inDays": "In {days}d",
+            "header": "Time Left"
+        },
+        "dialogs": {
+            "detailsTitle": "Booking Details",
+            "newBookingTitle": "New Booking",
+            "cancelTitle": "Cancel Booking",
+            "cancelContent": "Are you sure you want to cancel the booking for {name}?"
+        },
+        "form": {
+            "clientName": "Client Name",
+            "clientEmail": "Client Email",
+            "clientPhone": "Client Phone (Optional)",
+            "service": "Service",
+            "provider": "Provider",
+            "date": "Date",
+            "time": "Time",
+            "notes": "Notes",
+            "dateTime": "Date & Time"
+        },
+        "actions": {
+            "whatsAppReminder": "WhatsApp Reminder",
+            "confirm": "Confirm",
+            "noShow": "No Show",
+            "cancelBooking": "Cancel Booking",
+            "prev": "Prev",
+            "next": "Next"
+        },
+        "sorting": {
+            "label": "Sort By",
+            "closest": "Closest",
+            "furthest": "Furthest"
+        },
+        "searchPlaceholder": "Search client...",
+        "noBookingsFound": "No bookings found."
     },
     "services": {
         "title": "Services",
@@ -77,17 +139,75 @@
         "description": "Description",
         "active": "Active",
         "inactive": "Inactive",
-        "noServices": "No services created"
+        "noServices": "No services created",
+        "searchPlaceholder": "Search service...",
+        "noServicesFound": "No services found.",
+        "status": "Status",
+        "actions": "Actions",
+        "newService": "New Service",
+        "serviceName": "Service Name",
+        "durationMin": "Duration (min)",
+        "priceLabel": "Price ($)",
+        "activeService": "Active Service",
+        "deleteConfirmation": "Are you sure you want to delete this service? This action cannot be undone.",
+        "manageCategories": "Manage Categories",
+        "newCategoryPlaceholder": "New category name",
+        "add": "Add",
+        "deleteCategoryTitle": "Delete Category",
+        "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{name}\"?"
     },
     "providers": {
         "title": "Providers",
-        "addProvider": "Add Provider",
+        "newProvider": "New Provider",
         "editProvider": "Edit Provider",
-        "name": "Name",
-        "email": "Email",
-        "phone": "Phone",
-        "specialties": "Specialties",
-        "noProviders": "No providers"
+        "searchPlaceholder": "Search provider...",
+        "noProvidersFound": "No providers found.",
+        "columns": {
+            "name": "Name",
+            "assignedServices": "Assigned Services",
+            "aiDrivers": "AI Drivers",
+            "timezone": "Timezone",
+            "status": "Status",
+            "actions": "Actions"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "servicesCount": "{count} Services",
+        "dialog": {
+            "tabs": {
+                "general": "General",
+                "services": "Services",
+                "aiContext": "AI Context"
+            },
+            "general": {
+                "fullName": "Full Name",
+                "biography": "Biography",
+                "timezone": "Timezone",
+                "providerIsActive": "Provider is Active"
+            },
+            "services": {
+                "assignedServices": "Assigned Services",
+                "selectServices": "Select services",
+                "description": "Services this provider is qualified to perform.",
+                "helperText": "Assign specific services to ensure this provider only receives relevant bookings."
+            },
+            "aiContext": {
+                "personalityTraits": "Personality Traits",
+                "traitsPlaceholder": "e.g. Patient, Energetic",
+                "traitsHelper": "Adjectives that describe the provider's style.",
+                "granularSpecialties": "Granular Specialties",
+                "specialtiesPlaceholder": "e.g. Back pain, Social anxiety",
+                "specialtiesHelper": "Specific conditions or areas of expertise.",
+                "languages": "Languages",
+                "languagesPlaceholder": "Select or type languages"
+            }
+        },
+        "deleteDialog": {
+            "title": "Delete Provider",
+            "message": "Are you sure you want to delete {name}? They will be removed from all future bookings."
+        }
     },
     "availability": {
         "title": "Availability",
@@ -103,59 +223,142 @@
             "friday": "Friday",
             "saturday": "Saturday",
             "sunday": "Sunday"
-        }
+        },
+        "saveChanges": "Save Changes",
+        "saved": "Saved",
+        "addSlot": "Add Slot",
+        "noExceptions": "No exceptions configured.",
+        "configuringFor": "Configuring Availability for",
+        "visibilityWarning": "This will affect their visibility in the Booking Widget.",
+        "alertPastDate": "Cannot add past dates as exceptions",
+        "alertDuplicateDate": "This date is already added",
+        "alertSaveSuccess": "Availability saved!",
+        "alertSaveError": "Failed to save availability.",
+        "dayOff": "Day Off",
+        "addExceptionDate": "Add Exception Date"
     },
     "knowledge": {
         "title": "Knowledge Base",
-        "addDocument": "Add Document",
-        "uploadFile": "Upload File",
-        "fileName": "File Name",
-        "fileSize": "Size",
-        "uploadDate": "Upload Date",
-        "noDocuments": "No documents"
+        "subtitle": "Upload documents (PDF, Text) to train your AI agent.",
+        "ragDisabled": "RAG is currently disabled.",
+        "ragDisabledMessage": "Uploaded documents will be stored but the AI Agent won't use them until you enable \"Knowledge Retrieval\" in Settings.",
+        "uploadSection": "Upload New Document",
+        "selectFile": "Select File",
+        "uploadDocument": "Upload Document",
+        "uploading": "Uploading...",
+        "uploadSuccess": "Document uploaded successfully! Processing started.",
+        "uploadError": "Failed to upload document. Please try again.",
+        "recentDocuments": "Recent Documents",
+        "fileSize": "{size} KB"
     },
     "faqs": {
         "title": "Frequently Asked Questions",
-        "addFaq": "Add FAQ",
+        "newFaq": "New FAQ",
         "editFaq": "Edit FAQ",
+        "searchPlaceholder": "Search FAQs...",
         "question": "Question",
         "answer": "Answer",
         "category": "Category",
-        "noFaqs": "No FAQs"
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "noFaqsFound": "No FAQs found.",
+        "deleteDialog": {
+            "title": "Delete FAQ",
+            "message": "Are you sure you want to delete this FAQ? This action cannot be undone."
+        }
     },
     "settings": {
         "title": "Settings",
+        "saveSuccess": "Settings saved successfully!",
+        "saveError": "Failed to save settings.",
+        "upgradeAlert": "Contact sales to upgrade!",
         "tabs": {
             "general": "General",
             "ai": "Artificial Intelligence",
-            "providers": "Providers",
-            "notifications": "Notifications"
+            "apiKeys": "API Keys"
         },
         "general": {
             "title": "General Settings",
-            "companyName": "Company Name",
-            "email": "Email",
-            "phone": "Phone",
-            "timezone": "Timezone",
+            "primaryColor": "Primary Color",
+            "custom": "Custom:",
+            "position": "Position",
             "language": "Language",
-            "currency": "Currency"
+            "welcomeMessage": "Welcome Message",
+            "saveBranding": "Save Branding",
+            "positions": {
+                "bottomRight": "Bottom Right",
+                "bottomLeft": "Bottom Left"
+            },
+            "languages": {
+                "es": "Español",
+                "en": "English",
+                "pt": "Português"
+            },
+            "colorPresets": {
+                "defaultBlue": "Default Blue",
+                "royalPurple": "Royal Purple",
+                "teal": "Teal",
+                "fieryOrange": "Fiery Orange",
+                "midnight": "Midnight"
+            }
         },
         "ai": {
             "title": "AI Settings",
-            "mode": "AI Mode",
-            "ragEnabled": "RAG Enabled",
-            "temperature": "Temperature",
-            "maxTokens": "Max Tokens",
-            "model": "Model"
+            "intelligenceMode": "Intelligence Mode",
+            "currentPlan": "Current Plan: {plan}",
+            "description": "Select the AI model that powers your conversational agent. Higher tiers require advanced plans.",
+            "knowledgeBase": "Knowledge Base (RAG)",
+            "enableKnowledge": "Enable Knowledge Retrieval",
+            "knowledgeDescription": "Allow the AI agent to search your uploaded documents and answer questions based on your specific business knowledge.",
+            "requiresUpgrade": "Requires {plan}",
+            "ragRequirement": "RAG features require NLP or Full Agent mode.",
+            "changeNotice": "Changes to AI Mode generally apply instantly, but active conversations might finish their session with the previous model.",
+            "saveAiSettings": "Save AI Settings",
+            "modes": {
+                "fsm": {
+                    "name": "FSM (Basic)",
+                    "description": "Deterministic decision tree. Ideal for fixed flows and total control."
+                },
+                "nlp": {
+                    "name": "NLP Assisted",
+                    "description": "Uses lightweight AI to detect intent and entities, but follows strict rules."
+                },
+                "agent": {
+                    "name": "Full AI Agent",
+                    "description": "Autonomous agent with reasoning (Bedrock + Sonnet). Natural conversation."
+                }
+            },
+            "plans": {
+                "lite": "Plan LITE",
+                "pro": "Plan PRO",
+                "business": "Plan BUSINESS"
+            }
         },
-        "saveSuccess": "Settings saved successfully",
-        "saveError": "Error saving settings"
+        "apiKeys": {
+            "title": "Active API Keys",
+            "createKey": "Create Key",
+            "name": "Name",
+            "keyPrefix": "Key Prefix",
+            "created": "Created",
+            "status": "Status",
+            "actions": "Actions",
+            "active": "Active",
+            "revoked": "Revoked",
+            "createDialog": {
+                "title": "Create New API Key",
+                "label": "Key Name (e.g. Website Production)"
+            }
+        }
     },
     "workflows": {
         "title": "Workflow Editor",
         "newWorkflow": "New Workflow",
         "saveWorkflow": "Save Workflow",
         "deleteWorkflow": "Delete Workflow",
+        "deleteConfirmation": "Are you sure you want to delete this workflow?",
+        "noDescription": "No description",
+        "noWorkflowsFound": "No workflows found.",
         "nodes": {
             "start": "Start",
             "message": "Message",
@@ -180,14 +383,21 @@
             "title": "Create Account",
             "companyName": "Company Name",
             "alreadyHaveAccount": "Already have an account?",
-            "signIn": "Sign in"
+            "signIn": "Sign in",
+            "heroTitle": "Start Your Chat Business",
+            "heroSubtitle": "Create AI-powered booking agents for any business in seconds.",
+            "getStarted": "Get Started",
+            "noCreditCard": "No credit card required. Free forever plan.",
+            "email": "Email Address",
+            "password": "Password",
+            "createAccount": "Create Account",
+            "errorAccountExists": "Account already exists. Please login.",
+            "errorRegistrationFailed": "Registration failed. Please try again."
         }
     },
     "planGuard": {
-        "upgradeRequired": "Upgrade Required",
-        "upgradeMessage": "This feature requires the {plan} plan or higher.",
-        "currentPlan": "Current Plan",
-        "upgradeButton": "Upgrade Plan",
-        "learnMore": "Learn more"
+        "unlockPremium": "Unlock Premium Capabilities",
+        "featureAvailable": "{featureName} is available exclusively on the {plan} plan and above. Upgrade to access advanced automation and AI features.",
+        "upgradeTo": "Upgrade to {plan}"
     }
 }

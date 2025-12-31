@@ -5,6 +5,7 @@ import { Box, Typography, Button, Paper, CircularProgress } from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useTenant } from '../context/TenantContext';
+import { useTranslations } from 'next-intl';
 
 const PLAN_LEVELS: Record<string, number> = {
     'LITE': 1,
@@ -21,6 +22,7 @@ interface PlanGuardProps {
 
 export default function PlanGuard({ children, minPlan, featureName = 'This feature' }: PlanGuardProps) {
     const { tenant, loading } = useTenant();
+    const t = useTranslations('planGuard');
 
     if (loading) {
         return (
@@ -66,11 +68,10 @@ export default function PlanGuard({ children, minPlan, featureName = 'This featu
                         <LockIcon sx={{ fontSize: 40, color: 'primary.main' }} />
                     </Box>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Unlock Premium Capabilities
+                        {t('unlockPremium')}
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                        {featureName} is available exclusively on the <strong>{minPlan}</strong> plan and above.
-                        Upgrade to access advanced automation and AI features.
+                        {t('featureAvailable', { featureName, plan: minPlan })}
                     </Typography>
 
                     <Button
@@ -86,7 +87,7 @@ export default function PlanGuard({ children, minPlan, featureName = 'This featu
                             fontSize: '1rem'
                         }}
                     >
-                        Upgrade to {minPlan}
+                        {t('upgradeTo', { plan: minPlan })}
                     </Button>
                 </Paper>
             </Box>
