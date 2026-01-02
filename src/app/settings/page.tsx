@@ -19,6 +19,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { useSearchParams } from 'next/navigation';
 
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
 
 // Import refactored components
@@ -87,17 +88,16 @@ export default function SettingsPage() {
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
         try {
-            // Retrieving tenantId from local storage if available, but it's optional now
-            const storedTenantId = localStorage.getItem('tenantId');
-            // if (storedTenantId) {
-            //    setTenantId(storedTenantId);
-            // }
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
 
             // Always call GET_TENANT. If tenantId is not provided, backend infers from auth context.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response = await client.graphql({
                 query: GET_TENANT,
-                variables: { tenantId: storedTenantId || null }
+                variables: { tenantId: null }, // Backend infers from token
+                authToken: token
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             }) as { data: { getTenant: any } };
 
@@ -160,6 +160,9 @@ export default function SettingsPage() {
                 }
             });
 
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             await client.graphql({
                 query: UPDATE_TENANT,
                 variables: {
@@ -168,7 +171,8 @@ export default function SettingsPage() {
                         billingEmail: undefined,
                         settings: settingsJson
                     }
-                }
+                },
+                authToken: token
             });
             setSuccessMsg(t('saveSuccess'));
         } catch (error) {
