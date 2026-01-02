@@ -3,6 +3,7 @@
 
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { LIST_FAQS, CREATE_FAQ, UPDATE_FAQ, DELETE_FAQ } from '../../graphql/queries';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import {
@@ -116,6 +117,10 @@ export default function FAQsPage() {
 
     const handleSave = async () => {
         try {
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             if (currentFAQ) {
                 // Edit
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,7 +134,8 @@ export default function FAQsPage() {
                             category: formData.category,
                             active: formData.active
                         }
-                    }
+                    },
+                    authToken: token
                 });
                 const updated = response.data.updateFAQ;
                 setFaqs((prev) =>
@@ -147,7 +153,8 @@ export default function FAQsPage() {
                             category: formData.category,
                             active: formData.active
                         }
-                    }
+                    },
+                    authToken: token
                 });
                 const created = response.data.createFAQ;
                 setFaqs((prev) => [...prev, created]);
@@ -164,9 +171,13 @@ export default function FAQsPage() {
             content: t('deleteDialog.message'),
             action: async () => {
                 try {
+                    const session = await fetchAuthSession();
+                    const token = session.tokens?.idToken?.toString();
+
                     await client.graphql({
                         query: DELETE_FAQ,
-                        variables: { faqId: id }
+                        variables: { faqId: id },
+                        authToken: token
                     });
                     setFaqs((prev) => prev.filter((f) => f.faqId !== id));
                     setConfirmOpen(false);
