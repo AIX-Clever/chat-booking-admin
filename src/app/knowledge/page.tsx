@@ -21,6 +21,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 // Assuming GET_TENANT is available in queries, otherwise we define it or import it.
 // To be safe and self-contained given I can't browse all files easily, I'll import it if I know the path or redefine it.
 // In settings page it was: import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
@@ -45,10 +46,14 @@ export default function KnowledgePage() {
 
     const checkRagStatus = React.useCallback(async () => {
         try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: GET_TENANT,
-                variables: { tenantId: null } // Infers from auth
+                variables: { tenantId: null }, // Infers from auth
+                authToken: token
             });
             const tenant = response.data.getTenant;
             if (tenant && tenant.settings) {
@@ -84,6 +89,9 @@ export default function KnowledgePage() {
         try {
 
 
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             // 1. Get Presigned URL
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
@@ -91,7 +99,8 @@ export default function KnowledgePage() {
                 variables: {
                     fileName: file.name,
                     contentType: file.type
-                }
+                },
+                authToken: token
             });
 
             const uploadUrl = response.data.getUploadUrl;
