@@ -4,6 +4,7 @@ import ConfirmDialog from '../../components/common/ConfirmDialog';
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE, LIST_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY } from '../../graphql/queries';
 import {
     Typography,
@@ -147,6 +148,10 @@ export default function ServicesPage() {
 
     const handleSave = async () => {
         try {
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             if (currentService) {
                 // Edit
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,7 +167,8 @@ export default function ServicesPage() {
                             price: formData.price,
                             available: formData.available
                         }
-                    }
+                    },
+                    authToken: token
                 });
                 const updated = response.data.updateService;
                 setServices((prev) =>
@@ -181,7 +187,8 @@ export default function ServicesPage() {
                             durationMinutes: formData.durationMinutes,
                             price: formData.price
                         }
-                    }
+                    },
+                    authToken: token
                 });
                 const created = response.data.createService;
                 // Backend default available to true usually, but checking schema
@@ -199,9 +206,13 @@ export default function ServicesPage() {
             content: t('deleteConfirmation'),
             action: async () => {
                 try {
+                    const session = await fetchAuthSession();
+                    const token = session.tokens?.idToken?.toString();
+
                     await client.graphql({
                         query: DELETE_SERVICE,
-                        variables: { serviceId: id }
+                        variables: { serviceId: id },
+                        authToken: token
                     });
                     setServices((prev) => prev.filter((s) => s.serviceId !== id));
                     setConfirmOpen(false);
@@ -217,6 +228,9 @@ export default function ServicesPage() {
     const handleAddCategory = async () => {
         if (newCategory) {
             try {
+                const session = await fetchAuthSession();
+                const token = session.tokens?.idToken?.toString();
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: CREATE_CATEGORY,
@@ -227,7 +241,8 @@ export default function ServicesPage() {
                             isActive: true,
                             displayOrder: categories.length + 1
                         }
-                    }
+                    },
+                    authToken: token
                 });
                 const created = response.data.createCategory;
                 setCategories(prev => [...prev, created]);
@@ -244,9 +259,13 @@ export default function ServicesPage() {
             content: t('deleteCategoryConfirmation', { name: category.name }),
             action: async () => {
                 try {
+                    const session = await fetchAuthSession();
+                    const token = session.tokens?.idToken?.toString();
+
                     await client.graphql({
                         query: DELETE_CATEGORY,
-                        variables: { categoryId: category.categoryId }
+                        variables: { categoryId: category.categoryId },
+                        authToken: token
                     });
                     setCategories(prev => prev.filter(c => c.categoryId !== category.categoryId));
                     setConfirmOpen(false);
