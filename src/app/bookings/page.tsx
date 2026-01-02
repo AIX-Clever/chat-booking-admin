@@ -4,6 +4,8 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
+import { useTenant } from '../../context/TenantContext';
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW } from '../../graphql/queries';
 
 import {
@@ -50,6 +52,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 // --- Types ---
 type BookingStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed' | 'no_show';
@@ -87,6 +90,7 @@ const client = generateClient();
 
 export default function BookingsPage() {
     const t = useTranslations('bookings');
+    const { tenant } = useTenant();
     const tCommon = useTranslations('common');
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
@@ -151,6 +155,13 @@ export default function BookingsPage() {
             const allBookings: Booking[] = [];
 
             for (const provider of providersToFetch) {
+                console.log('DEBUG: Fetching bookings for:', {
+                    providerId: provider.providerId,
+                    startDate,
+                    endDate,
+                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
+                });
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response: any = await client.graphql({
                     query: LIST_BOOKINGS_BY_PROVIDER,
@@ -301,14 +312,20 @@ export default function BookingsPage() {
     const confirmCancel = async () => {
         if (bookingToCancel) {
             try {
+                // Securely fetch ID Token to ensure custom:tenantId claim is present
+                const session = await fetchAuthSession();
+                const token = session.tokens?.idToken?.toString();
+
                 await client.graphql({
                     query: CANCEL_BOOKING,
                     variables: {
                         input: {
                             bookingId: bookingToCancel.id,
                             reason: 'Cancelled by Admin'
+                            // tenantId removed: relying on secure token claims
                         }
-                    }
+                    },
+                    authToken: token // Explicit secure token
                 });
 
                 setBookings(prev => prev.map(b =>
@@ -329,7 +346,7 @@ export default function BookingsPage() {
         try {
             await client.graphql({
                 query: CONFIRM_BOOKING,
-                variables: { input: { bookingId: booking.id } }
+                variables: { input: { bookingId: booking.id, tenantId: tenant?.tenantId } }
             });
             setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'confirmed' } : b));
             if (selectedBooking?.id === booking.id) {
@@ -505,6 +522,14 @@ export default function BookingsPage() {
                     >
                         {t('newBooking')}
                     </Button>
+                    <IconButton
+                        onClick={() => fetchBookings(providers)}
+                        disabled={loading}
+                        color="primary"
+                        title="Refresh"
+                    >
+                        <RefreshIcon />
+                    </IconButton>
                     <ToggleButtonGroup
                         value={viewMode}
                         exclusive
@@ -593,7 +618,7 @@ export default function BookingsPage() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>{t('columns.date')}</TableCell>
-                                    <TableCell>{t('timeLeft.header')}</TableCell> {/* New Column */}
+                                    <TableCell>{t('timeLeft.header')}</TableCell>
                                     <TableCell>{t('columns.customer')}</TableCell>
                                     <TableCell>{t('columns.service')}</TableCell>
                                     <TableCell>{t('columns.provider')}</TableCell>
