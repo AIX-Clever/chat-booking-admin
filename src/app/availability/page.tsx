@@ -4,6 +4,7 @@
 
 import * as React from 'react';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { LIST_PROVIDERS, GET_PROVIDER_AVAILABILITY, SET_PROVIDER_AVAILABILITY, SET_PROVIDER_EXCEPTIONS } from '../../graphql/queries';
 import {
     Typography,
@@ -241,6 +242,10 @@ export default function AvailabilityPage() {
         if (!selectedProvider) return;
         setLoading(true);
         try {
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             const dayMapReverse = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
             // 1. Save weekly schedule (availability per day)
@@ -260,7 +265,8 @@ export default function AvailabilityPage() {
                             timeRanges: timeRanges,
                             breaks: []
                         }
-                    }
+                    },
+                    authToken: token
                 });
             });
 
@@ -273,7 +279,8 @@ export default function AvailabilityPage() {
                         providerId: selectedProvider,
                         exceptions: exceptionDates
                     }
-                }
+                },
+                authToken: token
             });
 
             // Execute all in parallel
