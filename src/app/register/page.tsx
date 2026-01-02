@@ -14,7 +14,6 @@ const client = generateClient();
 
 export default function RegisterPage() {
     const t = useTranslations('auth.register');
-    const tCommon = useTranslations('common');
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
