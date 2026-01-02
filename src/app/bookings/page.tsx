@@ -262,6 +262,10 @@ export default function BookingsPage() {
             const duration = service ? service.durationMinutes : 60; // Default or fetched
             const endDateTime = new Date(startDateTime.getTime() + duration * 60000);
 
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             await client.graphql({
                 query: CREATE_BOOKING,
                 variables: {
@@ -275,7 +279,8 @@ export default function BookingsPage() {
                         clientPhone: newBookingData.clientPhone || null,
                         notes: newBookingData.notes || null
                     }
-                }
+                },
+                authToken: token
             });
 
             setNewBookingOpen(false);
@@ -344,9 +349,13 @@ export default function BookingsPage() {
 
     const handleConfirmBooking = async (booking: Booking) => {
         try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             await client.graphql({
                 query: CONFIRM_BOOKING,
-                variables: { input: { bookingId: booking.id, tenantId: tenant?.tenantId } }
+                variables: { input: { bookingId: booking.id } },
+                authToken: token
             });
             setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'confirmed' } : b));
             if (selectedBooking?.id === booking.id) {
@@ -359,9 +368,13 @@ export default function BookingsPage() {
 
     const handleNoShowBooking = async (booking: Booking) => {
         try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             await client.graphql({
                 query: MARK_AS_NO_SHOW,
-                variables: { input: { bookingId: booking.id } }
+                variables: { input: { bookingId: booking.id } },
+                authToken: token
             });
             setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, status: 'no_show' } : b));
             if (selectedBooking?.id === booking.id) {
