@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { LIST_PROVIDERS, CREATE_PROVIDER, UPDATE_PROVIDER, DELETE_PROVIDER, SEARCH_SERVICES } from '../../graphql/queries';
 import {
     Typography,
@@ -227,6 +228,10 @@ export default function ProvidersPage() {
 
     const handleSave = async () => {
         try {
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             if (currentProvider) {
                 // Update
                 const input = {
@@ -241,7 +246,8 @@ export default function ProvidersPage() {
 
                 await client.graphql({
                     query: UPDATE_PROVIDER,
-                    variables: { input }
+                    variables: { input },
+                    authToken: token
                 });
             } else {
                 // Create
@@ -255,7 +261,8 @@ export default function ProvidersPage() {
 
                 await client.graphql({
                     query: CREATE_PROVIDER,
-                    variables: { input }
+                    variables: { input },
+                    authToken: token
                 });
             }
             fetchProviders(); // Refresh list
@@ -272,9 +279,13 @@ export default function ProvidersPage() {
             content: t('deleteDialog.message', { name }),
             action: async () => {
                 try {
+                    const session = await fetchAuthSession();
+                    const token = session.tokens?.idToken?.toString();
+
                     await client.graphql({
                         query: DELETE_PROVIDER,
-                        variables: { providerId: id }
+                        variables: { providerId: id },
+                        authToken: token
                     });
                     setProviders((prev) => prev.filter((p) => p.id !== id));
                     setConfirmOpen(false);
@@ -306,7 +317,12 @@ export default function ProvidersPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Typography variant="h4">{t('title')}</Typography>
+                <Box>
+                    <Typography variant="h4">{t('title')}</Typography>
+                    <Typography variant="caption" sx={{ color: 'red', display: 'block' }}>
+                        DEBUG API: {process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT}
+                    </Typography>
+                </Box>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
                     {t('newProvider')}
                 </Button>
@@ -353,6 +369,9 @@ export default function ProvidersPage() {
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 200 }} noWrap>
                                                     {row.bio}
+                                                </Typography>
+                                                <Typography variant="caption" display="block" color="text.disabled" sx={{ fontSize: '0.65rem' }}>
+                                                    ID: {row.id}
                                                 </Typography>
                                             </Box>
                                         </Stack>
