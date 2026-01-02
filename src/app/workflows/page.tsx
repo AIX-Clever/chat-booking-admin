@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { LIST_WORKFLOWS, DELETE_WORKFLOW } from '../../graphql/queries';
 import { useTranslations } from 'next-intl';
 
@@ -47,9 +48,13 @@ export default function WorkflowsListPage() {
         e.stopPropagation();
         if (confirm(t('deleteConfirmation'))) {
             try {
+                const session = await fetchAuthSession();
+                const token = session.tokens?.idToken?.toString();
+
                 await client.graphql({
                     query: DELETE_WORKFLOW,
-                    variables: { workflowId: id }
+                    variables: { workflowId: id },
+                    authToken: token
                 });
                 setWorkflows(prev => prev.filter(w => w.workflowId !== id));
             } catch (error) {
