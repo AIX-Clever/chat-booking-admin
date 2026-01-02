@@ -8,7 +8,7 @@ import {
     Card, CardContent
 } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
-import { fetchUserAttributes } from 'aws-amplify/auth';
+import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { UPDATE_TENANT, CREATE_SERVICE } from '../../graphql/queries';
 
@@ -51,6 +51,10 @@ export default function OnboardingPage() {
         setLoading(true);
         setError(null);
         try {
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             if (activeStep === 0) {
                 // Save Branding
                 await client.graphql({
@@ -64,7 +68,8 @@ export default function OnboardingPage() {
                                 }
                             })
                         }
-                    }
+                    },
+                    authToken: token
                 });
             } else if (activeStep === 1) {
                 // Create Service
@@ -77,7 +82,8 @@ export default function OnboardingPage() {
                             durationMinutes: parseInt(duration),
                             price: parseFloat(price)
                         }
-                    }
+                    },
+                    authToken: token
                 });
             }
 
