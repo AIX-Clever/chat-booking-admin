@@ -7,6 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SaveIcon from '@mui/icons-material/Save';
 import WorkflowEditor, { WorkflowEditorRef } from '../../../components/workflow/WorkflowEditor';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { GET_WORKFLOW, UPDATE_WORKFLOW } from '../../../graphql/queries';
 import { Node, Edge } from '@xyflow/react';
 
@@ -213,6 +214,10 @@ export default function WorkflowPageClient({ id }: { id: string }) {
                 };
             });
 
+            // Securely fetch ID Token
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
             await client.graphql({
                 query: UPDATE_WORKFLOW,
                 variables: {
@@ -221,7 +226,8 @@ export default function WorkflowPageClient({ id }: { id: string }) {
                         steps: JSON.stringify(stepsMap),
                         metadata: JSON.stringify({ positions: positionsMap })
                     }
-                }
+                },
+                authToken: token
             });
 
             setToast({ open: true, message: 'Workflow saved successfully', severity: 'success' });
