@@ -35,6 +35,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 
 // --- Types ---
@@ -406,7 +407,7 @@ export default function AvailabilityPage() {
                         </Typography>
 
                         <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                                 <DatePicker
                                     label={t('addExceptionDate')}
                                     value={newExceptionDate ? new Date(newExceptionDate + 'T00:00:00') : null}
