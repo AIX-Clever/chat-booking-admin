@@ -90,7 +90,6 @@ const client = generateClient();
 
 export default function BookingsPage() {
     const t = useTranslations('bookings');
-    const { tenant } = useTenant();
     const tCommon = useTranslations('common');
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
