@@ -122,7 +122,26 @@ export default function SettingsPage() {
                             }));
                         }
 
-                        if (settings.widgetConfig) setWidgetConfig(settings.widgetConfig);
+                        if (settings.widgetConfig) {
+                            const config = settings.widgetConfig;
+                            // Migrate legacy welcomeMessage to welcomeMessages map if needed
+                            if (!config.welcomeMessages && config.welcomeMessage) {
+                                config.welcomeMessages = {
+                                    es: config.welcomeMessage,
+                                    en: 'Hello! How can I help you today?',
+                                    pt: 'Olá! Como posso ajudar você hoje?'
+                                };
+                            }
+                            // Ensure welcomeMessages exists even if empty
+                            if (!config.welcomeMessages) {
+                                config.welcomeMessages = {
+                                    es: '¡Hola! ¿En qué puedo ayudarte hoy?',
+                                    en: 'Hello! How can I help you today?',
+                                    pt: 'Olá! Como posso ajudar você hoje?'
+                                };
+                            }
+                            setWidgetConfig(config);
+                        }
                         if (settings.aiMode) setAiMode(settings.aiMode);
                         if (settings.ai && typeof settings.ai.enabled !== 'undefined') {
                             setRagEnabled(settings.ai.enabled);

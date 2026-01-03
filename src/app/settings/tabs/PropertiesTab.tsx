@@ -91,6 +91,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                         label={t('language')}
                         value={widgetConfig.language}
                         onChange={(e) => setWidgetConfig({ ...widgetConfig, language: e.target.value })}
+                        helperText={t('languageHelper')} // Add this key or use hardcoded string for now
                     >
                         <MenuItem value="es">{t('languages.es')}</MenuItem>
                         <MenuItem value="en">{t('languages.en')}</MenuItem>
@@ -100,8 +101,15 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                         label={t('welcomeMessage')}
                         multiline
                         rows={3}
-                        value={widgetConfig.welcomeMessage}
-                        onChange={(e) => setWidgetConfig({ ...widgetConfig, welcomeMessage: e.target.value })}
+                        value={widgetConfig.welcomeMessages?.[widgetConfig.language] || ''}
+                        onChange={(e) => {
+                            const newMessages = {
+                                ...(widgetConfig.welcomeMessages || {}),
+                                [widgetConfig.language]: e.target.value
+                            };
+                            setWidgetConfig({ ...widgetConfig, welcomeMessages: newMessages });
+                        }}
+                        helperText={`Editing message for: ${widgetConfig.language.toUpperCase()}`}
                     />
                     <Button
                         variant="contained"
