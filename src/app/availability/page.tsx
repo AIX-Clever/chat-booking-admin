@@ -35,8 +35,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { es, enUS, ptBR } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 // --- Types ---
 interface TimeWindow {
@@ -81,6 +82,15 @@ const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturd
 export default function AvailabilityPage() {
     const t = useTranslations('availability');
     const tCommon = useTranslations('common');
+    const locale = useLocale(); // Get current locale (es, en, pt)
+
+    // Map locale to date-fns locale
+    const dateLocaleMap: Record<string, Locale> = {
+        'es': es,
+        'en': enUS,
+        'pt': ptBR
+    };
+    const dateLocale = dateLocaleMap[locale] || enUS; // Default to English if locale not found
 
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [selectedProvider, setSelectedProvider] = React.useState('');
@@ -407,7 +417,7 @@ export default function AvailabilityPage() {
                         </Typography>
 
                         <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
                                 <DatePicker
                                     label={t('addExceptionDate')}
                                     value={newExceptionDate ? new Date(newExceptionDate + 'T00:00:00') : null}
