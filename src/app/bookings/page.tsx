@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { useTenant } from '../../context/TenantContext';
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW } from '../../graphql/queries';
 
 import {
