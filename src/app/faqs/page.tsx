@@ -33,6 +33,9 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Collapse from '@mui/material/Collapse';
 import { useTranslations } from 'next-intl';
 
 // --- Types ---
@@ -52,6 +55,7 @@ export default function FAQsPage() {
     const [faqs, setFaqs] = React.useState<FAQ[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [expandedRows, setExpandedRows] = React.useState<Set<string>>(new Set());
 
     // Dialog States
     const [open, setOpen] = React.useState(false);
@@ -237,46 +241,84 @@ export default function FAQsPage() {
                         <Table>
                             <TableHead>
                                 <TableRow>
+                                    <TableCell width="50px" />
                                     <TableCell>{t('question')}</TableCell>
-                                    <TableCell>{t('answer')}</TableCell>
                                     <TableCell>{t('category')}</TableCell>
                                     <TableCell>{t('status')}</TableCell>
                                     <TableCell align="right">{tCommon('actions')}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredFAQs.map((row) => (
-                                    <TableRow key={row.faqId} hover>
-                                        <TableCell width="30%">
-                                            <Typography variant="subtitle2">
-                                                {row.question}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell width="40%">
-                                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                {row.answer}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>{row.category}</TableCell>
-                                        <TableCell>
-                                            <Chip
-                                                label={row.active ? t('active') : t('inactive')}
-                                                color={row.active ? 'success' : 'default'}
-                                                size="small"
-                                                variant="filled"
-                                                sx={{ borderRadius: 1 }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
-                                                <EditIcon fontSize="small" />
-                                            </IconButton>
-                                            <IconButton size="small" onClick={() => handleDelete(row.faqId)} color="error">
-                                                <DeleteIcon fontSize="small" />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {filteredFAQs.map((row) => {
+                                    const isExpanded = expandedRows.has(row.faqId);
+                                    return (
+                                        <React.Fragment key={row.faqId}>
+                                            <TableRow hover sx={{ cursor: 'pointer' }}>
+                                                <TableCell>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => {
+                                                            const newExpanded = new Set(expandedRows);
+                                                            if (isExpanded) {
+                                                                newExpanded.delete(row.faqId);
+                                                            } else {
+                                                                newExpanded.add(row.faqId);
+                                                            }
+                                                            setExpandedRows(newExpanded);
+                                                        }}
+                                                    >
+                                                        {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                                    </IconButton>
+                                                </TableCell>
+                                                <TableCell onClick={() => {
+                                                    const newExpanded = new Set(expandedRows);
+                                                    if (isExpanded) {
+                                                        newExpanded.delete(row.faqId);
+                                                    } else {
+                                                        newExpanded.add(row.faqId);
+                                                    }
+                                                    setExpandedRows(newExpanded);
+                                                }}>
+                                                    <Typography variant="subtitle2">
+                                                        {row.question}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>{row.category}</TableCell>
+                                                <TableCell>
+                                                    <Chip
+                                                        label={row.active ? t('active') : t('inactive')}
+                                                        color={row.active ? 'success' : 'default'}
+                                                        size="small"
+                                                        variant="filled"
+                                                        sx={{ borderRadius: 1 }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
+                                                        <EditIcon fontSize="small" />
+                                                    </IconButton>
+                                                    <IconButton size="small" onClick={() => handleDelete(row.faqId)} color="error">
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+                                                    <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                                                        <Box sx={{ py: 2, px: 3, bgcolor: 'action.hover', borderRadius: 1, my: 1 }}>
+                                                            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                                                {t('answer')}
+                                                            </Typography>
+                                                            <Typography variant="body2" sx={{ mt: 1, whiteSpace: 'pre-wrap' }}>
+                                                                {row.answer}
+                                                            </Typography>
+                                                        </Box>
+                                                    </Collapse>
+                                                </TableCell>
+                                            </TableRow>
+                                        </React.Fragment>
+                                    );
+                                })}
                                 {filteredFAQs.length === 0 && (
                                     <TableRow>
                                         <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
