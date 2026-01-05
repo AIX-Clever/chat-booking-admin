@@ -284,6 +284,7 @@
             "custom": "Personalizado:",
             "position": "Posición",
             "language": "Idioma",
+            "languageHelper": "Selecciona el idioma predeterminado para la interfaz del chat.",
             "welcomeMessage": "Mensaje de Bienvenida",
             "saveBranding": "Guardar Marca",
             "positions": {

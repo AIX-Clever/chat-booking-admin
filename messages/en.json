@@ -284,6 +284,7 @@
             "custom": "Custom:",
             "position": "Position",
             "language": "Language",
+            "languageHelper": "Select the default language for the chat interface.",
             "welcomeMessage": "Welcome Message",
             "saveBranding": "Save Branding",
             "positions": {
