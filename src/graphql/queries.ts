@@ -432,7 +432,79 @@ export const UPDATE_WORKFLOW = `
 export const DELETE_WORKFLOW = `
   mutation DeleteWorkflow($workflowId: ID!) {
      deleteWorkflow(workflowId: $workflowId) {
-       workflowId
+      workflowId
      }
   }
+`;
+
+export const UPDATE_BOOKING_STATUS = `
+  mutation UpdateBookingStatus($bookingId: ID!, $status: String!) {
+    updateBookingStatus(bookingId: $bookingId, status: $status) {
+      bookingId
+      status
+    }
+  }
+`;
+
+export const LIST_ROOMS = `
+  query ListRooms {
+    listRooms {
+      roomId
+      tenantId
+      name
+      description
+      capacity
+      status
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_ROOM = `
+  query GetRoom($roomId: ID!) {
+    tenantId
+    name
+    description
+    capacity
+    status
+    metadata
+    createdAt
+    updatedAt
+  }
+}
+`;
+
+export const CREATE_ROOM = `
+  mutation CreateRoom($input: CreateRoomInput!) {
+  createRoom(input: $input) {
+    roomId
+    name
+    description
+    capacity
+    status
+  }
+}
+`;
+
+export const UPDATE_ROOM = `
+  mutation UpdateRoom($input: UpdateRoomInput!) {
+  updateRoom(input: $input) {
+    roomId
+    name
+    description
+    capacity
+    status
+    updatedAt
+  }
+}
+`;
+
+export const DELETE_ROOM = `
+  mutation DeleteRoom($roomId: ID!) {
+  deleteRoom(roomId: $roomId) {
+    roomId
+  }
+}
 `;

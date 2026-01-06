@@ -161,7 +161,7 @@ export default function SettingsPage() {
         } finally {
             setLoading(false);
         }
-    }, []); // Empty dependencies - client is stable from generateClient()
+    }, [client]); // Empty dependencies - client is stable from generateClient()
 
     React.useEffect(() => {
         setHasMounted(true);

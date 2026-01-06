@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW } from '../../graphql/queries';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS } from '../../graphql/queries';
 
 import {
     Typography,
@@ -543,7 +543,7 @@ export default function BookingsPage() {
                                                 {b.clientName}
                                             </Typography>
                                             <Typography variant="caption" color="text.secondary" noWrap>
-                                                {b.serviceName}
+                                                {availableServices.find(s => s.serviceId === b.serviceName)?.name || b.serviceName}
                                             </Typography>
                                         </Paper>
                                     ))}
@@ -765,8 +765,9 @@ export default function BookingsPage() {
                                             </TableCell>
                                             <TableCell>{row.providerName}</TableCell>
                                             <TableCell>
+                                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                                 <Chip
-                                                    label={row.status}
+                                                    label={row.status === 'no_show' ? 'No Show' : t(`status.${row.status}`)}
                                                     color={STATUS_COLORS[row.status] || 'default'}
                                                     size="small"
                                                     sx={{ textTransform: 'capitalize' }}
@@ -822,7 +823,20 @@ export default function BookingsPage() {
 
             {/* Booking Detail Dialog */}
             <Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>{t('dialogs.detailsTitle')}</DialogTitle>
+                <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {t('dialogs.detailsTitle')}
+                    {selectedBooking?.clientPhone && (
+                        <Button
+                            startIcon={<WhatsAppIcon />}
+                            color="success"
+                            variant="outlined"
+                            size="small"
+                            onClick={handleWhatsAppReminder}
+                        >
+                            {t('actions.whatsAppReminder')}
+                        </Button>
+                    )}
+                </DialogTitle>
                 <DialogContent dividers>
                     {selectedBooking && (
                         <Grid container spacing={2}>
@@ -839,7 +853,7 @@ export default function BookingsPage() {
                             <Grid item xs={6}>
                                 <Typography variant="subtitle2" color="text.secondary">{t('columns.status')}</Typography>
                                 <Chip
-                                    label={selectedBooking.status}
+                                    label={t(`status.${selectedBooking.status}`)}
                                     color={STATUS_COLORS[selectedBooking.status] || 'default'}
                                     size="small"
                                     sx={{ textTransform: 'capitalize' }}
@@ -866,32 +880,45 @@ export default function BookingsPage() {
                         </Grid>
                     )}
                 </DialogContent>
-                <DialogActions>
-                    {selectedBooking?.clientPhone && (
-                        <Button
-                            startIcon={<WhatsAppIcon />}
-                            color="success"
-                            onClick={handleWhatsAppReminder}
-                            sx={{ mr: 'auto' }}
-                        >
-                            {t('actions.whatsAppReminder')}
-                        </Button>
-                    )}
+                <DialogActions sx={{ justifyContent: 'space-between', px: 3, py: 2 }}>
                     <Button onClick={() => setDetailOpen(false)}>{tCommon('close')}</Button>
-                    {selectedBooking && selectedBooking.status === 'pending' && (
-                        <Button color="success" onClick={() => handleConfirmBooking(selectedBooking)}>
-                            {t('actions.confirm')}
-                        </Button>
-                    )}
-                    {selectedBooking && !['cancelled', 'completed', 'no_show'].includes(selectedBooking.status) && (
-                        <Button color="warning" onClick={() => handleNoShowBooking(selectedBooking)}>
-                            {t('actions.noShow')}
-                        </Button>
-                    )}
-                    {selectedBooking && selectedBooking.status !== 'cancelled' && selectedBooking.status !== 'completed' && (
-                        <Button color="error" onClick={() => { setDetailOpen(false); handleCancelClick(selectedBooking); }}>
-                            {t('actions.cancelBooking')}
-                        </Button>
+
+                    {selectedBooking && (
+                        <TextField
+                            select
+                            label={t('columns.status')}
+                            value={selectedBooking.status}
+                            onChange={async (e) => {
+                                const newStatus = e.target.value as BookingStatus;
+                                if (!selectedBooking) return;
+
+                                // Update local state immediately for responsiveness
+                                setSelectedBooking({ ...selectedBooking, status: newStatus });
+
+                                try {
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    await client.graphql({
+                                        query: UPDATE_BOOKING_STATUS,
+                                        variables: {
+                                            bookingId: selectedBooking.id,
+                                            status: newStatus.toUpperCase()
+                                        }
+                                    });
+                                    // Refresh list in background
+                                    fetchBookings(providers);
+                                } catch (err) {
+                                    console.error("Error updating status", err);
+                                    // Revert on error (optional, but good UX)
+                                    alert(tCommon('error'));
+                                }
+                            }}
+                            size="small"
+                            sx={{ minWidth: 150 }}
+                        >
+                            {STATUSES.map(s => (
+                                <MenuItem key={s} value={s}>{t(`status.${s}`)}</MenuItem>
+                            ))}
+                        </TextField>
                     )}
                 </DialogActions>
             </Dialog>
@@ -1009,7 +1036,7 @@ export default function BookingsPage() {
                         {createLoading ? <CircularProgress size={24} /> : t('newBooking')}
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog >
         </>
     );
 }

@@ -15,16 +15,53 @@
         "close": "Cerrar"
     },
     "nav": {
-        "dashboard": "Panel",
+        "dashboard": "Dashboard",
         "bookings": "Reservas",
+        "availability": "Disponibilidad",
         "services": "Servicios",
         "providers": "Profesionales",
-        "availability": "Disponibilidad",
-        "knowledge": "Conocimiento",
-        "faqs": "FAQs",
+        "rooms": "Salas",
         "settings": "Configuración",
+        "logout": "Cerrar Sesión",
+        "crm": "CRM",
+        "knowledge": "Base de Conocimiento",
+        "faqs": "FAQs",
         "workflows": "Flujos",
-        "logout": "Cerrar sesión"
+        "categories": "Categorías"
+    },
+    "rooms": {
+        "title": "Gestión de Salas",
+        "subtitle": "Administra las salas y espacios físicos disponibles para reserva",
+        "addRoom": "Nueva Sala",
+        "editRoom": "Editar Sala",
+        "deleteRoom": "Eliminar Sala",
+        "fields": {
+            "name": "Nombre",
+            "description": "Descripción",
+            "capacity": "Capacidad",
+            "status": "Estado",
+            "active": "Activa",
+            "inactive": "Inactiva"
+        },
+        "actions": {
+            "save": "Guardar",
+            "cancel": "Cancelar",
+            "delete": "Eliminar",
+            "edit": "Editar",
+            "actions": "Acciones",
+            "confirmDelete": "¿Estás seguro de que deseas eliminar esta sala?"
+        },
+        "errors": {
+            "loadFailed": "Error al cargar las salas",
+            "createFailed": "Error al crear la sala",
+            "updateFailed": "Error al actualizar la sala",
+            "deleteFailed": "Error al eliminar la sala"
+        },
+        "success": {
+            "created": "Sala creada exitosamente",
+            "updated": "Sala actualizada exitosamente",
+            "deleted": "Sala eliminada exitosamente"
+        }
     },
     "dashboard": {
         "title": "Panel de Control",
@@ -65,11 +102,13 @@
         "newBooking": "Nueva Reserva",
         "viewDetails": "Ver Detalles",
         "status": {
+            "All": "Todas",
             "pending": "Pendiente",
             "confirmed": "Confirmada",
             "cancelled": "Cancelada",
             "completed": "Completada",
-            "noShow": "No Asistió"
+            "noShow": "No Asistió",
+            "no_show": "No Asistió"
         },
         "columns": {
             "id": "ID",

@@ -28,6 +28,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import QuizIcon from '@mui/icons-material/Quiz';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -209,6 +210,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
         { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
         { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
+        { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
         { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
 

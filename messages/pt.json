@@ -17,14 +17,51 @@
     "nav": {
         "dashboard": "Painel",
         "bookings": "Reservas",
+        "availability": "Disponibilidade",
         "services": "Serviços",
         "providers": "Profissionais",
-        "availability": "Disponibilidade",
-        "knowledge": "Conhecimento",
-        "faqs": "FAQs",
+        "rooms": "Salas",
         "settings": "Configurações",
+        "logout": "Sair",
+        "crm": "CRM",
+        "knowledge": "Base de Conhecimento",
+        "faqs": "FAQs",
         "workflows": "Fluxos",
-        "logout": "Sair"
+        "categories": "Categorias"
+    },
+    "rooms": {
+        "title": "Gestão de Salas",
+        "subtitle": "Gerencie salas e espaços físicos disponíveis para reserva",
+        "addRoom": "Nova Sala",
+        "editRoom": "Editar Sala",
+        "deleteRoom": "Excluir Sala",
+        "fields": {
+            "name": "Nome",
+            "description": "Descrição",
+            "capacity": "Capacidade",
+            "status": "Status",
+            "active": "Ativa",
+            "inactive": "Inativa"
+        },
+        "actions": {
+            "save": "Salvar",
+            "cancel": "Cancelar",
+            "delete": "Excluir",
+            "edit": "Editar",
+            "actions": "Ações",
+            "confirmDelete": "Tem certeza que deseja excluir esta sala?"
+        },
+        "errors": {
+            "loadFailed": "Erro ao carregar salas",
+            "createFailed": "Erro ao criar sala",
+            "updateFailed": "Erro ao atualizar sala",
+            "deleteFailed": "Erro ao excluir sala"
+        },
+        "success": {
+            "created": "Sala criada com sucesso",
+            "updated": "Sala atualizada com sucesso",
+            "deleted": "Sala excluída com sucesso"
+        }
     },
     "dashboard": {
         "title": "Painel de Controle",
@@ -65,11 +102,13 @@
         "newBooking": "Nova Reserva",
         "viewDetails": "Ver Detalhes",
         "status": {
+            "All": "Todas",
             "pending": "Pendente",
             "confirmed": "Confirmada",
             "cancelled": "Cancelada",
             "completed": "Concluída",
-            "noShow": "Não Compareceu"
+            "noShow": "Não Compareceu",
+            "no_show": "Não Compareceu"
         },
         "columns": {
             "id": "ID",
