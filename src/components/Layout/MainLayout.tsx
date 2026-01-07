@@ -210,6 +210,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
         { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
         { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
+        { text: t('users'), icon: <PeopleIcon />, path: '/users' },
         { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
         { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
