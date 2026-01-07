@@ -34,9 +34,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import SearchIcon from '@mui/icons-material/Search';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useTranslations } from 'next-intl';
 import { GraphQLRoomRepository } from '@/repositories/GraphQLRoomRepository';
 import { Room, CreateRoomInput } from '@/domain/Room';

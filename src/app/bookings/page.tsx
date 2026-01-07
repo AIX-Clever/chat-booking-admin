@@ -644,7 +644,7 @@ export default function BookingsPage() {
                                                             <Typography variant="body2" fontWeight="bold">{b.clientName}</Typography>
                                                             <Typography variant="caption" display="block">{availableServices.find(s => s.serviceId === b.serviceName)?.name || b.serviceName}</Typography>
                                                             <Typography variant="caption" display="block">Prov: {b.providerName}</Typography>
-                                                            {b.notes && <Typography variant="caption" display="block" sx={{ mt: 1, fontStyle: 'italic' }}>"{b.notes}"</Typography>}
+                                                            {b.notes && <Typography variant="caption" display="block" sx={{ mt: 1, fontStyle: 'italic' }}>&quot;{b.notes}&quot;</Typography>}
                                                         </React.Fragment>
                                                     }
                                                     arrow
