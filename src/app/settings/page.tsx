@@ -222,6 +222,13 @@ export default function SettingsPage() {
                 authToken: token
             });
             setSuccessMsg(t('saveSuccess'));
+
+            // Refresh tenant context so other pages see the updated settings
+            const { refreshTenant } = await import('../../context/TenantContext');
+            if (refreshTenant) {
+                // Give backend a moment to propagate
+                setTimeout(() => window.location.reload(), 500);
+            }
         } catch (error) {
             console.error('Error saving branding:', error);
             setError(t('saveError'));

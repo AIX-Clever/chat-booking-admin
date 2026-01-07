@@ -56,13 +56,22 @@ export default function KnowledgePage() {
                 authToken: token
             });
             const tenant = response.data.getTenant;
+            console.log('🔍 Knowledge - Tenant data:', tenant);
+
             if (tenant && tenant.settings) {
                 const settings = JSON.parse(tenant.settings);
+                console.log('🔍 Knowledge - Parsed settings:', settings);
+                console.log('🔍 Knowledge - settings.ai:', settings.ai);
+
                 if (settings.ai && typeof settings.ai.enabled !== 'undefined') {
+                    console.log('✅ Knowledge - RAG enabled value:', settings.ai.enabled);
                     setRagEnabled(settings.ai.enabled);
                 } else {
+                    console.log('❌ Knowledge - RAG settings not found, defaulting to false');
                     setRagEnabled(false); // Default to false if not present
                 }
+            } else {
+                console.log('⚠️ Knowledge - No tenant or settings found');
             }
         } catch (error) {
             console.error('Error fetching tenant settings:', error);
@@ -71,6 +80,16 @@ export default function KnowledgePage() {
 
     React.useEffect(() => {
         checkRagStatus();
+
+        // Refetch when page becomes visible (e.g., after navigating from Settings)
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                checkRagStatus();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, [checkRagStatus]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
