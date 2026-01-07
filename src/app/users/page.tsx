@@ -69,19 +69,19 @@ export default function UsersPage() {
 
     const client = generateClient();
 
-    const fetchUsers = async () => {
+    const fetchUsers = React.useCallback(async () => {
         try {
             setLoading(true);
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({
+            const response: unknown = await client.graphql({
                 query: LIST_TENANT_USERS,
                 authToken: token
             });
 
-            setUsers(response.data.listTenantUsers || []);
+            const typedResponse = response as { data: { listTenantUsers: TenantUser[] } };
+            setUsers(typedResponse.data.listTenantUsers || []);
             setError(null);
         } catch (err) {
             console.error('Error fetching users:', err);
@@ -89,13 +89,13 @@ export default function UsersPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [client]);
 
     useEffect(() => {
         if (!tenantLoading) {
             fetchUsers();
         }
-    }, [tenantLoading]);
+    }, [tenantLoading, fetchUsers]);
 
     const handleInviteUser = async () => {
         if (!inviteEmail) {
@@ -118,7 +118,6 @@ export default function UsersPage() {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await client.graphql({
                 query: INVITE_USER,
                 variables: {
@@ -136,9 +135,10 @@ export default function UsersPage() {
             setInviteName('');
             setInviteRole('USER');
             fetchUsers();
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error inviting user:', err);
-            setError(err.errors?.[0]?.message || 'Failed to invite user');
+            const error = err as { errors?: Array<{ message: string }> };
+            setError(error.errors?.[0]?.message || 'Failed to invite user');
         } finally {
             setInviting(false);
         }
@@ -149,7 +149,6 @@ export default function UsersPage() {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await client.graphql({
                 query: UPDATE_USER_ROLE,
                 variables: {
@@ -164,9 +163,10 @@ export default function UsersPage() {
             fetchUsers();
             setEditDialogOpen(false);
             setSelectedUser(null);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating role:', err);
-            setError(err.errors?.[0]?.message || 'Failed to update role');
+            const error = err as { errors?: Array<{ message: string }> };
+            setError(error.errors?.[0]?.message || 'Failed to update role');
         }
     };
 
@@ -177,7 +177,6 @@ export default function UsersPage() {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await client.graphql({
                 query: REMOVE_USER,
                 variables: { userId },
@@ -185,9 +184,10 @@ export default function UsersPage() {
             });
 
             fetchUsers();
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error removing user:', err);
-            setError(err.errors?.[0]?.message || 'Failed to remove user');
+            const error = err as { errors?: Array<{ message: string }> };
+            setError(error.errors?.[0]?.message || 'Failed to remove user');
         }
     };
 
@@ -368,7 +368,7 @@ export default function UsersPage() {
                             <Select
                                 value={selectedUser?.role || 'USER'}
                                 label="New Role"
-                                onChange={(e) => setSelectedUser(prev => prev ? { ...prev, role: e.target.value as any } : null)}
+                                onChange={(e) => setSelectedUser(prev => prev ? { ...prev, role: e.target.value as 'OWNER' | 'ADMIN' | 'USER' } : null)}
                             >
                                 <MenuItem value="USER">User (Read-only)</MenuItem>
                                 <MenuItem value="ADMIN">Admin (Can manage data)</MenuItem>
