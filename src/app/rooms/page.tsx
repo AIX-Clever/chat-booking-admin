@@ -351,7 +351,7 @@ export default function RoomsPage() {
 
                         <Box sx={{ mt: 2 }}>
                             <Typography variant="caption" color="text.secondary">
-                                Operating Hours (JSON Format: <code>[{'{'}"day": "MON", "start": "09:00", "end": "18:00"{'}'}]</code>)
+                                Operating Hours (JSON Format: <code>[{'{'}&quot;day&quot;: &quot;MON&quot;, &quot;start&quot;: &quot;09:00&quot;, &quot;end&quot;: &quot;18:00&quot;{'}'}]</code>)
                             </Typography>
                             <TextField
                                 multiline
