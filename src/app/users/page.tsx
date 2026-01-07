@@ -32,8 +32,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { useTenant } from '../context/TenantContext';
-import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER } from '../graphql/user-queries';
+import { useTenant } from '../../context/TenantContext';
+import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER } from '../../graphql/user-queries';
 
 interface TenantUser {
     userId: string;
