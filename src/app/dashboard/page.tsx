@@ -7,6 +7,7 @@ import AppWebsiteVisits from '../../components/dashboard/AppWebsiteVisits';
 import AppCurrentVisits from '../../components/dashboard/AppCurrentVisits';
 import AppPlanUsage from '../../components/dashboard/AppPlanUsage';
 import { useDashboardMetrics, usePlanUsage } from '../../hooks/useDashboardMetrics';
+import { useTenant } from '../../context/TenantContext';
 
 // Icons
 import PaidIcon from '@mui/icons-material/Paid';
@@ -18,6 +19,7 @@ import EventIcon from '@mui/icons-material/Event';
 // Plan limits by plan type (these could come from tenant settings)
 const PLAN_LIMITS: Record<string, { tokensIA: number; bookings: number; apiCalls: number }> = {
     FREE: { tokensIA: 5000, bookings: 50, apiCalls: 1000 },
+    LITE: { tokensIA: 5000, bookings: 50, apiCalls: 1000 },
     PRO: { tokensIA: 20000, bookings: 500, apiCalls: 10000 },
     BUSINESS: { tokensIA: 100000, bookings: 5000, apiCalls: 100000 },
     ENTERPRISE: { tokensIA: 1000000, bookings: 50000, apiCalls: 1000000 },
@@ -27,12 +29,13 @@ export default function DashboardPage() {
     const t = useTranslations('dashboard');
     const { metrics, loading: metricsLoading, error: metricsError } = useDashboardMetrics();
     const { usage, loading: usageLoading } = usePlanUsage();
+    const { tenant, loading: tenantLoading } = useTenant();
 
-    // Get plan limits (default to FREE for demo)
-    const planName = 'PRO'; // This should come from tenant data
-    const limits = PLAN_LIMITS[planName] || PLAN_LIMITS.FREE;
+    // Get plan limits from tenant data
+    const planName = tenant?.plan || 'LITE';
+    const limits = PLAN_LIMITS[planName] || PLAN_LIMITS.LITE;
 
-    if (metricsLoading || usageLoading) {
+    if (metricsLoading || usageLoading || tenantLoading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
                 <CircularProgress />
