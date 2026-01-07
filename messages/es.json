@@ -196,7 +196,11 @@
         "newCategoryPlaceholder": "Nombre de nueva categoría",
         "add": "Agregar",
         "deleteCategoryTitle": "Eliminar Categoría",
-        "deleteCategoryConfirmation": "¿Estás seguro de que deseas eliminar la categoría \"{name}\"?"
+        "deleteCategoryConfirmation": "¿Estás seguro de que deseas eliminar la categoría \"{name}\"?",
+        "modality": "Modalidad",
+        "online": "Online",
+        "physical": "Presencial",
+        "requiredRooms": "Salas Requeridas (Opcional)"
     },
     "providers": {
         "title": "Profesionales",

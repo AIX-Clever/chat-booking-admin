@@ -193,7 +193,11 @@
         "newCategoryPlaceholder": "New category name",
         "add": "Add",
         "deleteCategoryTitle": "Delete Category",
-        "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{name}\"?"
+        "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{name}\"?",
+        "modality": "Modality",
+        "online": "Online",
+        "physical": "Physical (In-Person)",
+        "requiredRooms": "Required Rooms (Optional)"
     },
     "providers": {
         "title": "Providers",
