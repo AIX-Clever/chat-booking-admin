@@ -21,6 +21,7 @@
         "services": "Services",
         "providers": "Providers",
         "rooms": "Rooms",
+        "users": "Users",
         "settings": "Settings",
         "logout": "Logout",
         "crm": "CRM",
