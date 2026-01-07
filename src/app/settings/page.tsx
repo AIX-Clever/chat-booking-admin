@@ -16,6 +16,7 @@ import {
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChatIcon from '@mui/icons-material/Chat';
+import BusinessIcon from '@mui/icons-material/Business';
 import { useSearchParams } from 'next/navigation';
 
 import { generateClient } from 'aws-amplify/api';
@@ -26,6 +27,7 @@ import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
 import PropertiesTab from './tabs/PropertiesTab';
 import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
+import IdentityTab from './tabs/IdentityTab';
 
 // --- Types ---
 
@@ -53,13 +55,14 @@ function CustomTabPanel(props: TabPanelProps) {
 export default function SettingsPage() {
     const t = useTranslations('settings');
     const searchParams = useSearchParams();
-    const client = generateClient();
+    const client = React.useMemo(() => generateClient(), []);
 
     // Initial tab logic
     const getInitialTab = () => {
         const tabParam = searchParams.get('tab');
         if (tabParam === 'ai') return 1;
         if (tabParam === 'keys') return 2;
+        if (tabParam === 'identity') return 3;
         return 0;
     };
 
@@ -85,6 +88,9 @@ export default function SettingsPage() {
     const [aiMode, setAiMode] = React.useState('nlp');
     const [ragEnabled, setRagEnabled] = React.useState(false);
 
+    // Profile State
+    const [profile, setProfile] = React.useState<any>(null);
+
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
         try {
@@ -107,12 +113,26 @@ export default function SettingsPage() {
                 if (tenant.plan) setCurrentPlan(tenant.plan);
                 if (tenant.settings) {
                     try {
-                        let settings;
-                        if (typeof tenant.settings === 'string') {
-                            settings = JSON.parse(tenant.settings);
-                        } else {
-                            settings = tenant.settings;
+                        let settings = tenant.settings;
+
+                        // Robust parsing: Handle double-serialization or single-serialization
+                        if (typeof settings === 'string') {
+                            try {
+                                settings = JSON.parse(settings);
+                            } catch (e) {
+                                console.error("First parse failed", e);
+                            }
                         }
+                        // Check if it's STILL a string (double encoded)
+                        if (typeof settings === 'string') {
+                            try {
+                                settings = JSON.parse(settings);
+                            } catch (e) {
+                                console.error("Second parse failed", e);
+                            }
+                        }
+
+                        console.log("Final Parsed Settings:", settings);
 
                         // Compatibility with Onboarding data structure
                         if (settings.theme && settings.theme.primaryColor && !settings.widgetConfig) {
@@ -146,6 +166,11 @@ export default function SettingsPage() {
                         if (settings.ai && typeof settings.ai.enabled !== 'undefined') {
                             setRagEnabled(settings.ai.enabled);
                         }
+                        if (settings.profile) {
+                            setProfile(settings.profile);
+                        } else {
+                            // console.warn("Profile missing in settings object:", settings);
+                        }
                     } catch (e) {
                         console.warn("Failed to parse tenant settings JSON", e);
                     }
@@ -171,13 +196,15 @@ export default function SettingsPage() {
     const handleSaveSettings = async () => {
         try {
             setLoading(true);
-            const settingsJson = JSON.stringify({
+            const settingsObj = {
                 widgetConfig,
                 aiMode,
                 ai: {
                     enabled: ragEnabled
-                }
-            });
+                },
+                profile
+            };
+            const settingsJson = JSON.stringify(settingsObj);
 
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
@@ -236,6 +263,7 @@ export default function SettingsPage() {
                         <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
+                        <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
                     </Tabs>
                 </Box>
 
@@ -279,6 +307,11 @@ export default function SettingsPage() {
                         {/* --- Tab 3: API Keys --- */}
                         <CustomTabPanel value={tabValue} index={2}>
                             <ApiKeysTab hasMounted={hasMounted} />
+                        </CustomTabPanel>
+
+                        {/* --- Tab 4: Identity --- */}
+                        <CustomTabPanel value={tabValue} index={3}>
+                            <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
                     </>
                 )}

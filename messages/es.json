@@ -108,7 +108,8 @@
             "cancelled": "Cancelada",
             "completed": "Completada",
             "noShow": "No Asistió",
-            "no_show": "No Asistió"
+            "no_show": "No Asistió",
+            "all": "Todos"
         },
         "columns": {
             "id": "ID",
@@ -121,7 +122,9 @@
             "actions": "Acciones"
         },
         "filters": {
-            "all": "Todas",
+            "all": "Ver todos",
+            "provider": "Provider",
+            "statusLabel": "Status",
             "today": "Hoy",
             "week": "Esta Semana",
             "month": "Este Mes"
@@ -315,7 +318,28 @@
         "tabs": {
             "general": "General",
             "ai": "Inteligencia Artificial",
-            "apiKeys": "Claves API"
+            "apiKeys": "Claves API",
+            "identity": "Datos Centro"
+        },
+        "identity": {
+            "generalInfo": "Información General",
+            "centerName": "Nombre del centro",
+            "legalName": "Razón Social",
+            "taxId": "Identificador Fiscal",
+            "taxIdTooltip": "Identificador tributario nacional (RUT, RFC, CNPJ, CUIT, etc.)",
+            "phone1": "Teléfono de contacto 1",
+            "phone2": "Teléfono de contacto 2",
+            "email": "Correo de contacto",
+            "website": "Sitio web",
+            "location": "Ubicación Regional",
+            "address": "Dirección (Calle y número)",
+            "country": "País",
+            "regionState": "Región / Estado / Provincia",
+            "city": "Ciudad / Comuna",
+            "zipCode": "Código Postal",
+            "timezone": "Región Horaria",
+            "timezoneHelper": "Selecciona la región geográfica para el cálculo automático de hora",
+            "save": "Guardar Datos"
         },
         "general": {
             "title": "Configuración General",

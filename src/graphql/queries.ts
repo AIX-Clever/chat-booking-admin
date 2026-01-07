@@ -76,6 +76,7 @@ export const CREATE_SERVICE = `
       name
       durationMinutes
       price
+      requiredRoomIds
     }
   }
 `;
@@ -88,6 +89,7 @@ export const SEARCH_SERVICES = `
       durationMinutes
       category
       price
+      requiredRoomIds
     }
   }
 `;
@@ -132,6 +134,8 @@ export const UPDATE_SERVICE = `
       durationMinutes
       price
       available
+      requiredRoomIds
+      locationType
     }
   }
 `;
@@ -143,6 +147,8 @@ export const DELETE_SERVICE = `
     }
   }
 `;
+
+
 
 export const GET_PROVIDER_AVAILABILITY = `
   query GetProviderAvailability($providerId: ID!) {
@@ -484,6 +490,10 @@ export const CREATE_ROOM = `
     description
     capacity
     status
+    isVirtual
+    minDuration
+    maxDuration
+    operatingHours
   }
 }
 `;
@@ -496,6 +506,10 @@ export const UPDATE_ROOM = `
     description
     capacity
     status
+    isVirtual
+    minDuration
+    maxDuration
+    operatingHours
     updatedAt
   }
 }

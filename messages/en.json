@@ -120,6 +120,8 @@
         },
         "filters": {
             "all": "All",
+            "provider": "Provider",
+            "statusLabel": "Status",
             "today": "Today",
             "week": "This Week",
             "month": "This Month"
@@ -313,7 +315,28 @@
         "tabs": {
             "general": "General",
             "ai": "Artificial Intelligence",
-            "apiKeys": "API Keys"
+            "apiKeys": "API Keys",
+            "identity": "Center Identity"
+        },
+        "identity": {
+            "generalInfo": "General Information",
+            "centerName": "Center Name",
+            "legalName": "Legal Name",
+            "taxId": "Tax ID",
+            "taxIdTooltip": "National Tax Identifier (RUT, RFC, CNPJ, CUIT, etc.)",
+            "phone1": "Contact Phone 1",
+            "phone2": "Contact Phone 2",
+            "email": "Contact Email",
+            "website": "Website",
+            "location": "Regional Location",
+            "address": "Address (Street and number)",
+            "country": "Country",
+            "regionState": "Region / State / Province",
+            "city": "City",
+            "zipCode": "Zip Code",
+            "timezone": "Timezone Region",
+            "timezoneHelper": "Select geographic region for automatic time calculation",
+            "save": "Save Identity"
         },
         "general": {
             "title": "General Settings",

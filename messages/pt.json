@@ -121,7 +121,9 @@
             "actions": "Ações"
         },
         "filters": {
-            "all": "Todas",
+            "all": "Todos",
+            "provider": "Profissional",
+            "statusLabel": "Status",
             "today": "Hoje",
             "week": "Esta Semana",
             "month": "Este Mês"
@@ -315,7 +317,28 @@
         "tabs": {
             "general": "Geral",
             "ai": "Inteligência Artificial",
-            "apiKeys": "Chaves API"
+            "apiKeys": "Chaves API",
+            "identity": "Identidade"
+        },
+        "identity": {
+            "generalInfo": "Informações Gerais",
+            "centerName": "Nome do Centro",
+            "legalName": "Razão Social",
+            "taxId": "Identificador Fiscal",
+            "taxIdTooltip": "Identificador tributário nacional (RUT, RFC, CNPJ, CUIT, etc.)",
+            "phone1": "Telefone de contato 1",
+            "phone2": "Telefone de contato 2",
+            "email": "Email de contato",
+            "website": "Site",
+            "location": "Localização Regional",
+            "address": "Endereço (Rua e número)",
+            "country": "País",
+            "regionState": "Região / Estado / Província",
+            "city": "Cidade",
+            "zipCode": "CEP",
+            "timezone": "Região Horária",
+            "timezoneHelper": "Selecione a região geográfica para cálculo automático de hora",
+            "save": "Salvar Dados"
         },
         "general": {
             "title": "Configurações Gerais",

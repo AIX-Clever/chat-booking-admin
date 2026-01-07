@@ -33,6 +33,7 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     CircularProgress,
+    Tooltip
     // FormControl // Unused
 
 } from '@mui/material';
@@ -47,6 +48,7 @@ import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import PersonIcon from '@mui/icons-material/Person';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
@@ -94,8 +96,8 @@ export default function BookingsPage() {
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [loading, setLoading] = React.useState(true);
-    const [filterProvider, setFilterProvider] = React.useState('All');
-    const [filterStatus, setFilterStatus] = React.useState('All');
+    const [filterProvider, setFilterProvider] = React.useState('all');
+    const [filterStatus, setFilterStatus] = React.useState('all');
     const [searchTerm, setSearchTerm] = React.useState('');
     const [hasMounted, setHasMounted] = React.useState(false);
     const [sortBy, setSortBy] = React.useState<'closest' | 'furthest'>('closest');
@@ -146,10 +148,10 @@ export default function BookingsPage() {
             const startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1).toISOString(); // Last month
             const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1).toISOString(); // Next 2 months
 
-            // If filterProvider is 'All', fetch for all. Else fetch for specific.
-            const providersToFetch = filterProvider === 'All'
+            // If filterProvider is 'all', fetch for all. Else fetch for specific.
+            const providersToFetch = filterProvider === 'all'
                 ? currentProviders
-                : currentProviders.filter(p => p.name === filterProvider);
+                : currentProviders.filter(p => p.providerId === filterProvider);
 
             const allBookings: Booking[] = [];
 
@@ -432,7 +434,7 @@ export default function BookingsPage() {
 
         // Empty cells for previous month
         for (let i = 0; i < firstDay; i++) {
-            days.push(<Grid item xs={1.7} key={`empty-${i}`} sx={{ height: 120, border: '1px solid #eee', bgcolor: '#fafafa' }} />);
+            days.push(<Grid item xs={1.7} key={`empty-${i}`} sx={{ height: 120, border: 1, borderColor: 'divider', bgcolor: 'action.hover' }} />);
         }
 
         // Days of current month
@@ -441,7 +443,7 @@ export default function BookingsPage() {
             const dayBookings = statusFilteredBookings.filter(b => b.start.startsWith(dateStr));
 
             days.push(
-                <Grid item xs={1.7} key={day} sx={{ height: 120, border: '1px solid #eee', p: 1, overflow: 'hidden' }}>
+                <Grid item xs={1.7} key={day} sx={{ height: 120, border: 1, borderColor: 'divider', p: 1, overflow: 'hidden' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold' }}>{day}</Typography>
                     <Stack spacing={0.5} sx={{ mt: 1 }}>
                         {dayBookings.map(b => (
@@ -456,6 +458,8 @@ export default function BookingsPage() {
                                     height: 20,
                                     justifyContent: 'flex-start',
                                     textTransform: 'capitalize',
+                                    borderRadius: 0,
+                                    width: '100%',
                                     '& .MuiChip-label': { px: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }
                                 }}
                             />
@@ -477,7 +481,7 @@ export default function BookingsPage() {
                 {/* Weekday Headers */}
                 <Grid container>
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(d => (
-                        <Grid item xs={1.7} key={d} sx={{ p: 1, textAlign: 'center', bgcolor: '#f5f5f5', border: '1px solid #eee' }}>
+                        <Grid item xs={1.7} key={d} sx={{ p: 1, textAlign: 'center', bgcolor: 'background.default', border: 1, borderColor: 'divider' }}>
                             <Typography variant="subtitle2">{t(`availability.days.${d.toLowerCase()}`).substring(0, 3)}</Typography>
                         </Grid>
                     ))}
@@ -488,6 +492,12 @@ export default function BookingsPage() {
     };
 
     const renderWeekCalendar = () => {
+        // Constants for the grid
+        const START_HOUR = 8;
+        const END_HOUR = 20; // 8 PM
+        const HOUR_HEIGHT = 60; // 1px = 1min
+        const TOTAL_HEIGHT = (END_HOUR - START_HOUR) * HOUR_HEIGHT;
+
         // Find Monday of the current week
         const currentDay = currentDate.getDay();
         const distanceToMonday = currentDay === 0 ? 6 : currentDay - 1;
@@ -501,8 +511,33 @@ export default function BookingsPage() {
             weekDays.push(d);
         }
 
+        // Helper to position events
+        const getEventStyle = (booking: Booking) => {
+            const startDate = new Date(booking.start);
+            const hours = startDate.getHours();
+            const minutes = startDate.getMinutes();
+
+            // Calculate minutes from start of validation day (START_HOUR)
+            const minutesFromStart = (hours - START_HOUR) * 60 + minutes;
+
+            // Find service duration
+            const service = availableServices.find(s => s.serviceId === booking.serviceName); // providerName stored as ID? No, serviceName is ID.
+            // Fallback duration if not found
+            const duration = service?.durationMinutes || 60;
+
+            return {
+                top: Math.max(0, minutesFromStart), // Avoid negative top
+                height: duration, // 1px per min
+                position: 'absolute' as const,
+                width: '95%',
+                left: '2.5%',
+                zIndex: 2
+            };
+        };
+
         return (
             <Box>
+                {/* Header Navigation */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Button onClick={handlePrev} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
                     <Typography variant="h6">
@@ -510,53 +545,155 @@ export default function BookingsPage() {
                     </Typography>
                     <Button onClick={handleNext} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
                 </Box>
-                <Grid container spacing={1}>
-                    {weekDays.map((dayDate) => {
-                        const dateStr = dayDate.toISOString().split('T')[0];
-                        const dayBookings = statusFilteredBookings.filter(b => b.start.startsWith(dateStr))
-                            .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
-                        const isToday = new Date().toISOString().split('T')[0] === dateStr;
+                <Paper variant="outlined" sx={{ display: 'flex', position: 'relative', overflowX: 'auto' }}>
 
-                        return (
-                            <Grid item xs={1.7} key={dateStr} sx={{ minHeight: 300, border: '1px solid #eee', p: 1, bgcolor: isToday ? '#f0f7ff' : 'white' }}>
-                                <Typography variant="subtitle2" align="center" sx={{ mb: 1, fontWeight: 'bold' }}>
-                                    {dayDate.toLocaleDateString('default', { weekday: 'short' })} {dayDate.getDate()}
-                                </Typography>
-                                <Stack spacing={1}>
-                                    {dayBookings.map(b => (
-                                        <Paper
-                                            key={b.id}
-                                            elevation={1}
-                                            sx={{
-                                                p: 1,
-                                                borderLeft: `4px solid ${STATUS_COLORS[b.status] === 'success' ? '#2e7d32' : STATUS_COLORS[b.status] === 'warning' ? '#ed6c02' : '#d32f2f'}`,
-                                                cursor: 'pointer',
-                                                '&:hover': { bgcolor: '#f5f5f5' }
-                                            }}
-                                            onClick={() => handleViewDetail(b)}
-                                        >
-                                            <Typography variant="caption" display="block" fontWeight="bold">
-                                                {new Date(b.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </Typography>
-                                            <Typography variant="body2" noWrap title={b.clientName}>
-                                                {b.clientName}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary" noWrap>
-                                                {availableServices.find(s => s.serviceId === b.serviceName)?.name || b.serviceName}
-                                            </Typography>
-                                        </Paper>
-                                    ))}
-                                    {dayBookings.length === 0 && (
-                                        <Typography variant="caption" color="text.disabled" align="center" sx={{ mt: 2, display: 'block' }}>
-                                            Sin reservas
+                    {/* Time Column (Left Axis) */}
+                    <Box sx={{ width: 60, flexShrink: 0, borderRight: 1, borderColor: 'divider' }}>
+                        {/* Header Spacer */}
+                        <Box sx={{ height: 50, borderBottom: 1, borderColor: 'divider', bgcolor: 'background.default' }} />
+
+                        {/* Time Labels */}
+                        <Box sx={{ position: 'relative', height: TOTAL_HEIGHT }}>
+                            {Array.from({ length: END_HOUR - START_HOUR + 1 }).map((_, i) => {
+                                const hour = START_HOUR + i;
+                                return (
+                                    <Typography
+                                        key={hour}
+                                        variant="caption"
+                                        sx={{
+                                            position: 'absolute',
+                                            top: i * HOUR_HEIGHT - 10, // Offset to center on line
+                                            width: '100%',
+                                            textAlign: 'center',
+                                            color: 'text.secondary'
+                                        }}
+                                    >
+                                        {hour}:00
+                                    </Typography>
+                                );
+                            })}
+                        </Box>
+                    </Box>
+
+                    {/* Days Columns */}
+                    <Box sx={{ display: 'flex', flexGrow: 1, minWidth: 800 }}>
+                        {weekDays.map((dayDate, index) => {
+                            const dateStr = dayDate.toISOString().split('T')[0];
+                            const isToday = new Date().toISOString().split('T')[0] === dateStr;
+
+                            // Filter bookings for this day
+                            const dayBookings = statusFilteredBookings.filter(b => b.start.startsWith(dateStr));
+
+                            return (
+                                <Box key={dateStr} sx={{ flex: 1, borderRight: index < 6 ? 1 : 0, borderColor: 'divider', minWidth: 100 }}>
+
+                                    {/* Day Header */}
+                                    <Box sx={{
+                                        height: 50,
+                                        borderBottom: 1,
+                                        borderColor: 'divider',
+                                        bgcolor: isToday ? 'primary.light' : 'background.default',
+                                        color: isToday ? 'primary.contrastText' : 'text.primary',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        position: 'sticky',
+                                        top: 0,
+                                        zIndex: 10
+                                    }}>
+                                        <Typography variant="subtitle2" fontWeight="bold">
+                                            {dayDate.toLocaleDateString('default', { weekday: 'short' })}
                                         </Typography>
-                                    )}
-                                </Stack>
-                            </Grid>
-                        );
-                    })}
-                </Grid>
+                                        <Typography variant="body2">
+                                            {dayDate.getDate()}
+                                        </Typography>
+                                    </Box>
+
+                                    {/* Grid Content */}
+                                    <Box sx={{ position: 'relative', height: TOTAL_HEIGHT, bgcolor: isToday ? 'action.hover' : 'background.paper' }}>
+
+                                        {/* Horizontal Grid Lines */}
+                                        {Array.from({ length: END_HOUR - START_HOUR }).map((_, i) => (
+                                            <Box
+                                                key={`grid-${i}`}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: (i + 1) * HOUR_HEIGHT,
+                                                    width: '100%',
+                                                    borderBottom: '1px dashed',
+                                                    borderColor: 'divider',
+                                                    opacity: 0.5
+                                                }}
+                                            />
+                                        ))}
+
+                                        {/* Bookings */}
+                                        {dayBookings.map(b => {
+                                            const style = getEventStyle(b);
+                                            // Don't render if outside of view range (simplification)
+                                            // Actually CSS overflow hidden on container would hide it, but let's be safe? 
+                                            // For now just render all.
+
+                                            return (
+                                                <Tooltip
+                                                    key={b.id}
+                                                    title={
+                                                        <React.Fragment>
+                                                            <Typography variant="body2" fontWeight="bold">{b.clientName}</Typography>
+                                                            <Typography variant="caption" display="block">{availableServices.find(s => s.serviceId === b.serviceName)?.name || b.serviceName}</Typography>
+                                                            <Typography variant="caption" display="block">Prov: {b.providerName}</Typography>
+                                                            {b.notes && <Typography variant="caption" display="block" sx={{ mt: 1, fontStyle: 'italic' }}>"{b.notes}"</Typography>}
+                                                        </React.Fragment>
+                                                    }
+                                                    arrow
+                                                >
+                                                    <Paper
+                                                        elevation={3}
+                                                        onClick={() => handleViewDetail(b)}
+                                                        sx={{
+                                                            ...style,
+                                                            p: 0.5,
+                                                            borderLeft: `4px solid ${STATUS_COLORS[b.status] === 'success' ? '#2e7d32' : STATUS_COLORS[b.status] === 'warning' ? '#ed6c02' : '#d32f2f'}`,
+                                                            bgcolor: 'background.paper',
+                                                            borderRadius: 0,
+                                                            cursor: 'pointer',
+                                                            overflow: 'hidden',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            '&:hover': { zIndex: 10, boxShadow: 6 }
+                                                        }}
+                                                    >
+                                                        {/* Header: Time & Name */}
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                            <Typography variant="caption" fontWeight="bold" sx={{ lineHeight: 1.1, fontSize: '0.7rem' }}>
+                                                                {b.clientName}
+                                                            </Typography>
+                                                        </Box>
+
+                                                        {/* Service Name */}
+                                                        <Typography variant="caption" color="text.secondary" noWrap sx={{ fontSize: '0.65rem' }}>
+                                                            {availableServices.find(s => s.serviceId === b.serviceName)?.name || b.serviceName}
+                                                        </Typography>
+
+                                                        {/* Provider (only if enough height) */}
+                                                        {style.height >= 45 && (
+                                                            <Typography variant="caption" color="primary" noWrap sx={{ fontSize: '0.6rem', mt: 'auto' }}>
+                                                                {b.providerName}
+                                                            </Typography>
+                                                        )}
+                                                    </Paper>
+                                                </Tooltip>
+                                            );
+                                        })}
+
+                                    </Box>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                </Paper>
             </Box>
         );
     };
@@ -572,12 +709,9 @@ export default function BookingsPage() {
     // No, consistent filtering is better. If I search "Juan", I only see Juan's bookings on the calendar.
 
     const statusFilteredBookings = bookings.filter(b => {
-        // filterProvider is handled by fetch, but check here just in case of state lag?
-        // Actually fetch handles it. But wait, if I have 'All', fetch gets all. If I have specific, fetch gets specific.
-        // So this filter check is redundant but safe.
-        const matchesProvider = filterProvider === 'All' || b.providerName === filterProvider;
-        const matchesStatus = filterStatus === 'All' || b.status === filterStatus;
-        return matchesProvider && matchesStatus;
+        const matchesSearch = b.clientName.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = filterStatus === 'all' || b.status === filterStatus;
+        return matchesSearch && matchesStatus;
     });
 
     // Filter AND Sort Logic
@@ -648,48 +782,64 @@ export default function BookingsPage() {
             </Box>
 
             <Card sx={{ mb: 3, p: 2 }}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                    {/* Provider Filter */}
                     <TextField
                         select
-                        label={t('filters.all')}
+                        label={t('filters.provider')}
                         value={filterProvider}
                         onChange={(e) => setFilterProvider(e.target.value)}
-                        sx={{ minWidth: 200 }}
                         size="small"
-                        disabled={loading}
+                        sx={{ minWidth: 200 }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PersonIcon fontSize="small" color="action" />
+                                </InputAdornment>
+                            ),
+                        }}
                     >
-                        <MenuItem value="All">{t('filters.all')}</MenuItem>
+                        <MenuItem value="all">{t('filters.all')}</MenuItem>
                         {providers.map((p) => (
-                            <MenuItem key={p.providerId} value={p.name}>{p.name}</MenuItem>
+                            <MenuItem key={p.providerId} value={p.providerId}>
+                                {p.name}
+                            </MenuItem>
                         ))}
                     </TextField>
 
+                    {/* Status Filter */}
                     <TextField
                         select
-                        label={t('columns.status')}
+                        label={t('filters.statusLabel')}
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        sx={{ minWidth: 150 }}
                         size="small"
+                        sx={{ minWidth: 150 }}
                     >
-                        {STATUSES.map((s) => (
-                            <MenuItem key={s} value={s} sx={{ textTransform: 'capitalize' }}>{s}</MenuItem>
-                        ))}
+                        <MenuItem value="all">{t('filters.all')}</MenuItem>
+                        <MenuItem value="confirmed">{t('status.confirmed')}</MenuItem>
+                        <MenuItem value="pending">{t('status.pending')}</MenuItem>
+                        <MenuItem value="cancelled">{t('status.cancelled')}</MenuItem>
+                        <MenuItem value="completed">{t('status.completed')}</MenuItem>
+                        <MenuItem value="noShow">{t('status.noShow')}</MenuItem>
                     </TextField>
 
+                    {/* Sort */}
                     <TextField
                         select
                         label={t('sorting.label')}
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as 'closest' | 'furthest')}
-                        sx={{ minWidth: 150 }}
                         size="small"
+                        sx={{ minWidth: 150 }}
                     >
                         <MenuItem value="closest">{t('sorting.closest')}</MenuItem>
                         <MenuItem value="furthest">{t('sorting.furthest')}</MenuItem>
                     </TextField>
+                </Stack>
 
-                    {viewMode === 'list' && (
+                {viewMode === 'list' && (
+                    <Box sx={{ mt: 2 }}>
                         <TextField
                             placeholder={t('searchPlaceholder')}
                             value={searchTerm}
@@ -704,8 +854,8 @@ export default function BookingsPage() {
                                 )
                             }}
                         />
-                    )}
-                </Stack>
+                    </Box>
+                )}
             </Card>
 
             <Card sx={{ p: viewMode === 'calendar' ? 2 : 0 }}>

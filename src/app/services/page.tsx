@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE, LIST_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY } from '../../graphql/queries';
+import { SEARCH_SERVICES, CREATE_SERVICE, UPDATE_SERVICE, DELETE_SERVICE, LIST_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY, LIST_ROOMS } from '../../graphql/queries';
 import {
     Typography,
     Button,
@@ -25,6 +25,8 @@ import {
     DialogActions,
     TextField,
     FormControlLabel,
+    Checkbox,
+    FormGroup,
     Switch,
     InputAdornment,
     MenuItem,
@@ -39,6 +41,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import CategoryIcon from '@mui/icons-material/Category';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 // --- Types ---
 interface Service {
@@ -49,6 +52,13 @@ interface Service {
     category: string;
     price: number;
     available: boolean;
+    requiredRoomIds?: string[];
+    locationType?: string[];
+}
+interface Room {
+    roomId: string;
+    name: string;
+    status: string;
 }
 
 interface Category {
@@ -67,6 +77,7 @@ export default function ServicesPage() {
     const [services, setServices] = React.useState<Service[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [categories, setCategories] = React.useState<Category[]>([]);
+    const [rooms, setRooms] = React.useState<Room[]>([]);
 
     // Dialog States
     const [open, setOpen] = React.useState(false);
@@ -93,12 +104,25 @@ export default function ServicesPage() {
         category: '',
         price: 0,
         available: true,
+        requiredRoomIds: [],
+        locationType: ['PHYSICAL']
     });
 
     React.useEffect(() => {
         fetchServices();
         fetchCategories();
+        fetchRooms();
     }, []);
+
+    const fetchRooms = async () => {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({ query: LIST_ROOMS });
+            setRooms(response.data.listRooms);
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    };
 
     const fetchCategories = async () => {
         try {
@@ -136,6 +160,8 @@ export default function ServicesPage() {
                 category: categories.length > 0 ? categories[0].name : '',
                 price: 0,
                 available: true,
+                requiredRoomIds: [],
+                locationType: ['PHYSICAL']
             });
             setCurrentService(null);
         }
@@ -165,7 +191,8 @@ export default function ServicesPage() {
                             category: formData.category,
                             durationMinutes: formData.durationMinutes,
                             price: formData.price,
-                            available: formData.available
+                            available: formData.available,
+                            requiredRoomIds: formData.requiredRoomIds
                         }
                     },
                     authToken: token
@@ -185,7 +212,8 @@ export default function ServicesPage() {
                             description: formData.description,
                             category: formData.category,
                             durationMinutes: formData.durationMinutes,
-                            price: formData.price
+                            price: formData.price,
+                            requiredRoomIds: formData.requiredRoomIds
                         }
                     },
                     authToken: token
@@ -440,6 +468,71 @@ export default function ServicesPage() {
                                 </MenuItem>
                             ))}
                         </TextField>
+
+                        <Box sx={{ mt: 2 }}>
+                            <Typography variant="caption" color="text.secondary">Modality</Typography>
+                            <FormGroup row>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={formData.locationType?.includes('ONLINE') || false}
+                                            onChange={(e) => {
+                                                const current = formData.locationType || [];
+                                                const newType = e.target.checked
+                                                    ? [...current, 'ONLINE']
+                                                    : current.filter(t => t !== 'ONLINE');
+                                                setFormData({ ...formData, locationType: newType });
+                                            }}
+                                        />
+                                    }
+                                    label="Online"
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={formData.locationType?.includes('PHYSICAL') || false}
+                                            onChange={(e) => {
+                                                const current = formData.locationType || [];
+                                                const newType = e.target.checked
+                                                    ? [...current, 'PHYSICAL']
+                                                    : current.filter(t => t !== 'PHYSICAL');
+                                                setFormData({ ...formData, locationType: newType });
+                                            }}
+                                        />
+                                    }
+                                    label="Physical (In-Person)"
+                                />
+                            </FormGroup>
+                        </Box>
+
+                        {formData.locationType?.includes('PHYSICAL') && (
+                            <TextField
+                                label="Required Rooms (Optional)"
+                                select
+                                fullWidth
+                                SelectProps={{
+                                    multiple: true,
+                                    renderValue: (selected) => (
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                            {(selected as string[]).map((value) => (
+                                                <Chip key={value} label={rooms.find(r => r.roomId === value)?.name || value} />
+                                            ))}
+                                        </Box>
+                                    )
+                                }}
+                                value={formData.requiredRoomIds || []}
+                                onChange={(e) => {
+                                    const val = typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value;
+                                    setFormData({ ...formData, requiredRoomIds: val as string[] });
+                                }}
+                            >
+                                {rooms.map((room) => (
+                                    <MenuItem key={room.roomId} value={room.roomId}>
+                                        {room.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        )}
 
                         <FormControlLabel
                             control={
