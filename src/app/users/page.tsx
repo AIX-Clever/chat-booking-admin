@@ -52,6 +52,8 @@ const PLAN_LIMITS = {
     ENTERPRISE: -1 // Unlimited
 };
 
+const client = generateClient();
+
 export default function UsersPage() {
     const { tenant, loading: tenantLoading } = useTenant();
     const [users, setUsers] = useState<TenantUser[]>([]);
@@ -66,8 +68,6 @@ export default function UsersPage() {
     const [inviteName, setInviteName] = useState('');
     const [inviteRole, setInviteRole] = useState<'ADMIN' | 'USER'>('USER');
     const [inviting, setInviting] = useState(false);
-
-    const client = generateClient();
 
     const fetchUsers = React.useCallback(async () => {
         try {
@@ -89,7 +89,7 @@ export default function UsersPage() {
         } finally {
             setLoading(false);
         }
-    }, [client]);
+    }, []);
 
     useEffect(() => {
         if (!tenantLoading) {
