@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_PROVIDERS, CREATE_PROVIDER, UPDATE_PROVIDER, DELETE_PROVIDER, SEARCH_SERVICES } from '../../graphql/queries';
+import { LIST_PROVIDERS, CREATE_PROVIDER, UPDATE_PROVIDER, DELETE_PROVIDER, SEARCH_SERVICES, GENERATE_PRESIGNED_URL } from '../../graphql/queries';
 import {
     Typography,
     Button,
@@ -32,12 +32,14 @@ import {
     Avatar,
     Stack,
     Tabs,
-    Tab
+    Tab,
+    CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 // --- Types ---
 interface Service {
@@ -52,7 +54,8 @@ interface Provider {
     serviceIds: string[]; // List of assigned service IDs
     timezone: string;
     active: boolean;
-    avatarUrl?: string;
+    photoUrl?: string; // Optimized WebP URL
+    photoUrlThumbnail?: string; // Thumbnail URL
     aiDrivers: {
         traits: string[];
         languages: string[];
@@ -113,6 +116,7 @@ export default function ProvidersPage() {
     const [open, setOpen] = React.useState(false);
     const [currentProvider, setCurrentProvider] = React.useState<Provider | null>(null);
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [isUploading, setIsUploading] = React.useState(false);
 
     // Tab State
     const [tabValue, setTabValue] = React.useState(0);
@@ -174,6 +178,8 @@ export default function ProvidersPage() {
                     serviceIds: p.serviceIds || [],
                     timezone: p.timezone,
                     active: p.available,
+                    photoUrl: p.photoUrl,
+                    photoUrlThumbnail: p.photoUrlThumbnail,
                     aiDrivers: aiDrivers
                 };
             });
@@ -226,6 +232,80 @@ export default function ProvidersPage() {
         setOpen(false);
     };
 
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file');
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            // 1. Get Presigned URL
+            const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '-')}`;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GENERATE_PRESIGNED_URL,
+                variables: {
+                    fileName,
+                    contentType: file.type
+                }
+            });
+            const presignedUrl = response.data.generatePresignedUrl;
+
+            // 2. Upload to S3
+            const uploadResponse = await fetch(presignedUrl, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type
+                }
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Upload failed');
+            }
+
+            // 3. Construct public URL using CDN
+            // Extract the path (key) from the presigned URL
+            try {
+                const urlObj = new URL(presignedUrl);
+                const path = urlObj.pathname; // includes leading slash, e.g. /raw/tenant/uuid-file.jpg
+
+                const cdnDomain = process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN;
+                let newPhotoUrl = '';
+
+                if (cdnDomain) {
+                    // Use CDN domain with the extracted path
+                    // Ensure protocol is handling correctly (environment variable should not have protocol)
+                    newPhotoUrl = `https://${cdnDomain}${path}`;
+                } else {
+                    // Fallback to S3 URL (without query params)
+                    console.warn("NEXT_PUBLIC_ASSETS_CDN_DOMAIN is missing");
+                    newPhotoUrl = `${urlObj.origin}${path}`;
+                }
+
+                setFormData(prev => ({
+                    ...prev,
+                    photoUrl: newPhotoUrl
+                }));
+            } catch (e) {
+                console.error("Error parsing presigned URL", e);
+                // Fallback: use the raw presigned url but stripped of query params? 
+                // Or just fail gracefully.
+            }
+
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            alert('Failed to upload image.');
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     const handleSave = async () => {
         try {
             // Securely fetch ID Token
@@ -240,6 +320,8 @@ export default function ProvidersPage() {
                     bio: formData.bio,
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
+                    photoUrl: formData.photoUrl,
+                    // photoUrlThumbnail: formData.photoUrlThumbnail, // We can let lambda update this or set if we knew it
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
                     available: formData.active
                 };
@@ -256,6 +338,7 @@ export default function ProvidersPage() {
                     bio: formData.bio,
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
+                    photoUrl: formData.photoUrl,
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers })
                 };
 
@@ -449,6 +532,44 @@ export default function ProvidersPage() {
                     {/* Tab 1: General */}
                     <CustomTabPanel value={tabValue} index={0}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            {/* Image Upload */}
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                                <Box sx={{ position: 'relative' }}>
+                                    <Avatar
+                                        src={formData.photoUrl}
+                                        alt={formData.name}
+                                        sx={{ width: 100, height: 100, border: '1px solid #ddd' }}
+                                    >
+                                        {!formData.photoUrl && formData.name.charAt(0)}
+                                    </Avatar>
+                                    {isUploading && (
+                                        <CircularProgress
+                                            size={100}
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                zIndex: 1
+                                            }}
+                                        />
+                                    )}
+                                </Box>
+                                <Button
+                                    component="label"
+                                    variant="outlined"
+                                    size="small"
+                                    startIcon={<CloudUploadIcon />}
+                                    disabled={isUploading}
+                                >
+                                    Upload Photo
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept="image/*"
+                                        onChange={handleFileUpload}
+                                    />
+                                </Button>
+                            </Box>
                             <TextField
                                 label={t('dialog.general.fullName')}
                                 fullWidth
