@@ -445,7 +445,7 @@ export default function ProvidersPage() {
                                 <TableRow key={row.id} hover>
                                     <TableCell>
                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                            <Avatar alt={row.name} src={row.avatarUrl} >{row.name.charAt(0)}</Avatar>
+                                            <Avatar alt={row.name} src={row.photoUrl} >{row.name.charAt(0)}</Avatar>
                                             <Box>
                                                 <Typography variant="subtitle2" noWrap>
                                                     {row.name}
