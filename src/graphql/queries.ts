@@ -7,6 +7,8 @@ export const LIST_PROVIDERS = `
       bio
       serviceIds
       timezone
+      photoUrl
+      photoUrlThumbnail
       metadata
       available
     }
@@ -242,6 +244,8 @@ export const CREATE_PROVIDER = `
       bio
       serviceIds
       timezone
+      photoUrl
+      photoUrlThumbnail
       metadata
       available
     }
@@ -256,6 +260,8 @@ export const UPDATE_PROVIDER = `
       bio
       serviceIds
       timezone
+      photoUrl
+      photoUrlThumbnail
       metadata
       available
     }
@@ -521,4 +527,10 @@ export const DELETE_ROOM = `
     roomId
   }
 }
+`;
+
+export const GENERATE_PRESIGNED_URL = `
+  mutation GeneratePresignedUrl($fileName: String!, $contentType: String!) {
+    generatePresignedUrl(fileName: $fileName, contentType: $contentType)
+  }
 `;
