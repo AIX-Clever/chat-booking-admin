@@ -282,7 +282,8 @@
         "alertSaveSuccess": "¡Disponibilidad guardada!",
         "alertSaveError": "Error al guardar disponibilidad.",
         "dayOff": "Día Libre",
-        "addExceptionDate": "Fecha de Excepción"
+        "addExceptionDate": "Fecha de Excepción",
+        "unsavedChangesWarning": "Tienes cambios sin guardar. Recuerda hacer clic en \"Guardar Cambios\" arriba."
     },
     "knowledge": {
         "title": "Base de Conocimiento",

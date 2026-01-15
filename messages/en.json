@@ -279,7 +279,8 @@
         "alertSaveSuccess": "Availability saved!",
         "alertSaveError": "Failed to save availability.",
         "dayOff": "Day Off",
-        "addExceptionDate": "Add Exception Date"
+        "addExceptionDate": "Exception Date",
+        "unsavedChangesWarning": "You have unsaved changes. Remember to click \"Save Changes\" above."
     },
     "knowledge": {
         "title": "Knowledge Base",

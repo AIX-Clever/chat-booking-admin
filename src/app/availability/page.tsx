@@ -34,7 +34,8 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { format } from 'date-fns';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { format, parse } from 'date-fns';
 import { es, enUS, ptBR } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
@@ -57,6 +58,7 @@ interface Exception {
     date: string; // YYYY-MM-DD
     note: string;
     type: 'off' | 'custom';
+    timeWindows?: TimeWindow[]; // New field for partial exceptions
 }
 
 interface Provider {
@@ -99,8 +101,10 @@ export default function AvailabilityPage() {
 
     // Ideally, this would be fetched based on selectedProvider
     const [schedule, setSchedule] = React.useState<DaySchedule[]>(DEFAULT_SCHEDULE);
-    const [exceptions, setExceptions] = React.useState<Exception[]>([]); // Exceptions not supported by backend schema yet for setProviderAvailability
+    const [exceptions, setExceptions] = React.useState<Exception[]>([]);
     const [newExceptionDate, setNewExceptionDate] = React.useState('');
+    const [newExceptionType, setNewExceptionType] = React.useState<'off' | 'custom'>('off');
+    const [newExceptionWindows, setNewExceptionWindows] = React.useState<TimeWindow[]>([]);
 
     React.useEffect(() => {
         fetchProviders();
@@ -236,12 +240,44 @@ export default function AvailabilityPage() {
             return;
         }
 
-        setExceptions(prev => [
-            ...prev,
-            { id: Math.random().toString(), date: newExceptionDate, note: t('dayOff'), type: 'off' }
-        ]);
+        const newEx: Exception = {
+            id: Math.random().toString(),
+            date: newExceptionDate,
+            note: newExceptionType === 'off' ? t('dayOff') : 'Custom Hours',
+            type: newExceptionType,
+            timeWindows: newExceptionType === 'custom' ? newExceptionWindows : []
+        };
+
+        setExceptions(prev => [...prev, newEx]);
+
+        // Reset form
         setNewExceptionDate('');
+        setNewExceptionType('off');
+        setNewExceptionWindows([]);
         setIsSaved(false);
+    };
+
+    const toggleNewExceptionType = () => {
+        setNewExceptionType(prev => prev === 'off' ? 'custom' : 'off');
+        // Default to standard hours if switching to custom
+        if (newExceptionType === 'off') {
+            setNewExceptionWindows([{ start: '09:00', end: '13:00' }]);
+        }
+    };
+
+    // Handlers for exception time windows
+    const addExceptionWindow = () => {
+        setNewExceptionWindows(prev => [...prev, { start: '14:00', end: '18:00' }]);
+    };
+
+    const removeExceptionWindow = (index: number) => {
+        setNewExceptionWindows(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const updateExceptionWindow = (index: number, field: 'start' | 'end', value: string) => {
+        const updated = [...newExceptionWindows];
+        updated[index][field] = value;
+        setNewExceptionWindows(updated);
     };
 
     const handleDeleteException = (id: string) => {
@@ -282,14 +318,19 @@ export default function AvailabilityPage() {
             });
 
             // 2. Save exceptions separately (provider-level)
-            const exceptionDates = exceptions.map(ex => ex.date);
+            const formattedExceptions = exceptions.map(ex => ({
+                date: ex.date,
+                timeRanges: ex.timeWindows?.map(tw => ({
+                    startTime: tw.start,
+                    endTime: tw.end
+                })) || [] // Empty means full day off
+            }));
+
             const exceptionsPromise = client.graphql({
                 query: SET_PROVIDER_EXCEPTIONS,
                 variables: {
-                    input: {
-                        providerId: selectedProvider,
-                        exceptions: exceptionDates
-                    }
+                    providerId: selectedProvider,
+                    exceptions: formattedExceptions
                 },
                 authToken: token
             });
@@ -309,6 +350,20 @@ export default function AvailabilityPage() {
 
     const getDayLabel = (index: number) => {
         return t(`days.${dayKeys[index]}`);
+    };
+
+    // Helper to convert HH:mm string to Date for TimePicker
+    const parseTime = (timeStr: string) => {
+        if (!timeStr) return null;
+        const d = new Date();
+        const [hours, minutes] = timeStr.split(':');
+        d.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+        return d;
+    };
+
+    // Helper to convert Date from TimePicker to HH:mm string
+    const formatTime = (date: Date | null) => {
+        return date ? format(date, 'HH:mm') : '';
     };
 
     return (
@@ -375,21 +430,23 @@ export default function AvailabilityPage() {
                                         <Stack spacing={1}>
                                             {day.timeWindows.map((window, windowIndex) => (
                                                 <Box key={windowIndex} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                    <TextField
-                                                        type="time"
-                                                        size="small"
-                                                        value={window.start}
-                                                        onChange={(e) => handleTimeChange(dayIndex, windowIndex, 'start', e.target.value)}
-                                                        InputLabelProps={{ shrink: true }}
-                                                    />
-                                                    <Typography>-</Typography>
-                                                    <TextField
-                                                        type="time"
-                                                        size="small"
-                                                        value={window.end}
-                                                        onChange={(e) => handleTimeChange(dayIndex, windowIndex, 'end', e.target.value)}
-                                                        InputLabelProps={{ shrink: true }}
-                                                    />
+                                                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
+                                                        <TimePicker
+                                                            label="Inicio"
+                                                            value={parseTime(window.start)}
+                                                            onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'start', formatTime(newValue))}
+                                                            slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
+                                                            ampm={false}
+                                                        />
+                                                        <Typography>-</Typography>
+                                                        <TimePicker
+                                                            label="Fin"
+                                                            value={parseTime(window.end)}
+                                                            onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'end', formatTime(newValue))}
+                                                            slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
+                                                            ampm={false}
+                                                        />
+                                                    </LocalizationProvider>
                                                     {day.timeWindows.length > 1 && (
                                                         <IconButton
                                                             size="small"
@@ -416,7 +473,7 @@ export default function AvailabilityPage() {
                             <EventBusyIcon color="error" /> {t('exceptions')}
                         </Typography>
 
-                        <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+                        <Stack spacing={2} sx={{ mb: 3 }}>
                             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
                                 <DatePicker
                                     label={t('addExceptionDate')}
@@ -432,10 +489,53 @@ export default function AvailabilityPage() {
                                     slotProps={{ textField: { size: 'small', fullWidth: true } }}
                                 />
                             </LocalizationProvider>
+
+                            <FormControlLabel
+                                control={<Switch checked={newExceptionType === 'custom'} onChange={toggleNewExceptionType} />}
+                                label="Habilitar Horario Parcial"
+                            />
+
+                            {newExceptionType === 'custom' && (
+                                <Box sx={{ pl: 2, borderLeft: '2px solid #ddd' }}>
+                                    <Typography variant="caption" display="block" mb={1}>Franjas Horarias Disponibles:</Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
+                                        {newExceptionWindows.map((window, idx) => (
+                                            <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                                <TimePicker
+                                                    value={parseTime(window.start)}
+                                                    onChange={(newValue) => updateExceptionWindow(idx, 'start', formatTime(newValue))}
+                                                    slotProps={{ textField: { size: 'small', sx: { width: 110 } } }}
+                                                    ampm={false}
+                                                />
+                                                <Typography>-</Typography>
+                                                <TimePicker
+                                                    value={parseTime(window.end)}
+                                                    onChange={(newValue) => updateExceptionWindow(idx, 'end', formatTime(newValue))}
+                                                    slotProps={{ textField: { size: 'small', sx: { width: 110 } } }}
+                                                    ampm={false}
+                                                />
+                                                <IconButton size="small" color="error" onClick={() => removeExceptionWindow(idx)}>
+                                                    <DeleteIcon fontSize="small" />
+                                                </IconButton>
+                                            </Box>
+                                        ))}
+                                    </LocalizationProvider>
+                                    <Button size="small" startIcon={<AddIcon />} onClick={addExceptionWindow}>
+                                        Agregar Rango
+                                    </Button>
+                                </Box>
+                            )}
+
                             <Button variant="contained" size="small" onClick={handleAddException} disabled={!newExceptionDate}>
                                 {tCommon('add')}
                             </Button>
-                        </Box>
+                        </Stack>
+
+                        {!isSaved && (
+                            <Alert severity="warning" sx={{ mb: 3 }}>
+                                {t('unsavedChangesWarning')}
+                            </Alert>
+                        )}
 
                         <Stack spacing={2}>
                             {exceptions.length === 0 && (
@@ -448,7 +548,15 @@ export default function AvailabilityPage() {
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                                         <Box>
                                             <Typography variant="subtitle2">{ex.date}</Typography>
-                                            <Chip label={t('dayOff')} size="small" color="error" variant="outlined" sx={{ mt: 0.5 }} />
+                                            {ex.type === 'off' ? (
+                                                <Chip label={t('dayOff')} size="small" color="error" variant="outlined" sx={{ mt: 0.5 }} />
+                                            ) : (
+                                                <Stack direction="row" spacing={0.5} flexWrap="wrap" sx={{ mt: 0.5 }}>
+                                                    {ex.timeWindows?.map((tw, i) => (
+                                                        <Chip key={i} label={`${tw.start}-${tw.end}`} size="small" color="success" variant="outlined" />
+                                                    ))}
+                                                </Stack>
+                                            )}
                                         </Box>
                                         <IconButton size="small" onClick={() => handleDeleteException(ex.id)}>
                                             <DeleteIcon fontSize="small" />
