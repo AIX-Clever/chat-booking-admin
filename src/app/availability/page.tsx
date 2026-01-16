@@ -328,8 +328,10 @@ export default function AvailabilityPage() {
             const exceptionsPromise = client.graphql({
                 query: SET_PROVIDER_EXCEPTIONS,
                 variables: {
-                    providerId: selectedProvider,
-                    exceptions: formattedExceptions
+                    input: {
+                        providerId: selectedProvider,
+                        exceptions: formattedExceptions
+                    }
                 },
                 authToken: token
             });

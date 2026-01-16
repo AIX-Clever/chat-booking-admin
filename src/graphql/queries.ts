@@ -188,13 +188,10 @@ export const SET_PROVIDER_AVAILABILITY = `
 `;
 
 export const SET_PROVIDER_EXCEPTIONS = `
-  mutation SetProviderExceptions($providerId: ID!, $exceptions: [ExceptionRuleInput!]!) {
-    setProviderExceptions(providerId: $providerId, exceptions: $exceptions) {
-      date
-      timeRanges {
-        startTime
-        endTime
-      }
+  mutation SetProviderExceptions($input: SetExceptionsInput!) {
+    setProviderExceptions(input: $input) {
+      providerId
+      exceptions
     }
   }
 `;
