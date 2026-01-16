@@ -28,6 +28,7 @@ export const LIST_BOOKINGS_BY_PROVIDER = `
       notes
       serviceId
       providerId
+      roomId
     }
   }
 `;
@@ -76,6 +77,7 @@ export const CREATE_SERVICE = `
     createService(input: $input) {
       serviceId
       name
+      category
       durationMinutes
       price
       requiredRoomIds
@@ -84,14 +86,16 @@ export const CREATE_SERVICE = `
 `;
 
 export const SEARCH_SERVICES = `
-  query SearchServices($text: String) {
-    searchServices(text: $text) {
+  query SearchServices($text: String, $availableOnly: Boolean) {
+    searchServices(text: $text, availableOnly: $availableOnly) {
       serviceId
       name
       durationMinutes
       category
       price
       requiredRoomIds
+      locationType
+      available
     }
   }
 `;

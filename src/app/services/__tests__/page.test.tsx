@@ -3,7 +3,7 @@
  * @jest-environment jsdom
  */
 
-import { render, screen, waitFor } from '@testing-library/react'
+// import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 // Mock the services page component

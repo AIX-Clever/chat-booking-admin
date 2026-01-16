@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS } from '../../graphql/queries';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS } from '../../graphql/queries';
 
 import {
     Typography,
@@ -71,11 +71,13 @@ interface Booking {
     status: BookingStatus;
     notes?: string;
     providerId?: string;
+    roomId?: string;
 }
 
 interface Provider {
     providerId: string;
     name: string;
+    serviceIds: string[];
 }
 
 const STATUS_COLORS: Record<BookingStatus, 'success' | 'warning' | 'error' | 'default' | 'info'> = {
@@ -84,6 +86,23 @@ const STATUS_COLORS: Record<BookingStatus, 'success' | 'warning' | 'error' | 'de
     cancelled: 'error',
     completed: 'info',
     no_show: 'default'
+};
+
+// Professional color palette - works in both light and dark modes
+const PROVIDER_COLORS = [
+    { bg: 'rgba(59, 130, 246, 0.15)', border: '#3b82f6', text: '#1e40af', darkText: '#93c5fd' }, // Blue
+    { bg: 'rgba(16, 185, 129, 0.15)', border: '#10b981', text: '#065f46', darkText: '#6ee7b7' }, // Green
+    { bg: 'rgba(245, 158, 11, 0.15)', border: '#f59e0b', text: '#92400e', darkText: '#fcd34d' }, // Amber
+    { bg: 'rgba(139, 92, 246, 0.15)', border: '#8b5cf6', text: '#5b21b6', darkText: '#c4b5fd' }, // Purple
+    { bg: 'rgba(236, 72, 153, 0.15)', border: '#ec4899', text: '#9f1239', darkText: '#f9a8d4' }, // Pink
+    { bg: 'rgba(20, 184, 166, 0.15)', border: '#14b8a6', text: '#115e59', darkText: '#5eead4' }, // Teal
+    { bg: 'rgba(249, 115, 22, 0.15)', border: '#f97316', text: '#9a3412', darkText: '#fdba74' }, // Orange
+    { bg: 'rgba(99, 102, 241, 0.15)', border: '#6366f1', text: '#3730a3', darkText: '#a5b4fc' }, // Indigo
+];
+
+const getProviderColor = (providerId: string) => {
+    const hash = providerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return PROVIDER_COLORS[hash % PROVIDER_COLORS.length];
 };
 
 const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed', 'no_show'];
@@ -98,6 +117,8 @@ export default function BookingsPage() {
     const [loading, setLoading] = React.useState(true);
     const [filterProvider, setFilterProvider] = React.useState('all');
     const [filterStatus, setFilterStatus] = React.useState('all');
+    const [filterRoom, setFilterRoom] = React.useState('all');
+    const [rooms, setRooms] = React.useState<{ roomId: string, name: string }[]>([]);
     const [searchTerm, setSearchTerm] = React.useState('');
     const [hasMounted, setHasMounted] = React.useState(false);
     const [sortBy, setSortBy] = React.useState<'closest' | 'furthest'>('closest');
@@ -124,6 +145,7 @@ export default function BookingsPage() {
         setHasMounted(true);
         fetchServices();
         fetchProviders();
+        fetchRooms();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -138,6 +160,21 @@ export default function BookingsPage() {
         } catch (error) {
             console.error('Error fetching providers:', error);
             setLoading(false);
+        }
+    };
+
+    const fetchRooms = async () => {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({ query: LIST_ROOMS });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fetchedRooms = response.data.listRooms.map((r: any) => ({
+                roomId: r.roomId,
+                name: r.name
+            }));
+            setRooms(fetchedRooms);
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
         }
     };
 
@@ -186,10 +223,19 @@ export default function BookingsPage() {
                     start: b.start,
                     status: b.status.toLowerCase() as BookingStatus,
                     notes: b.notes,
-                    providerId: provider.providerId
+                    providerId: provider.providerId,
+                    roomId: b.roomId
                 }));
+                console.log('Fetched bookings for provider', provider.providerId, providerBookings);
                 allBookings.push(...providerBookings);
             }
+
+            // Debug logging for Room ID
+            console.log('--- BOOKING ROOM DEBUG ---');
+            allBookings.forEach(b => {
+                console.log(`Booking ${b.id} | Client: ${b.clientName} | Room: ${b.roomId}`);
+            });
+            console.log('--------------------------');
 
             setBookings(allBookings);
         } catch (error) {
@@ -229,7 +275,7 @@ export default function BookingsPage() {
     const fetchServices = async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '' } }); // Fetch all
+            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '', availableOnly: true } }); // Fetch available only
             setAvailableServices(response.data.searchServices);
         } catch (error) {
             console.error('Error fetching services:', error);
@@ -446,24 +492,29 @@ export default function BookingsPage() {
                 <Grid item xs={1.7} key={day} sx={{ height: 120, border: 1, borderColor: 'divider', p: 1, overflow: 'hidden' }}>
                     <Typography variant="caption" sx={{ fontWeight: 'bold' }}>{day}</Typography>
                     <Stack spacing={0.5} sx={{ mt: 1 }}>
-                        {dayBookings.map(b => (
-                            <Chip
-                                key={b.id}
-                                label={`${new Date(b.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${b.clientName}`}
-                                size="small"
-                                color={STATUS_COLORS[b.status]}
-                                onClick={() => handleViewDetail(b)}
-                                sx={{
-                                    fontSize: '0.65rem',
-                                    height: 20,
-                                    justifyContent: 'flex-start',
-                                    textTransform: 'capitalize',
-                                    borderRadius: 0,
-                                    width: '100%',
-                                    '& .MuiChip-label': { px: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }
-                                }}
-                            />
-                        ))}
+                        {dayBookings.map(b => {
+                            const providerColor = getProviderColor(b.providerId || '');
+                            return (
+                                <Chip
+                                    key={b.id}
+                                    label={`${new Date(b.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${b.clientName}`}
+                                    size="small"
+                                    onClick={() => handleViewDetail(b)}
+                                    sx={{
+                                        fontSize: '0.65rem',
+                                        height: 20,
+                                        justifyContent: 'flex-start',
+                                        textTransform: 'capitalize',
+                                        borderRadius: 0,
+                                        bgcolor: providerColor.bg,
+                                        borderLeft: `3px solid ${providerColor.border}`,
+                                        color: (theme) => theme.palette.mode === 'dark' ? providerColor.darkText : providerColor.text,
+                                        width: '100%',
+                                        '& .MuiChip-label': { px: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }
+                                    }}
+                                />
+                            );
+                        })}
                     </Stack>
                 </Grid>
             );
@@ -632,8 +683,9 @@ export default function BookingsPage() {
                                         {/* Bookings */}
                                         {dayBookings.map(b => {
                                             const style = getEventStyle(b);
+                                            const providerColor = getProviderColor(b.providerId || '');
                                             // Don't render if outside of view range (simplification)
-                                            // Actually CSS overflow hidden on container would hide it, but let's be safe? 
+                                            // Actually CSS overflow hidden on container would hide it, but let's be safe?
                                             // For now just render all.
 
                                             return (
@@ -655,8 +707,8 @@ export default function BookingsPage() {
                                                         sx={{
                                                             ...style,
                                                             p: 0.5,
-                                                            borderLeft: `4px solid ${STATUS_COLORS[b.status] === 'success' ? '#2e7d32' : STATUS_COLORS[b.status] === 'warning' ? '#ed6c02' : '#d32f2f'}`,
-                                                            bgcolor: 'background.paper',
+                                                            borderLeft: `4px solid ${providerColor.border}`,
+                                                            bgcolor: providerColor.bg,
                                                             borderRadius: 0,
                                                             cursor: 'pointer',
                                                             overflow: 'hidden',
@@ -667,7 +719,7 @@ export default function BookingsPage() {
                                                     >
                                                         {/* Header: Time & Name */}
                                                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                            <Typography variant="caption" fontWeight="bold" sx={{ lineHeight: 1.1, fontSize: '0.7rem' }}>
+                                                            <Typography variant="caption" fontWeight="bold" sx={{ lineHeight: 1.1, fontSize: '0.7rem', color: (theme) => theme.palette.mode === 'dark' ? providerColor.darkText : providerColor.text }}>
                                                                 {b.clientName}
                                                             </Typography>
                                                         </Box>
@@ -679,7 +731,7 @@ export default function BookingsPage() {
 
                                                         {/* Provider (only if enough height) */}
                                                         {style.height >= 45 && (
-                                                            <Typography variant="caption" color="primary" noWrap sx={{ fontSize: '0.6rem', mt: 'auto' }}>
+                                                            <Typography variant="caption" noWrap sx={{ fontSize: '0.6rem', mt: 'auto', color: (theme) => theme.palette.mode === 'dark' ? providerColor.darkText : providerColor.text, fontWeight: 'medium' }}>
                                                                 {b.providerName}
                                                             </Typography>
                                                         )}
@@ -711,7 +763,8 @@ export default function BookingsPage() {
     const statusFilteredBookings = bookings.filter(b => {
         const matchesSearch = b.clientName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'all' || b.status === filterStatus;
-        return matchesSearch && matchesStatus;
+        const matchesRoom = filterRoom === 'all' || b.roomId === filterRoom;
+        return matchesSearch && matchesStatus && matchesRoom;
     });
 
     // Filter AND Sort Logic
@@ -800,11 +853,25 @@ export default function BookingsPage() {
                         }}
                     >
                         <MenuItem value="all">{t('filters.all')}</MenuItem>
-                        {providers.map((p) => (
-                            <MenuItem key={p.providerId} value={p.providerId}>
-                                {p.name}
-                            </MenuItem>
-                        ))}
+                        {providers.map((p) => {
+                            const providerColor = getProviderColor(p.providerId);
+                            return (
+                                <MenuItem key={p.providerId} value={p.providerId}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Box
+                                            sx={{
+                                                width: 12,
+                                                height: 12,
+                                                bgcolor: providerColor.border,
+                                                borderRadius: '2px',
+                                                flexShrink: 0
+                                            }}
+                                        />
+                                        {p.name}
+                                    </Box>
+                                </MenuItem>
+                            );
+                        })}
                     </TextField>
 
                     {/* Status Filter */}
@@ -822,6 +889,30 @@ export default function BookingsPage() {
                         <MenuItem value="cancelled">{t('status.cancelled')}</MenuItem>
                         <MenuItem value="completed">{t('status.completed')}</MenuItem>
                         <MenuItem value="noShow">{t('status.noShow')}</MenuItem>
+                    </TextField>
+
+                    {/* Room Filter */}
+                    <TextField
+                        select
+                        label="Sala"
+                        value={filterRoom}
+                        onChange={(e) => setFilterRoom(e.target.value)}
+                        size="small"
+                        sx={{ minWidth: 150 }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EventIcon fontSize="small" color="action" />
+                                </InputAdornment>
+                            ),
+                        }}
+                    >
+                        <MenuItem value="all">Todas</MenuItem>
+                        {rooms.map((r) => (
+                            <MenuItem key={r.roomId} value={r.roomId}>
+                                {r.name}
+                            </MenuItem>
+                        ))}
                     </TextField>
 
                     {/* Sort */}
@@ -856,7 +947,33 @@ export default function BookingsPage() {
                         />
                     </Box>
                 )}
-            </Card>
+
+                {/* Professional Color Legend for calendar/week views */}
+                {(viewMode === 'calendar' || viewMode === 'week') && providers.length > 0 && (
+                    <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <Typography variant="caption" sx={{ fontWeight: 'medium', color: 'text.secondary' }}>
+                            Profesionales:
+                        </Typography>
+                        {providers.map((p) => {
+                            const color = getProviderColor(p.providerId);
+                            return (
+                                <Chip
+                                    key={p.providerId}
+                                    label={p.name}
+                                    size="small"
+                                    sx={{
+                                        bgcolor: color.bg,
+                                        borderLeft: `3px solid ${color.border}`,
+                                        color: (theme) => theme.palette.mode === 'dark' ? color.darkText : color.text,
+                                        fontWeight: 'medium',
+                                        fontSize: '0.75rem'
+                                    }}
+                                />
+                            );
+                        })}
+                    </Box>
+                )}
+            </Card >
 
             <Card sx={{ p: viewMode === 'calendar' ? 2 : 0 }}>
                 {loading ? (
@@ -913,7 +1030,23 @@ export default function BookingsPage() {
                                             <TableCell>
                                                 {availableServices.find(s => s.serviceId === row.serviceName)?.name || availableServices.find(s => s.serviceId === (row as unknown as { serviceId: string }).serviceId)?.name || row.serviceName}
                                             </TableCell>
-                                            <TableCell>{row.providerName}</TableCell>
+                                            <TableCell>
+                                                {(() => {
+                                                    const providerColor = getProviderColor(row.providerId || '');
+                                                    return (
+                                                        <Chip
+                                                            label={row.providerName}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: providerColor.bg,
+                                                                borderLeft: `3px solid ${providerColor.border}`,
+                                                                color: (theme) => theme.palette.mode === 'dark' ? providerColor.darkText : providerColor.text,
+                                                                fontWeight: 'medium'
+                                                            }}
+                                                        />
+                                                    );
+                                                })()}
+                                            </TableCell>
                                             <TableCell>
                                                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                                 <Chip
@@ -1108,7 +1241,11 @@ export default function BookingsPage() {
                                 label={t('form.service')}
                                 fullWidth
                                 value={newBookingData.serviceId}
-                                onChange={(e) => setNewBookingData({ ...newBookingData, serviceId: e.target.value })}
+                                onChange={(e) => setNewBookingData({
+                                    ...newBookingData,
+                                    serviceId: e.target.value,
+                                    providerId: '' // Reset provider when service changes
+                                })}
                             >
                                 {availableServices.map((s) => (
                                     <MenuItem key={s.serviceId} value={s.serviceId}>{s.name} ({s.durationMinutes} min)</MenuItem>
@@ -1123,9 +1260,11 @@ export default function BookingsPage() {
                                 value={newBookingData.providerId}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, providerId: e.target.value })}
                             >
-                                {providers.map((p) => (
-                                    <MenuItem key={p.providerId} value={p.providerId}>{p.name}</MenuItem>
-                                ))}
+                                {providers
+                                    .filter(p => !newBookingData.serviceId || (p.serviceIds && p.serviceIds.includes(newBookingData.serviceId)))
+                                    .map((p) => (
+                                        <MenuItem key={p.providerId} value={p.providerId}>{p.name}</MenuItem>
+                                    ))}
                             </TextField>
                         </Grid>
                         <Grid item xs={6} />

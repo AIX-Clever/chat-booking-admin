@@ -37,6 +37,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useTranslations } from 'next-intl';
 import { GraphQLRoomRepository } from '@/repositories/GraphQLRoomRepository';
 import { Room, CreateRoomInput } from '@/domain/Room';
+import { OperatingHoursEditor } from '@/components/OperatingHoursEditor';
 
 const roomRepository = new GraphQLRoomRepository();
 
@@ -59,9 +60,7 @@ export default function RoomsPage() {
         minDuration: 30,
         maxDuration: 120,
         operatingHours: []
-    });
-    // Temporary state for JSON editing
-    const [operatingHoursJson, setOperatingHoursJson] = useState('[]');
+    })
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Delete confirmation
@@ -99,7 +98,6 @@ export default function RoomsPage() {
             maxDuration: 120,
             operatingHours: []
         });
-        setOperatingHoursJson('[]');
         setSelectedRoom(null);
         setOpenDialog(true);
     };
@@ -116,7 +114,6 @@ export default function RoomsPage() {
             maxDuration: room.maxDuration || 120,
             operatingHours: room.operatingHours || []
         });
-        setOperatingHoursJson(JSON.stringify(room.operatingHours || [], null, 2));
         setSelectedRoom(room);
         setOpenDialog(true);
     };
@@ -130,15 +127,11 @@ export default function RoomsPage() {
         try {
             setIsSubmitting(true);
             if (dialogMode === 'create') {
-                await roomRepository.createRoom({
-                    ...formData,
-                    operatingHours: JSON.parse(operatingHoursJson || '[]')
-                });
+                await roomRepository.createRoom(formData);
             } else if (dialogMode === 'edit' && selectedRoom) {
                 await roomRepository.updateRoom({
                     roomId: selectedRoom.roomId,
-                    ...formData,
-                    operatingHours: JSON.parse(operatingHoursJson || '[]')
+                    ...formData
                 });
             }
             await loadRooms();
@@ -349,17 +342,10 @@ export default function RoomsPage() {
                             />
                         </Box>
 
-                        <Box sx={{ mt: 2 }}>
-                            <Typography variant="caption" color="text.secondary">
-                                Operating Hours (JSON Format: <code>[{'{'}&quot;day&quot;: &quot;MON&quot;, &quot;start&quot;: &quot;09:00&quot;, &quot;end&quot;: &quot;18:00&quot;{'}'}]</code>)
-                            </Typography>
-                            <TextField
-                                multiline
-                                rows={4}
-                                fullWidth
-                                value={operatingHoursJson}
-                                onChange={(e) => setOperatingHoursJson(e.target.value)}
-                                sx={{ mt: 1, fontFamily: 'monospace' }}
+                        <Box sx={{ mt: 3 }}>
+                            <OperatingHoursEditor
+                                value={formData.operatingHours || []}
+                                onChange={(value) => setFormData({ ...formData, operatingHours: value })}
                             />
                         </Box>
                     </Box>
