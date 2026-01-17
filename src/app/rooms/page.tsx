@@ -165,7 +165,6 @@ export default function RoomsPage() {
     );
 
     return (
-    return (
         <React.Fragment>
             <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
@@ -387,5 +386,5 @@ export default function RoomsPage() {
             </Dialog>
         </React.Fragment>
     );
-    );
+
 }
