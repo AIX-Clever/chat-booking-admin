@@ -23,6 +23,7 @@ import { useSearchParams } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
+import { useTenant } from '../../context/TenantContext';
 
 // Import refactored components
 import PropertiesTab from './tabs/PropertiesTab';
@@ -57,6 +58,7 @@ export default function SettingsPage() {
     const t = useTranslations('settings');
     const searchParams = useSearchParams();
     const client = React.useMemo(() => generateClient(), []);
+    const { refreshTenant } = useTenant();
 
     // Initial tab logic
     const getInitialTab = () => {
@@ -224,11 +226,12 @@ export default function SettingsPage() {
             setSuccessMsg(t('saveSuccess'));
 
             // Refresh tenant context so other pages see the updated settings
-            const { refreshTenant } = await import('../../context/TenantContext');
-            if (refreshTenant) {
-                // Give backend a moment to propagate
-                setTimeout(() => window.location.reload(), 500);
-            }
+
+            // Refresh tenant context so other pages see the updated settings
+            await refreshTenant();
+
+            // Give backend a moment to propagate and reload to apply theme changes globally
+            setTimeout(() => window.location.reload(), 500);
         } catch (error) {
             console.error('Error saving branding:', error);
             setError(t('saveError'));
