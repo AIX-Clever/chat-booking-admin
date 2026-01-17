@@ -28,31 +28,37 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
 
     const refreshTenant = async () => {
         try {
-            let token: string | undefined;
-            try {
-                const session = await fetchAuthSession();
-                // User Pool Auth often requires ID Token for identity claims
-                token = session.tokens?.idToken?.toString();
-            } catch (authErr) {
-                console.warn('Failed to get auth session for TenantContext:', authErr);
-            }
-
-            if (!token) {
-                // Warning only, let the query try (it might fail or use other auth if configured)
-            }
-
-            const client = generateClient();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({
-                query: GET_TENANT,
-                variables: { tenantId: null },
-                authMode: 'userPool',
-                authToken: token // Explicitly passing ID token
+            // Create a timeout promise
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Tenant refresh timeout')), 10000);
             });
 
-            if (response.data && response.data.getTenant) {
-                setTenant(response.data.getTenant);
-            }
+            // Race between the fetch and the timeout
+            await Promise.race([
+                (async () => {
+                    let token: string | undefined;
+                    try {
+                        const session = await fetchAuthSession();
+                        token = session.tokens?.idToken?.toString();
+                    } catch (authErr) {
+                        console.warn('Failed to get auth session for TenantContext:', authErr);
+                    }
+
+                    const client = generateClient();
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const response: any = await client.graphql({
+                        query: GET_TENANT,
+                        variables: { tenantId: null },
+                        authMode: 'userPool',
+                        authToken: token
+                    });
+
+                    if (response.data && response.data.getTenant) {
+                        setTenant(response.data.getTenant);
+                    }
+                })(),
+                timeoutPromise
+            ]);
         } catch (error) {
             console.error('Error fetching tenant context:', error);
         } finally {
