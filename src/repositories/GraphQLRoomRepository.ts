@@ -16,7 +16,6 @@ export class GraphQLRoomRepository implements RoomRepository {
             return (response.data.listRooms || []).map((room: any) => ({
                 ...room,
                 operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
-                operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
                 metadata: room.metadata ? JSON.parse(room.metadata) : undefined
             }));
         } catch (error) {
