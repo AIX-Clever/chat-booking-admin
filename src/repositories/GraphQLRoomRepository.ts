@@ -12,7 +12,11 @@ export class GraphQLRoomRepository implements RoomRepository {
             const response: any = await client.graphql({
                 query: LIST_ROOMS
             });
-            return response.data.listRooms || [];
+            return (response.data.listRooms || []).map((room: any) => ({
+                ...room,
+                operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
+                metadata: room.metadata ? JSON.parse(room.metadata) : undefined
+            }));
         } catch (error) {
             console.error('Error listing rooms:', error);
             throw error;
@@ -26,7 +30,13 @@ export class GraphQLRoomRepository implements RoomRepository {
                 query: GET_ROOM,
                 variables: { roomId }
             });
-            return response.data.getRoom || null;
+            const room = response.data.getRoom;
+            if (!room) return null;
+            return {
+                ...room,
+                operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
+                metadata: room.metadata ? JSON.parse(room.metadata) : undefined
+            };
         } catch (error) {
             console.error('Error getting room:', error);
             throw error;
@@ -38,7 +48,13 @@ export class GraphQLRoomRepository implements RoomRepository {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: CREATE_ROOM,
-                variables: { input }
+                variables: {
+                    input: {
+                        ...input,
+                        operatingHours: input.operatingHours ? JSON.stringify(input.operatingHours) : null,
+                        metadata: input.metadata ? JSON.stringify(input.metadata) : null
+                    }
+                }
             });
             return response.data.createRoom;
         } catch (error) {
@@ -52,7 +68,13 @@ export class GraphQLRoomRepository implements RoomRepository {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: UPDATE_ROOM,
-                variables: { input }
+                variables: {
+                    input: {
+                        ...input,
+                        operatingHours: input.operatingHours ? JSON.stringify(input.operatingHours) : null,
+                        metadata: input.metadata ? JSON.stringify(input.metadata) : null
+                    }
+                }
             });
             return response.data.updateRoom;
         } catch (error) {
