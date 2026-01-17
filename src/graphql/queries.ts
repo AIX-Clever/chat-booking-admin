@@ -169,7 +169,13 @@ export const GET_PROVIDER_AVAILABILITY = `
         startTime
         endTime
       }
-      exceptions
+      exceptions {
+        date
+        timeRanges {
+          startTime
+          endTime
+        }
+      }
     }
   }
 `;
@@ -191,7 +197,13 @@ export const SET_PROVIDER_EXCEPTIONS = `
   mutation SetProviderExceptions($input: SetExceptionsInput!) {
     setProviderExceptions(input: $input) {
       providerId
-      exceptions
+      exceptions {
+        date
+        timeRanges {
+          startTime
+          endTime
+        }
+      }
     }
   }
 `;
