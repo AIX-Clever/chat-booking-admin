@@ -550,3 +550,38 @@ export const GENERATE_PRESIGNED_URL = `
     generatePresignedUrl(fileName: $fileName, contentType: $contentType)
   }
 `;
+
+export const LIST_API_KEYS = `
+  query ListApiKeys {
+    listApiKeys {
+      apiKeyId
+      name
+      keyPreview
+      status
+      createdAt
+      lastUsedAt
+    }
+  }
+`;
+
+export const CREATE_API_KEY = `
+  mutation CreateApiKey($name: String) {
+    createApiKey(name: $name) {
+      apiKeyId
+      name
+      keyPreview
+      status
+      createdAt
+      apiKey
+    }
+  }
+`;
+
+export const REVOKE_API_KEY = `
+  mutation RevokeApiKey($apiKeyId: ID!) {
+    revokeApiKey(apiKeyId: $apiKeyId) {
+      apiKeyId
+      status
+    }
+  }
+`;

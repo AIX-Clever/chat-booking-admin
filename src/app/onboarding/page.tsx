@@ -79,8 +79,8 @@ export default function OnboardingPage() {
                         input: {
                             name: serviceName,
                             category: 'General',
-                            durationMinutes: parseInt(duration),
-                            price: parseFloat(price)
+                            durationMinutes: parseInt(duration) || 0,
+                            price: parseFloat(price) || 0
                         }
                     },
                     authToken: token
@@ -181,8 +181,10 @@ export default function OnboardingPage() {
                                             id="duration"
                                             label="Duration (minutes)"
                                             type="number"
-                                            value={duration}
+                                            placeholder="30"
+                                            value={duration === '0' ? '' : duration}
                                             onChange={(e) => setDuration(e.target.value)}
+                                            onFocus={(e) => e.target.select()}
                                         />
                                         <TextField
                                             margin="normal"
@@ -191,8 +193,10 @@ export default function OnboardingPage() {
                                             id="price"
                                             label="Price ($)"
                                             type="number"
-                                            value={price}
+                                            placeholder="0"
+                                            value={price === '0' ? '' : price}
                                             onChange={(e) => setPrice(e.target.value)}
+                                            onFocus={(e) => e.target.select()}
                                         />
                                     </Box>
                                 </Box>

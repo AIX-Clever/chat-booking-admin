@@ -439,19 +439,22 @@ export default function ServicesPage() {
                                 label={t('durationMin')}
                                 type="number"
                                 fullWidth
-                                value={formData.durationMinutes}
+                                value={formData.durationMinutes || ''}
                                 onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
+                                onFocus={(e) => e.target.select()}
                             />
                             <TextField
                                 label={t('priceLabel')}
                                 type="number"
                                 fullWidth
-                                value={formData.price}
+                                placeholder="0"
+                                value={formData.price || ''}
                                 onChange={(e) => {
                                     // Strip leading zero if followed by a digit (e.g. "04" -> "4")
                                     const val = e.target.value.replace(/^0+(?=\d)/, '');
                                     setFormData({ ...formData, price: val === '' ? 0 : Number(val) });
                                 }}
+                                onFocus={(e) => e.target.select()}
                             />
                         </Box>
 
