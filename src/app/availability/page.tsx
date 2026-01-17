@@ -133,7 +133,7 @@ export default function AvailabilityPage() {
         };
         const newSchedule = DEFAULT_SCHEDULE.map(d => ({ ...d, enabled: false, timeWindows: [] }));
 
-        const allExceptions = new Set<string>();
+        const exceptionsMap = new Map<string, Exception>();
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data.forEach((item: any) => {
@@ -150,18 +150,40 @@ export default function AvailabilityPage() {
                 };
             }
             if (item.exceptions && Array.isArray(item.exceptions)) {
-                item.exceptions.forEach((ex: string) => allExceptions.add(ex));
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                item.exceptions.forEach((ex: any) => {
+                    let dateStr = '';
+                    let timeWindows: TimeWindow[] = [];
+                    let type: 'off' | 'custom' = 'off';
+
+                    if (typeof ex === 'string') {
+                        dateStr = ex;
+                    } else if (ex && ex.date) {
+                        dateStr = ex.date;
+                        if (ex.timeRanges && Array.isArray(ex.timeRanges) && ex.timeRanges.length > 0) {
+                            type = 'custom';
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            timeWindows = ex.timeRanges.map((tr: any) => ({
+                                start: tr.startTime,
+                                end: tr.endTime
+                            }));
+                        }
+                    }
+
+                    if (dateStr && !exceptionsMap.has(dateStr)) {
+                        exceptionsMap.set(dateStr, {
+                            id: Math.random().toString(),
+                            date: dateStr,
+                            note: type === 'off' ? 'Day Off' : 'Custom Hours',
+                            type: type,
+                            timeWindows: timeWindows
+                        });
+                    }
+                });
             }
         });
         setSchedule(newSchedule);
-
-        const loadedExceptions: Exception[] = Array.from(allExceptions).map(date => ({
-            id: Math.random().toString(), // Helper ID for UI
-            date: date,
-            note: 'Day Off', // Default note as we don't store note yet
-            type: 'off'
-        }));
-        setExceptions(loadedExceptions);
+        setExceptions(Array.from(exceptionsMap.values()));
     }, []);
 
     const fetchAvailability = React.useCallback(async (providerId: string) => {
