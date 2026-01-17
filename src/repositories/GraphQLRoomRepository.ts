@@ -12,8 +12,10 @@ export class GraphQLRoomRepository implements RoomRepository {
             const response: any = await client.graphql({
                 query: LIST_ROOMS
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return (response.data.listRooms || []).map((room: any) => ({
                 ...room,
+                operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
                 operatingHours: room.operatingHours ? JSON.parse(room.operatingHours) : [],
                 metadata: room.metadata ? JSON.parse(room.metadata) : undefined
             }));
