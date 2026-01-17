@@ -165,110 +165,113 @@ export default function RoomsPage() {
     );
 
     return (
-        <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
-                <Typography variant="h4">{t('title')}</Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleOpenCreate}
-                >
-                    {t('addRoom')}
-                </Button>
-            </Box>
-
-            {error && (
-                <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
-                    {error}
-                </Alert>
-            )}
-
-            <Card>
-                <Box sx={{ p: 3 }}>
-                    <TextField
-                        fullWidth
-                        placeholder="Buscar sala..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon sx={{ color: 'text.disabled' }} />
-                                </InputAdornment>
-                            )
-                        }}
-                    />
+    return (
+        <React.Fragment>
+            <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
+                    <Typography variant="h4">{t('title')}</Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={handleOpenCreate}
+                    >
+                        {t('addRoom')}
+                    </Button>
                 </Box>
 
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <TableContainer sx={{ minWidth: 800 }}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>{t('fields.name')}</TableCell>
-                                    <TableCell>{t('fields.description')}</TableCell>
-                                    <TableCell>{t('fields.capacity')}</TableCell>
-                                    <TableCell>{t('fields.status')}</TableCell>
-                                    <TableCell align="right">{t('actions.actions')}</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {filteredRooms.map((room) => (
-                                    <TableRow key={room.roomId} hover>
-                                        <TableCell>
-                                            <Typography variant="subtitle2" noWrap>
-                                                {room.name}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                                                {room.description}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            {room.capacity}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Chip
-                                                label={room.status === 'ACTIVE' ? t('fields.active') : t('fields.inactive')}
-                                                color={room.status === 'ACTIVE' ? 'success' : 'default'}
-                                                size="small"
-                                                variant="filled"
-                                                sx={{ borderRadius: 1 }}
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Tooltip title={t('actions.edit')}>
-                                                <IconButton onClick={() => handleOpenEdit(room)} size="small" color="primary">
-                                                    <EditIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title={t('actions.delete')}>
-                                                <IconButton onClick={() => handleDeleteClick(room.roomId)} size="small" color="error">
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                                {filteredRooms.length === 0 && (
-                                    <TableRow>
-                                        <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
-                                            <Typography variant="body1" color="text.secondary">
-                                                {t('errors.loadFailed').includes('Failed') ? 'No rooms found' : 'No se encontraron salas'}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                {error && (
+                    <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+                        {error}
+                    </Alert>
                 )}
-            </Card>
+
+                <Card>
+                    <Box sx={{ p: 3 }}>
+                        <TextField
+                            fullWidth
+                            placeholder="Buscar sala..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon sx={{ color: 'text.disabled' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    </Box>
+
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <TableContainer sx={{ minWidth: 800 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>{t('fields.name')}</TableCell>
+                                        <TableCell>{t('fields.description')}</TableCell>
+                                        <TableCell>{t('fields.capacity')}</TableCell>
+                                        <TableCell>{t('fields.status')}</TableCell>
+                                        <TableCell align="right">{t('actions.actions')}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {filteredRooms.map((room) => (
+                                        <TableRow key={room.roomId} hover>
+                                            <TableCell>
+                                                <Typography variant="subtitle2" noWrap>
+                                                    {room.name}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                                                    {room.description}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                {room.capacity}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={room.status === 'ACTIVE' ? t('fields.active') : t('fields.inactive')}
+                                                    color={room.status === 'ACTIVE' ? 'success' : 'default'}
+                                                    size="small"
+                                                    variant="filled"
+                                                    sx={{ borderRadius: 1 }}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Tooltip title={t('actions.edit')}>
+                                                    <IconButton onClick={() => handleOpenEdit(room)} size="small" color="primary">
+                                                        <EditIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={t('actions.delete')}>
+                                                    <IconButton onClick={() => handleDeleteClick(room.roomId)} size="small" color="error">
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {filteredRooms.length === 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                                <Typography variant="body1" color="text.secondary">
+                                                    {t('errors.loadFailed').includes('Failed') ? 'No rooms found' : 'No se encontraron salas'}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Card>
+            </Box>
 
             {/* Create/Edit Dialog */}
             <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
@@ -297,8 +300,9 @@ export default function RoomsPage() {
                                 label={t('fields.capacity')}
                                 type="number"
                                 fullWidth
-                                value={formData.capacity}
+                                value={formData.capacity || ''}
                                 onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) || 0 })}
+                                onFocus={(e) => e.target.select()}
                             />
                             <FormControl fullWidth>
                                 <InputLabel>{t('fields.status')}</InputLabel>
@@ -330,15 +334,17 @@ export default function RoomsPage() {
                                 label="Min Duration (min)"
                                 type="number"
                                 fullWidth
-                                value={formData.minDuration}
+                                value={formData.minDuration || ''}
                                 onChange={(e) => setFormData({ ...formData, minDuration: Number(e.target.value) })}
+                                onFocus={(e) => e.target.select()}
                             />
                             <TextField
                                 label="Max Duration (min)"
                                 type="number"
                                 fullWidth
-                                value={formData.maxDuration}
+                                value={formData.maxDuration || ''}
                                 onChange={(e) => setFormData({ ...formData, maxDuration: Number(e.target.value) })}
+                                onFocus={(e) => e.target.select()}
                             />
                         </Box>
 
@@ -379,6 +385,7 @@ export default function RoomsPage() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </React.Fragment>
+    );
     );
 }
