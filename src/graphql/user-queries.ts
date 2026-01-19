@@ -64,3 +64,9 @@ export const REMOVE_USER = `
     }
   }
 `;
+
+export const RESET_USER_PASSWORD = `
+  mutation ResetUserPassword($userId: ID!) {
+    resetUserPassword(userId: $userId)
+  }
+`;
