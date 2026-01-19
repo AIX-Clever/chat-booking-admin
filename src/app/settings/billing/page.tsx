@@ -1,15 +1,17 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect } from 'react';
 import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { GET_TENANT, UPDATE_TENANT } from '../../../graphql/queries';
-import { LIST_INVOICES, DOWNGRADE_PLAN } from '../../../graphql/billing-queries';
+import { LIST_INVOICES } from '../../../graphql/billing-queries';
 import {
-    BuildingOffice2Icon,
-    DocumentTextIcon,
-    CreditCardIcon,
-    ArrowDownTrayIcon
-} from '@heroicons/react/24/outline';
+    Business as BuildingOffice2Icon,
+    Description as DocumentTextIcon,
+    CreditCard as CreditCardIcon,
+    Download as ArrowDownTrayIcon
+} from '@mui/icons-material';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const client = generateClient();
@@ -45,18 +47,8 @@ export default function BillingPage() {
         try {
             if (!user) return;
 
-            // 1. Fetch Tenant Settings
-            // We need tenantId, but GET_TENANT usually gets context if not provided, or we pass null.
-            // However, the query definition takes $tenantId. If auth is CONTEXT based, we might find it automatically?
-            // Actually standard pattern here is usually fetch by context or stored tenantId.
-            // Let's assume GET_TENANT with null returns current tenant if resolver supports it, 
-            // OR we rely on what we have. 
-            // Looking at resolver "GetTenantResolver", it uses "getTenant".
-            // Let's try fetching without ID if possible, or we need to look up how other pages do it.
-            // Assuming context has custom attribute or we query 'listTenantUsers' to get tenantId?
-            // Usually user has tenantId in attributes.
-
-            const tenantId = user?.signInUserSession?.idToken?.payload?.['custom:tenantId'];
+            const session = await fetchAuthSession();
+            const tenantId = session.tokens?.idToken?.payload['custom:tenantId'] as string | undefined;
 
             if (!tenantId) {
                 console.error("No tenant ID found in user session");
@@ -73,16 +65,16 @@ export default function BillingPage() {
             setTenant(t);
 
             // Parse settings for billing info
-            let settings = {};
+            let settings: Record<string, any> = {};
             try {
                 settings = JSON.parse(t.settings || '{}');
-            } catch (e) { }
+            } catch { }
 
             setBillingInfo({
-                companyName: (settings as any).billingInfo?.companyName || t.name || '',
-                rut: (settings as any).billingInfo?.rut || '',
-                address: (settings as any).billingInfo?.address || '',
-                city: (settings as any).billingInfo?.city || ''
+                companyName: settings.billingInfo?.companyName || t.name || '',
+                rut: settings.billingInfo?.rut || '',
+                address: settings.billingInfo?.address || '',
+                city: settings.billingInfo?.city || ''
             });
 
             // 2. Fetch Invoices
@@ -103,10 +95,10 @@ export default function BillingPage() {
         setIsSaving(true);
         try {
             // Merge with existing settings
-            let currentSettings = {};
+            let currentSettings: Record<string, any> = {};
             try {
                 currentSettings = JSON.parse(tenant.settings || '{}');
-            } catch (e) { }
+            } catch { }
 
             const newSettings = {
                 ...currentSettings,
