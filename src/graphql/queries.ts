@@ -585,3 +585,13 @@ export const REVOKE_API_KEY = `
     }
   }
 `;
+
+export const SUBSCRIBE = `
+  mutation Subscribe($planId: String!, $email: String, $backUrl: String) {
+    subscribe(planId: $planId, email: $email, backUrl: $backUrl) {
+      subscriptionId
+      initPoint
+      message
+    }
+  }
+`;
