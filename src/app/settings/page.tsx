@@ -199,6 +199,8 @@ export default function SettingsPage() {
     const handleSaveSettings = async () => {
         try {
             setLoading(true);
+            setError(null); // Clear any previous errors
+
             const settingsObj = {
                 widgetConfig,
                 aiMode,
@@ -223,21 +225,23 @@ export default function SettingsPage() {
                 },
                 authToken: token
             });
-            setSuccessMsg(t('saveSuccess'));
 
-            // Refresh tenant context so other pages see the updated settings
+            setSuccessMsg(t('saveSuccess'));
 
             // Refresh tenant context so other pages see the updated settings
             await refreshTenant();
 
             // Give backend a moment to propagate and reload to apply theme changes globally
-            setTimeout(() => window.location.reload(), 500);
+            // Keep loading state true during reload
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         } catch (error) {
-            console.error('Error saving branding:', error);
+            console.error('Error saving settings:', error);
             setError(t('saveError'));
-        } finally {
-            setLoading(false);
+            setLoading(false); // Only set loading to false on error
         }
+        // Don't set loading to false in finally - let the page reload handle it
     };
 
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
