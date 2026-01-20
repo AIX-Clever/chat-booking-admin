@@ -38,6 +38,7 @@ import { format } from 'date-fns';
 import { es, enUS, ptBR } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import { useToast } from '../../components/common/ToastContext';
 
 // --- Types ---
 interface TimeWindow {
@@ -84,6 +85,7 @@ export default function AvailabilityPage() {
     const t = useTranslations('availability');
     const tCommon = useTranslations('common');
     const locale = useLocale(); // Get current locale (es, en, pt)
+    const { showToast } = useToast();
 
     // Map locale to date-fns locale
     const dateLocaleMap: Record<string, Locale> = {
@@ -251,13 +253,13 @@ export default function AvailabilityPage() {
         const selectedDate = new Date(newExceptionDate + 'T00:00:00');
 
         if (selectedDate < today) {
-            alert(t('alertPastDate'));
+            showToast(t('alertPastDate'), 'error');
             return;
         }
 
         // Check for duplicates
         if (exceptions.some(ex => ex.date === newExceptionDate)) {
-            alert(t('alertDuplicateDate'));
+            showToast(t('alertDuplicateDate'), 'warning');
             return;
         }
 
@@ -362,10 +364,10 @@ export default function AvailabilityPage() {
             await Promise.all([...schedulePromises, exceptionsPromise]);
 
             setIsSaved(true);
-            alert(t('alertSaveSuccess'));
+            showToast(t('alertSaveSuccess'), 'success');
         } catch (error: any) {
             console.error('Error saving availability:', error);
-            alert(t('alertSaveError'));
+            showToast(t('alertSaveError'), 'error');
         } finally {
             setLoading(false);
         }

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 import AmplifyProvider from '../components/AmplifyProvider';
 import { TenantProvider } from '../context/TenantContext';
 import LocaleProvider from '../providers/LocaleProvider';
+import { ToastProvider } from '../components/common/ToastContext';
 
 export default function RootLayout({
     children,
@@ -27,7 +28,9 @@ export default function RootLayout({
                     <TenantProvider>
                         <LocaleProvider>
                             <ThemeRegistry>
-                                <MainLayout>{children}</MainLayout>
+                                <ToastProvider>
+                                    <MainLayout>{children}</MainLayout>
+                                </ToastProvider>
                             </ThemeRegistry>
                         </LocaleProvider>
                     </TenantProvider>
@@ -36,3 +39,4 @@ export default function RootLayout({
         </html>
     );
 }
+
