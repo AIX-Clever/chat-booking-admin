@@ -266,7 +266,6 @@ export default function ServicesPage() {
                         input: {
                             name: newCategory,
                             description: '',
-                            isActive: true,
                             displayOrder: categories.length + 1
                         }
                     },
