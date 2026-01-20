@@ -877,7 +877,9 @@ export default function BookingsPage() {
     const statusFilteredBookings = bookings.filter(b => {
         const matchesSearch = b.clientName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'all' || b.status === filterStatus;
-        const matchesRoom = filterRoom === 'all' || b.roomId === filterRoom;
+        // Room filter: handle empty roomId (null/undefined) as a valid filter option
+        const matchesRoom = filterRoom === 'all' ||
+            (filterRoom === 'no_room' ? !b.roomId : b.roomId === filterRoom);
         return matchesSearch && matchesStatus && matchesRoom;
     });
 
