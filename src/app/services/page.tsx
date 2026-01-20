@@ -59,6 +59,7 @@ interface Room {
     roomId: string;
     name: string;
     status: string;
+    isVirtual?: boolean;
 }
 
 interface Category {
@@ -507,7 +508,7 @@ export default function ServicesPage() {
                             </FormGroup>
                         </Box>
 
-                        {formData.locationType?.includes('PHYSICAL') && (
+                        {(formData.locationType?.includes('PHYSICAL') || formData.locationType?.includes('ONLINE')) && (
                             <TextField
                                 label="Required Rooms (Optional)"
                                 select
@@ -528,11 +529,30 @@ export default function ServicesPage() {
                                     setFormData({ ...formData, requiredRoomIds: val as string[] });
                                 }}
                             >
-                                {rooms.map((room) => (
-                                    <MenuItem key={room.roomId} value={room.roomId}>
-                                        {room.name}
-                                    </MenuItem>
-                                ))}
+                                {rooms
+                                    .filter(room => {
+                                        // Filter based on selected locationType
+                                        const hasPhysical = formData.locationType?.includes('PHYSICAL');
+                                        const hasOnline = formData.locationType?.includes('ONLINE');
+
+                                        if (hasPhysical && hasOnline) {
+                                            // Show all rooms
+                                            return true;
+                                        } else if (hasPhysical) {
+                                            // Show only physical rooms (isVirtual === false or undefined)
+                                            return !room.isVirtual;
+                                        } else if (hasOnline) {
+                                            // Show only virtual rooms (isVirtual === true)
+                                            return room.isVirtual === true;
+                                        }
+                                        return true;
+                                    })
+                                    .map((room) => (
+                                        <MenuItem key={room.roomId} value={room.roomId}>
+                                            {room.name}
+                                        </MenuItem>
+                                    ))
+                                }
                             </TextField>
                         )}
 
