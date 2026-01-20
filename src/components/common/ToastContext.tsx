@@ -1,14 +1,16 @@
-import * as React from 'react';
+'use client';
+
+import React, { createContext, useContext, useState, useCallback, ReactNode, SyntheticEvent } from 'react';
 import { Snackbar, Alert, AlertColor } from '@mui/material';
 
 interface ToastContextType {
     showToast: (message: string, severity?: AlertColor) => void;
 }
 
-const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const useToast = () => {
-    const context = React.useContext(ToastContext);
+    const context = useContext(ToastContext);
     if (!context) {
         throw new Error('useToast must be used within a ToastProvider');
     }
@@ -16,21 +18,21 @@ export const useToast = () => {
 };
 
 interface ToastProviderProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState('');
-    const [severity, setSeverity] = React.useState<AlertColor>('success');
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const [severity, setSeverity] = useState<AlertColor>('success');
 
-    const showToast = React.useCallback((msg: string, sev: AlertColor = 'success') => {
+    const showToast = useCallback((msg: string, sev: AlertColor = 'success') => {
         setMessage(msg);
         setSeverity(sev);
         setOpen(true);
     }, []);
 
-    const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (_event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
