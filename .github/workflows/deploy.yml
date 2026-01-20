@@ -49,4 +49,5 @@ jobs:
         working-directory: infra
         run: npx cdk deploy --all --require-approval never
         env:
-          ENV: ${{ github.ref_name }}
+          ENV: dev # Always deploy to dev environment in current AWS account
+
