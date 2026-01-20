@@ -33,7 +33,10 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     CircularProgress,
-    Tooltip
+    Tooltip,
+    Menu,
+    ListItemIcon,
+    ListItemText
     // FormControl // Unused
 
 } from '@mui/material';
@@ -55,6 +58,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import TodayIcon from '@mui/icons-material/Today';
 
 // --- Types ---
 type BookingStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed' | 'no_show';
@@ -434,8 +438,12 @@ export default function BookingsPage() {
 
 
     // Calendar State
-    const [viewMode, setViewMode] = React.useState<ViewMode>('list');
+    const [viewMode, setViewMode] = React.useState<ViewMode>('week'); // Default to week view
     const [currentDate, setCurrentDate] = React.useState(new Date());
+
+    // Context menu for quick status update
+    const [statusMenuAnchor, setStatusMenuAnchor] = React.useState<null | HTMLElement>(null);
+    const [statusMenuBooking, setStatusMenuBooking] = React.useState<Booking | null>(null);
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear();
@@ -473,6 +481,74 @@ export default function BookingsPage() {
         }
     };
 
+    const handleToday = () => {
+        setCurrentDate(new Date());
+    };
+
+    const handleSlotClick = (date: Date, time?: string) => {
+        const selectedDateTime = new Date(date);
+
+        if (time) {
+            const [hours, minutes] = time.split(':').map(Number);
+            selectedDateTime.setHours(hours, minutes, 0, 0);
+        } else {
+            selectedDateTime.setHours(9, 0, 0, 0);
+        }
+
+        setNewBookingData({
+            clientName: '',
+            clientEmail: '',
+            clientPhone: '',
+            serviceId: '',
+            providerId: '',
+            date: selectedDateTime.toISOString().split('T')[0],
+            time: `${String(selectedDateTime.getHours()).padStart(2, '0')}:${String(selectedDateTime.getMinutes()).padStart(2, '0')}`,
+            notes: ''
+        });
+        setNewBookingOpen(true);
+    };
+
+    const handleContextMenu = (event: React.MouseEvent, booking: Booking) => {
+        event.preventDefault();
+        setStatusMenuAnchor(event.currentTarget as HTMLElement);
+        setStatusMenuBooking(booking);
+    };
+
+    const handleQuickStatusChange = async (newStatus: string) => {
+        if (!statusMenuBooking) return;
+
+        try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
+            await client.graphql({
+                query: UPDATE_BOOKING_STATUS,
+                variables: {
+                    bookingId: statusMenuBooking.id,
+                    status: newStatus.toUpperCase()
+                },
+                authToken: token
+            });
+
+            // Update local state
+            setBookings(prev => prev.map(b =>
+                b.id === statusMenuBooking.id
+                    ? { ...b, status: newStatus as BookingStatus }
+                    : b
+            ));
+
+            // Update selected booking if in detail dialog
+            if (selectedBooking?.id === statusMenuBooking.id) {
+                setSelectedBooking(prev => prev ? { ...prev, status: newStatus as BookingStatus } : null);
+            }
+
+            setStatusMenuAnchor(null);
+            setStatusMenuBooking(null);
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
     const renderCalendar = () => {
         const daysInMonth = getDaysInMonth(currentDate);
         const firstDay = getFirstDayOfMonth(currentDate);
@@ -488,8 +564,21 @@ export default function BookingsPage() {
             const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const dayBookings = statusFilteredBookings.filter(b => b.start.startsWith(dateStr));
 
+            const dayDate = new Date(`${dateStr}T00:00:00`);
+
             days.push(
-                <Grid item xs={1.7} key={day} sx={{ height: 120, border: 1, borderColor: 'divider', p: 1, overflow: 'hidden' }}>
+                <Grid
+                    item
+                    xs={1.7}
+                    key={day}
+                    sx={{ height: 120, border: 1, borderColor: 'divider', p: 1, overflow: 'hidden', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}
+                    onClick={(e) => {
+                        // Only trigger if clicking empty space, not a booking chip
+                        if (e.target === e.currentTarget || (e.target as HTMLElement).closest('.MuiTypography-root')) {
+                            handleSlotClick(dayDate);
+                        }
+                    }}
+                >
                     <Typography variant="caption" sx={{ fontWeight: 'bold' }}>{day}</Typography>
                     <Stack spacing={0.5} sx={{ mt: 1 }}>
                         {dayBookings.map(b => {
@@ -500,6 +589,7 @@ export default function BookingsPage() {
                                     label={`${new Date(b.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${b.clientName}`}
                                     size="small"
                                     onClick={() => handleViewDetail(b)}
+                                    onContextMenu={(e) => { e.stopPropagation(); handleContextMenu(e, b); }}
                                     sx={{
                                         fontSize: '0.65rem',
                                         height: 20,
@@ -524,9 +614,14 @@ export default function BookingsPage() {
             <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Button onClick={handlePrev} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
-                    <Typography variant="h6">
-                        {currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Button onClick={handleToday} startIcon={<TodayIcon />} variant="outlined" size="small">
+                            Hoy
+                        </Button>
+                        <Typography variant="h6">
+                            {currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                        </Typography>
+                    </Box>
                     <Button onClick={handleNext} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
                 </Box>
                 {/* Weekday Headers */}
@@ -591,9 +686,14 @@ export default function BookingsPage() {
                 {/* Header Navigation */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Button onClick={handlePrev} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
-                    <Typography variant="h6">
-                        {`Semana del ${monday.getDate()} de ${monday.toLocaleDateString('default', { month: 'long' })}`}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Button onClick={handleToday} startIcon={<TodayIcon />} variant="outlined" size="small">
+                            Hoy
+                        </Button>
+                        <Typography variant="h6">
+                            {`Semana del ${monday.getDate()} de ${monday.toLocaleDateString('default', { month: 'long' })}`}
+                        </Typography>
+                    </Box>
                     <Button onClick={handleNext} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
                 </Box>
 
@@ -663,7 +763,20 @@ export default function BookingsPage() {
                                     </Box>
 
                                     {/* Grid Content */}
-                                    <Box sx={{ position: 'relative', height: TOTAL_HEIGHT, bgcolor: isToday ? 'action.hover' : 'background.paper' }}>
+                                    <Box
+                                        sx={{ position: 'relative', height: TOTAL_HEIGHT, bgcolor: isToday ? 'action.hover' : 'background.paper', cursor: 'pointer' }}
+                                        onClick={(e) => {
+                                            // Calculate clicked time based on mouse position
+                                            const rect = e.currentTarget.getBoundingClientRect();
+                                            const y = e.clientY - rect.top;
+                                            const minutesFromStart = Math.floor(y);
+                                            const totalMinutes = START_HOUR * 60 + minutesFromStart;
+                                            const hours = Math.floor(totalMinutes / 60);
+                                            const minutes = Math.floor((totalMinutes % 60) / 15) * 15; // Round to nearest 15 min
+                                            const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+                                            handleSlotClick(dayDate, timeStr);
+                                        }}
+                                    >
 
                                         {/* Horizontal Grid Lines */}
                                         {Array.from({ length: END_HOUR - START_HOUR }).map((_, i) => (
@@ -704,6 +817,7 @@ export default function BookingsPage() {
                                                     <Paper
                                                         elevation={3}
                                                         onClick={() => handleViewDetail(b)}
+                                                        onContextMenu={(e) => handleContextMenu(e, b)}
                                                         sx={{
                                                             ...style,
                                                             p: 0.5,
@@ -1326,6 +1440,46 @@ export default function BookingsPage() {
                     </Button>
                 </DialogActions>
             </Dialog >
+
+            {/* Quick Status Update Context Menu */}
+            <Menu
+                anchorEl={statusMenuAnchor}
+                open={Boolean(statusMenuAnchor)}
+                onClose={() => { setStatusMenuAnchor(null); setStatusMenuBooking(null); }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <MenuItem onClick={() => handleQuickStatusChange('confirmed')}>
+                    <ListItemIcon>
+                        <CheckCircleIcon fontSize="small" color="success" />
+                    </ListItemIcon>
+                    <ListItemText>{t('status.confirmed')}</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => handleQuickStatusChange('pending')}>
+                    <ListItemIcon>
+                        <AccessTimeIcon fontSize="small" color="warning" />
+                    </ListItemIcon>
+                    <ListItemText>{t('status.pending')}</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => handleQuickStatusChange('cancelled')}>
+                    <ListItemIcon>
+                        <BlockIcon fontSize="small" color="error" />
+                    </ListItemIcon>
+                    <ListItemText>{t('status.cancelled')}</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => handleQuickStatusChange('completed')}>
+                    <ListItemIcon>
+                        <CheckCircleIcon fontSize="small" color="info" />
+                    </ListItemIcon>
+                    <ListItemText>{t('status.completed')}</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => handleQuickStatusChange('no_show')}>
+                    <ListItemIcon>
+                        <PersonOffIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>{t('status.noShow')}</ListItemText>
+                </MenuItem>
+            </Menu>
         </>
     );
 }
