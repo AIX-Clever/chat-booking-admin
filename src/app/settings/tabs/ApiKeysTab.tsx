@@ -42,10 +42,11 @@ interface ApiKey {
     lastUsedAt?: string;
 }
 
+const client = generateClient();
+
 export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
     const t = useTranslations('settings.apiKeys');
     const tCommon = useTranslations('common');
-    const client = generateClient();
 
     const [apiKeys, setApiKeys] = React.useState<ApiKey[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -69,7 +70,7 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
         } finally {
             setLoading(false);
         }
-    }, [client]);
+    }, []); // Remove 'client' dependency
 
     React.useEffect(() => {
         fetchKeys();
