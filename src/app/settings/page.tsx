@@ -231,17 +231,13 @@ export default function SettingsPage() {
             // Refresh tenant context so other pages see the updated settings
             await refreshTenant();
 
-            // Give backend a moment to propagate and reload to apply theme changes globally
-            // Keep loading state true during reload
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
+            // Settings saved successfully - stop loading
+            setLoading(false);
         } catch (error) {
             console.error('Error saving settings:', error);
             setError(t('saveError'));
-            setLoading(false); // Only set loading to false on error
+            setLoading(false);
         }
-        // Don't set loading to false in finally - let the page reload handle it
     };
 
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
