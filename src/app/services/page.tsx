@@ -160,11 +160,15 @@ export default function ServicesPage() {
             return false;
         });
 
-        // Update if changed
-        if (compatibleRoomIds.length !== formData.requiredRoomIds.length) {
+        // Update only if the filtered array is different
+        const arraysDifferent = compatibleRoomIds.length !== formData.requiredRoomIds.length ||
+            !compatibleRoomIds.every((id, index) => id === formData.requiredRoomIds[index]);
+
+        if (arraysDifferent) {
             setFormData(prev => ({ ...prev, requiredRoomIds: compatibleRoomIds }));
         }
-    }, [formData.locationType, formData.requiredRoomIds, rooms]);
+    }, [formData.locationType, rooms]); // Removed formData.requiredRoomIds from dependencies to prevent loop
+
 
 
     const fetchServices = async () => {
