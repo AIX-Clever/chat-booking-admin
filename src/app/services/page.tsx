@@ -135,6 +135,38 @@ export default function ServicesPage() {
         }
     };
 
+    // Auto-clean incompatible rooms when modality changes
+    React.useEffect(() => {
+        if (!formData.requiredRoomIds || formData.requiredRoomIds.length === 0) return;
+
+        const hasPhysical = formData.locationType?.includes('PHYSICAL');
+        const hasOnline = formData.locationType?.includes('ONLINE');
+
+        // Filter out incompatible rooms
+        const compatibleRoomIds = formData.requiredRoomIds.filter(roomId => {
+            const room = rooms.find(r => r.roomId === roomId);
+            if (!room) return false;
+
+            if (hasPhysical && hasOnline) {
+                // Both modes: keep all rooms
+                return true;
+            } else if (hasPhysical && !hasOnline) {
+                // Only physical: remove virtual rooms
+                return !room.isVirtual;
+            } else if (!hasPhysical && hasOnline) {
+                // Only online: keep only virtual rooms
+                return room.isVirtual === true;
+            }
+            return false;
+        });
+
+        // Update if changed
+        if (compatibleRoomIds.length !== formData.requiredRoomIds.length) {
+            setFormData(prev => ({ ...prev, requiredRoomIds: compatibleRoomIds }));
+        }
+    }, [formData.locationType, formData.requiredRoomIds, rooms]);
+
+
     const fetchServices = async () => {
         setLoading(true);
         try {
@@ -473,7 +505,7 @@ export default function ServicesPage() {
                         </TextField>
 
                         <Box sx={{ mt: 2 }}>
-                            <Typography variant="caption" color="text.secondary">Modality</Typography>
+                            <Typography variant="caption" color="text.secondary">{t('modality')}</Typography>
                             <FormGroup row>
                                 <FormControlLabel
                                     control={
@@ -488,7 +520,7 @@ export default function ServicesPage() {
                                             }}
                                         />
                                     }
-                                    label="Online"
+                                    label={t('online')}
                                 />
                                 <FormControlLabel
                                     control={
@@ -503,14 +535,14 @@ export default function ServicesPage() {
                                             }}
                                         />
                                     }
-                                    label="Physical (In-Person)"
+                                    label={t('physical')}
                                 />
                             </FormGroup>
                         </Box>
 
                         {(formData.locationType?.includes('PHYSICAL') || formData.locationType?.includes('ONLINE')) && (
                             <TextField
-                                label="Required Rooms (Optional)"
+                                label={t('requiredRooms')}
                                 select
                                 fullWidth
                                 SelectProps={{
