@@ -66,6 +66,7 @@ export const UPDATE_TENANT = `
     updateTenant(input: $input) {
       tenantId
       name
+      slug
       plan
       billingEmail
     }
@@ -297,6 +298,7 @@ export const GET_TENANT = `
     getTenant(tenantId: $tenantId) {
       tenantId
       name
+      slug
       status
       plan
       billingEmail

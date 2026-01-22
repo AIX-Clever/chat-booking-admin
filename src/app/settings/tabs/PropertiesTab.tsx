@@ -7,12 +7,17 @@ import {
     Button,
     Typography,
     Box,
-    Grid
+    Grid,
+    InputAdornment
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useTranslations } from 'next-intl';
 
-/* --- Constants could be moved to a shared config --- */
+// Also import internal preview
+import WidgetPreview from '../components/WidgetPreview';
+
 const COLOR_PRESETS = [
     { name: 'Default Blue', value: '#2563eb' },
     { name: 'Royal Purple', value: '#7c3aed' },
@@ -26,16 +31,73 @@ interface PropertiesTabProps {
     widgetConfig: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setWidgetConfig: (config: any) => void;
+    slug: string;
+    setSlug: (slug: string) => void;
     onSave: () => void;
 }
 
-export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }: PropertiesTabProps) {
+export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, setSlug, onSave }: PropertiesTabProps) {
     const t = useTranslations('settings.general');
+    const [copySuccess, setCopySuccess] = React.useState(false);
+
+    const publicLink = `https://link.holalucia.cl/${slug || 'tu-slug'}`;
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(publicLink);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+    };
 
     return (
         <Grid container spacing={4}>
             <Grid item xs={12} md={7}>
                 <Stack spacing={3}>
+
+                    {/* Public Page Section */}
+
+                    <Typography variant="h6">Public Booking Page</Typography>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                        <TextField
+                            label="Profile URL (Slug)"
+                            value={slug}
+                            onChange={(e) => {
+                                const val = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                                setSlug(val);
+                            }}
+                            helperText={`Your page will be at: ${publicLink}`}
+                            fullWidth
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">link.holalucia.cl/</InputAdornment>,
+                            }}
+                        />
+                    </Stack>
+                    <Stack direction="row" spacing={1}>
+                        <Button
+                            variant="outlined"
+                            startIcon={<ContentCopyIcon />}
+                            onClick={handleCopyLink}
+                            size="small"
+                        >
+                            {copySuccess ? 'Copied!' : 'Copy Link'}
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            startIcon={<OpenInNewIcon />}
+                            href={publicLink}
+                            target="_blank"
+                            size="small"
+                            disabled={!slug}
+                        >
+                            View Page
+                        </Button>
+                    </Stack>
+                    <Typography variant="caption" color="text.secondary">
+                        Share this link with your clients so they can book appointments with you.
+                    </Typography>
+
+                    <Box sx={{ my: 2, height: 1, bgcolor: 'divider' }} />
+
+                    {/* Branding Section */}
                     <div>
                         <Typography variant="subtitle2" gutterBottom>{t('primaryColor')}</Typography>
                         <Stack direction="row" spacing={2} alignItems="center">
@@ -91,7 +153,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                         label={t('language')}
                         value={widgetConfig.language}
                         onChange={(e) => setWidgetConfig({ ...widgetConfig, language: e.target.value })}
-                        helperText={t('languageHelper')} // Add this key or use hardcoded string for now
+                        helperText={t('languageHelper')}
                     >
                         <MenuItem value="es">{t('languages.es')}</MenuItem>
                         <MenuItem value="en">{t('languages.en')}</MenuItem>
@@ -121,24 +183,9 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, onSave }:
                     </Button>
                 </Stack>
             </Grid>
-            {/* We could move the Preview to a separate component too, but for now user said 'no redesign' so we keep structure similar but maybe cleaner */
-            /* Actually, the current page col-locates input and preview. I will separate the input part (PropertiesTab) and maybe keep Preview in page or pass it?
-               In the original code, they are side-by-side in a Grid.
-               PropertiesTabProps suggests only inputs.
-               Let's assume PropertiesTab includes the Preview if we want to match the tab content.
-               Yes, 'Tab 1: Widget & Branding' contains the Grid with Inputs AND Preview.
-            */}
             <Grid item xs={12} md={5}>
-                {/* We will need to import/recreate the preview here or pass it as children. 
-                    For simplicity, I'll copy the preview code here as well to keep the tab self-contained.
-                    Wait, preview needs imports too (Avatar, Icons).
-                */}
                 <WidgetPreview widgetConfig={widgetConfig} />
             </Grid>
         </Grid>
     );
 }
-
-// Minimal Preview Component internal to this file to avoid file explosion, or I can put it in a separate file if preferred.
-// Let's create a separate WidgetPreview.tsx to make this file cleaner.
-import WidgetPreview from '../components/WidgetPreview';

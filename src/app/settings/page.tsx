@@ -76,8 +76,8 @@ export default function SettingsPage() {
     const [successMsg, setSuccessMsg] = React.useState<string | null>(null);
 
     // Tenant State
-    // const [tenantId, setTenantId] = React.useState<string>(''); // Removed unused state
-    const [currentPlan, setCurrentPlan] = React.useState('PRO'); // Default fallback
+    const [currentPlan, setCurrentPlan] = React.useState('PRO');
+    const [slug, setSlug] = React.useState('');
 
     // Widget State
     const [widgetConfig, setWidgetConfig] = React.useState({
@@ -114,6 +114,8 @@ export default function SettingsPage() {
             if (tenant) {
                 // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
+                if (tenant.slug) setSlug(tenant.slug);
+
                 if (tenant.settings) {
                     try {
                         let settings = tenant.settings;
@@ -135,12 +137,11 @@ export default function SettingsPage() {
                             }
                         }
 
-                        console.log("Final Parsed Settings:", settings);
-
                         // Compatibility with Onboarding data structure
                         if (settings.theme && settings.theme.primaryColor && !settings.widgetConfig) {
                             setWidgetConfig(prev => ({
                                 ...prev,
+                                ...settings.widgetConfig,
                                 primaryColor: settings.theme.primaryColor
                             }));
                         }
@@ -171,25 +172,21 @@ export default function SettingsPage() {
                         }
                         if (settings.profile) {
                             setProfile(settings.profile);
-                        } else {
-                            // console.warn("Profile missing in settings object:", settings);
                         }
                     } catch (e) {
                         console.warn("Failed to parse tenant settings JSON", e);
                     }
                 }
             } else {
-                // Should not happen if backend throws on not found, but handle empty
                 console.warn("No tenant data returned");
             }
 
         } catch (err: unknown) {
             console.error('Error fetching tenant data:', err);
-            // Don't block UI on error, just log it. Data will be defaults.
         } finally {
             setLoading(false);
         }
-    }, [client]); // Empty dependencies - client is stable from generateClient()
+    }, [client]);
 
     React.useEffect(() => {
         setHasMounted(true);
@@ -199,7 +196,7 @@ export default function SettingsPage() {
     const handleSaveSettings = async () => {
         try {
             setLoading(true);
-            setError(null); // Clear any previous errors
+            setError(null);
 
             const settingsObj = {
                 widgetConfig,
@@ -219,6 +216,7 @@ export default function SettingsPage() {
                 variables: {
                     input: {
                         name: undefined, // Don't update name
+                        slug: slug,      // Update slug
                         billingEmail: undefined,
                         settings: settingsJson
                     }
@@ -289,6 +287,8 @@ export default function SettingsPage() {
                             <PropertiesTab
                                 widgetConfig={widgetConfig}
                                 setWidgetConfig={setWidgetConfig}
+                                slug={slug}
+                                setSlug={setSlug}
                                 onSave={handleSaveSettings}
                             />
                         </CustomTabPanel>
