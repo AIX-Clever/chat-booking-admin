@@ -19,6 +19,9 @@ import { useTranslations } from 'next-intl';
 
 interface ProfileData {
     centerName: string;
+    profession: string;
+    specializations: string[];
+    operatingHours: string;
     legalName: string;
     taxId: string;
     phone1: string;
@@ -37,7 +40,9 @@ interface ProfileData {
 }
 
 interface IdentityTabProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     profile: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setProfile: (profile: any) => void;
     onSave: () => void;
 }
@@ -73,6 +78,9 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
     // Local state to handle form inputs before updating parent state
     const [formData, setFormData] = useState<ProfileData>({
         centerName: '',
+        profession: '',
+        specializations: [],
+        operatingHours: '',
         legalName: '',
         taxId: '',
         phone1: '',
@@ -141,6 +149,37 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                                 onChange={(e) => handleChange('centerName', e.target.value)}
                                 placeholder="Ej: Centro Médico Salud Total"
                                 required
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label={t('profession') || 'Título Profesional'}
+                                value={formData.profession}
+                                onChange={(e) => handleChange('profession', e.target.value)}
+                                placeholder="Ej: Psicólogo Clínico / Centro Dental"
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                fullWidth
+                                label={t('specializations') || 'Especialidades'}
+                                value={formData.specializations ? formData.specializations.join(', ') : ''}
+                                onChange={(e) => handleChange('specializations', e.target.value.split(',').map(s => s.trim()))}
+                                placeholder="Ej: Ansiedad, Depresión (separar por comas)"
+                                helperText="Separa las especialidades con comas"
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label={t('operatingHours') || 'Horarios de Atención'}
+                                value={formData.operatingHours}
+                                onChange={(e) => handleChange('operatingHours', e.target.value)}
+                                placeholder="Ej: Lunes a Viernes 09:00 - 19:00"
                             />
                         </Grid>
 
