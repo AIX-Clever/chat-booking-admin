@@ -11,8 +11,9 @@ import {
     Divider,
     MenuItem,
     InputAdornment,
-    Tooltip
+    Tooltip,
 } from '@mui/material';
+import Image from 'next/image';
 import InfoIcon from '@mui/icons-material/Info';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useTranslations } from 'next-intl';
@@ -357,10 +358,11 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             borderColor: 'divider'
                         }}>
                             {formData.logoUrl ? (
-                                <img
+                                <Image
                                     src={formData.logoUrl}
                                     alt="Logo"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    fill
+                                    style={{ objectFit: 'cover' }}
                                 />
                             ) : (
                                 <BusinessIcon sx={{ fontSize: 60, color: 'text.secondary' }} />
