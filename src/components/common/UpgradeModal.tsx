@@ -1,15 +1,13 @@
-
+```
 import React from 'react';
 import {
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogActions,
     Button,
     Typography,
     Box,
     Chip,
-    useTheme,
     IconButton
 } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -65,11 +63,10 @@ const FEATURE_CONFIG: Record<UpgradeFeature, {
 };
 
 export default function UpgradeModal({ open, onClose, feature, currentPlan }: UpgradeModalProps) {
-    const theme = useTheme();
     const config = FEATURE_CONFIG[feature];
 
     // Determine target plan based on current (Simple logic for now)
-    const targetPlan = 'PRO';
+    const targetPlan = currentPlan === 'LITE' ? 'PRO' : 'BUSINESS';
 
     return (
         <Dialog
@@ -113,7 +110,7 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                     {config.title}
                 </Typography>
                 <Chip
-                    label={`Upgrade to ${targetPlan}`}
+                    label={`Upgrade to ${ targetPlan } `}
                     size="small"
                     sx={{
                         mt: 1,
