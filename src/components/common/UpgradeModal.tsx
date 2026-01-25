@@ -110,7 +110,7 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                     {config.title}
                 </Typography>
                 <Chip
-                    label={`Upgrade to ${ targetPlan } `}
+                    label={'Upgrade to ' + targetPlan}
                     size="small"
                     sx={{
                         mt: 1,
