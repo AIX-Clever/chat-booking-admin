@@ -35,6 +35,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import { useTenant } from '../../context/TenantContext';
 import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER, RESET_USER_PASSWORD } from '../../graphql/user-queries';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import UpgradeModal from '../../components/common/UpgradeModal';
 
 interface TenantUser {
     userId: string;
@@ -63,6 +64,7 @@ export default function UsersPage() {
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<TenantUser | null>(null);
+    const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
     // Reset Password State
     const [resetDialogOpen, setResetDialogOpen] = useState(false);
@@ -270,8 +272,14 @@ export default function UsersPage() {
                 <Button
                     variant="contained"
                     startIcon={<PersonAddIcon />}
-                    onClick={() => setInviteDialogOpen(true)}
-                    disabled={!canInviteMore}
+                    onClick={() => {
+                        if (canInviteMore) {
+                            setInviteDialogOpen(true);
+                        } else {
+                            setUpgradeModalOpen(true);
+                        }
+                    }}
+                // Removed disabled so it's clickable for upgrade
                 >
                     Invite User
                 </Button>
@@ -457,6 +465,13 @@ export default function UsersPage() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <UpgradeModal
+                open={upgradeModalOpen}
+                onClose={() => setUpgradeModalOpen(false)}
+                feature="TEAM"
+                currentPlan={plan}
+            />
         </Box>
     );
 }
