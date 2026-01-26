@@ -59,6 +59,7 @@ interface Provider {
     active: boolean;
     photoUrl?: string; // Optimized WebP URL
     photoUrlThumbnail?: string; // Thumbnail URL
+    hasGoogleCalendar?: boolean;
     aiDrivers: {
         traits: string[];
         languages: string[];
@@ -198,6 +199,7 @@ export default function ProvidersPage() {
                     active: p.available,
                     photoUrl: p.photoUrl,
                     photoUrlThumbnail: p.photoUrlThumbnail,
+                    hasGoogleCalendar: p.hasGoogleCalendar,
                     aiDrivers: aiDrivers
                 };
             });
@@ -728,7 +730,7 @@ export default function ProvidersPage() {
                             <GoogleCalendarCard
                                 providerId={formData.id}
                                 tenantId={tenantId}
-                                isConnected={false} // TODO: Fetch real status
+                                isConnected={!!formData.hasGoogleCalendar}
                                 onDisconnect={() => { alert("Disconnect feature coming soon"); }}
                             />
                         </Box>

@@ -11,6 +11,7 @@ export const LIST_PROVIDERS = `
       photoUrlThumbnail
       metadata
       available
+      hasGoogleCalendar
     }
   }
 `;
@@ -265,6 +266,7 @@ export const CREATE_PROVIDER = `
       photoUrlThumbnail
       metadata
       available
+      hasGoogleCalendar
     }
   }
 `;
@@ -281,6 +283,7 @@ export const UPDATE_PROVIDER = `
       photoUrlThumbnail
       metadata
       available
+      hasGoogleCalendar
     }
   }
 `;

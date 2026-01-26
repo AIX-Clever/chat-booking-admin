@@ -64,7 +64,18 @@ export default function GoogleCalendarCard({ providerId, tenantId, isConnected, 
                         </Box>
                     </Stack>
                     <Box>
-                        {isConnected ? (
+                        {!providerId ? (
+                            <Typography variant="body2" sx={{
+                                color: 'common.white',
+                                fontStyle: 'italic',
+                                bgcolor: 'primary.main',
+                                p: 1.5,
+                                borderRadius: 1,
+                                textAlign: 'center'
+                            }}>
+                                Registra el profesional primero para conectar su calendario.
+                            </Typography>
+                        ) : isConnected ? (
                             <Stack direction="row" spacing={1} alignItems="center">
                                 <Chip
                                     icon={<CheckCircleIcon />}
