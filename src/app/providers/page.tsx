@@ -40,6 +40,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
+
+// --- Types ---
 
 // --- Types ---
 interface Service {
@@ -144,10 +147,25 @@ export default function ProvidersPage() {
         }
     });
 
+    const [tenantId, setTenantId] = React.useState<string>('');
+
     React.useEffect(() => {
         fetchProviders();
         fetchServices();
+        fetchTenantId();
     }, []);
+
+    const fetchTenantId = async () => {
+        try {
+            const session = await fetchAuthSession();
+            const payload = session.tokens?.idToken?.payload;
+            if (payload && payload['custom:tenantId']) {
+                setTenantId(payload['custom:tenantId'] as string);
+            }
+        } catch (e) {
+            console.error("Error fetching tenant ID", e);
+        }
+    }
 
     const fetchProviders = async () => {
         try {
@@ -525,6 +543,7 @@ export default function ProvidersPage() {
                         <Tab label={t('dialog.tabs.general')} />
                         <Tab label={t('dialog.tabs.services')} />
                         <Tab label={t('dialog.tabs.aiContext')} />
+                        <Tab label="Integraciones" />
                     </Tabs>
                 </Box>
                 <DialogContent dividers={false} sx={{ minHeight: 320 }}>
@@ -638,6 +657,7 @@ export default function ProvidersPage() {
                     {/* Tab 3: AI Context */}
                     <CustomTabPanel value={tabValue} index={2}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            {/* ... Content of Tab 2 ... */}
                             <Autocomplete
                                 multiple
                                 freeSolo
@@ -698,6 +718,18 @@ export default function ProvidersPage() {
                                         placeholder={t('dialog.aiContext.languagesPlaceholder')}
                                     />
                                 )}
+                            />
+                        </Box>
+                    </CustomTabPanel>
+
+                    {/* Tab 4: Integrations */}
+                    <CustomTabPanel value={tabValue} index={3}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            <GoogleCalendarCard
+                                providerId={formData.id}
+                                tenantId={tenantId}
+                                isConnected={false} // TODO: Fetch real status
+                                onDisconnect={() => { alert("Disconnect feature coming soon"); }}
                             />
                         </Box>
                     </CustomTabPanel>
