@@ -8,7 +8,6 @@ import {
     Button,
     Typography,
     Grid,
-    Divider,
     MenuItem,
     InputAdornment,
     Tooltip,
@@ -136,194 +135,203 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
         <Box sx={{ maxWidth: '100%' }}>
             <Grid container spacing={4}>
                 {/* --- Left Column: General Info --- */}
+                {/* --- Left Column: Main Configuration --- */}
                 <Grid item xs={12} md={8}>
-                    <Typography variant="h6" gutterBottom>
-                        {t('generalInfo')}
-                    </Typography>
+                    {/* 1. BRANDING & BASIC INFO */}
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <BusinessIcon fontSize="small" /> {t('branding')}
+                        </Typography>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label={t('centerName')}
+                                    value={formData.centerName}
+                                    onChange={(e) => handleChange('centerName', e.target.value)}
+                                    placeholder="Ej: Centro de Salud Lucía / Clínica Dental Acme"
+                                    required
+                                />
+                            </Grid>
+                        </Grid>
+                    </Box>
 
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label={t('centerName')}
-                                value={formData.centerName}
-                                onChange={(e) => handleChange('centerName', e.target.value)}
-                                placeholder="Ej: Centro Médico Salud Total"
-                                required
-                            />
+                    {/* 2. CONTACT INFO */}
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h6" gutterBottom color="primary.main">
+                            {t('contact')}
+                        </Typography>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('phone1')}
+                                    value={formData.phone1}
+                                    onChange={(e) => handleChange('phone1', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('phone2')}
+                                    value={formData.phone2}
+                                    onChange={(e) => handleChange('phone2', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('email')}
+                                    value={formData.email}
+                                    onChange={(e) => handleChange('email', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('website')}
+                                    value={formData.website}
+                                    onChange={(e) => handleChange('website', e.target.value)}
+                                    placeholder="https://..."
+                                />
+                            </Grid>
                         </Grid>
+                    </Box>
 
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('profession') || 'Título Profesional'}
-                                value={formData.profession}
-                                onChange={(e) => handleChange('profession', e.target.value)}
-                                placeholder="Ej: Psicólogo Clínico / Centro Dental"
-                            />
+                    {/* 3. LOCATION & TIMEZONE */}
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h6" gutterBottom color="primary.main">
+                            {t('location')}
+                        </Typography>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label={t('address')}
+                                    value={formData.address.street}
+                                    onChange={(e) => handleAddressChange('street', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <TextField
+                                    fullWidth select
+                                    label={t('country')}
+                                    value={formData.address.country}
+                                    onChange={(e) => handleAddressChange('country', e.target.value)}
+                                >
+                                    {COUNTRIES.map((option) => (
+                                        <MenuItem key={option.code} value={option.code}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <TextField
+                                    fullWidth
+                                    label={t('regionState')}
+                                    value={formData.address.state}
+                                    onChange={(e) => handleAddressChange('state', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <TextField
+                                    fullWidth
+                                    label={t('city')}
+                                    value={formData.address.city}
+                                    onChange={(e) => handleAddressChange('city', e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth select
+                                    label={t('timezone')}
+                                    value={formData.timezone}
+                                    onChange={(e) => handleChange('timezone', e.target.value)}
+                                    helperText={t('timezoneHelper')}
+                                >
+                                    {TIMEZONES.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('operatingHours')}
+                                    value={formData.operatingHours}
+                                    onChange={(e) => handleChange('operatingHours', e.target.value)}
+                                    placeholder="Ej: Lunes a Viernes 09:00 - 19:00"
+                                />
+                            </Grid>
                         </Grid>
+                    </Box>
 
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('specializations') || 'Especialidades'}
-                                value={formData.specializations ? formData.specializations.join(', ') : ''}
-                                onChange={(e) => handleChange('specializations', e.target.value.split(',').map(s => s.trim()))}
-                                placeholder="Ej: Ansiedad, Depresión (separar por comas)"
-                                helperText="Separa las especialidades con comas"
-                            />
+                    {/* 4. AI CONTEXT */}
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h6" gutterBottom color="primary.main">
+                            IA Context (Identidad Escuchada)
+                        </Typography>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('profession')}
+                                    value={formData.profession}
+                                    onChange={(e) => handleChange('profession', e.target.value)}
+                                    placeholder="Ej: Salud y Bienestar / Asesoría Legal"
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('specializations')}
+                                    value={formData.specializations ? formData.specializations.join(', ') : ''}
+                                    onChange={(e) => handleChange('specializations', e.target.value.split(',').map(s => s.trim()))}
+                                    placeholder="Ej: Ortodoncia, Implantología / Derecho Civil, Laboral"
+                                    helperText={t('specializationsHelper')}
+                                />
+                            </Grid>
                         </Grid>
+                    </Box>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label={t('operatingHours') || 'Horarios de Atención'}
-                                value={formData.operatingHours}
-                                onChange={(e) => handleChange('operatingHours', e.target.value)}
-                                placeholder="Ej: Lunes a Viernes 09:00 - 19:00"
-                            />
+                    {/* 5. LEGAL & BILLING */}
+                    <Box sx={{ p: 3, bgcolor: 'action.hover', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                        <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <InfoIcon fontSize="small" /> {t('legal')}
+                        </Typography>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('legalName')}
+                                    value={formData.legalName}
+                                    onChange={(e) => handleChange('legalName', e.target.value)}
+                                    placeholder="Para fines de facturación"
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    fullWidth
+                                    label={t('taxId')}
+                                    value={formData.taxId}
+                                    onChange={(e) => handleChange('taxId', e.target.value)}
+                                    placeholder="RUT / RFC / CNPJ / CUIT"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <Tooltip title={t('taxIdTooltip')}>
+                                                    <InfoIcon color="action" fontSize="small" />
+                                                </Tooltip>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </Grid>
                         </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('legalName')}
-                                value={formData.legalName}
-                                onChange={(e) => handleChange('legalName', e.target.value)}
-                                placeholder="Ej: Inversiones Salud SpA"
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('taxId')}
-                                value={formData.taxId}
-                                onChange={(e) => handleChange('taxId', e.target.value)}
-                                placeholder="RUT / RFC / CNPJ / CUIT"
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <Tooltip title={t('taxIdTooltip')}>
-                                                <InfoIcon color="action" fontSize="small" />
-                                            </Tooltip>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('phone1')}
-                                value={formData.phone1}
-                                onChange={(e) => handleChange('phone1', e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('phone2')}
-                                value={formData.phone2}
-                                onChange={(e) => handleChange('phone2', e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('email')}
-                                value={formData.email}
-                                onChange={(e) => handleChange('email', e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                fullWidth
-                                label={t('website')}
-                                value={formData.website}
-                                onChange={(e) => handleChange('website', e.target.value)}
-                                placeholder="https://..."
-                            />
-                        </Grid>
-                    </Grid>
-
-                    <Divider sx={{ my: 4 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        {t('location')}
-                    </Typography>
-
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label={t('address')}
-                                value={formData.address.street}
-                                onChange={(e) => handleAddressChange('street', e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={4}>
-                            <TextField
-                                fullWidth
-                                select
-                                label={t('country')}
-                                value={formData.address.country}
-                                onChange={(e) => handleAddressChange('country', e.target.value)}
-                            >
-                                {COUNTRIES.map((option) => (
-                                    <MenuItem key={option.code} value={option.code}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-
-                        <Grid item xs={12} md={4}>
-                            <TextField
-                                fullWidth
-                                label={t('regionState')}
-                                value={formData.address.state}
-                                onChange={(e) => handleAddressChange('state', e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={4}>
-                            <TextField
-                                fullWidth
-                                label={t('city')}
-                                value={formData.address.city}
-                                onChange={(e) => handleAddressChange('city', e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={4}>
-                            <TextField
-                                fullWidth
-                                label={t('zipCode')}
-                                value={formData.address.zipCode}
-                                onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} md={8}>
-                            <TextField
-                                fullWidth
-                                select
-                                label={t('timezone')}
-                                value={formData.timezone}
-                                onChange={(e) => handleChange('timezone', e.target.value)}
-                                helperText={t('timezoneHelper')}
-                            >
-                                {TIMEZONES.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                    </Grid>
+                    </Box>
                 </Grid>
 
                 {/* --- Right Column: Logo & Branding --- */}
@@ -337,10 +345,10 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                         bgcolor: 'background.paper'
                     }}>
                         <Typography variant="subtitle1" gutterBottom fontWeight="medium">
-                            Logo del Centro
+                            {t('logoLabel')}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                            Se mostrará en el Widget y Correos
+                            {t('logoDescription')}
                         </Typography>
 
                         <Box sx={{
@@ -374,7 +382,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             variant="outlined"
                             fullWidth
                         >
-                            Subir Imagen
+                            {t('uploadButton')}
                             <input
                                 type="file"
                                 hidden
@@ -383,7 +391,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             />
                         </Button>
                         <Typography variant="caption" display="block" sx={{ mt: 1, color: 'text.disabled' }}>
-                            Recomendado: 500x500px, PNG o JPG
+                            {t('uploadRecommended')}
                         </Typography>
                     </Box>
                 </Grid>

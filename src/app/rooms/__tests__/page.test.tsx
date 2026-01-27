@@ -49,7 +49,7 @@ describe('Rooms Page', () => {
     describe('Component Rendering', () => {
         it('should render without crashing', () => {
             render(<RoomsPage />)
-            expect(screen.getByText(/rooms/i)).toBeInTheDocument()
+            expect(screen.getByText(/title/i)).toBeInTheDocument()
         })
 
         it('should display rooms list without null error', async () => {

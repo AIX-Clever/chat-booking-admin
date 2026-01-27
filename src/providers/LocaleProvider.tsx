@@ -35,6 +35,7 @@ export default function LocaleProvider({ children }: LocaleProviderProps) {
 
         const lang = detectLanguage();
         setLocale(lang);
+        document.documentElement.lang = lang;
 
         // Load messages dynamically
         import(`../../messages/${lang}.json`)
@@ -54,6 +55,7 @@ export default function LocaleProvider({ children }: LocaleProviderProps) {
             const customEvent = event as CustomEvent;
             const newLocale = customEvent.detail.locale;
             setLocale(newLocale);
+            document.documentElement.lang = newLocale;
             localStorage.setItem('lucia-language', newLocale);
 
             import(`../../messages/${newLocale}.json`)

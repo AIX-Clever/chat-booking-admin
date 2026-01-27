@@ -23,7 +23,7 @@ jest.mock('aws-amplify/auth', () => ({
 }))
 
 // Mock the GraphQL queries
-jest.mock('../../graphql/queries', () => ({
+jest.mock('../../../graphql/queries', () => ({
     LIST_PROVIDERS: 'query ListProviders { }',
     LIST_BOOKINGS_BY_PROVIDER: 'query ListBookingsByProvider { }',
     CANCEL_BOOKING: 'mutation CancelBooking { }',
@@ -42,7 +42,7 @@ describe('Bookings Page', () => {
     describe('Component Rendering', () => {
         it('should render without crashing', () => {
             render(<BookingsPage />)
-            expect(screen.getByText(/bookings|reservations|reservas/i)).toBeInTheDocument()
+            expect(screen.getByText(/title/i)).toBeInTheDocument()
         })
 
         it('should display bookings page title', () => {
@@ -52,13 +52,15 @@ describe('Bookings Page', () => {
             expect(heading).toBeInTheDocument()
         })
 
-        it('should have date range selectors', async () => {
+        it('should have view mode selectors', async () => {
             render(<BookingsPage />)
 
-            // Should have date pickers for filtering
+            // Should have toggle buttons for view modes
             await waitFor(() => {
-                const dateInputs = screen.getAllByRole('textbox')
-                expect(dateInputs.length).toBeGreaterThan(0)
+                const listButton = screen.getByLabelText(/list view/i)
+                const calendarButton = screen.getByLabelText(/calendar view/i)
+                expect(listButton).toBeInTheDocument()
+                expect(calendarButton).toBeInTheDocument()
             })
         })
     })

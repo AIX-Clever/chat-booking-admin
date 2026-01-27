@@ -35,6 +35,8 @@ import { useTranslations } from 'next-intl';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import LanguageSelector from '../LanguageSelector';
 
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -201,19 +203,30 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         }
     }, [authStatus, pathname, router]);
 
-    const menuItems = [
+    const operationsItems = [
         { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
+        { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
+        { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
+    ];
+
+    const aiConfigItems = [
         { text: t('workflows'), icon: <AccountTreeIcon />, path: '/workflows' },
         { text: t('knowledge'), icon: <MenuBookIcon />, path: '/knowledge' },
         { text: t('faqs'), icon: <QuizIcon />, path: '/faqs' },
+    ];
+
+    const resourcesItems = [
         { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
         { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
-        { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
-        { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
-        { text: t('users'), icon: <PeopleIcon />, path: '/users' },
         { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
+    ];
+
+    const systemItems = [
+        { text: t('users'), icon: <ManageAccountsIcon />, path: '/users' },
         { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
+
+    const allMenuItems = [...operationsItems, ...aiConfigItems, ...resourcesItems, ...systemItems];
 
     if (pathname === '/login') {
         return (
@@ -223,6 +236,34 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </>
         );
     }
+
+    const renderMenuItems = (items: { text: string, icon: React.ReactNode, path: string }[]) => (
+        items.map((item) => (
+            <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                    component={Link}
+                    href={item.path}
+                    selected={pathname.startsWith(item.path)}
+                    sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                    }}
+                >
+                    <ListItemIcon
+                        sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : 'auto',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+            </ListItem>
+        ))
+    );
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -243,7 +284,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     </IconButton>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography variant="h6" noWrap component="div">
-                            {menuItems.find(item => pathname.startsWith(item.path))?.text || 'Dashboard'}
+                            {allMenuItems.find(item => pathname.startsWith(item.path))?.text || 'Dashboard'}
                         </Typography>
                         {tenantName && (
                             <Typography variant="subtitle1" component="div" sx={{
@@ -273,31 +314,19 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {menuItems.map((item) => (
-                        <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                component={Link}
-                                href={item.path}
-                                selected={pathname.startsWith(item.path)}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {item.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
+                    {renderMenuItems(operationsItems)}
+                </List>
+                <Divider />
+                <List>
+                    {renderMenuItems(aiConfigItems)}
+                </List>
+                <Divider />
+                <List>
+                    {renderMenuItems(resourcesItems)}
+                </List>
+                <Divider />
+                <List>
+                    {renderMenuItems(systemItems)}
                 </List>
                 <Divider sx={{ mt: 'auto' }} />
                 {/* Version Number */}

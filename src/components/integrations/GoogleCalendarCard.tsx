@@ -10,7 +10,8 @@ import {
 } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { fetchAuthSession } from 'aws-amplify/auth';
+
+
 
 interface GoogleCalendarCardProps {
     providerId: string;
