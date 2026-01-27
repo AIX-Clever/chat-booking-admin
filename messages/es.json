@@ -12,7 +12,8 @@
         "noData": "Sin datos",
         "actions": "Acciones",
         "confirm": "Confirmar",
-        "close": "Cerrar"
+        "close": "Cerrar",
+        "done": "Listo"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -424,11 +425,17 @@
             "created": "Creado",
             "status": "Estado",
             "actions": "Acciones",
-            "active": "Activo",
-            "revoked": "Revocado",
+            "active": "Activa",
+            "revoked": "Revocada",
+            "noKeys": "No tienes claves API activas.",
+            "revoke": "Revocar",
+            "confirmRevoke": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
             "createDialog": {
                 "title": "Crear Nueva Clave API",
-                "label": "Nombre de Clave (ej. Producción Web)"
+                "label": "Nombre de la Clave (ej. App Móvil)",
+                "successTitle": "¡Clave API Creada!",
+                "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
+                "secretLabel": "Tu Clave API (Secreto)"
             }
         }
     },
