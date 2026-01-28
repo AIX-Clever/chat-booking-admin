@@ -5,7 +5,18 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS } from '../../graphql/queries';
+import { Badge } from '@mui/material';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import WbTwilightIcon from '@mui/icons-material/WbTwilight';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
+import { format, parseISO, getHours } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS, GET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
 
 import {
     Typography,
@@ -40,8 +51,6 @@ import {
     // FormControl // Unused
 
 } from '@mui/material';
-import { DatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BlockIcon from '@mui/icons-material/Block';
 import SearchIcon from '@mui/icons-material/Search';
@@ -332,6 +341,74 @@ export default function BookingsPage() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newBookingData.date, newBookingData.providerId, newBookingData.serviceId, newBookingOpen]);
+
+    const [workingDays, setWorkingDays] = React.useState<number[]>([]);
+
+    const fetchProviderSchedule = async (providerId: string) => {
+        if (!providerId) return;
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GET_PROVIDER_AVAILABILITY,
+                variables: { providerId }
+            });
+            const availability = response.data.getProviderAvailability;
+            const daysMap: Record<string, number> = {
+                'sunday': 0, 'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6,
+                'domingo': 0, 'lunes': 1, 'martes': 2, 'miércoles': 3, 'miercoles': 3, 'jueves': 4, 'viernes': 5, 'sábado': 6, 'sabado': 6
+            };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const activeDays = availability.map((a: any) => daysMap[a.dayOfWeek.toLowerCase()]).filter((d: any) => d !== undefined);
+            setWorkingDays(activeDays);
+        } catch (error) {
+            console.error('Error fetching provider schedule:', error);
+        }
+    };
+
+    React.useEffect(() => {
+        if (newBookingData.providerId) {
+            fetchProviderSchedule(newBookingData.providerId);
+        } else {
+            setWorkingDays([]);
+        }
+    }, [newBookingData.providerId]);
+
+
+    const CustomDay = (props: PickersDayProps<Date>) => {
+        const { day, outsideCurrentMonth, ...other } = props;
+        const dayOfWeek = day.getDay();
+        const isWorkingDay = workingDays.includes(dayOfWeek);
+
+        // Highlight working days, dim others but keep clickable
+        return (
+            <Badge
+                key={props.day.toString()}
+                overlap="circular"
+                badgeContent={isWorkingDay ? '•' : undefined}
+                color="primary"
+                invisible={!isWorkingDay}
+                sx={{
+                    '& .MuiBadge-badge': {
+                        top: 5,
+                        right: 5,
+                        minWidth: '8px',
+                        height: '8px',
+                        p: 0
+                    }
+                }}
+            >
+                <PickersDay
+                    {...other}
+                    outsideCurrentMonth={outsideCurrentMonth}
+                    day={day}
+                    sx={{
+                        opacity: isWorkingDay ? 1 : 0.4,
+                        fontWeight: isWorkingDay ? 'bold' : 'normal',
+                    }}
+                />
+            </Badge>
+        );
+    };
 
     const handleOpenNewBooking = () => {
         // Default to a sane date/time (tomorrow 9am)
@@ -1430,7 +1507,6 @@ export default function BookingsPage() {
                                     ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={6} />
                         <Grid item xs={6}>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
@@ -1442,13 +1518,14 @@ export default function BookingsPage() {
                                             setNewBookingData({ ...newBookingData, date: dateStr });
                                         }
                                     }}
+                                    slots={{ day: CustomDay }}
                                     slotProps={{
                                         textField: { fullWidth: true }
                                     }}
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <Box>
                                 <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
                                     {t('form.time')}
@@ -1458,21 +1535,114 @@ export default function BookingsPage() {
                                         <CircularProgress size={24} />
                                     </Box>
                                 ) : availableSlots.length > 0 ? (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, maxHeight: 150, overflowY: 'auto' }}>
-                                        {availableSlots.map((slot) => {
-                                            const timeStr = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
-                                            const isSelected = newBookingData.time === timeStr;
+                                    <Box sx={{
+                                        maxHeight: 250,
+                                        overflowY: 'auto',
+                                        pr: 1,
+                                        border: '1px solid #e0e0e0',
+                                        borderRadius: 2,
+                                        p: 2,
+                                        // Force scrollbar visibility
+                                        '&::-webkit-scrollbar': {
+                                            width: '8px',
+                                        },
+                                        '&::-webkit-scrollbar-track': {
+                                            background: '#f1f1f1',
+                                            borderRadius: '4px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            background: '#ccc',
+                                            borderRadius: '4px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb:hover': {
+                                            background: '#999',
+                                        },
+                                    }}>
+                                        {/* Morning Segments */}
+                                        {(() => {
+                                            const morning = availableSlots.filter(s => {
+                                                const h = new Date(s.start).getHours();
+                                                return h < 12;
+                                            });
+                                            const afternoon = availableSlots.filter(s => {
+                                                const h = new Date(s.start).getHours();
+                                                return h >= 12 && h < 18; // 12pm to 5:59pm
+                                            });
+                                            const evening = availableSlots.filter(s => {
+                                                const h = new Date(s.start).getHours();
+                                                return h >= 18;
+                                            });
+
+                                            const renderSlotButton = (slot: any) => {
+                                                const timeStr = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+                                                const isSelected = newBookingData.time === timeStr;
+                                                return (
+                                                    <Button
+                                                        key={timeStr}
+                                                        variant={isSelected ? "contained" : "outlined"}
+                                                        size="small"
+                                                        onClick={() => setNewBookingData({ ...newBookingData, time: timeStr })}
+                                                        sx={{
+                                                            minWidth: '70px',
+                                                            borderRadius: '8px',
+                                                            px: 1,
+                                                            py: 0.5,
+                                                            fontSize: '13px',
+                                                            fontWeight: 500,
+                                                            textTransform: 'none',
+                                                            borderColor: isSelected ? 'primary.main' : '#e0e0e0',
+                                                            bgcolor: isSelected ? 'primary.main' : '#fff',
+                                                            color: isSelected ? '#fff' : '#444',
+                                                            boxShadow: isSelected ? 2 : '0 1px 2px rgba(0,0,0,0.05)',
+                                                            '&:hover': {
+                                                                bgcolor: isSelected ? 'primary.dark' : 'rgba(0,0,0,0.04)',
+                                                                borderColor: isSelected ? 'primary.dark' : 'primary.main',
+                                                            }
+                                                        }}
+                                                    >
+                                                        {timeStr}
+                                                    </Button>
+                                                );
+                                            };
+
                                             return (
-                                                <Chip
-                                                    key={timeStr}
-                                                    label={timeStr}
-                                                    color={isSelected ? "primary" : "default"}
-                                                    variant={isSelected ? "filled" : "outlined"}
-                                                    onClick={() => setNewBookingData({ ...newBookingData, time: timeStr })}
-                                                    clickable
-                                                />
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                                    {morning.length > 0 && (
+                                                        <Box>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 0.5 }}>
+                                                                <WbSunnyIcon sx={{ fontSize: 16, color: '#fbc02d' }} />
+                                                                <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>Mañana</Typography>
+                                                            </Box>
+                                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                                                {morning.map(renderSlotButton)}
+                                                            </Box>
+                                                        </Box>
+                                                    )}
+                                                    {afternoon.length > 0 && (
+                                                        <Box>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 0.5 }}>
+                                                                <WbTwilightIcon sx={{ fontSize: 16, color: '#ff9800' }} />
+                                                                <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>Tarde</Typography>
+                                                            </Box>
+                                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                                                {afternoon.map(renderSlotButton)}
+                                                            </Box>
+                                                        </Box>
+                                                    )}
+                                                    {evening.length > 0 && (
+                                                        <Box>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 0.5 }}>
+                                                                <NightsStayIcon sx={{ fontSize: 16, color: '#3f51b5' }} />
+                                                                <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary' }}>Noche</Typography>
+                                                            </Box>
+                                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                                                {evening.map(renderSlotButton)}
+                                                            </Box>
+                                                        </Box>
+                                                    )}
+                                                </Box>
                                             );
-                                        })}
+                                        })()}
                                     </Box>
                                 ) : (
                                     <Box sx={{ p: 1, border: '1px dashed', borderColor: 'divider', borderRadius: 1 }}>
