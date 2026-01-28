@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS } from '../../graphql/queries';
+import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS } from '../../graphql/queries';
 
 import {
     Typography,
@@ -274,6 +274,8 @@ export default function BookingsPage() {
         notes: ''
     });
     const [availableServices, setAvailableServices] = React.useState<{ serviceId: string, name: string, durationMinutes: number }[]>([]);
+    const [availableSlots, setAvailableSlots] = React.useState<{ start: string, end: string, isAvailable: boolean }[]>([]);
+    const [slotsLoading, setSlotsLoading] = React.useState(false);
 
 
     const fetchServices = async () => {
@@ -285,6 +287,51 @@ export default function BookingsPage() {
             console.error('Error fetching services:', error);
         }
     };
+
+    const fetchAvailableSlots = async () => {
+        // Only fetch if we have all requirements
+        if (!newBookingData.providerId || !newBookingData.serviceId || !newBookingData.date) {
+            setAvailableSlots([]);
+            return;
+        }
+
+        setSlotsLoading(true);
+        try {
+            const startOfDay = new Date(`${newBookingData.date}T00:00:00`).toISOString();
+            const endOfDay = new Date(`${newBookingData.date}T23:59:59`).toISOString();
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GET_AVAILABLE_SLOTS,
+                variables: {
+                    input: {
+                        serviceId: newBookingData.serviceId,
+                        providerId: newBookingData.providerId,
+                        from: startOfDay,
+                        to: endOfDay
+                    }
+                }
+            });
+
+            // Filter for true availability
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const slots = response.data.getAvailableSlots.filter((s: any) => s.isAvailable);
+            setAvailableSlots(slots);
+        } catch (error) {
+            console.error('Error fetching slots:', error);
+            setAvailableSlots([]);
+        } finally {
+            setSlotsLoading(false);
+        }
+    };
+
+    // Trigger fetch when dependencies change
+    React.useEffect(() => {
+        if (newBookingOpen) {
+            fetchAvailableSlots();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newBookingData.date, newBookingData.providerId, newBookingData.serviceId, newBookingOpen]);
 
     const handleOpenNewBooking = () => {
         // Default to a sane date/time (tomorrow 9am)
@@ -1402,22 +1449,61 @@ export default function BookingsPage() {
                             </LocalizationProvider>
                         </Grid>
                         <Grid item xs={6}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <TimePicker
-                                    label={t('form.time')}
-                                    value={newBookingData.time ? new Date(`2000-01-01T${newBookingData.time}:00`) : null}
-                                    onChange={(newValue) => {
-                                        if (newValue) {
-                                            const hours = String(newValue.getHours()).padStart(2, '0');
-                                            const minutes = String(newValue.getMinutes()).padStart(2, '0');
-                                            setNewBookingData({ ...newBookingData, time: `${hours}:${minutes}` });
-                                        }
-                                    }}
-                                    slotProps={{
-                                        textField: { fullWidth: true }
-                                    }}
-                                />
-                            </LocalizationProvider>
+                            <Box>
+                                <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+                                    {t('form.time')}
+                                </Typography>
+                                {slotsLoading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+                                        <CircularProgress size={24} />
+                                    </Box>
+                                ) : availableSlots.length > 0 ? (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, maxHeight: 150, overflowY: 'auto' }}>
+                                        {availableSlots.map((slot) => {
+                                            const timeStr = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+                                            const isSelected = newBookingData.time === timeStr;
+                                            return (
+                                                <Chip
+                                                    key={timeStr}
+                                                    label={timeStr}
+                                                    color={isSelected ? "primary" : "default"}
+                                                    variant={isSelected ? "filled" : "outlined"}
+                                                    onClick={() => setNewBookingData({ ...newBookingData, time: timeStr })}
+                                                    clickable
+                                                />
+                                            );
+                                        })}
+                                    </Box>
+                                ) : (
+                                    <Box sx={{ p: 1, border: '1px dashed', borderColor: 'divider', borderRadius: 1 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {(!newBookingData.date || !newBookingData.providerId)
+                                                ? t('availability.selectDateAndProvider')
+                                                : t('availability.noSlotsFound')
+                                            }
+                                        </Typography>
+                                    </Box>
+                                )}
+                                {/* Manual Override */}
+                                <Box sx={{ mt: 2 }}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <TimePicker
+                                            label={t('form.manualTime')}
+                                            value={newBookingData.time ? new Date(`2000-01-01T${newBookingData.time}:00`) : null}
+                                            onChange={(newValue) => {
+                                                if (newValue) {
+                                                    const hours = String(newValue.getHours()).padStart(2, '0');
+                                                    const minutes = String(newValue.getMinutes()).padStart(2, '0');
+                                                    setNewBookingData({ ...newBookingData, time: `${hours}:${minutes}` });
+                                                }
+                                            }}
+                                            slotProps={{
+                                                textField: { fullWidth: true, size: 'small', helperText: t('availability.manualOverrideHelper') }
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                </Box>
+                            </Box>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

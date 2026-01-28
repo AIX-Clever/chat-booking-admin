@@ -600,3 +600,15 @@ export const SUBSCRIBE = `
     }
   }
 `;
+
+export const GET_AVAILABLE_SLOTS = `
+  query GetAvailableSlots($input: GetAvailableSlotsInput!) {
+    getAvailableSlots(input: $input) {
+      providerId
+      serviceId
+      start
+      end
+      isAvailable
+    }
+  }
+`;

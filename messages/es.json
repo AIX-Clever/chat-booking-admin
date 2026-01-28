@@ -97,6 +97,18 @@
             "tokensIA": "Tokens IA (Mensual)",
             "bookings": "Reservas (Mensual)",
             "messages": "Mensajes"
+        },
+        "funnel": {
+            "title": "Embudo de Conversión",
+            "subtitle": "Tasas de abandono por paso",
+            "serviceSelected": "Servicio Seleccionado",
+            "providerSelected": "Profesional Seleccionado",
+            "dateSelected": "Fecha Seleccionada",
+            "bookingCompleted": "Reserva Completada"
+        },
+        "peakHours": {
+            "title": "Horarios Peak",
+            "subtitle": "Densidad de reservas por hora"
         }
     },
     "bookings": {
@@ -152,6 +164,7 @@
             "provider": "Profesional",
             "date": "Fecha",
             "time": "Hora",
+            "manualTime": "Entrada Manual / Otra Hora",
             "notes": "Notas",
             "dateTime": "Fecha y Hora"
         },
@@ -272,6 +285,9 @@
             "saturday": "Sábado",
             "sunday": "Domingo"
         },
+        "selectDateAndProvider": "Seleccione un profesional y una fecha para ver horarios disponibles.",
+        "noSlotsFound": "No hay horarios disponibles para este día.",
+        "manualOverrideHelper": "Puede ingresar una hora manualmente si es necesario (el sistema validará si está permitido).",
         "saveChanges": "Guardar Cambios",
         "saved": "Guardado",
         "addSlot": "Agregar Franja",
