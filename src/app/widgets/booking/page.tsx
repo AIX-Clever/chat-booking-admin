@@ -66,10 +66,10 @@ export default function BookingWidgetPage() {
 
                     <Paper sx={{ p: 3 }}>
                         <Typography variant="h6" fontWeight="bold" gutterBottom>
-                            Branding & Visuals
+                            {t('brandingTitle')}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            Customize how your booking page looks to your customers. (Available in PRO)
+                            {t('brandingSubtitle')}
                         </Typography>
                         {/* More options could be added here, gated with PlanGuard if they are PRO features */}
                     </Paper>
