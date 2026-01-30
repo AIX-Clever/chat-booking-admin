@@ -48,6 +48,18 @@ export interface MetricError {
     lastOccurred?: string;
 }
 
+export interface PeakHour {
+    hour: number;
+    bookings: number;
+}
+
+export interface FunnelData {
+    service_selected: number;
+    provider_selected: number;
+    date_selected: number;
+    booking_completed: number;
+}
+
 export interface DashboardMetrics {
     period: string;
     summary: DashboardSummary;
@@ -56,6 +68,8 @@ export interface DashboardMetrics {
     topProviders: TopProvider[];
     bookingStatus: BookingStatusCounts;
     errors: MetricError[];
+    peakHours: PeakHour[];
+    funnel: FunnelData;
 }
 
 export interface PlanUsage {

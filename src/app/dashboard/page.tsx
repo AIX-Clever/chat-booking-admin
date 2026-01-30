@@ -8,6 +8,8 @@ import AppCurrentVisits from '../../components/dashboard/AppCurrentVisits';
 import AppPlanUsage from '../../components/dashboard/AppPlanUsage';
 import { useDashboardMetrics, usePlanUsage } from '../../hooks/useDashboardMetrics';
 import { useTenant } from '../../context/TenantContext';
+import FunnelChart from '../../components/dashboard/FunnelChart';
+import PeakHoursHeatmap from '../../components/dashboard/PeakHoursHeatmap';
 
 // Icons
 import PaidIcon from '@mui/icons-material/Paid';
@@ -164,10 +166,28 @@ export default function DashboardPage() {
                     />
                 </Grid>
 
+
                 <Grid item xs={12} md={6} lg={4}>
                     <AppCurrentVisits
                         title={t('bookingStatus')}
                         chartData={bookingStatusData}
+                    />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                    <FunnelChart
+                        data={metrics?.funnel || {
+                            service_selected: 0,
+                            provider_selected: 0,
+                            date_selected: 0,
+                            booking_completed: 0
+                        }}
+                    />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                    <PeakHoursHeatmap
+                        data={metrics?.peakHours || []}
                     />
                 </Grid>
 
@@ -178,7 +198,7 @@ export default function DashboardPage() {
                     />
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} md={6} lg={8}>
                     <AppWidgetSummary
                         title={t('totalBookings')}
                         total={metrics?.summary.bookings || 0}

@@ -12,6 +12,7 @@ export const LIST_PROVIDERS = `
       metadata
       available
       hasGoogleCalendar
+      slug
     }
   }
 `;
@@ -267,6 +268,7 @@ export const CREATE_PROVIDER = `
       metadata
       available
       hasGoogleCalendar
+      slug
     }
   }
 `;
@@ -284,6 +286,7 @@ export const UPDATE_PROVIDER = `
       metadata
       available
       hasGoogleCalendar
+      slug
     }
   }
 `;
