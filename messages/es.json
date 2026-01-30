@@ -29,7 +29,27 @@
         "knowledge": "Base de Conocimiento",
         "faqs": "FAQs",
         "workflows": "Flujos",
-        "categories": "Categorías"
+        "categories": "Categorías",
+        "widgets": "Interfaces",
+        "chatWidget": "Chat de Lucia",
+        "bookingWidget": "Página de Reservas"
+    },
+    "widgets": {
+        "chat": {
+            "title": "Chat de Lucia",
+            "subtitle": "Configura el asistente de IA para tu sitio web",
+            "install": "Instalación",
+            "installSubtitle": "Copia este código en la etiqueta <head> de tu sitio web"
+        },
+        "booking": {
+            "title": "Página de Reservas",
+            "subtitle": "Configura tu página de aterrizaje para reservas directas",
+            "publicLink": "Enlace Público",
+            "copyLink": "Copiar Enlace",
+            "openLink": "Abrir Enlace",
+            "brandingTitle": "Imagen de Marca y Visuales",
+            "brandingSubtitle": "Personaliza cómo se ve tu página de reservas para tus clientes. (Disponible en PRO)"
+        }
     },
     "users": {
         "title": "Gestión de Usuarios",

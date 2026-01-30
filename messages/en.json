@@ -45,7 +45,9 @@
             "subtitle": "Configure your landing page for direct bookings",
             "publicLink": "Public Link",
             "copyLink": "Copy Link",
-            "openLink": "Open Link"
+            "openLink": "Open Link",
+            "brandingTitle": "Branding & Visuals",
+            "brandingSubtitle": "Customize how your booking page looks to your customers. (Available in PRO)"
         }
     },
     "rooms": {
