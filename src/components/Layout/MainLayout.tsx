@@ -148,6 +148,27 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         }
     }, [authStatus, pathname, router]);
 
+    // Background session health check
+    React.useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const { fetchAuthSession } = await import('aws-amplify/auth');
+                const session = await fetchAuthSession();
+                if (!session.tokens) {
+                    console.warn('No active tokens found. Redirecting to login.');
+                    router.push('/login');
+                }
+            } catch (err) {
+                console.error('Session check failed:', err);
+                router.push('/login');
+            }
+        };
+
+        if (authStatus === 'authenticated') {
+            checkSession();
+        }
+    }, [authStatus, router]);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -198,12 +219,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         checkTenantAuthorization();
     }, [authStatus, signOut, router]);
-
-    React.useEffect(() => {
-        if (authStatus === 'unauthenticated' && pathname !== '/login') {
-            router.push('/login');
-        }
-    }, [authStatus, pathname, router]);
 
     const operationsItems = [
         { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },

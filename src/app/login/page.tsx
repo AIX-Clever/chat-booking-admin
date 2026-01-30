@@ -37,12 +37,26 @@ export default function LoginPage() {
 
 
     React.useEffect(() => {
+        // Check if user is already signed in
+        const checkAuth = async () => {
+            try {
+                const { getCurrentUser } = await import('aws-amplify/auth');
+                await getCurrentUser();
+                // If no error, user is signed in, redirect to dashboard
+                router.push('/dashboard');
+            } catch {
+                // Not signed in, do nothing
+                console.log('No active session found');
+            }
+        };
+        checkAuth();
+
         // Check for error params from redirection
         const searchParams = new URLSearchParams(window.location.search);
         if (searchParams.get('error') === 'no_tenant') {
             setError('Tu cuenta no está asociada a ningún tenant. Contacta a soporte.');
         }
-    }, []);
+    }, [router]);
 
     const handleChange = (prop: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [prop]: event.target.value });
