@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { GET_TENANT, DELETE_WORKFLOW, LIST_WORKFLOWS } from '../../graphql/queries';
+import { DELETE_WORKFLOW, LIST_WORKFLOWS } from '../../graphql/queries';
 import { useTranslations } from 'next-intl';
 import PlanGuard from '../../components/PlanGuard';
 

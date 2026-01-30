@@ -23,7 +23,6 @@ import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
