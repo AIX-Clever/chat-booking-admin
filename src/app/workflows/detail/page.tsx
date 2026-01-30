@@ -4,6 +4,7 @@ import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import WorkflowPageClient from './WorkflowPageClient';
+import PlanGuard from '../../../components/PlanGuard';
 
 function WorkflowDetailParamWrapper() {
     const searchParams = useSearchParams();
@@ -22,8 +23,10 @@ function WorkflowDetailParamWrapper() {
 
 export default function WorkflowDetailPage() {
     return (
-        <Suspense fallback={<Typography>Loading...</Typography>}>
-            <WorkflowDetailParamWrapper />
-        </Suspense>
+        <PlanGuard minPlan="PRO" featureName="Custom Workflows" variant="overlay" upgradeFeature="AI">
+            <Suspense fallback={<Typography>Loading...</Typography>}>
+                <WorkflowDetailParamWrapper />
+            </Suspense>
+        </PlanGuard>
     );
 }

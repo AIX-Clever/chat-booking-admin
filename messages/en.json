@@ -466,5 +466,40 @@
         "unlockPremium": "Unlock Premium Capabilities",
         "featureAvailable": "{featureName} is available exclusively on the {plan} plan and above. Upgrade to access advanced automation and AI features.",
         "upgradeTo": "Upgrade to {plan}"
+    },
+    "upgradeModal": {
+        "unlockAi": {
+            "title": "Unlock AI Intelligence",
+            "description": "Train your assistant with your own documents and let it handle complex questions automatically.",
+            "benefit1": "Custom Knowledge Base",
+            "benefit2": "Smart RAG Responses",
+            "benefit3": "24/7 Automated Support"
+        },
+        "team": {
+            "title": "Work Together",
+            "description": "Scale your operations by inviting your team members to manage chats and bookings.",
+            "benefit1": "Up to 5 Team Members",
+            "benefit2": "Role-based Access",
+            "benefit3": "Shared Inbox"
+        },
+        "usage": {
+            "title": "Increase Capacity",
+            "description": "You are approaching your plan limits. Upgrade to keep growing without interruption.",
+            "benefit1": "4x Booking Capacity",
+            "benefit2": "4x Message Volume",
+            "benefit3": "Priority Support"
+        },
+        "workflow": {
+            "title": "Advanced Workflows",
+            "description": "Create sophisticated conversation flows with AI-powered steps and logic.",
+            "benefit1": "AI Logic Steps",
+            "benefit2": "Complex Branching",
+            "benefit3": "Data Extraction"
+        },
+        "common": {
+            "upgradeTo": "Upgrade to {plan}",
+            "whatYouGet": "WHAT YOU GET WITH {plan}:",
+            "maybeLater": "Maybe Later"
+        }
     }
 }

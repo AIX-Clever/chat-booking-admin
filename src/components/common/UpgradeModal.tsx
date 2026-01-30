@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -8,13 +7,20 @@ import {
     Typography,
     Box,
     Chip,
-    IconButton
+    IconButton,
+    CircularProgress
 } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import GroupIcon from '@mui/icons-material/Group';
 import SpeedIcon from '@mui/icons-material/Speed';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslations } from 'next-intl';
+import { generateClient } from 'aws-amplify/api';
+import { fetchUserAttributes } from 'aws-amplify/auth';
+import { SUBSCRIBE } from '../../graphql/queries';
+
+const client = generateClient();
 
 export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW';
 
@@ -25,48 +31,77 @@ interface UpgradeModalProps {
     currentPlan: string;
 }
 
-const FEATURE_CONFIG: Record<UpgradeFeature, {
-    title: string;
-    description: string;
-    icon: React.ElementType;
-    benefits: string[];
-    color: string;
-}> = {
-    'AI': {
-        title: 'Unlock AI Intelligence',
-        description: 'Train your assistant with your own documents and let it handle complex questions automatically.',
-        icon: AutoAwesomeIcon,
-        benefits: ['Custom Knowledge Base', 'Smart RAG Responses', '24/7 Automated Support'],
-        color: '#8B5CF6' // Violet
-    },
-    'TEAM': {
-        title: 'Work Together',
-        description: 'Scale your operations by inviting your team members to manage chats and bookings.',
-        icon: GroupIcon,
-        benefits: ['Up to 5 Team Members', 'Role-based Access', 'Shared Inbox'],
-        color: '#10B981' // Emerald
-    },
-    'USAGE': {
-        title: 'Increase Capacity',
-        description: 'You are approaching your plan limits. Upgrade to keep growing without interruption.',
-        icon: SpeedIcon,
-        benefits: ['4x Booking Capacity', '4x Message Volume', 'Priority Support'],
-        color: '#F59E0B' // Amber
-    },
-    'WORKFLOW': {
-        title: 'Advanced Workflows',
-        description: 'Create sophisticated conversation flows with AI-powered steps and logic.',
-        icon: AutoAwesomeIcon, // Reusing AI icon
-        benefits: ['AI Logic Steps', 'Complex Branching', 'Data Extraction'],
-        color: '#3B82F6' // Blue
-    }
-};
-
 export default function UpgradeModal({ open, onClose, feature, currentPlan }: UpgradeModalProps) {
-    const config = FEATURE_CONFIG[feature];
+    const t = useTranslations('upgradeModal');
+    const [loading, setLoading] = useState(false);
 
     // Determine target plan based on current (Simple logic for now)
     const targetPlan = currentPlan === 'LITE' ? 'PRO' : 'BUSINESS';
+
+    // Determine config dynamically based on feature and translations
+    const config = useMemo(() => {
+        const configs = {
+            'AI': {
+                title: t('unlockAi.title'),
+                description: t('unlockAi.description'),
+                icon: AutoAwesomeIcon,
+                benefits: [t('unlockAi.benefit1'), t('unlockAi.benefit2'), t('unlockAi.benefit3')],
+                color: '#8B5CF6' // Violet
+            },
+            'TEAM': {
+                title: t('team.title'),
+                description: t('team.description'),
+                icon: GroupIcon,
+                benefits: [t('team.benefit1'), t('team.benefit2'), t('team.benefit3')],
+                color: '#10B981' // Emerald
+            },
+            'USAGE': {
+                title: t('usage.title'),
+                description: t('usage.description'),
+                icon: SpeedIcon,
+                benefits: [t('usage.benefit1'), t('usage.benefit2'), t('usage.benefit3')],
+                color: '#F59E0B' // Amber
+            },
+            'WORKFLOW': {
+                title: t('workflow.title'),
+                description: t('workflow.description'),
+                icon: AutoAwesomeIcon, // Reusing AI icon
+                benefits: [t('workflow.benefit1'), t('workflow.benefit2'), t('workflow.benefit3')],
+                color: '#3B82F6' // Blue
+            }
+        };
+        return configs[feature];
+    }, [feature, t]);
+
+    const handleUpgrade = async () => {
+        setLoading(true);
+        try {
+            const attrs = await fetchUserAttributes();
+            const email = attrs.email;
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: SUBSCRIBE,
+                variables: {
+                    planId: targetPlan.toLowerCase(), // 'pro' or 'business'
+                    email: email,
+                    backUrl: window.location.href
+                }
+            });
+
+            const initPoint = response.data?.subscribe?.initPoint;
+            if (initPoint) {
+                window.location.href = initPoint;
+            } else {
+                console.error("No initPoint returned from subscription");
+            }
+
+        } catch (error) {
+            console.error("Error creating subscription:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <Dialog
@@ -110,7 +145,7 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                     {config.title}
                 </Typography>
                 <Chip
-                    label={'Upgrade to ' + targetPlan}
+                    label={t('common.upgradeTo', { plan: targetPlan })}
                     size="small"
                     sx={{
                         mt: 1,
@@ -126,14 +161,18 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                     {config.description}
                 </Typography>
 
-                <Box sx={{ bgcolor: 'grey.50', p: 3, borderRadius: 2 }}>
+                <Box sx={{
+                    bgcolor: 'action.hover', // Changed from grey.50 for better dark mode support and contrast
+                    p: 3,
+                    borderRadius: 2
+                }}>
                     <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 2, textTransform: 'uppercase', color: 'text.secondary', fontSize: '0.75rem' }}>
-                        What you get with {targetPlan}:
+                        {t('common.whatYouGet', { plan: targetPlan })}
                     </Typography>
                     {config.benefits.map((benefit, index) => (
                         <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                             <CheckCircleIcon sx={{ color: config.color, fontSize: 20, mr: 1.5 }} />
-                            <Typography variant="body2" fontWeight={500}>
+                            <Typography variant="body2" fontWeight={500} color="text.primary">
                                 {benefit}
                             </Typography>
                         </Box>
@@ -142,23 +181,21 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
             </DialogContent>
 
             <DialogActions sx={{ p: 3, justifyContent: 'center' }}>
-                <Button onClick={onClose} color="inherit" sx={{ mr: 1 }}>
-                    Maybe Later
+                <Button onClick={onClose} color="inherit" sx={{ mr: 1 }} disabled={loading}>
+                    {t('common.maybeLater')}
                 </Button>
                 <Button
                     variant="contained"
                     size="large"
-                    onClick={() => {
-                        window.open('https://billing.stripe.com/p/login/test', '_blank'); // Mock Portal URL
-                        onClose();
-                    }}
+                    onClick={handleUpgrade}
+                    disabled={loading}
                     sx={{
                         bgcolor: config.color,
                         '&:hover': { bgcolor: config.color, filter: 'brightness(0.9)' },
                         px: 4
                     }}
                 >
-                    Upgrade to {targetPlan}
+                    {loading ? <CircularProgress size={24} color="inherit" /> : t('common.upgradeTo', { plan: targetPlan })}
                 </Button>
             </DialogActions>
         </Dialog>

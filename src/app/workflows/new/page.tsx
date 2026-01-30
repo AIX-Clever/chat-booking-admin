@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { CREATE_WORKFLOW } from '../../../graphql/queries';
+import PlanGuard from '../../../components/PlanGuard';
 
 const client = generateClient();
 
@@ -68,61 +69,63 @@ export default function NewWorkflowPage() {
     };
 
     return (
-        <Box sx={{ p: 3 }}>
-            <Box sx={{ mb: 4 }}>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                    <Link underline="hover" color="inherit" href="/workflows">
-                        Workflows
-                    </Link>
-                    <Typography color="text.primary">New Workflow</Typography>
-                </Breadcrumbs>
-                <Typography variant="h4" fontWeight="bold" sx={{ mt: 2 }}>
-                    Create New Workflow
-                </Typography>
-            </Box>
-
-            <Paper sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
-                {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-
-                <Box component="form" noValidate autoComplete="off">
-                    <TextField
-                        fullWidth
-                        label="Workflow Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        margin="normal"
-                        required
-                        autoFocus
-                    />
-                    <TextField
-                        fullWidth
-                        label="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        margin="normal"
-                        multiline
-                        rows={3}
-                    />
-
-                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                        <Button
-                            variant="outlined"
-                            onClick={() => router.back()}
-                            disabled={loading}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="contained"
-                            onClick={handleCreate}
-                            disabled={loading || !name.trim()}
-                            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
-                        >
-                            Create Workflow
-                        </Button>
-                    </Box>
+        <PlanGuard minPlan="PRO" featureName="Custom Workflows" variant="overlay" upgradeFeature="AI">
+            <Box sx={{ p: 3 }}>
+                <Box sx={{ mb: 4 }}>
+                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+                        <Link underline="hover" color="inherit" href="/workflows">
+                            Workflows
+                        </Link>
+                        <Typography color="text.primary">New Workflow</Typography>
+                    </Breadcrumbs>
+                    <Typography variant="h4" fontWeight="bold" sx={{ mt: 2 }}>
+                        Create New Workflow
+                    </Typography>
                 </Box>
-            </Paper>
-        </Box>
+
+                <Paper sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
+                    {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+
+                    <Box component="form" noValidate autoComplete="off">
+                        <TextField
+                            fullWidth
+                            label="Workflow Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            margin="normal"
+                            required
+                            autoFocus
+                        />
+                        <TextField
+                            fullWidth
+                            label="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            margin="normal"
+                            multiline
+                            rows={3}
+                        />
+
+                        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                            <Button
+                                variant="outlined"
+                                onClick={() => router.back()}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleCreate}
+                                disabled={loading || !name.trim()}
+                                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
+                            >
+                                Create Workflow
+                            </Button>
+                        </Box>
+                    </Box>
+                </Paper>
+            </Box>
+        </PlanGuard>
     );
 }

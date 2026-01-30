@@ -9,8 +9,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/navigation';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { LIST_WORKFLOWS, DELETE_WORKFLOW } from '../../graphql/queries';
+import { GET_TENANT, DELETE_WORKFLOW, LIST_WORKFLOWS } from '../../graphql/queries';
 import { useTranslations } from 'next-intl';
+import PlanGuard from '../../components/PlanGuard';
 
 const client = generateClient();
 
@@ -64,68 +65,70 @@ export default function WorkflowsListPage() {
     };
 
     return (
-        <Box sx={{ p: 3 }}>
-            <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="h4" fontWeight="bold">
-                    {t('title')}
-                </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => router.push('/workflows/new')}
-                >
-                    {t('newWorkflow')}
-                </Button>
-            </Box>
-
-            {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
-                    <CircularProgress />
+        <PlanGuard minPlan="PRO" featureName="Custom Workflows" variant="overlay" upgradeFeature="AI">
+            <Box sx={{ p: 3 }}>
+                <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h4" fontWeight="bold">
+                        {t('title')}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => router.push('/workflows/new')}
+                    >
+                        {t('newWorkflow')}
+                    </Button>
                 </Box>
-            ) : (
-                <Grid container spacing={3}>
-                    {workflows.map((workflow) => (
-                        <Grid item xs={12} sm={6} md={4} key={workflow.workflowId}>
-                            <Paper
-                                sx={{
-                                    p: 3,
-                                    cursor: 'pointer',
-                                    '&:hover': { boxShadow: 4 },
-                                    position: 'relative'
-                                }}
-                                onClick={() => router.push(`/workflows/detail?id=${workflow.workflowId}`)}
-                            >
-                                <Typography variant="h6" gutterBottom>
-                                    {workflow.name}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" noWrap sx={{ mb: 2 }}>
-                                    {workflow.description || t('noDescription')}
-                                </Typography>
 
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {workflow.updatedAt ? new Date(workflow.updatedAt).toLocaleDateString() : '-'}
+                {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <Grid container spacing={3}>
+                        {workflows.map((workflow) => (
+                            <Grid item xs={12} sm={6} md={4} key={workflow.workflowId}>
+                                <Paper
+                                    sx={{
+                                        p: 3,
+                                        cursor: 'pointer',
+                                        '&:hover': { boxShadow: 4 },
+                                        position: 'relative'
+                                    }}
+                                    onClick={() => router.push(`/workflows/detail?id=${workflow.workflowId}`)}
+                                >
+                                    <Typography variant="h6" gutterBottom>
+                                        {workflow.name}
                                     </Typography>
-                                    <IconButton
-                                        size="small"
-                                        color="error"
-                                        onClick={(e) => handleDelete(e, workflow.workflowId)}
-                                    >
-                                        <DeleteIcon fontSize="small" />
-                                    </IconButton>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                    ))}
-                    {workflows.length === 0 && (
-                        <Grid item xs={12}>
-                            <Paper sx={{ p: 4, textAlign: 'center' }}>
-                                <Typography color="text.secondary">{t('noWorkflowsFound')}</Typography>
-                            </Paper>
-                        </Grid>
-                    )}
-                </Grid>
-            )}
-        </Box>
+                                    <Typography variant="body2" color="text.secondary" noWrap sx={{ mb: 2 }}>
+                                        {workflow.description || t('noDescription')}
+                                    </Typography>
+
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {workflow.updatedAt ? new Date(workflow.updatedAt).toLocaleDateString() : '-'}
+                                        </Typography>
+                                        <IconButton
+                                            size="small"
+                                            color="error"
+                                            onClick={(e) => handleDelete(e, workflow.workflowId)}
+                                        >
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        ))}
+                        {workflows.length === 0 && (
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 4, textAlign: 'center' }}>
+                                    <Typography color="text.secondary">{t('noWorkflowsFound')}</Typography>
+                                </Paper>
+                            </Grid>
+                        )}
+                    </Grid>
+                )}
+            </Box>
+        </PlanGuard>
     );
 }
