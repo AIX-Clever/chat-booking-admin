@@ -7,8 +7,8 @@ import ThemeRegistry from '../components/ThemeRegistry/ThemeRegistry';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Chat Booking Admin',
-    description: 'Admin panel for Chat Booking SaaS',
+    title: 'Hola Lucia - Panel de Control',
+    description: 'Administra tus servicios, profesionales y reservas con la eficiencia de la IA.',
 };
 
 import AmplifyProvider from '../components/AmplifyProvider';

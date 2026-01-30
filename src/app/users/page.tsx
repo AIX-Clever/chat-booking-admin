@@ -27,6 +27,7 @@ import {
     CircularProgress,
     Tooltip
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -57,6 +58,8 @@ const PLAN_LIMITS = {
 const client = generateClient();
 
 export default function UsersPage() {
+    const t = useTranslations('users');
+    const tCommon = useTranslations('common');
     const { tenant, loading: tenantLoading } = useTenant();
     const [users, setUsers] = useState<TenantUser[]>([]);
     const [loading, setLoading] = useState(true);
@@ -93,7 +96,7 @@ export default function UsersPage() {
             setError(null);
         } catch (err) {
             console.error('Error fetching users:', err);
-            setError('Failed to load users');
+            setError(t('messages.fetchError'));
         } finally {
             setLoading(false);
         }
@@ -107,7 +110,7 @@ export default function UsersPage() {
 
     const handleInviteUser = async () => {
         if (!inviteEmail) {
-            setError('Email is required');
+            setError(t('messages.emailRequired'));
             return;
         }
 
@@ -117,7 +120,7 @@ export default function UsersPage() {
         const activeUsers = users.filter(u => u.status !== 'INACTIVE').length;
 
         if (maxUsers !== -1 && activeUsers >= maxUsers) {
-            setError(`Your ${plan} plan allows maximum ${maxUsers} user(s). Please upgrade to add more users.`);
+            setError(t('messages.planLimitError', { plan, max: maxUsers }));
             return;
         }
 
@@ -146,7 +149,7 @@ export default function UsersPage() {
         } catch (err: unknown) {
             console.error('Error inviting user:', err);
             const error = err as { errors?: Array<{ message: string }> };
-            setError(error.errors?.[0]?.message || 'Failed to invite user');
+            setError(error.errors?.[0]?.message || t('dialogs.inviteError') || 'Failed to invite user');
         } finally {
             setInviting(false);
         }
@@ -179,7 +182,7 @@ export default function UsersPage() {
     };
 
     const handleRemoveUser = async (userId: string) => {
-        if (!confirm('Are you sure you want to remove this user?')) return;
+        if (!confirm(t('dialogs.removeUserConfirm'))) return;
 
         try {
             const session = await fetchAuthSession();
@@ -214,7 +217,7 @@ export default function UsersPage() {
             });
 
             // Show success message (using alert for now, ideally Snackbar)
-            alert(`Password reset email sent to ${userToReset.email}`);
+            alert(t('messages.passwordResetSent', { email: userToReset.email }));
 
             setResetDialogOpen(false);
             setUserToReset(null);
@@ -263,10 +266,10 @@ export default function UsersPage() {
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <div>
                     <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                        User Management
+                        {t('title')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" mt={1}>
-                        Active Users: {activeUsers} / {maxUsers === -1 ? '∞' : maxUsers} ({plan} Plan)
+                        {t('activeUsers', { current: activeUsers, max: maxUsers === -1 ? '∞' : maxUsers, plan })}
                     </Typography>
                 </div>
                 <Button
@@ -281,7 +284,7 @@ export default function UsersPage() {
                     }}
                 // Removed disabled so it's clickable for upgrade
                 >
-                    Invite User
+                    {t('inviteUser')}
                 </Button>
             </Box>
 
@@ -293,7 +296,7 @@ export default function UsersPage() {
 
             {!canInviteMore && (
                 <Alert severity="warning" sx={{ mb: 2 }}>
-                    You have reached the maximum number of users for your {plan} plan. Upgrade to add more users.
+                    {t('planLimitReached', { plan })}
                 </Alert>
             )}
 
@@ -301,12 +304,12 @@ export default function UsersPage() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Created</TableCell>
-                            <TableCell align="right">Actions</TableCell>
+                            <TableCell>{t('table.email')}</TableCell>
+                            <TableCell>{t('table.name')}</TableCell>
+                            <TableCell>{t('table.role')}</TableCell>
+                            <TableCell>{t('table.status')}</TableCell>
+                            <TableCell>{t('table.created')}</TableCell>
+                            <TableCell align="right">{t('table.actions')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -324,7 +327,7 @@ export default function UsersPage() {
                                 <TableCell align="right">
                                     {user.role !== 'OWNER' && (
                                         <>
-                                            <Tooltip title="Change Role">
+                                            <Tooltip title={tCommon('edit')}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => {
@@ -335,7 +338,7 @@ export default function UsersPage() {
                                                     <EditIcon fontSize="small" />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title="Reset Password">
+                                            <Tooltip title={t('dialogs.resetPassword')}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => {
@@ -368,11 +371,11 @@ export default function UsersPage() {
 
             {/* Invite User Dialog */}
             <Dialog open={inviteDialogOpen} onClose={() => setInviteDialogOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>Invite New User</DialogTitle>
+                <DialogTitle>{t('dialogs.inviteTitle')}</DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <TextField
-                            label="Email"
+                            label={t('form.email')}
                             type="email"
                             fullWidth
                             required
@@ -380,88 +383,88 @@ export default function UsersPage() {
                             onChange={(e) => setInviteEmail(e.target.value)}
                         />
                         <TextField
-                            label="Name (optional)"
+                            label={t('form.name')}
                             fullWidth
                             value={inviteName}
                             onChange={(e) => setInviteName(e.target.value)}
                         />
                         <FormControl fullWidth>
-                            <InputLabel>Role</InputLabel>
+                            <InputLabel>{t('form.role')}</InputLabel>
                             <Select
                                 value={inviteRole}
-                                label="Role"
+                                label={t('form.role')}
                                 onChange={(e) => setInviteRole(e.target.value as 'ADMIN' | 'USER')}
                             >
-                                <MenuItem value="USER">User (Read-only)</MenuItem>
-                                <MenuItem value="ADMIN">Admin (Can manage data)</MenuItem>
+                                <MenuItem value="USER">{t('form.roleUser')}</MenuItem>
+                                <MenuItem value="ADMIN">{t('form.roleAdmin')}</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setInviteDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={() => setInviteDialogOpen(false)}>{tCommon('cancel')}</Button>
                     <Button
                         onClick={handleInviteUser}
                         variant="contained"
                         disabled={inviting || !inviteEmail}
                     >
-                        {inviting ? 'Inviting...' : 'Send Invitation'}
+                        {inviting ? t('dialogs.inviting') : t('dialogs.sendInvitation')}
                     </Button>
                 </DialogActions>
             </Dialog>
 
             {/* Edit Role Dialog */}
             <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="xs" fullWidth>
-                <DialogTitle>Change User Role</DialogTitle>
+                <DialogTitle>{t('dialogs.editRoleTitle')}</DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2 }}>
                         <Typography variant="body2" mb={2}>
-                            User: {selectedUser?.email}
+                            {t('form.userLabel', { email: selectedUser?.email })}
                         </Typography>
                         <FormControl fullWidth>
-                            <InputLabel>New Role</InputLabel>
+                            <InputLabel>{t('form.newRole')}</InputLabel>
                             <Select
                                 value={selectedUser?.role || 'USER'}
-                                label="New Role"
+                                label={t('form.newRole')}
                                 onChange={(e) => setSelectedUser(prev => prev ? { ...prev, role: e.target.value as 'OWNER' | 'ADMIN' | 'USER' } : null)}
                             >
-                                <MenuItem value="USER">User (Read-only)</MenuItem>
-                                <MenuItem value="ADMIN">Admin (Can manage data)</MenuItem>
+                                <MenuItem value="USER">{t('form.roleUser')}</MenuItem>
+                                <MenuItem value="ADMIN">{t('form.roleAdmin')}</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={() => setEditDialogOpen(false)}>{tCommon('cancel')}</Button>
                     <Button
                         onClick={() => selectedUser && handleUpdateRole(selectedUser.userId, selectedUser.role)}
                         variant="contained"
                     >
-                        Update Role
+                        {t('dialogs.updateRole')}
                     </Button>
                 </DialogActions>
             </Dialog>
 
             {/* Reset Password Confirmation Dialog */}
             <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
-                <DialogTitle>Reset User Password</DialogTitle>
+                <DialogTitle>{t('dialogs.resetPasswordTitle')}</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Are you sure you want to reset the password for <strong>{userToReset?.email}</strong>?
+                        {t('dialogs.resetPasswordConfirm', { email: userToReset?.email })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                        This will send an email to the user with a code to reset their password.
+                        {t('dialogs.resetPasswordInfo')}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setResetDialogOpen(false)} disabled={resetting}>Cancel</Button>
+                    <Button onClick={() => setResetDialogOpen(false)} disabled={resetting}>{tCommon('cancel')}</Button>
                     <Button
                         onClick={handleResetPassword}
                         color="warning"
                         variant="contained"
                         disabled={resetting}
                     >
-                        {resetting ? 'Sending...' : 'Reset Password'}
+                        {resetting ? t('dialogs.sending') : t('dialogs.resetPassword')}
                     </Button>
                 </DialogActions>
             </Dialog>

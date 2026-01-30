@@ -22,6 +22,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -205,8 +206,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     const operationsItems = [
         { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
-        { text: t('bookings'), icon: <BookOnlineIcon />, path: '/bookings' },
-        { text: t('availability'), icon: <CalendarMonthIcon />, path: '/availability' },
+        { text: t('bookings'), icon: <CalendarMonthIcon />, path: '/bookings' },
+        { text: t('availability'), icon: <EditCalendarIcon />, path: '/availability' },
     ];
 
     const aiConfigItems = [
@@ -305,8 +306,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, ml: 2, opacity: open ? 1 : 0, transition: 'opacity 0.2s', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                        Admin Panel
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, ml: 2, opacity: open ? 1 : 0, transition: 'opacity 0.2s', whiteSpace: 'nowrap', overflow: 'hidden', fontWeight: 'bold' }}>
+                        Hola Lucia
                     </Typography>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
