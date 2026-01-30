@@ -41,6 +41,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
+import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
+import PlanGuard from '../../components/PlanGuard';
 
 // --- Types ---
 
@@ -60,6 +62,8 @@ interface Provider {
     photoUrl?: string; // Optimized WebP URL
     photoUrlThumbnail?: string; // Thumbnail URL
     hasGoogleCalendar?: boolean;
+    hasMicrosoftCalendar?: boolean;
+    slug?: string;
     aiDrivers: {
         traits: string[];
         languages: string[];
@@ -141,6 +145,7 @@ export default function ProvidersPage() {
         serviceIds: [],
         timezone: 'America/Santiago',
         active: true,
+        slug: '',
         aiDrivers: {
             traits: [],
             languages: ['Español'],
@@ -200,6 +205,8 @@ export default function ProvidersPage() {
                     photoUrl: p.photoUrl,
                     photoUrlThumbnail: p.photoUrlThumbnail,
                     hasGoogleCalendar: p.hasGoogleCalendar,
+                    hasMicrosoftCalendar: p.hasMicrosoftCalendar,
+                    slug: p.slug || '',
                     aiDrivers: aiDrivers
                 };
             });
@@ -237,6 +244,7 @@ export default function ProvidersPage() {
                 serviceIds: [],
                 timezone: 'America/Santiago',
                 active: true,
+                slug: '',
                 aiDrivers: {
                     traits: [],
                     languages: ['Español'],
@@ -343,7 +351,8 @@ export default function ProvidersPage() {
                     photoUrl: formData.photoUrl,
                     // photoUrlThumbnail: formData.photoUrlThumbnail, // We can let lambda update this or set if we knew it
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
-                    available: formData.active
+                    available: formData.active,
+                    slug: formData.slug
                 };
 
                 await client.graphql({
@@ -359,7 +368,8 @@ export default function ProvidersPage() {
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
                     photoUrl: formData.photoUrl,
-                    metadata: JSON.stringify({ aiDrivers: formData.aiDrivers })
+                    metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
+                    slug: formData.slug
                 };
 
                 await client.graphql({
@@ -592,6 +602,14 @@ export default function ProvidersPage() {
                                 </Button>
                             </Box>
                             <TextField
+                                label="Link Personal (Slug)"
+                                placeholder="ej: dr-juan-perez"
+                                fullWidth
+                                value={formData.slug}
+                                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                                helperText={formData.slug ? `Tu link será: holalucia.cl/${formData.slug}` : 'Escribe un nombre único para tu link (sin espacios)'}
+                            />
+                            <TextField
                                 label={t('dialog.general.fullName')}
                                 fullWidth
                                 value={formData.name}
@@ -727,12 +745,20 @@ export default function ProvidersPage() {
                     {/* Tab 4: Integrations */}
                     <CustomTabPanel value={tabValue} index={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <GoogleCalendarCard
-                                providerId={formData.id}
-                                tenantId={tenantId}
-                                isConnected={!!formData.hasGoogleCalendar}
-                                onDisconnect={() => { alert("Disconnect feature coming soon"); }}
-                            />
+                            <PlanGuard minPlan="PRO" featureName="Integración de Calendarios" variant="overlay" upgradeFeature="AI">
+                                <GoogleCalendarCard
+                                    providerId={formData.id}
+                                    tenantId={tenantId}
+                                    isConnected={!!formData.hasGoogleCalendar}
+                                    onDisconnect={() => { alert("Disconnect feature coming soon"); }}
+                                />
+                                <MicrosoftCalendarCard
+                                    providerId={formData.id}
+                                    tenantId={tenantId}
+                                    isConnected={!!formData.hasMicrosoftCalendar}
+                                    onDisconnect={() => { alert("Disconnect feature coming soon"); }}
+                                />
+                            </PlanGuard>
                         </Box>
                     </CustomTabPanel>
 
