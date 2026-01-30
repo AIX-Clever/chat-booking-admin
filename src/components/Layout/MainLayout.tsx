@@ -28,7 +28,6 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import QuizIcon from '@mui/icons-material/Quiz';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChatIcon from '@mui/icons-material/Chat';
 import WebIcon from '@mui/icons-material/Web';
