@@ -14,8 +14,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { format, parseISO, getHours } from 'date-fns';
-import { es } from 'date-fns/locale';
+// Removed unused date-fns imports
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS, GET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
 
 import {
@@ -1573,6 +1572,7 @@ export default function BookingsPage() {
                                                 return h >= 18;
                                             });
 
+                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                             const renderSlotButton = (slot: any) => {
                                                 const timeStr = new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
                                                 const isSelected = newBookingData.time === timeStr;

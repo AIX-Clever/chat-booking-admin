@@ -28,7 +28,25 @@
         "knowledge": "Knowledge Base",
         "faqs": "FAQs",
         "workflows": "Workflows",
-        "categories": "Categories"
+        "categories": "Categories",
+        "widgets": "Interfaces",
+        "chatWidget": "Chat Bot (Lucia)",
+        "bookingWidget": "Booking Page"
+    },
+    "widgets": {
+        "chat": {
+            "title": "Chat Bot (Lucia)",
+            "subtitle": "Configure the AI assistant for your website",
+            "install": "Installation",
+            "installSubtitle": "Copy this code into your website's <head> tag"
+        },
+        "booking": {
+            "title": "Booking Page",
+            "subtitle": "Configure your landing page for direct bookings",
+            "publicLink": "Public Link",
+            "copyLink": "Copy Link",
+            "openLink": "Open Link"
+        }
     },
     "rooms": {
         "title": "Room Management",

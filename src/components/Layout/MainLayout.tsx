@@ -28,7 +28,10 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import QuizIcon from '@mui/icons-material/Quiz';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import ChatIcon from '@mui/icons-material/Chat';
+import WebIcon from '@mui/icons-material/Web';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -215,6 +218,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('faqs'), icon: <QuizIcon />, path: '/faqs' },
     ];
 
+    const widgetItems = [
+        { text: t('chatWidget'), icon: <ChatIcon />, path: '/widgets/chat' },
+        { text: t('bookingWidget'), icon: <WebIcon />, path: '/widgets/booking' },
+    ];
+
     const resourcesItems = [
         { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
         { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
@@ -226,7 +234,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
 
-    const allMenuItems = [...operationsItems, ...aiConfigItems, ...resourcesItems, ...systemItems];
+    const allMenuItems = [...operationsItems, ...aiConfigItems, ...widgetItems, ...resourcesItems, ...systemItems];
 
     if (pathname === '/login') {
         return (
@@ -320,6 +328,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 <List>
                     {renderMenuItems(aiConfigItems)}
                 </List>
+                <Divider />
+                <List>{renderMenuItems(widgetItems)}</List>
                 <Divider />
                 <List>
                     {renderMenuItems(resourcesItems)}
