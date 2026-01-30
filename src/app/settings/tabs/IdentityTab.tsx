@@ -19,6 +19,7 @@ import { useTranslations } from 'next-intl';
 
 interface ProfileData {
     centerName: string;
+    bio: string;
     profession: string;
     specializations: string[];
     operatingHours: string;
@@ -78,6 +79,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
     // Local state to handle form inputs before updating parent state
     const [formData, setFormData] = useState<ProfileData>({
         centerName: '',
+        bio: '',
         profession: '',
         specializations: [],
         operatingHours: '',
@@ -149,8 +151,19 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                                     label={t('centerName')}
                                     value={formData.centerName}
                                     onChange={(e) => handleChange('centerName', e.target.value)}
-                                    placeholder="Ej: Centro de Salud Lucía / Clínica Dental Acme"
+                                    placeholder={t('centerNamePlaceholder')}
                                     required
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    rows={4}
+                                    label={t('bio')}
+                                    value={formData.bio}
+                                    onChange={(e) => handleChange('bio', e.target.value)}
+                                    placeholder={t('bioPlaceholder')}
                                 />
                             </Grid>
                         </Grid>

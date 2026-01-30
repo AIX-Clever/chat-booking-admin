@@ -31,6 +31,60 @@
         "workflows": "Flujos",
         "categories": "Categorías"
     },
+    "users": {
+        "title": "Gestión de Usuarios",
+        "activeUsers": "Usuarios Activos: {current} / {max} (Plan {plan})",
+        "inviteUser": "Invitar Usuario",
+        "planLimitReached": "Has alcanzado el número máximo de usuarios para tu plan {plan}. Actualiza para agregar más usuarios.",
+        "table": {
+            "email": "Email",
+            "name": "Nombre",
+            "role": "Rol",
+            "status": "Estado",
+            "created": "Creado",
+            "actions": "Acciones"
+        },
+        "roles": {
+            "owner": "Propietario",
+            "admin": "Administrador",
+            "user": "Usuario"
+        },
+        "status": {
+            "active": "Activo",
+            "inactive": "Inactivo",
+            "pendingInvitation": "Invitación Pendiente"
+        },
+        "dialogs": {
+            "inviteTitle": "Invitar Nuevo Usuario",
+            "editRoleTitle": "Cambiar Rol de Usuario",
+            "resetPasswordTitle": "Restablecer Contraseña",
+            "resetPasswordConfirm": "¿Estás seguro de que deseas restablecer la contraseña para {email}?",
+            "resetPasswordInfo": "Esto enviará un correo al usuario con un código para restablecer su contraseña.",
+            "removeUserConfirm": "¿Estás seguro de que deseas eliminar este usuario?",
+            "cancel": "Cancelar",
+            "sendInvitation": "Enviar Invitación",
+            "inviting": "Invitando...",
+            "updateRole": "Actualizar Rol",
+            "resetPassword": "Restablecer Contraseña",
+            "sending": "Enviando..."
+        },
+        "form": {
+            "email": "Email",
+            "name": "Nombre (opcional)",
+            "role": "Rol",
+            "roleUser": "Usuario (Solo lectura)",
+            "roleAdmin": "Admin (Gestionar datos)",
+            "newRole": "Nuevo Rol",
+            "userLabel": "Usuario: {email}"
+        },
+        "messages": {
+            "emailRequired": "El email es requerido",
+            "planLimitError": "Tu plan {plan} permite máximo {max} usuario(s). Por favor actualiza para agregar más usuarios.",
+            "inviteSuccess": "Usuario invitado exitosamente",
+            "passwordResetSent": "Correo de restablecimiento enviado a {email}",
+            "fetchError": "Error al cargar usuarios"
+        }
+    },
     "rooms": {
         "title": "Gestión de Salas",
         "subtitle": "Administra las salas y espacios físicos disponibles para reserva",
@@ -182,7 +236,12 @@
             "furthest": "Más lejana"
         },
         "searchPlaceholder": "Buscar cliente...",
-        "noBookingsFound": "No se encontraron reservas."
+        "noBookingsFound": "No se encontraron reservas.",
+        "availability": {
+            "selectDateAndProvider": "Seleccione un profesional y una fecha para ver horarios disponibles.",
+            "noSlotsFound": "No hay horarios disponibles para este día.",
+            "manualOverrideHelper": "Puede ingresar una hora manualmente si es necesario (el sistema validará si está permitido)."
+        }
     },
     "services": {
         "title": "Servicios",
@@ -285,9 +344,6 @@
             "saturday": "Sábado",
             "sunday": "Domingo"
         },
-        "selectDateAndProvider": "Seleccione un profesional y una fecha para ver horarios disponibles.",
-        "noSlotsFound": "No hay horarios disponibles para este día.",
-        "manualOverrideHelper": "Puede ingresar una hora manualmente si es necesario (el sistema validará si está permitido).",
         "saveChanges": "Guardar Cambios",
         "saved": "Guardado",
         "addSlot": "Agregar Franja",
@@ -351,6 +407,9 @@
             "location": "Ubicación y Horarios",
             "legal": "Información Legal y Facturación",
             "centerName": "Nombre Público (Centro o Profesional)",
+            "centerNamePlaceholder": "Ej: Centro de Salud Lucía / Clínica Dental Acme",
+            "bio": "Sobre mí / Biografía",
+            "bioPlaceholder": "Cuéntale a tus clientes sobre tu experiencia, especialidades o lo que hace único a tu servicio...",
             "profession": "Giro o Actividad Principal",
             "specializations": "Áreas de Servicio / Especialidades",
             "specializationsHelper": "Describe brevemente qué servicios ofreces para dar contexto a la IA",
@@ -503,5 +562,40 @@
         "unlockPremium": "Desbloquear Capacidades Premium",
         "featureAvailable": "{featureName} está disponible exclusivamente en el plan {plan} y superior. Actualiza para acceder a funciones avanzadas de automatización e IA.",
         "upgradeTo": "Actualizar a {plan}"
+    },
+    "upgradeModal": {
+        "unlockAi": {
+            "title": "Desbloquea Inteligencia Artificial",
+            "description": "Entrena a tu asistente con tus propios documentos y deja que maneje preguntas complejas automáticamente.",
+            "benefit1": "Base de Conocimiento Personalizada",
+            "benefit2": "Respuestas RAG Inteligentes",
+            "benefit3": "Soporte Automatizado 24/7"
+        },
+        "team": {
+            "title": "Trabaja en Equipo",
+            "description": "Escala tus operaciones invitando a miembros de tu equipo para gestionar chats y reservas.",
+            "benefit1": "Hasta 5 Miembros de Equipo",
+            "benefit2": "Acceso Basado en Roles",
+            "benefit3": "Bandeja de Entrada Compartida"
+        },
+        "usage": {
+            "title": "Aumenta la Capacidad",
+            "description": "Te estás acercando a los límites de tu plan. Actualiza para seguir creciendo sin interrupciones.",
+            "benefit1": "4x Capacidad de Reservas",
+            "benefit2": "4x Volumen de Mensajes",
+            "benefit3": "Soporte Prioritario"
+        },
+        "workflow": {
+            "title": "Flujos Avanzados",
+            "description": "Crea flujos de conversación sofisticados con pasos lógicos e IA.",
+            "benefit1": "Pasos de Lógica IA",
+            "benefit2": "Ramificación Compleja",
+            "benefit3": "Extracción de Datos"
+        },
+        "common": {
+            "upgradeTo": "Contratar Plan {plan}",
+            "whatYouGet": "LO QUE OBTIENES CON {plan}:",
+            "maybeLater": "Quizás más tarde"
+        }
     }
 }
