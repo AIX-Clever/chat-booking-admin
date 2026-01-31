@@ -38,7 +38,7 @@
             "title": "Chat Bot (Lucia)",
             "subtitle": "Configure the AI assistant for your website",
             "install": "Installation",
-            "installSubtitle": "Copy this code into your website's <head> tag"
+            "installSubtitle": "Copy this code into your website's &lt;head&gt; tag"
         },
         "booking": {
             "title": "Booking Page",

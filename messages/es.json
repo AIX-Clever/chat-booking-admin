@@ -39,7 +39,7 @@
             "title": "Chat de Lucia",
             "subtitle": "Configura el asistente de IA para tu sitio web",
             "install": "Instalación",
-            "installSubtitle": "Copia este código en la etiqueta <head> de tu sitio web"
+            "installSubtitle": "Copia este código en la etiqueta &lt;head&gt; de tu sitio web"
         },
         "booking": {
             "title": "Página de Reservas",
