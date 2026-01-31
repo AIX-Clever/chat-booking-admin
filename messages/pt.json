@@ -28,7 +28,27 @@
         "knowledge": "Base de Conhecimento",
         "faqs": "FAQs",
         "workflows": "Fluxos",
-        "categories": "Categorias"
+        "categories": "Categorias",
+        "widgets": "Interfaces",
+        "chatWidget": "Chat Bot (Lucia)",
+        "bookingWidget": "Página de Agendamento"
+    },
+    "widgets": {
+        "chat": {
+            "title": "Chat Bot (Lucia)",
+            "subtitle": "Configure o assistente de IA para o seu site",
+            "install": "Instalação",
+            "installSubtitle": "Copie este código na tag tag &lt;head&gt; do seu site"
+        },
+        "booking": {
+            "title": "Página de Agendamento",
+            "subtitle": "Configure sua página de destino para agendamentos diretos",
+            "publicLink": "Link Público",
+            "copyLink": "Copiar Link",
+            "openLink": "Abrir Link",
+            "brandingTitle": "Identidade Visual",
+            "brandingSubtitle": "Personalize como sua página de agendamento aparece para seus clientes. (Disponível no PRO)"
+        }
     },
     "users": {
         "title": "Gestão de Usuários",
