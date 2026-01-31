@@ -285,7 +285,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                     {/* 4. AI CONTEXT */}
                     <Box sx={{ mb: 4 }}>
                         <Typography variant="h6" gutterBottom color="primary.main">
-                            IA Context (Identidad Escuchada)
+                            {t('aiContext')}
                         </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={6}>

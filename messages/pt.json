@@ -445,6 +445,8 @@
             "zipCode": "CEP",
             "timezone": "Fuso Horário",
             "timezoneHelper": "Essencial para coordenar as reservas corretamente",
+            "aiContext": "Contexto de IA (Identidade Ouvida)",
+            "legal": "Informações Legais e Faturamento",
             "branding": "Marca",
             "contact": "Contato",
             "centerNamePlaceholder": "Ex: Centro de Saúde Lúcia / Clínica Odontológica Acme",

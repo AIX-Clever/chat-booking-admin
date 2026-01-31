@@ -427,6 +427,7 @@
             "location": "Ubicación y Horarios",
             "legal": "Información Legal y Facturación",
             "centerName": "Nombre Público (Centro o Profesional)",
+            "aiContext": "Contexto de IA (Identidad Escuchada)",
             "centerNamePlaceholder": "Ej: Centro de Salud Lucía / Clínica Dental Acme",
             "bio": "Sobre mí / Biografía",
             "bioPlaceholder": "Cuéntale a tus clientes sobre tu experiencia, especialidades o lo que hace único a tu servicio...",
