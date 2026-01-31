@@ -116,6 +116,18 @@
             "tokensIA": "AI Tokens (Monthly)",
             "bookings": "Bookings (Monthly)",
             "messages": "Messages"
+        },
+        "funnel": {
+            "title": "Conversion Funnel",
+            "subtitle": "Drop-off rates by step",
+            "serviceSelected": "Service Selected",
+            "providerSelected": "Provider Selected",
+            "dateSelected": "Date Selected",
+            "bookingCompleted": "Booking Completed"
+        },
+        "peakHours": {
+            "title": "Peak Hours",
+            "subtitle": "Booking density by hour"
         }
     },
     "bookings": {
@@ -168,6 +180,7 @@
             "provider": "Provider",
             "date": "Date",
             "time": "Time",
+            "manualTime": "Manual Entry / Other Time",
             "notes": "Notes",
             "dateTime": "Date & Time"
         },
@@ -185,7 +198,12 @@
             "furthest": "Furthest"
         },
         "searchPlaceholder": "Search client...",
-        "noBookingsFound": "No bookings found."
+        "noBookingsFound": "No bookings found.",
+        "availability": {
+            "selectDateAndProvider": "Select a provider and date to view available slots.",
+            "noSlotsFound": "No slots available for this day.",
+            "manualOverrideHelper": "You can enter a time manually if necessary (system will validate if allowed)."
+        }
     },
     "services": {
         "title": "Services",
@@ -223,8 +241,6 @@
     "providers": {
         "title": "Providers",
         "newProvider": "New Provider",
-        "editProvider": "Edit Provider",
-        "searchPlaceholder": "Search provider...",
         "noProvidersFound": "No providers found.",
         "columns": {
             "name": "Name",

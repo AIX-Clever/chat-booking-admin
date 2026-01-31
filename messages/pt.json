@@ -150,6 +150,7 @@
             "provider": "Profissional",
             "date": "Data",
             "time": "Hora",
+            "manualTime": "Entrada Manual / Outra Hora",
             "notes": "Notas",
             "dateTime": "Data e Hora"
         },
@@ -167,7 +168,12 @@
             "furthest": "Mais distante"
         },
         "searchPlaceholder": "Buscar cliente...",
-        "noBookingsFound": "Nenhuma reserva encontrada."
+        "noBookingsFound": "Nenhuma reserva encontrada.",
+        "availability": {
+            "selectDateAndProvider": "Selecione um profissional e uma data para ver horários disponíveis.",
+            "noSlotsFound": "Não há horários disponíveis para este dia.",
+            "manualOverrideHelper": "Você pode inserir um horário manualmente, se necessário (o sistema validará se for permitido)."
+        }
     },
     "services": {
         "title": "Serviços",
@@ -466,5 +472,40 @@
         "unlockPremium": "Desbloquear Recursos Premium",
         "featureAvailable": "{featureName} está disponível exclusivamente no plano {plan} e superior. Atualize para acessar recursos avançados de automação e IA.",
         "upgradeTo": "Atualizar para {plan}"
+    },
+    "upgradeModal": {
+        "unlockAi": {
+            "title": "Desbloqueie Inteligência Artificial",
+            "description": "Treine seu assistente com seus próprios documentos e deixe-o lidar com perguntas complexas automaticamente.",
+            "benefit1": "Base de Conhecimento Personalizada",
+            "benefit2": "Respostas Inteligentes RAG",
+            "benefit3": "Suporte Automatizado 24/7"
+        },
+        "team": {
+            "title": "Trabalhe em Equipe",
+            "description": "Escalone suas operações convidando membros da equipe para gerenciar chats e reservas.",
+            "benefit1": "Até 5 Membros da Equipe",
+            "benefit2": "Acesso Baseado em Opcões",
+            "benefit3": "Caixa de Entrada Compartilhada"
+        },
+        "usage": {
+            "title": "Aumentar Capacidade",
+            "description": "Você está se aproximando dos limites do seu plano. Atualize para continuar crescendo sem interrupções.",
+            "benefit1": "4x Capacidade de Reserva",
+            "benefit2": "4x Volume de Mensagens",
+            "benefit3": "Suporte Prioritário"
+        },
+        "workflow": {
+            "title": "Fluxos Avançados",
+            "description": "Crie fluxos de conversação sofisticados com etapas lógicas e IA.",
+            "benefit1": "Etapas Lógicas de IA",
+            "benefit2": "Ramificação Complexa",
+            "benefit3": "Extração de Dados"
+        },
+        "common": {
+            "upgradeTo": "Atualizar para {plan}",
+            "whatYouGet": "O QUE VOCÊ RECEBE COM {plan}:",
+            "maybeLater": "Talvez mais tarde"
+        }
     }
 }
