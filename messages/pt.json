@@ -505,6 +505,9 @@
             "actions": "Ações",
             "active": "Ativo",
             "revoked": "Revogado",
+            "noKeys": "Você não tem chaves API ativas.",
+            "revoke": "Revogar",
+            "confirmRevoke": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
             "createDialog": {
                 "title": "Criar Nova Chave API",
                 "label": "Nome da Chave (ex. Produção Web)"
