@@ -87,6 +87,58 @@ export default function LoginPage() {
         }
     };
 
+    const [view, setView] = React.useState<'login' | 'forgot' | 'reset'>('login');
+    const [resetData, setResetData] = React.useState({
+        code: '',
+        newPassword: ''
+    });
+
+    const handleForgotPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!formData.email) {
+            setError('Por favor ingresa tu email');
+            return;
+        }
+        setLoading(true);
+        try {
+            const { resetPassword } = await import('aws-amplify/auth');
+            await resetPassword({ username: formData.email });
+            setView('reset');
+            setError('');
+            // Optional: Success toast could go here
+        } catch (err: unknown) {
+            console.error('Reset error:', err);
+            const message = err instanceof Error ? err.message : 'Error al solicitar el código';
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleConfirmReset = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const { confirmResetPassword } = await import('aws-amplify/auth');
+            await confirmResetPassword({
+                username: formData.email,
+                confirmationCode: resetData.code,
+                newPassword: resetData.newPassword
+            });
+            setView('login');
+            setError('');
+            alert(t('passwordChanged'));
+        } catch (err: unknown) {
+            console.error('Confirm reset error:', err);
+            const message = err instanceof Error ? err.message : 'Error al confirmar la nueva contraseña';
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loginUrl = process.env.NEXT_PUBLIC_ONBOARDING_URL || 'https://onboarding.holalucia.cl';
+
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
             {/* Left Side - Brand/Image */}
@@ -136,10 +188,10 @@ export default function LoginPage() {
                 </Box>
             </Box>
 
-            {/* Right Side - Login Form */}
+            {/* Right Side - Forms */}
             <Box
                 sx={{
-                    flex: { xs: 1, md: 0.8 }, // Give form slightly less width on large screens
+                    flex: { xs: 1, md: 0.8 },
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -158,10 +210,10 @@ export default function LoginPage() {
                 >
                     <Box sx={{ mb: 4, textAlign: 'center' }}>
                         <Typography variant="h5" fontWeight="bold" gutterBottom>
-                            Bienvenido de nuevo
+                            {view === 'login' ? 'Bienvenido de nuevo' : view === 'forgot' ? t('resetPasswordTitle') : t('confirmReset')}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            Ingresa tus credenciales para acceder al panel.
+                            {view === 'login' ? 'Ingresa tus credenciales para acceder al panel.' : view === 'forgot' ? t('resetPasswordSubtitle') : 'Ingresa el código que te enviamos y tu nueva contraseña.'}
                         </Typography>
                     </Box>
 
@@ -171,85 +223,145 @@ export default function LoginPage() {
                         </Alert>
                     )}
 
-                    <form onSubmit={handleLogin}>
-                        <Stack spacing={3}>
-                            <TextField
-                                fullWidth
-                                label={t('email')}
-                                placeholder="admin@lucia.com"
-                                value={formData.email}
-                                onChange={handleChange('email')}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <EmailOutlineIcon color="action" />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-
-                            <TextField
-                                fullWidth
-                                label={t('password')}
-                                type={showPassword ? 'text' : 'password'}
-                                value={formData.password}
-                                onChange={handleChange('password')}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <LockOutlineIcon color="action" />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                edge="end"
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <FormControlLabel
-                                    control={<Checkbox defaultChecked color="primary" />}
-                                    label={<Typography variant="body2">Recordarme</Typography>}
+                    {view === 'login' && (
+                        <form onSubmit={handleLogin}>
+                            <Stack spacing={3}>
+                                <TextField
+                                    fullWidth
+                                    label={t('email')}
+                                    placeholder="admin@lucia.com"
+                                    value={formData.email}
+                                    onChange={handleChange('email')}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailOutlineIcon color="action" />
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
-                                <Link component="button" variant="body2" underline="hover" onClick={() => { }}>
-                                    {t('forgotPassword')}
-                                </Link>
-                            </Box>
 
-                            <Button
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                disabled={loading}
-                                sx={{
-                                    height: 48,
-                                    fontSize: '1rem',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(to right, #2563eb, #7c3aed)',
-                                    boxShadow: '0 4px 14px 0 rgba(37,99,235,0.39)',
-                                    '&:hover': {
-                                        background: 'linear-gradient(to right, #1d4ed8, #6d28d9)',
-                                    }
-                                }}
-                            >
-                                {loading ? <CircularProgress size={24} color="inherit" /> : t('signIn')}
-                            </Button>
-                        </Stack>
-                    </form>
+                                <TextField
+                                    fullWidth
+                                    label={t('password')}
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={formData.password}
+                                    onChange={handleChange('password')}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockOutlineIcon color="action" />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <FormControlLabel
+                                        control={<Checkbox defaultChecked color="primary" />}
+                                        label={<Typography variant="body2">Recordarme</Typography>}
+                                    />
+                                    <Link component="button" variant="body2" underline="hover" type="button" onClick={() => setView('forgot')}>
+                                        {t('forgotPassword')}
+                                    </Link>
+                                </Box>
+
+                                <Button
+                                    fullWidth
+                                    size="large"
+                                    type="submit"
+                                    variant="contained"
+                                    disabled={loading}
+                                    sx={{
+                                        height: 48,
+                                        fontSize: '1rem',
+                                        textTransform: 'none',
+                                        background: 'linear-gradient(to right, #2563eb, #7c3aed)',
+                                        boxShadow: '0 4px 14px 0 rgba(37,99,235,0.39)',
+                                        '&:hover': {
+                                            background: 'linear-gradient(to right, #1d4ed8, #6d28d9)',
+                                        }
+                                    }}
+                                >
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : t('signIn')}
+                                </Button>
+                            </Stack>
+                        </form>
+                    )}
+
+                    {view === 'forgot' && (
+                        <form onSubmit={handleForgotPassword}>
+                            <Stack spacing={3}>
+                                <TextField
+                                    fullWidth
+                                    label={t('email')}
+                                    value={formData.email}
+                                    onChange={handleChange('email')}
+                                    placeholder="admin@lucia.com"
+                                />
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={loading}
+                                    sx={{ height: 48, textTransform: 'none' }}
+                                >
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : t('sendCode')}
+                                </Button>
+                                <Button variant="text" onClick={() => setView('login')} sx={{ textTransform: 'none' }}>
+                                    {t('backToLogin')}
+                                </Button>
+                            </Stack>
+                        </form>
+                    )}
+
+                    {view === 'reset' && (
+                        <form onSubmit={handleConfirmReset}>
+                            <Stack spacing={3}>
+                                <TextField
+                                    fullWidth
+                                    label={t('verificationCode')}
+                                    value={resetData.code}
+                                    onChange={(e) => setResetData({ ...resetData, code: e.target.value })}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label={t('newPassword')}
+                                    type="password"
+                                    value={resetData.newPassword}
+                                    onChange={(e) => setResetData({ ...resetData, newPassword: e.target.value })}
+                                />
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={loading}
+                                    sx={{ height: 48, textTransform: 'none' }}
+                                >
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : t('confirmReset')}
+                                </Button>
+                                <Button variant="text" onClick={() => setView('forgot')} sx={{ textTransform: 'none' }}>
+                                    {t('backToLogin')}
+                                </Button>
+                            </Stack>
+                        </form>
+                    )}
 
                     <Box sx={{ mt: 4, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
                             {t('noAccount')}{' '}
-                            <Link href="#" underline="hover" fontWeight="medium">
+                            <Link href={loginUrl} underline="hover" fontWeight="medium">
                                 {t('signUp')}
                             </Link>
                         </Typography>

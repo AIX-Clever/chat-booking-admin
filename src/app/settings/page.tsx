@@ -30,6 +30,7 @@ import PropertiesTab from './tabs/PropertiesTab';
 import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
+import ComplianceTab from './tabs/ComplianceTab';
 
 // --- Types ---
 
@@ -66,6 +67,7 @@ export default function SettingsPage() {
         if (tabParam === 'ai') return 1;
         if (tabParam === 'keys') return 2;
         if (tabParam === 'identity') return 3;
+        if (tabParam === 'compliance') return 4;
         return 0;
     };
 
@@ -273,6 +275,7 @@ export default function SettingsPage() {
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
                         <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
+                        <Tab label={t('tabs.compliance')} icon={<Box component="span" sx={{ fontSize: '1.2rem' }}>⚖️</Box>} iconPosition="start" />
                     </Tabs>
                 </Box>
 
@@ -323,6 +326,11 @@ export default function SettingsPage() {
                         {/* --- Tab 4: Identity --- */}
                         <CustomTabPanel value={tabValue} index={3}>
                             <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
+                        </CustomTabPanel>
+
+                        {/* --- Tab 5: Compliance --- */}
+                        <CustomTabPanel value={tabValue} index={4}>
+                            <ComplianceTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
                     </>
                 )}

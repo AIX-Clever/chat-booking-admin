@@ -9,11 +9,8 @@ import {
     Typography,
     Grid,
     MenuItem,
-    InputAdornment,
-    Tooltip,
 } from '@mui/material';
 import Image from 'next/image';
-import InfoIcon from '@mui/icons-material/Info';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useTranslations } from 'next-intl';
 
@@ -305,42 +302,6 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                                     onChange={(e) => handleChange('specializations', e.target.value.split(',').map(s => s.trim()))}
                                     placeholder="Ej: Ortodoncia, Implantología / Derecho Civil, Laboral"
                                     helperText={t('specializationsHelper')}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Box>
-
-                    {/* 5. LEGAL & BILLING */}
-                    <Box sx={{ p: 3, bgcolor: 'action.hover', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                        <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <InfoIcon fontSize="small" /> {t('legal')}
-                        </Typography>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label={t('legalName')}
-                                    value={formData.legalName}
-                                    onChange={(e) => handleChange('legalName', e.target.value)}
-                                    placeholder="Para fines de facturación"
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label={t('taxId')}
-                                    value={formData.taxId}
-                                    onChange={(e) => handleChange('taxId', e.target.value)}
-                                    placeholder="RUT / RFC / CNPJ / CUIT"
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <Tooltip title={t('taxIdTooltip')}>
-                                                    <InfoIcon color="action" fontSize="small" />
-                                                </Tooltip>
-                                            </InputAdornment>
-                                        ),
-                                    }}
                                 />
                             </Grid>
                         </Grid>

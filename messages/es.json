@@ -86,6 +86,10 @@
             "inviting": "Invitando...",
             "updateRole": "Actualizar Rol",
             "resetPassword": "Restablecer Contraseña",
+            "resendInvitation": "Reenviar Invitación",
+            "resendInvitationTitle": "Reenviar Invitación de Acceso",
+            "resendInvitationConfirm": "¿Deseas reenviar la invitación de acceso a {email}?",
+            "resendInvitationInfo": "Se generará una nueva contraseña temporal y se enviará por correo al usuario.",
             "sending": "Enviando..."
         },
         "form": {
@@ -102,6 +106,7 @@
             "planLimitError": "Tu plan {plan} permite máximo {max} usuario(s). Por favor actualiza para agregar más usuarios.",
             "inviteSuccess": "Usuario invitado exitosamente",
             "passwordResetSent": "Correo de restablecimiento enviado a {email}",
+            "invitationResent": "Invitación reenviada exitosamente a {email}",
             "fetchError": "Error al cargar usuarios"
         }
     },
@@ -324,6 +329,7 @@
             "general": {
                 "fullName": "Nombre Completo",
                 "biography": "Biografía",
+                "professionalLicense": "N° Registro / Colegiado (Legal)",
                 "timezone": "Zona Horaria",
                 "providerIsActive": "Profesional Activo"
             },
@@ -418,14 +424,15 @@
             "general": "General",
             "ai": "Inteligencia Artificial",
             "apiKeys": "Claves API",
-            "identity": "Perfil e Identidad"
+            "identity": "Identidad",
+            "compliance": "Cumplimiento (Legal)"
         },
         "identity": {
             "title": "Perfil e Identidad",
             "branding": "Imagen de Marca",
             "contact": "Contacto",
             "location": "Ubicación y Horarios",
-            "legal": "Información Legal y Facturación",
+            "complianceTitle": "Certificaciones y Legal",
             "centerName": "Nombre Público (Centro o Profesional)",
             "aiContext": "Contexto de IA (Identidad Escuchada)",
             "centerNamePlaceholder": "Ej: Centro de Salud Lucía / Clínica Dental Acme",
@@ -435,9 +442,6 @@
             "specializations": "Áreas de Servicio / Especialidades",
             "specializationsHelper": "Describe brevemente qué servicios ofreces para dar contexto a la IA",
             "operatingHours": "Horario General de Atención",
-            "legalName": "Razón Social / Nombre Legal",
-            "taxId": "Identificador Fiscal (RUT/RFC/etc.)",
-            "taxIdTooltip": "Datos exactos para la generación de facturas y documentos legales",
             "phone1": "Teléfono Principal",
             "phone2": "Teléfono Secundario",
             "email": "Correo Electrónico de Contacto",
@@ -454,6 +458,22 @@
             "uploadButton": "Subir Imagen",
             "uploadRecommended": "PNG o JPG, máx 2MB (Proporción 1:1 recomendada)",
             "save": "Guardar Perfil"
+        },
+        "compliance": {
+            "title": "Cumplimiento y Regulaciones",
+            "subtitle": "Gestiona la identidad legal y el cumplimiento normativo de tu negocio.",
+            "legalInfo": "Información Legal de Facturación",
+            "legalName": "Nombre Legal / Razón Social",
+            "taxId": "ID Fiscal (Tax ID)",
+            "taxIdTooltip": "Utilizado para facturación oficial y transparencia (RUT, RFC, etc.)",
+            "professionalInfo": "Identificación Profesional",
+            "gdpr": "Privacidad y Datos (RGPD/DPA)",
+            "dpa": "Acuerdo de Procesamiento de Datos (DPA)",
+            "dpaDescription": "Genera o sube tu acuerdo de procesamiento de datos para clientes.",
+            "professionalLicense": "N° Registro / Colegiado (Global)",
+            "privacyOfficer": "Delegado de Protección de Datos (DPO)",
+            "cookieConsent": "Consentimiento de Cookies",
+            "cookieStatus": "El banner de cookies está activo en tu sitio público."
         },
         "general": {
             "title": "Configuración General",
@@ -561,7 +581,16 @@
             "forgotPassword": "¿Olvidaste tu contraseña?",
             "noAccount": "¿No tienes cuenta?",
             "signUp": "Registrarse",
-            "signIn": "Iniciar Sesión"
+            "signIn": "Iniciar Sesión",
+            "resetPasswordTitle": "Restablecer Contraseña",
+            "resetPasswordSubtitle": "Ingresa tu email para recibir un código de verificación",
+            "sendCode": "Enviar Código",
+            "verificationCode": "Código de Verificación",
+            "newPassword": "Nueva Contraseña",
+            "confirmReset": "Cambiar Contraseña",
+            "codeSent": "Código enviado a tu correo",
+            "passwordChanged": "Contraseña cambiada exitosamente. Ya puedes iniciar sesión.",
+            "backToLogin": "Volver al inicio"
         },
         "register": {
             "title": "Crear Cuenta",

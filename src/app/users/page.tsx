@@ -34,7 +34,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { useTenant } from '../../context/TenantContext';
-import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER, RESET_USER_PASSWORD } from '../../graphql/user-queries';
+import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER, RESET_USER_PASSWORD, RESEND_INVITATION } from '../../graphql/user-queries';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import UpgradeModal from '../../components/common/UpgradeModal';
 
@@ -210,14 +210,17 @@ export default function UsersPage() {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
+            const isPending = userToReset.status === 'PENDING_INVITATION';
+
             await client.graphql({
-                query: RESET_USER_PASSWORD,
+                query: isPending ? RESEND_INVITATION : RESET_USER_PASSWORD,
                 variables: { userId: userToReset.userId },
                 authToken: token
             });
 
-            // Show success message (using alert for now, ideally Snackbar)
-            alert(t('messages.passwordResetSent', { email: userToReset.email }));
+            // Show success message
+            const message = isPending ? t('messages.invitationResent', { email: userToReset.email }) : t('messages.passwordResetSent', { email: userToReset.email });
+            alert(message);
 
             setResetDialogOpen(false);
             setUserToReset(null);
@@ -338,16 +341,16 @@ export default function UsersPage() {
                                                     <EditIcon fontSize="small" />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={t('dialogs.resetPassword')}>
+                                            <Tooltip title={user.status === 'PENDING_INVITATION' ? t('dialogs.resendInvitation') : t('dialogs.resetPassword')}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => {
                                                         setUserToReset(user);
                                                         setResetDialogOpen(true);
                                                     }}
-                                                    color="warning"
+                                                    color={user.status === 'PENDING_INVITATION' ? "primary" : "warning"}
                                                 >
-                                                    <VpnKeyIcon fontSize="small" />
+                                                    {user.status === 'PENDING_INVITATION' ? <PersonAddIcon fontSize="small" /> : <VpnKeyIcon fontSize="small" />}
                                                 </IconButton>
                                             </Tooltip>
 
@@ -447,24 +450,28 @@ export default function UsersPage() {
 
             {/* Reset Password Confirmation Dialog */}
             <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
-                <DialogTitle>{t('dialogs.resetPasswordTitle')}</DialogTitle>
+                <DialogTitle>{userToReset?.status === 'PENDING_INVITATION' ? t('dialogs.resendInvitationTitle') : t('dialogs.resetPasswordTitle')}</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {t('dialogs.resetPasswordConfirm', { email: userToReset?.email })}
+                        {userToReset?.status === 'PENDING_INVITATION'
+                            ? t('dialogs.resendInvitationConfirm', { email: userToReset?.email })
+                            : t('dialogs.resetPasswordConfirm', { email: userToReset?.email })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                        {t('dialogs.resetPasswordInfo')}
+                        {userToReset?.status === 'PENDING_INVITATION'
+                            ? t('dialogs.resendInvitationInfo')
+                            : t('dialogs.resetPasswordInfo')}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setResetDialogOpen(false)} disabled={resetting}>{tCommon('cancel')}</Button>
                     <Button
                         onClick={handleResetPassword}
-                        color="warning"
+                        color={userToReset?.status === 'PENDING_INVITATION' ? "primary" : "warning"}
                         variant="contained"
                         disabled={resetting}
                     >
-                        {resetting ? t('dialogs.sending') : t('dialogs.resetPassword')}
+                        {resetting ? t('dialogs.sending') : (userToReset?.status === 'PENDING_INVITATION' ? t('dialogs.resendInvitation') : t('dialogs.resetPassword'))}
                     </Button>
                 </DialogActions>
             </Dialog>

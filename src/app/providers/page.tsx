@@ -69,6 +69,7 @@ interface Provider {
         languages: string[];
         specialties: string[];
     };
+    professionalLicense?: string;
 }
 
 // --- Mock Data ---
@@ -150,7 +151,8 @@ export default function ProvidersPage() {
             traits: [],
             languages: ['Español'],
             specialties: []
-        }
+        },
+        professionalLicense: ''
     });
 
     const [tenantId, setTenantId] = React.useState<string>('');
@@ -207,7 +209,8 @@ export default function ProvidersPage() {
                     hasGoogleCalendar: p.hasGoogleCalendar,
                     hasMicrosoftCalendar: p.hasMicrosoftCalendar,
                     slug: p.slug || '',
-                    aiDrivers: aiDrivers
+                    aiDrivers: aiDrivers,
+                    professionalLicense: p.professionalLicense || ''
                 };
             });
             setProviders(fetched);
@@ -249,7 +252,8 @@ export default function ProvidersPage() {
                     traits: [],
                     languages: ['Español'],
                     specialties: []
-                }
+                },
+                professionalLicense: ''
             });
             setCurrentProvider(null);
         }
@@ -352,7 +356,8 @@ export default function ProvidersPage() {
                     // photoUrlThumbnail: formData.photoUrlThumbnail, // We can let lambda update this or set if we knew it
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
                     available: formData.active,
-                    slug: formData.slug
+                    slug: formData.slug,
+                    professionalLicense: formData.professionalLicense
                 };
 
                 await client.graphql({
@@ -369,7 +374,8 @@ export default function ProvidersPage() {
                     timezone: formData.timezone,
                     photoUrl: formData.photoUrl,
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
-                    slug: formData.slug
+                    slug: formData.slug,
+                    professionalLicense: formData.professionalLicense
                 };
 
                 await client.graphql({
@@ -622,6 +628,13 @@ export default function ProvidersPage() {
                                 rows={3}
                                 value={formData.bio}
                                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                            />
+                            <TextField
+                                label={t('dialog.general.professionalLicense')}
+                                fullWidth
+                                value={formData.professionalLicense}
+                                onChange={(e) => setFormData({ ...formData, professionalLicense: e.target.value })}
+                                placeholder="Ej: Colegio Médico N° 123456"
                             />
                             <TextField
                                 label={t('dialog.general.timezone')}

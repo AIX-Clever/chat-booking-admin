@@ -70,3 +70,15 @@ export const RESET_USER_PASSWORD = `
     resetUserPassword(userId: $userId)
   }
 `;
+
+export const RESEND_USER_PASSWORD_RESET = `
+  mutation ResendUserPasswordReset($userId: ID!) {
+    resendUserPasswordReset(userId: $userId)
+  }
+`;
+
+export const RESEND_INVITATION = `
+  mutation ResendInvitation($userId: ID!) {
+    resendInvitation(userId: $userId)
+  }
+`;
