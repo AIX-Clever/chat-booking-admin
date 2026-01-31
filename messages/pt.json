@@ -30,6 +30,60 @@
         "workflows": "Fluxos",
         "categories": "Categorias"
     },
+    "users": {
+        "title": "Gestão de Usuários",
+        "activeUsers": "Usuários Ativos: {current} / {max} (Plano {plan})",
+        "inviteUser": "Convidar Usuário",
+        "planLimitReached": "Você atingiu o número máximo de usuários para seu plano {plan}. Atualize para adicionar mais usuários.",
+        "table": {
+            "email": "Email",
+            "name": "Nome",
+            "role": "Função",
+            "status": "Status",
+            "created": "Criado",
+            "actions": "Ações"
+        },
+        "roles": {
+            "owner": "Proprietário",
+            "admin": "Administrador",
+            "user": "Usuário"
+        },
+        "status": {
+            "active": "Ativo",
+            "inactive": "Inativo",
+            "pendingInvitation": "Convite Pendente"
+        },
+        "dialogs": {
+            "inviteTitle": "Convidar Novo Usuário",
+            "editRoleTitle": "Alterar Função de Usuário",
+            "resetPasswordTitle": "Redefinir Senha",
+            "resetPasswordConfirm": "Tem certeza que deseja redefinir a senha de {email}?",
+            "resetPasswordInfo": "Isso enviará um e-mail para o usuário com um código para redefinir sua senha.",
+            "removeUserConfirm": "Tem certeza que deseja excluir este usuário?",
+            "cancel": "Cancelar",
+            "sendInvitation": "Enviar Convite",
+            "inviting": "Convidando...",
+            "updateRole": "Atualizar Função",
+            "resetPassword": "Redefinir Senha",
+            "sending": "Enviando..."
+        },
+        "form": {
+            "email": "Email",
+            "name": "Nome (opcional)",
+            "role": "Função",
+            "roleUser": "Usuário (Somente leitura)",
+            "roleAdmin": "Admin (Gerenciar dados)",
+            "newRole": "Nova Função",
+            "userLabel": "Usuário: {email}"
+        },
+        "messages": {
+            "emailRequired": "O email é obrigatório",
+            "planLimitError": "Seu plano {plan} permite no máximo {max} usuário(s). Por favor atualize para adicionar mais usuários.",
+            "inviteSuccess": "Usuário convidado com sucesso",
+            "passwordResetSent": "Email de redefinição enviado para {email}",
+            "fetchError": "Erro ao carregar usuários"
+        }
+    },
     "rooms": {
         "title": "Gestão de Salas",
         "subtitle": "Gerencie salas e espaços físicos disponíveis para reserva",

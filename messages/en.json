@@ -50,6 +50,60 @@
             "brandingSubtitle": "Customize how your booking page looks to your customers. (Available in PRO)"
         }
     },
+    "users": {
+        "title": "User Management",
+        "activeUsers": "Active Users: {current} / {max} (Plan {plan})",
+        "inviteUser": "Invite User",
+        "planLimitReached": "You have reached the maximum number of users for your plan {plan}. Upgrade to add more users.",
+        "table": {
+            "email": "Email",
+            "name": "Name",
+            "role": "Role",
+            "status": "Status",
+            "created": "Created",
+            "actions": "Actions"
+        },
+        "roles": {
+            "owner": "Owner",
+            "admin": "Admin",
+            "user": "User"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "pendingInvitation": "Pending Invitation"
+        },
+        "dialogs": {
+            "inviteTitle": "Invite New User",
+            "editRoleTitle": "Change User Role",
+            "resetPasswordTitle": "Reset Password",
+            "resetPasswordConfirm": "Are you sure you want to reset the password for {email}?",
+            "resetPasswordInfo": "This will send an email to the user with a code to reset their password.",
+            "removeUserConfirm": "Are you sure you want to delete this user?",
+            "cancel": "Cancel",
+            "sendInvitation": "Send Invitation",
+            "inviting": "Inviting...",
+            "updateRole": "Update Role",
+            "resetPassword": "Reset Password",
+            "sending": "Sending..."
+        },
+        "form": {
+            "email": "Email",
+            "name": "Name (optional)",
+            "role": "Role",
+            "roleUser": "User (Read only)",
+            "roleAdmin": "Admin (Manage data)",
+            "newRole": "New Role",
+            "userLabel": "User: {email}"
+        },
+        "messages": {
+            "emailRequired": "Email is required",
+            "planLimitError": "Your plan {plan} allows a maximum of {max} user(s). Please upgrade to add more users.",
+            "inviteSuccess": "User invited successfully",
+            "passwordResetSent": "Reset email sent to {email}",
+            "fetchError": "Error loading users"
+        }
+    },
     "rooms": {
         "title": "Room Management",
         "subtitle": "Manage rooms and physical spaces available for booking",
