@@ -607,7 +607,7 @@ export default function ProvidersPage() {
                                 fullWidth
                                 value={formData.slug}
                                 onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                                helperText={formData.slug ? `Tu link será: holalucia.cl/${formData.slug}` : 'Escribe un nombre único para tu link (sin espacios)'}
+                                helperText={formData.slug ? `Tu link será: agendar.holalucia.cl/${formData.slug}` : 'Escribe un nombre único para tu link (sin espacios)'}
                             />
                             <TextField
                                 label={t('dialog.general.fullName')}

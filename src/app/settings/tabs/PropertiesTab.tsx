@@ -40,7 +40,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
     const t = useTranslations('settings.general');
     const [copySuccess, setCopySuccess] = React.useState(false);
 
-    const publicLink = `https://link.holalucia.cl/${slug || 'tu-slug'}`;
+    const publicLink = `https://agendar.holalucia.cl/${slug || 'tu-slug'}`;
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText(publicLink);
@@ -67,7 +67,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
                             helperText={`Your page will be at: ${publicLink}`}
                             fullWidth
                             InputProps={{
-                                startAdornment: <InputAdornment position="start">link.holalucia.cl/</InputAdornment>,
+                                startAdornment: <InputAdornment position="start">agendar.holalucia.cl/</InputAdornment>,
                             }}
                         />
                     </Stack>
