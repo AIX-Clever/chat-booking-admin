@@ -258,7 +258,16 @@
         "availability": {
             "selectDateAndProvider": "Selecione um profissional e uma data para ver horários disponíveis.",
             "noSlotsFound": "Não há horários disponíveis para este dia.",
-            "manualOverrideHelper": "Você pode inserir um horário manualmente, se necessário (o sistema validará se for permitido)."
+            "manualOverrideHelper": "Você pode inserir um horário manualmente, se necessário (o sistema validará se for permitido).",
+            "days": {
+                "monday": "Segunda-feira",
+                "tuesday": "Terça-feira",
+                "wednesday": "Quarta-feira",
+                "thursday": "Quinta-feira",
+                "friday": "Sexta-feira",
+                "saturday": "Sábado",
+                "sunday": "Domingo"
+            }
         }
     },
     "services": {
@@ -371,6 +380,7 @@
         "alertPastDate": "Não é possível adicionar datas passadas como exceções",
         "alertDuplicateDate": "Esta data já foi adicionada",
         "alertSaveSuccess": "Disponibilidade salva!",
+        "unsavedChangesWarning": "Você tem alterações não salvas. Lembre-se de clicar em 'Salvar Alterações' acima.",
         "alertSaveError": "Erro ao salvar disponibilidade.",
         "dayOff": "Dia de Folga",
         "addExceptionDate": "Data da Exceção"
