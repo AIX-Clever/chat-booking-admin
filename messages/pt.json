@@ -170,6 +170,18 @@
             "tokensIA": "Tokens IA (Mensal)",
             "bookings": "Reservas (Mensal)",
             "messages": "Mensagens"
+        },
+        "funnel": {
+            "title": "Funil de Conversão",
+            "subtitle": "Taxas de abandono por etapa",
+            "serviceSelected": "Serviço Selecionado",
+            "providerSelected": "Profissional Selecionado",
+            "dateSelected": "Data Selecionada",
+            "bookingCompleted": "Reserva Concluída"
+        },
+        "peakHours": {
+            "title": "Horários de Pico",
+            "subtitle": "Densidade de reservas por hora"
         }
     },
     "bookings": {
@@ -431,6 +443,7 @@
             "custom": "Personalizado:",
             "position": "Posição",
             "language": "Idioma",
+            "languageHelper": "Selecione o idioma padrão para a interface do chat.",
             "welcomeMessage": "Mensagem de Boas-Vindas",
             "saveBranding": "Salvar Marca",
             "positions": {
