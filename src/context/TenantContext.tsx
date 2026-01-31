@@ -9,6 +9,7 @@ import { GET_TENANT } from '../graphql/queries';
 export interface Tenant {
     tenantId: string;
     name: string;
+    slug: string;
     plan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE'; // Expanded based on known plans
     settings?: string; // JSON string
     createdAt: string;

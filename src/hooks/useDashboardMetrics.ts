@@ -133,6 +133,13 @@ export function useDashboardMetrics() {
                     NO_SHOW: 0,
                 },
                 errors: [],
+                peakHours: [],
+                funnel: {
+                    service_selected: 0,
+                    provider_selected: 0,
+                    date_selected: 0,
+                    booking_completed: 0,
+                },
             });
         } finally {
             setLoading(false);
