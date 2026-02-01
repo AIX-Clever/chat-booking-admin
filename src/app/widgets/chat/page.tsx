@@ -1,39 +1,98 @@
 'use client';
 
-import React from 'react';
-import { Box, Typography, Paper, Grid, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Paper, Grid, IconButton, Tabs, Tab, Alert } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import PlanGuard from '../../../components/PlanGuard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CodeIcon from '@mui/icons-material/Code';
+import ChatIcon from '@mui/icons-material/Chat';
+import { useTenant } from '../../../context/TenantContext';
 
-export default function ChatWidgetPage() {
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+export default function WebIntegrationPage() {
     const t = useTranslations('widgets.chat');
+    const { tenant } = useTenant();
+    const [value, setValue] = useState(0);
 
-    const scriptCode = `<script src="https://widget.holalucia.cl/bundle.js" data-tenant-id="YOUR_TENANT_ID"></script>`;
+    const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://booking.holalucia.cl';
+    // Use tenant.slug for iframe, tenant.id for widget script
+    const publicUrl = `${baseUrl}/${tenant?.slug || ''}`;
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(scriptCode);
-        // Add toast notification if available
+    // Iframe Embed Code (Tab 1)
+    const iframeCode = `<iframe src="${publicUrl}" width="100%" height="700" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>`;
+
+    // Widget Script Code (Tab 2)
+    const scriptCode = `<script src="https://widget.holalucia.cl/bundle.js" 
+    data-tenant-id="${tenant?.tenantId || 'YOUR_TENANT_ID'}" 
+    data-primary-color="#000000" 
+    data-language="es">
+</script>`;
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
+
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
+        // Toast could be added here
     };
 
     return (
-        <PlanGuard minPlan="PRO" featureName="AI Chat Bot (Lucia)" variant="overlay" upgradeFeature="AI">
-            <Box sx={{ p: 3 }}>
-                <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    {t('title')}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                    {t('subtitle')}
-                </Typography>
+        <Box sx={{ p: 3 }}>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
+                {t('title')} {/* Integración Web */}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+                {t('subtitle')}
+            </Typography>
 
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={8}>
-                        <Paper sx={{ p: 3, mb: 4 }}>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="integration tabs">
+                        <Tab icon={<CodeIcon />} iconPosition="start" label="Botón de Reservas (Embed)" />
+                        <Tab icon={<ChatIcon />} iconPosition="start" label="Asistente IA (Chat)" />
+                    </Tabs>
+                </Box>
+
+                {/* TAB 1: EMBED (Available for PRO+) */}
+                <CustomTabPanel value={value} index={0}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} md={8}>
+                            <Alert severity="info" sx={{ mb: 3 }}>
+                                <strong>Ideal para sitios web existentes.</strong> Incrusta tu perfil de reservas directamente en tu página (Wordpress, Wix, Squarespace) usando un iFrame.
+                            </Alert>
+
                             <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                {t('install')}
+                                Código de Incrustación
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                {t('installSubtitle')}
+                                Copia y pega este código HTML donde quieras que aparezca el formulario de reserva.
                             </Typography>
 
                             <Box
@@ -46,13 +105,14 @@ export default function ChatWidgetPage() {
                                     fontSize: '0.875rem',
                                     position: 'relative',
                                     border: '1px solid',
-                                    borderColor: 'grey.800'
+                                    borderColor: 'grey.800',
+                                    overflowX: 'auto'
                                 }}
                             >
-                                {scriptCode}
+                                {iframeCode}
                                 <IconButton
                                     size="small"
-                                    onClick={handleCopy}
+                                    onClick={() => handleCopy(iframeCode)}
                                     sx={{
                                         position: 'absolute',
                                         top: 8,
@@ -64,10 +124,62 @@ export default function ChatWidgetPage() {
                                     <ContentCopyIcon fontSize="small" />
                                 </IconButton>
                             </Box>
-                        </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Box>
-        </PlanGuard>
+                </CustomTabPanel>
+
+                {/* TAB 2: AI CHAT (Gated for BUSINESS) */}
+                <CustomTabPanel value={value} index={1}>
+                    <PlanGuard minPlan="BUSINESS" featureName="Asistente IA (Lucia)" variant="lock" upgradeFeature="AI">
+                        <Grid container spacing={4}>
+                            <Grid item xs={12} md={8}>
+                                <Alert severity="success" sx={{ mb: 3 }}>
+                                    <strong>Desbloquea el poder de la IA.</strong> Este widget no solo agenda, sino que responde preguntas sobre tus servicios y negocio usando tu Base de Conocimiento.
+                                </Alert>
+
+                                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                    Script de Instalación
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                    Agrega este script en el <code>&lt;head&gt;</code> o antes del cierre del <code>&lt;body&gt;</code> de tu sitio web.
+                                </Typography>
+
+                                <Box
+                                    sx={{
+                                        p: 2,
+                                        bgcolor: 'grey.900',
+                                        color: 'grey.300',
+                                        borderRadius: 1,
+                                        fontFamily: 'monospace',
+                                        fontSize: '0.875rem',
+                                        position: 'relative',
+                                        border: '1px solid',
+                                        borderColor: 'grey.800',
+                                        overflowX: 'auto',
+                                        whiteSpace: 'pre-wrap'
+                                    }}
+                                >
+                                    {scriptCode}
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleCopy(scriptCode)}
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 8,
+                                            right: 8,
+                                            color: 'grey.500',
+                                            '&:hover': { color: 'primary.light' }
+                                        }}
+                                    >
+                                        <ContentCopyIcon fontSize="small" />
+                                    </IconButton>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </PlanGuard>
+                </CustomTabPanel>
+            </Paper>
+        </Box>
     );
 }
+

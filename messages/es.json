@@ -31,8 +31,7 @@
         "workflows": "Flujos",
         "categories": "Categorías",
         "widgets": "Interfaces",
-        "chatWidget": "Chat de Lucia",
-        "bookingWidget": "Página de Reservas"
+        "chatWidget": "Integración Web"
     },
     "widgets": {
         "chat": {
