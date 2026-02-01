@@ -124,6 +124,26 @@ export default function WebIntegrationPage() {
                                     <ContentCopyIcon fontSize="small" />
                                 </IconButton>
                             </Box>
+
+                            <Box sx={{ mt: 4 }}>
+                                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                    Vista Previa (Playground)
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                    Así es como se verá el formulario de reservas en tu sitio web:
+                                </Typography>
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        p: 1,
+                                        bgcolor: 'grey.100',
+                                        borderRadius: 2,
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    <div dangerouslySetInnerHTML={{ __html: iframeCode }} />
+                                </Paper>
+                            </Box>
                         </Grid>
                     </Grid>
                 </CustomTabPanel>
