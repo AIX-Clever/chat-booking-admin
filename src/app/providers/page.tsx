@@ -367,6 +367,7 @@ export default function ProvidersPage() {
                 });
             } else {
                 // Create
+                const finalSlug = formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-');
                 const input = {
                     name: formData.name,
                     bio: formData.bio,
@@ -374,7 +375,7 @@ export default function ProvidersPage() {
                     timezone: formData.timezone,
                     photoUrl: formData.photoUrl,
                     metadata: JSON.stringify({ aiDrivers: formData.aiDrivers }),
-                    slug: formData.slug,
+                    slug: finalSlug,
                     professionalLicense: formData.professionalLicense
                 };
 
@@ -557,11 +558,13 @@ export default function ProvidersPage() {
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
                 <DialogTitle>{currentProvider ? t('editProvider') : t('newProvider')}</DialogTitle>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    {/* Always show Tabs to allow access to configurations */}
                     <Tabs value={tabValue} onChange={handleTabChange} aria-label="provider tabs">
                         <Tab label={t('dialog.tabs.general')} />
                         <Tab label={t('dialog.tabs.services')} />
                         <Tab label={t('dialog.tabs.aiContext')} />
-                        <Tab label="Integraciones" />
+                        <Tab label={t('dialog.tabs.linkBio')} />
+                        <Tab label={t('dialog.tabs.integrations')} />
                     </Tabs>
                 </Box>
                 <DialogContent dividers={false} sx={{ minHeight: 320 }}>
@@ -598,7 +601,7 @@ export default function ProvidersPage() {
                                     startIcon={<CloudUploadIcon />}
                                     disabled={isUploading}
                                 >
-                                    Upload Photo
+                                    {t('dialog.general.uploadPhoto')}
                                     <input
                                         type="file"
                                         hidden
@@ -607,14 +610,7 @@ export default function ProvidersPage() {
                                     />
                                 </Button>
                             </Box>
-                            <TextField
-                                label="Link Personal (Slug)"
-                                placeholder="ej: dr-juan-perez"
-                                fullWidth
-                                value={formData.slug}
-                                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                                helperText={formData.slug ? `Tu link será: agendar.holalucia.cl/${formData.slug}` : 'Escribe un nombre único para tu link (sin espacios)'}
-                            />
+
                             <TextField
                                 label={t('dialog.general.fullName')}
                                 fullWidth
@@ -755,8 +751,25 @@ export default function ProvidersPage() {
                         </Box>
                     </CustomTabPanel>
 
-                    {/* Tab 4: Integrations */}
+                    {/* Tab 3: Link Bio (Slug) */}
                     <CustomTabPanel value={tabValue} index={3}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            <Typography variant="body2" color="text.secondary">
+                                Configura el enlace único para compartir tu perfil.
+                            </Typography>
+                            <TextField
+                                label="Link Personal (Slug)"
+                                placeholder="ej: dr-juan-perez"
+                                fullWidth
+                                value={formData.slug}
+                                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                                helperText={formData.slug ? `Tu link será: agendar.holalucia.cl/${formData.slug}` : 'Se generará automáticamente si lo dejas vacío.'}
+                            />
+                        </Box>
+                    </CustomTabPanel>
+
+                    {/* Tab 4: Integrations */}
+                    <CustomTabPanel value={tabValue} index={4}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <PlanGuard minPlan="PRO" featureName="Integración de Calendarios" variant="overlay" upgradeFeature="AI">
                                 <GoogleCalendarCard
@@ -780,9 +793,35 @@ export default function ProvidersPage() {
                     <Button onClick={handleClose} color="inherit">
                         {tCommon('cancel')}
                     </Button>
-                    <Button onClick={handleSave} variant="contained" disabled={!formData.name}>
-                        {tCommon('save')}
-                    </Button>
+
+                    {!currentProvider ? (
+                        /* New Provider Flow: Wizard (Step 0 -> Step 1 [Services] -> Save) */
+                        <>
+                            {tabValue === 0 ? (
+                                <Button
+                                    onClick={() => setTabValue(1)}
+                                    variant="contained"
+                                    disabled={!formData.name}
+                                >
+                                    {tCommon('next')}
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button onClick={() => setTabValue(0)} color="inherit" sx={{ mr: 1 }}>
+                                        {tCommon('back')}
+                                    </Button>
+                                    <Button onClick={handleSave} variant="contained">
+                                        {tCommon('save')}
+                                    </Button>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        /* Edit Flow: Standard Save */
+                        <Button onClick={handleSave} variant="contained" disabled={!formData.name}>
+                            {tCommon('save')}
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </>
