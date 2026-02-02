@@ -45,7 +45,7 @@ import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalend
 import PlanGuard from '../../components/PlanGuard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LinkIcon from '@mui/icons-material/Link';
-import { Paper } from '@mui/material';
+import { Paper, Snackbar, Alert } from '@mui/material';
 
 // --- Types ---
 
@@ -159,6 +159,24 @@ export default function ProvidersPage() {
     });
 
     const [tenantId, setTenantId] = React.useState<string>('');
+
+    // Snackbar State
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'error' | 'info'>('success');
+
+    const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' = 'success') => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setSnackbarOpen(true);
+    };
+
+    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
 
     React.useEffect(() => {
         fetchProviders();
@@ -390,9 +408,10 @@ export default function ProvidersPage() {
             }
             fetchProviders(); // Refresh list
             setOpen(false);
+            showSnackbar(currentProvider ? 'Profesional actualizado' : 'Profesional creado exitosamente');
         } catch (error) {
             console.error('Error saving provider:', error);
-            alert('Failed to save provider. Please check console.');
+            showSnackbar('Error al guardar el profesional', 'error');
         }
     };
 
@@ -414,7 +433,7 @@ export default function ProvidersPage() {
                     setConfirmOpen(false);
                 } catch (error) {
                     console.error('Error deleting provider:', error);
-                    alert('Failed to delete provider.');
+                    showSnackbar('Error al eliminar el profesional', 'error');
                 }
             }
         });
@@ -425,8 +444,7 @@ export default function ProvidersPage() {
         if (!slug) return;
         const url = `https://agendar.holalucia.cl/${slug}`;
         navigator.clipboard.writeText(url);
-        // Simple fallback alert for now, could be improved with snackbar
-        alert(`Link copiado al portapapeles: ${url}`);
+        showSnackbar('¡Enlace copiado al portapapeles! 📋', 'success');
     };
 
     const filteredProviders = providers.filter((p) =>
@@ -446,6 +464,12 @@ export default function ProvidersPage() {
                 onClose={() => setConfirmOpen(false)}
                 onConfirm={confirmConfig.action}
             />
+
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
                 <Box>
