@@ -45,7 +45,7 @@ import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalend
 import PlanGuard from '../../components/PlanGuard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LinkIcon from '@mui/icons-material/Link';
-import { Paper, Tooltip } from '@mui/material';
+import { Paper } from '@mui/material';
 
 // --- Types ---
 
@@ -483,6 +483,7 @@ export default function ProvidersPage() {
                                 <TableCell>{t('columns.name')}</TableCell>
                                 <TableCell>{t('columns.assignedServices')}</TableCell>
                                 <TableCell>{t('columns.aiDrivers')}</TableCell>
+                                <TableCell>{t('columns.linkBio')}</TableCell>
                                 <TableCell>{t('columns.timezone')}</TableCell>
                                 <TableCell>{t('columns.status')}</TableCell>
                                 <TableCell align="right">{tCommon('actions')}</TableCell>
@@ -532,6 +533,18 @@ export default function ProvidersPage() {
                                             )}
                                         </Stack>
                                     </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            onClick={() => handleCopyLink(row.slug)}
+                                            disabled={!row.slug}
+                                            startIcon={<LinkIcon />}
+                                            sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
+                                        >
+                                            {row.slug ? 'Copiar Link' : 'Sin Link'}
+                                        </Button>
+                                    </TableCell>
                                     <TableCell>{row.timezone}</TableCell>
                                     <TableCell>
                                         <Chip
@@ -543,18 +556,6 @@ export default function ProvidersPage() {
                                         />
                                     </TableCell>
                                     <TableCell align="right">
-                                        <Tooltip title="Copiar enlace">
-                                            <span>
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => handleCopyLink(row.slug)}
-                                                    disabled={!row.slug}
-                                                    color="default"
-                                                >
-                                                    <LinkIcon fontSize="small" />
-                                                </IconButton>
-                                            </span>
-                                        </Tooltip>
                                         <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
                                             <EditIcon fontSize="small" />
                                         </IconButton>

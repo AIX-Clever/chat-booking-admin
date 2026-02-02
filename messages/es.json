@@ -323,6 +323,7 @@
             "assignedServices": "Servicios Asignados",
             "aiDrivers": "Drivers de IA",
             "timezone": "Zona Horaria",
+            "linkBio": "Link Agendamiento",
             "status": "Estado",
             "actions": "Acciones"
         },
