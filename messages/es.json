@@ -13,7 +13,10 @@
         "actions": "Acciones",
         "confirm": "Confirmar",
         "close": "Cerrar",
-        "done": "Listo"
+        "close": "Cerrar",
+        "done": "Listo",
+        "next": "Siguiente",
+        "back": "Atrás"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -264,7 +267,16 @@
         "availability": {
             "selectDateAndProvider": "Seleccione un profesional y una fecha para ver horarios disponibles.",
             "noSlotsFound": "No hay horarios disponibles para este día.",
-            "manualOverrideHelper": "Puede ingresar una hora manualmente si es necesario (el sistema validará si está permitido)."
+            "manualOverrideHelper": "Puede ingresar una hora manualmente si es necesario (el sistema validará si está permitido).",
+            "days": {
+                "monday": "Lunes",
+                "tuesday": "Martes",
+                "wednesday": "Miércoles",
+                "thursday": "Jueves",
+                "friday": "Viernes",
+                "saturday": "Sábado",
+                "sunday": "Domingo"
+            }
         }
     },
     "services": {
@@ -323,14 +335,20 @@
             "tabs": {
                 "general": "General",
                 "services": "Servicios",
-                "aiContext": "Contexto IA"
+                "services": "Servicios",
+                "aiContext": "Contexto IA",
+                "linkBio": "Link Bio",
+                "integrations": "Integraciones"
             },
             "general": {
                 "fullName": "Nombre Completo",
                 "biography": "Biografía",
                 "professionalLicense": "N° Registro / Colegiado (Legal)",
                 "timezone": "Zona Horaria",
-                "providerIsActive": "Profesional Activo"
+                "professionalLicense": "N° Registro / Colegiado (Legal)",
+                "timezone": "Zona Horaria",
+                "providerIsActive": "Profesional Activo",
+                "uploadPhoto": "Subir Foto"
             },
             "services": {
                 "assignedServices": "Servicios Asignados",
