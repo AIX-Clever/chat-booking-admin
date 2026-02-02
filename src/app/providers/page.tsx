@@ -291,7 +291,7 @@ export default function ProvidersPage() {
 
         // Check if file is an image
         if (!file.type.startsWith('image/')) {
-            alert('Please select a valid image file');
+            showSnackbar('Por favor selecciona un archivo de imagen válido', 'error');
             return;
         }
 
@@ -353,7 +353,7 @@ export default function ProvidersPage() {
 
         } catch (error) {
             console.error('Error uploading file:', error);
-            alert('Failed to upload image.');
+            showSnackbar('Error al subir la imagen', 'error');
         } finally {
             setIsUploading(false);
         }
@@ -849,13 +849,13 @@ export default function ProvidersPage() {
                                     providerId={formData.id}
                                     tenantId={tenantId}
                                     isConnected={!!formData.hasGoogleCalendar}
-                                    onDisconnect={() => { alert("Disconnect feature coming soon"); }}
+                                    onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
                                 />
                                 <MicrosoftCalendarCard
                                     providerId={formData.id}
                                     tenantId={tenantId}
                                     isConnected={!!formData.hasMicrosoftCalendar}
-                                    onDisconnect={() => { alert("Disconnect feature coming soon"); }}
+                                    onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
                                 />
                             </PlanGuard>
                         </Box>
