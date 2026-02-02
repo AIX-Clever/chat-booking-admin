@@ -199,9 +199,18 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }, [authStatus, signOut, router]);
 
     const operationsItems = [
-        { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
         { text: t('bookings'), icon: <CalendarMonthIcon />, path: '/bookings' },
         { text: t('availability'), icon: <EditCalendarIcon />, path: '/availability' },
+    ];
+
+    const resourcesItems = [
+        { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
+        { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
+        { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
+    ];
+
+    const analyticsItems = [
+        { text: t('dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
     ];
 
     const aiConfigItems = [
@@ -214,18 +223,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('chatWidget'), icon: <ChatIcon />, path: '/widgets/chat' },
     ];
 
-    const resourcesItems = [
-        { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
-        { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
-        { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
-    ];
-
     const systemItems = [
         { text: t('users'), icon: <ManageAccountsIcon />, path: '/users' },
         { text: t('settings'), icon: <SettingsIcon />, path: '/settings' },
     ];
 
-    const allMenuItems = [...operationsItems, ...aiConfigItems, ...widgetItems, ...resourcesItems, ...systemItems];
+    const allMenuItems = [...operationsItems, ...resourcesItems, ...analyticsItems, ...aiConfigItems, ...widgetItems, ...systemItems];
 
     if (pathname === '/login') {
         return (
@@ -316,15 +319,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     {renderMenuItems(operationsItems)}
                 </List>
                 <Divider />
+
+                <List>
+                    {renderMenuItems(resourcesItems)}
+                </List>
+                <Divider />
+
+                <List>
+                    {renderMenuItems(analyticsItems)}
+                </List>
+                <Divider />
                 <List>
                     {renderMenuItems(aiConfigItems)}
                 </List>
                 <Divider />
                 <List>{renderMenuItems(widgetItems)}</List>
-                <Divider />
-                <List>
-                    {renderMenuItems(resourcesItems)}
-                </List>
                 <Divider />
                 <List>
                     {renderMenuItems(systemItems)}
