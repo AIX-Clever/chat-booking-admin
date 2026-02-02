@@ -150,7 +150,7 @@ export default function WebIntegrationPage() {
 
                 {/* TAB 2: AI CHAT (Gated for BUSINESS) */}
                 <CustomTabPanel value={value} index={1}>
-                    <PlanGuard minPlan="BUSINESS" featureName="Asistente IA (Lucia)" variant="lock" upgradeFeature="AI">
+                    <PlanGuard minPlan="BUSINESS" featureName="Asistente IA (Lucia)" variant="block" upgradeFeature="AI">
                         <Grid container spacing={4}>
                             <Grid item xs={12} md={8}>
                                 <Alert severity="success" sx={{ mb: 3 }}>
