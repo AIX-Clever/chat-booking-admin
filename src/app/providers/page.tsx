@@ -43,6 +43,9 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
 import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
 import PlanGuard from '../../components/PlanGuard';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import LinkIcon from '@mui/icons-material/Link';
+import { Paper, Tooltip } from '@mui/material';
 
 // --- Types ---
 
@@ -418,6 +421,14 @@ export default function ProvidersPage() {
         setConfirmOpen(true);
     };
 
+    const handleCopyLink = (slug?: string) => {
+        if (!slug) return;
+        const url = `https://agendar.holalucia.cl/${slug}`;
+        navigator.clipboard.writeText(url);
+        // Simple fallback alert for now, could be improved with snackbar
+        alert(`Link copiado al portapapeles: ${url}`);
+    };
+
     const filteredProviders = providers.filter((p) =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -532,6 +543,18 @@ export default function ProvidersPage() {
                                         />
                                     </TableCell>
                                     <TableCell align="right">
+                                        <Tooltip title="Copiar enlace">
+                                            <span>
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={() => handleCopyLink(row.slug)}
+                                                    disabled={!row.slug}
+                                                    color="default"
+                                                >
+                                                    <LinkIcon fontSize="small" />
+                                                </IconButton>
+                                            </span>
+                                        </Tooltip>
                                         <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
                                             <EditIcon fontSize="small" />
                                         </IconButton>
@@ -755,16 +778,41 @@ export default function ProvidersPage() {
                     <CustomTabPanel value={tabValue} index={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <Typography variant="body2" color="text.secondary">
-                                Configura el enlace único para compartir tu perfil.
+                                Define la dirección web única donde tus pacientes agendarán contigo.
                             </Typography>
                             <TextField
-                                label="Link Personal (Slug)"
+                                label="Identificador (Slug)"
                                 placeholder="ej: dr-juan-perez"
                                 fullWidth
                                 value={formData.slug}
                                 onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                                helperText={formData.slug ? `Tu link será: agendar.holalucia.cl/${formData.slug}` : 'Se generará automáticamente si lo dejas vacío.'}
+                                helperText="Usa solo letras minúsculas, números y guiones."
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">agendar.holalucia.cl/</InputAdornment>,
+                                    style: { fontSize: '1rem' }
+                                }}
                             />
+
+                            {/* Live Preview & Copy */}
+                            <Paper variant="outlined" sx={{ p: 2, bgcolor: 'grey.50', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Box>
+                                    <Typography variant="caption" display="block" color="text.secondary" sx={{ mb: 0.5, fontWeight: 'bold' }}>
+                                        TU ENLACE FINAL
+                                    </Typography>
+                                    <Typography variant="h6" color="primary" sx={{ wordBreak: 'break-all', fontSize: '1.1rem' }}>
+                                        agendar.holalucia.cl/{formData.slug || 'tu-nombre'}
+                                    </Typography>
+                                </Box>
+                                <Button
+                                    startIcon={<ContentCopyIcon />}
+                                    onClick={() => handleCopyLink(formData.slug)}
+                                    variant="outlined"
+                                    size="small"
+                                    disabled={!formData.slug}
+                                >
+                                    Copiar
+                                </Button>
+                            </Paper>
                         </Box>
                     </CustomTabPanel>
 
