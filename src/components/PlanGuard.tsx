@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Paper, CircularProgress } from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
+import { Box, CircularProgress } from '@mui/material';
 import { useTenant } from '../context/TenantContext';
 import { UpgradeFeature } from './common/UpgradeModal'; // Type import
 import UpgradeContent from './common/UpgradeContent';
@@ -28,6 +27,7 @@ interface PlanGuardProps {
 export default function PlanGuard({
     children,
     minPlan,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     featureName = 'This feature',
     upgradeFeature = 'AI',
     variant = 'block'
