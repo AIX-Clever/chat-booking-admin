@@ -43,6 +43,14 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
                         token = session.tokens?.idToken?.toString();
                     } catch (authErr) {
                         console.warn('Failed to get auth session for TenantContext:', authErr);
+                        // If no session, stop here to avoid API errors
+                        setLoading(false);
+                        return;
+                    }
+
+                    if (!token) {
+                        setLoading(false);
+                        return;
                     }
 
                     const client = generateClient();
