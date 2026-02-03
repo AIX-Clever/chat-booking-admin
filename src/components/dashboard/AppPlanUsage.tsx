@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Box, Typography, LinearProgress, Stack, Chip, useTheme, alpha, Button } from '@mui/material';
+import { Card, Box, Typography, LinearProgress, Stack, useTheme, alpha, Button } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import UpgradeModal from '../common/UpgradeModal';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import PlanBadge, { PlanType } from '../common/PlanBadge';
 
 interface Limit {
     label: string;
@@ -28,18 +29,7 @@ export default function AppPlanUsage({ planName, limits }: Props) {
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="h6">{t('planUsage')}</Typography>
-                <Chip
-                    label={planName}
-                    color="primary"
-                    variant="filled"
-                    size="small"
-                    sx={{
-                        borderRadius: 1,
-                        fontWeight: 'bold',
-                        backgroundColor: alpha(theme.palette.primary.main, 0.16),
-                        color: theme.palette.primary.dark,
-                    }}
-                />
+                <PlanBadge plan={planName.split(' ')[0] as PlanType} />
             </Box>
 
             <Stack spacing={3} sx={{ p: 3, pt: 0, flexGrow: 1 }}>

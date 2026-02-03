@@ -12,7 +12,7 @@ export default function Home() {
         // Only redirect if we are actually at the root path,
         // preventing SPA fallbacks (like /services) from breaking.
         if (pathname === '/') {
-            router.push('/dashboard');
+            router.push('/bookings');
         }
     }, [pathname, router]);
 

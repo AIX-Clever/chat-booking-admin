@@ -35,8 +35,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import LanguageSelector from '../LanguageSelector';
+import PlanBadge from '../common/PlanBadge';
 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { useTenant } from '../../context/TenantContext';
 
 const drawerWidth = 240;
 
@@ -140,6 +142,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const router = useRouter();
     const { authStatus, signOut } = useAuthenticator();
     const [tenantName, setTenantName] = React.useState<string>('');
+    const { tenant } = useTenant();
 
     React.useEffect(() => {
         if (authStatus === 'unauthenticated' && pathname !== '/login') {
@@ -297,6 +300,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                             }}>
                                 {tenantName}
                             </Typography>
+                        )}
+                        {tenant?.plan && (
+                            <PlanBadge plan={tenant.plan} />
                         )}
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1 }}>
