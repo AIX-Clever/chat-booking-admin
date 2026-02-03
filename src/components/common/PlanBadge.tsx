@@ -12,6 +12,7 @@ interface PlanBadgeProps {
 
 const PlanBadge = ({ plan, showIcon = true }: PlanBadgeProps) => {
     const theme = useTheme();
+    console.log('🔍 PlanBadge rendered with plan:', plan);
 
     // Psychology: Lite is simple, Pro is "wow"
     const isPremium = plan === 'PRO' || plan === 'BUSINESS' || plan === 'ENTERPRISE';
