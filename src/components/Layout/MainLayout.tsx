@@ -301,8 +301,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                                 {tenantName}
                             </Typography>
                         )}
-                        {tenant?.plan && (
-                            <PlanBadge plan={tenant.plan} />
+                        {/* Debugging Plan Badge Visibility */}
+                        {(() => {
+                            console.log('MainLayout rendering. Tenant:', tenant);
+                            return null;
+                        })()}
+                        {(tenant?.plan || tenant) && (
+                            <PlanBadge plan={tenant?.plan || 'LITE'} />
                         )}
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1 }}>
