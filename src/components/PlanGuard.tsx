@@ -1,11 +1,14 @@
-'use client';
-
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, CircularProgress } from '@mui/material';
+import { Box, Paper, CircularProgress } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useTenant } from '../context/TenantContext';
-import UpgradeModal, { UpgradeFeature } from './common/UpgradeModal';
+import { UpgradeFeature } from './common/UpgradeModal'; // Type import
+import UpgradeContent from './common/UpgradeContent';
+import { generateClient } from 'aws-amplify/api';
+import { fetchUserAttributes } from 'aws-amplify/auth';
+import { SUBSCRIBE } from '../graphql/queries';
+
+const client = generateClient();
 
 const PLAN_LEVELS: Record<string, number> = {
     'LITE': 1,
@@ -18,8 +21,8 @@ interface PlanGuardProps {
     children: React.ReactNode;
     minPlan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
     featureName?: string;
-    upgradeFeature?: UpgradeFeature; // To pass to modal
-    variant?: 'block' | 'overlay'; // New prop
+    upgradeFeature?: UpgradeFeature; // To pass to content
+    variant?: 'block' | 'overlay';
 }
 
 export default function PlanGuard({
@@ -29,10 +32,10 @@ export default function PlanGuard({
     upgradeFeature = 'AI',
     variant = 'block'
 }: PlanGuardProps) {
-    const { tenant, loading } = useTenant();
-    const [modalOpen, setModalOpen] = useState(false);
+    const { tenant, loading: tenantLoading } = useTenant();
+    const [upgrading, setUpgrading] = useState(false);
 
-    if (loading) {
+    if (tenantLoading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
                 <CircularProgress />
@@ -44,12 +47,61 @@ export default function PlanGuard({
     const currentLevel = PLAN_LEVELS[currentPlan] || 1;
     const requiredLevel = PLAN_LEVELS[minPlan];
 
+    const handleUpgrade = async () => {
+        setUpgrading(true);
+        try {
+            const attrs = await fetchUserAttributes();
+            const email = attrs.email;
+
+            // Determine target plan. If minPlan is higher than current, use minPlan, else PRO. 
+            // Actually, we usually want to upgrade to the REQUIRED plan.
+            // But UpgradeModal logic was simply LITE->PRO. 
+            // Let's use minPlan as the target since that's what unlocks the feature.
+            const target = minPlan;
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: SUBSCRIBE,
+                variables: {
+                    planId: target.toLowerCase(),
+                    email: email,
+                    backUrl: window.location.href
+                }
+            });
+
+            const initPoint = response.data?.subscribe?.initPoint;
+            if (initPoint) {
+                window.location.href = initPoint;
+            } else {
+                console.error("No initPoint returned from subscription");
+            }
+
+        } catch (error) {
+            console.error("Error creating subscription:", error);
+        } finally {
+            setUpgrading(false);
+        }
+    };
+
     if (currentLevel < requiredLevel) {
+        // Shared content component
+        const upgradeCard = (
+            <Box sx={{ maxWidth: 500, width: '100%', m: 2 }}>
+                <UpgradeContent
+                    feature={upgradeFeature}
+                    targetPlan={minPlan}
+                    onUpgrade={handleUpgrade}
+                    loading={upgrading}
+                    showDismissButton={false}
+                />
+            </Box>
+        );
+
         if (variant === 'overlay') {
             return (
-                <Box sx={{ position: 'relative', minHeight: 200 }}>
+                <Box sx={{ position: 'relative', minHeight: 400 }}>
                     {/* Blurred Content */}
-                    <Box sx={{ filter: 'blur(6px)', opacity: 0.5, pointerEvents: 'none', userSelect: 'none' }}>
+                    <Box sx={{ filter: 'blur(8px)', opacity: 0.4, pointerEvents: 'none', userSelect: 'none', minHeight: '100%' }}>
                         {children}
                     </Box>
 
@@ -62,41 +114,8 @@ export default function PlanGuard({
                         justifyContent: 'center',
                         zIndex: 10
                     }}>
-                        <Paper
-                            elevation={4}
-                            sx={{
-                                p: 3,
-                                textAlign: 'center',
-                                borderRadius: 3,
-                                maxWidth: 400,
-                                background: 'rgba(255, 255, 255, 0.95)',
-                                backdropFilter: 'blur(10px)'
-                            }}
-                        >
-                            <Box sx={{ display: 'inline-flex', p: 1.5, borderRadius: '50%', bgcolor: 'primary.50', mb: 2 }}>
-                                <LockIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                            </Box>
-                            <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                {featureName} is locked
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                Upgrade to {minPlan} to unlock this feature and more.
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                startIcon={<AutoAwesomeIcon />}
-                                onClick={() => setModalOpen(true)}
-                            >
-                                Unlock Feature
-                            </Button>
-                        </Paper>
+                        {upgradeCard}
                     </Box>
-                    <UpgradeModal
-                        open={modalOpen}
-                        onClose={() => setModalOpen(false)}
-                        feature={upgradeFeature}
-                        currentPlan={currentPlan}
-                    />
                 </Box>
             );
         }
@@ -105,48 +124,13 @@ export default function PlanGuard({
         return (
             <Box sx={{
                 height: '100%',
-                minHeight: '400px',
+                minHeight: '500px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                bgcolor: 'background.default'
             }}>
-                <Paper
-                    elevation={3}
-                    sx={{
-                        p: 5,
-                        textAlign: 'center',
-                        maxWidth: 500,
-                        borderRadius: 4,
-                        background: 'linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)',
-                        border: '1px solid #e5e7eb'
-                    }}
-                >
-                    <Box sx={{ display: 'inline-flex', p: 2, borderRadius: '50%', bgcolor: 'primary.50', mb: 3 }}>
-                        <LockIcon sx={{ fontSize: 40, color: 'primary.main' }} />
-                    </Box>
-                    <Typography variant="h5" fontWeight="bold" gutterBottom>
-                        Unlock Premium Features
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                        {featureName} is available on the {minPlan} plan.
-                    </Typography>
-
-                    <Button
-                        variant="contained"
-                        size="large"
-                        startIcon={<AutoAwesomeIcon />}
-                        onClick={() => setModalOpen(true)}
-                        sx={{ px: 4, py: 1.5, borderRadius: 2 }}
-                    >
-                        Upgrade to {minPlan}
-                    </Button>
-                </Paper>
-                <UpgradeModal
-                    open={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    feature={upgradeFeature}
-                    currentPlan={currentPlan}
-                />
+                {upgradeCard}
             </Box>
         );
     }
