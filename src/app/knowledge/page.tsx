@@ -149,7 +149,7 @@ export default function KnowledgePage() {
     };
 
     return (
-        <PlanGuard minPlan="PRO" featureName="The Knowledge Base" variant="overlay" upgradeFeature="AI">
+        <PlanGuard minPlan="BUSINESS" featureName="The Knowledge Base" variant="overlay" upgradeFeature="AI">
             <Box>
                 <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
                     {t('title')}

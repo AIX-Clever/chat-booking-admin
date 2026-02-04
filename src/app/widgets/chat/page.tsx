@@ -82,70 +82,72 @@ export default function WebIntegrationPage() {
 
                 {/* TAB 1: EMBED (Available for PRO+) */}
                 <CustomTabPanel value={value} index={0}>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={8}>
-                            <Alert severity="info" sx={{ mb: 3 }}>
-                                <strong>Ideal para sitios web existentes.</strong> Incrusta tu perfil de reservas directamente en tu página (Wordpress, Wix, Squarespace) usando un iFrame.
-                            </Alert>
+                    <PlanGuard minPlan="PRO" featureName="Botón de Reserva (Embed)" variant="block">
+                        <Grid container spacing={4}>
+                            <Grid item xs={12} md={8}>
+                                <Alert severity="info" sx={{ mb: 3 }}>
+                                    <strong>Ideal para sitios web existentes.</strong> Incrusta tu perfil de reservas directamente en tu página (Wordpress, Wix, Squarespace) usando un iFrame.
+                                </Alert>
 
-                            <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                Código de Incrustación
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                Copia y pega este código HTML donde quieras que aparezca el formulario de reserva.
-                            </Typography>
-
-                            <Box
-                                sx={{
-                                    p: 2,
-                                    bgcolor: 'grey.900',
-                                    color: 'grey.300',
-                                    borderRadius: 1,
-                                    fontFamily: 'monospace',
-                                    fontSize: '0.875rem',
-                                    position: 'relative',
-                                    border: '1px solid',
-                                    borderColor: 'grey.800',
-                                    overflowX: 'auto'
-                                }}
-                            >
-                                {iframeCode}
-                                <IconButton
-                                    size="small"
-                                    onClick={() => handleCopy(iframeCode)}
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 8,
-                                        right: 8,
-                                        color: 'grey.500',
-                                        '&:hover': { color: 'primary.light' }
-                                    }}
-                                >
-                                    <ContentCopyIcon fontSize="small" />
-                                </IconButton>
-                            </Box>
-
-                            <Box sx={{ mt: 4 }}>
                                 <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                    Vista Previa (Playground)
+                                    Código de Incrustación
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                    Así es como se verá el formulario de reservas en tu sitio web:
+                                    Copia y pega este código HTML donde quieras que aparezca el formulario de reserva.
                                 </Typography>
-                                <Paper
-                                    elevation={3}
+
+                                <Box
                                     sx={{
-                                        p: 1,
-                                        bgcolor: 'grey.100',
-                                        borderRadius: 2,
-                                        overflow: 'hidden'
+                                        p: 2,
+                                        bgcolor: 'grey.900',
+                                        color: 'grey.300',
+                                        borderRadius: 1,
+                                        fontFamily: 'monospace',
+                                        fontSize: '0.875rem',
+                                        position: 'relative',
+                                        border: '1px solid',
+                                        borderColor: 'grey.800',
+                                        overflowX: 'auto'
                                     }}
                                 >
-                                    <div dangerouslySetInnerHTML={{ __html: iframeCode }} />
-                                </Paper>
-                            </Box>
+                                    {iframeCode}
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleCopy(iframeCode)}
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 8,
+                                            right: 8,
+                                            color: 'grey.500',
+                                            '&:hover': { color: 'primary.light' }
+                                        }}
+                                    >
+                                        <ContentCopyIcon fontSize="small" />
+                                    </IconButton>
+                                </Box>
+
+                                <Box sx={{ mt: 4 }}>
+                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                        Vista Previa (Playground)
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                        Así es como se verá el formulario de reservas en tu sitio web:
+                                    </Typography>
+                                    <Paper
+                                        elevation={3}
+                                        sx={{
+                                            p: 1,
+                                            bgcolor: 'grey.100',
+                                            borderRadius: 2,
+                                            overflow: 'hidden'
+                                        }}
+                                    >
+                                        <div dangerouslySetInnerHTML={{ __html: iframeCode }} />
+                                    </Paper>
+                                </Box>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </PlanGuard>
                 </CustomTabPanel>
 
                 {/* TAB 2: AI CHAT (Gated for BUSINESS) */}

@@ -65,7 +65,7 @@ export default function WorkflowsListPage() {
     };
 
     return (
-        <PlanGuard minPlan="PRO" featureName="Custom Workflows" variant="overlay" upgradeFeature="AI">
+        <PlanGuard minPlan="BUSINESS" featureName="Custom Workflows" variant="overlay" upgradeFeature="AI">
             <Box sx={{ p: 3 }}>
                 <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="h4" fontWeight="bold">

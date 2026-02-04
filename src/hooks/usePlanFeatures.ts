@@ -17,9 +17,9 @@ export interface PlanFeatures {
 
 const PLAN_LIMITS: Record<string, { ai: boolean; users: number; msgs: number; bookings: number }> = {
     'LITE': { ai: false, users: 1, msgs: 500, bookings: 50 },
-    'PRO': { ai: true, users: 5, msgs: 2000, bookings: 200 },
-    'BUSINESS': { ai: true, users: 1000, msgs: 10000, bookings: 1000 }, // Simplified
-    'ENTERPRISE': { ai: true, users: 9999, msgs: 100000, bookings: 10000 }
+    'PRO': { ai: false, users: 5, msgs: 2000, bookings: 500 },
+    'BUSINESS': { ai: true, users: 20, msgs: 10000, bookings: 2000 },
+    'ENTERPRISE': { ai: true, users: 9999, msgs: 100000, bookings: 5000 }
 };
 
 export function usePlanFeatures(): PlanFeatures {
