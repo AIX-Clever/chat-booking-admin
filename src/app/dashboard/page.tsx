@@ -1,6 +1,6 @@
 'use client';
 
-import { Typography, Grid, CircularProgress, Box, Alert } from '@mui/material';
+import { Typography, Grid, Alert } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import AppWidgetSummary from '../../components/dashboard/AppWidgetSummary';
 import AppWebsiteVisits from '../../components/dashboard/AppWebsiteVisits';
@@ -30,7 +30,7 @@ const PLAN_LIMITS: Record<string, { tokensIA: number; bookings: number; apiCalls
 export default function DashboardPage() {
     const t = useTranslations('dashboard');
     const { tenant } = useTenant();
-    const { metrics, loading, error: metricsError } = useDashboardMetrics();
+    const { metrics, error: metricsError } = useDashboardMetrics();
     const { usage } = usePlanUsage();
 
     const planName = tenant?.plan || 'LITE';
@@ -53,10 +53,10 @@ export default function DashboardPage() {
     ];
 
     const bookingStatusData = [
-        { label: t('status.confirmed'), value: metrics?.summary.confirmed || 0 },
-        { label: t('status.pending'), value: metrics?.summary.pending || 0 },
-        { label: t('status.cancelled'), value: metrics?.summary.cancelled || 0 },
-        { label: t('status.noShow'), value: metrics?.summary.noShow || 0 },
+        { label: t('status.confirmed'), value: metrics?.bookingStatus?.CONFIRMED || 0, color: '#00AB55' },
+        { label: t('status.pending'), value: metrics?.bookingStatus?.PENDING || 0, color: '#FFC107' },
+        { label: t('status.cancelled'), value: metrics?.bookingStatus?.CANCELLED || 0, color: '#FF4842' },
+        { label: t('status.noShow'), value: metrics?.bookingStatus?.NO_SHOW || 0, color: '#637381' },
     ];
 
     // Plan usage data
