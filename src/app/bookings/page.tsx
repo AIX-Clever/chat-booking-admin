@@ -711,7 +711,7 @@ export default function BookingsPage() {
                                     key={b.id}
                                     label={`${new Date(b.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${b.clientName}`}
                                     size="small"
-                                    onClick={() => handleViewDetail(b)}
+                                    onClick={(e) => { e.stopPropagation(); handleViewDetail(b); }}
                                     onContextMenu={(e) => { e.stopPropagation(); handleContextMenu(e, b); }}
                                     sx={{
                                         fontSize: '0.65rem',
@@ -939,7 +939,7 @@ export default function BookingsPage() {
                                                 >
                                                     <Paper
                                                         elevation={3}
-                                                        onClick={() => handleViewDetail(b)}
+                                                        onClick={(e) => { e.stopPropagation(); handleViewDetail(b); }}
                                                         onContextMenu={(e) => handleContextMenu(e, b)}
                                                         sx={{
                                                             ...style,
