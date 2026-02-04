@@ -306,8 +306,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                             console.log('MainLayout rendering. Tenant:', tenant);
                             return null;
                         })()}
-                        {(tenant?.plan || tenant) && (
-                            <PlanBadge plan={tenant?.plan || 'LITE'} />
+                        {(tenant?.plan) && (
+                            <PlanBadge plan={tenant.plan} />
                         )}
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1 }}>

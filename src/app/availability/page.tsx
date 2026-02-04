@@ -23,7 +23,7 @@ import {
     Chip,
     Alert,
     FormControlLabel,
-
+    Skeleton,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -432,61 +432,75 @@ export default function AvailabilityPage() {
                         </Typography>
 
                         <Stack spacing={2}>
-                            {schedule.map((day, dayIndex) => (
-                                <Paper key={dayIndex} variant="outlined" sx={{ p: 2, bgcolor: day.enabled ? 'background.paper' : 'action.hover' }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: day.enabled ? 2 : 0 }}>
-                                        <FormControlLabel
-                                            control={
-                                                <Switch
-                                                    checked={day.enabled}
-                                                    onChange={() => handleDayToggle(dayIndex)}
-                                                />
-                                            }
-                                            label={<Typography variant="subtitle1" fontWeight="bold">{getDayLabel(dayIndex)}</Typography>}
-                                        />
-                                        {day.enabled && (
-                                            <Button size="small" startIcon={<AddIcon />} onClick={() => addTimeWindow(dayIndex)}>
-                                                {t('addSlot')}
-                                            </Button>
-                                        )}
-                                    </Box>
+                            {loading ? (
+                                // Skeleton Loader
+                                Array.from(new Array(7)).map((_, index) => (
+                                    <Paper key={index} variant="outlined" sx={{ p: 2 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                <Skeleton variant="rounded" width={40} height={24} />
+                                                <Skeleton variant="text" width={100} height={24} />
+                                            </Box>
+                                        </Box>
+                                    </Paper>
+                                ))
+                            ) : (
+                                schedule.map((day, dayIndex) => (
+                                    <Paper key={dayIndex} variant="outlined" sx={{ p: 2, bgcolor: day.enabled ? 'background.paper' : 'action.hover' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: day.enabled ? 2 : 0 }}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        checked={day.enabled}
+                                                        onChange={() => handleDayToggle(dayIndex)}
+                                                    />
+                                                }
+                                                label={<Typography variant="subtitle1" fontWeight="bold">{getDayLabel(dayIndex)}</Typography>}
+                                            />
+                                            {day.enabled && (
+                                                <Button size="small" startIcon={<AddIcon />} onClick={() => addTimeWindow(dayIndex)}>
+                                                    {t('addSlot')}
+                                                </Button>
+                                            )}
+                                        </Box>
 
-                                    {day.enabled && (
-                                        <Stack spacing={1}>
-                                            {day.timeWindows.map((window, windowIndex) => (
-                                                <Box key={windowIndex} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
-                                                        <TimePicker
-                                                            label="Inicio"
-                                                            value={parseTime(window.start)}
-                                                            onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'start', formatTime(newValue))}
-                                                            slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
-                                                            ampm={false}
-                                                        />
-                                                        <Typography>-</Typography>
-                                                        <TimePicker
-                                                            label="Fin"
-                                                            value={parseTime(window.end)}
-                                                            onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'end', formatTime(newValue))}
-                                                            slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
-                                                            ampm={false}
-                                                        />
-                                                    </LocalizationProvider>
-                                                    {day.timeWindows.length > 1 && (
-                                                        <IconButton
-                                                            size="small"
-                                                            color="error"
-                                                            onClick={() => removeTimeWindow(dayIndex, windowIndex)}
-                                                        >
-                                                            <DeleteIcon fontSize="small" />
-                                                        </IconButton>
-                                                    )}
-                                                </Box>
-                                            ))}
-                                        </Stack>
-                                    )}
-                                </Paper>
-                            ))}
+                                        {day.enabled && (
+                                            <Stack spacing={1}>
+                                                {day.timeWindows.map((window, windowIndex) => (
+                                                    <Box key={windowIndex} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
+                                                            <TimePicker
+                                                                label="Inicio"
+                                                                value={parseTime(window.start)}
+                                                                onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'start', formatTime(newValue))}
+                                                                slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
+                                                                ampm={false}
+                                                            />
+                                                            <Typography>-</Typography>
+                                                            <TimePicker
+                                                                label="Fin"
+                                                                value={parseTime(window.end)}
+                                                                onChange={(newValue) => handleTimeChange(dayIndex, windowIndex, 'end', formatTime(newValue))}
+                                                                slotProps={{ textField: { size: 'small', sx: { width: 120 } } }}
+                                                                ampm={false}
+                                                            />
+                                                        </LocalizationProvider>
+                                                        {day.timeWindows.length > 1 && (
+                                                            <IconButton
+                                                                size="small"
+                                                                color="error"
+                                                                onClick={() => removeTimeWindow(dayIndex, windowIndex)}
+                                                            >
+                                                                <DeleteIcon fontSize="small" />
+                                                            </IconButton>
+                                                        )}
+                                                    </Box>
+                                                ))}
+                                            </Stack>
+                                        )}
+                                    </Paper>
+                                ))
+                            )}
                         </Stack>
                     </Card>
                 </Grid>

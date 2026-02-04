@@ -99,7 +99,7 @@ export default function PlanGuard({
 
         if (variant === 'overlay') {
             return (
-                <Box sx={{ position: 'relative', minHeight: 400 }}>
+                <Box sx={{ position: 'relative', minHeight: 600 }}>
                     {/* Blurred Content */}
                     <Box sx={{ filter: 'blur(8px)', opacity: 0.4, pointerEvents: 'none', userSelect: 'none', minHeight: '100%' }}>
                         {children}
