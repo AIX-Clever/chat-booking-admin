@@ -28,7 +28,36 @@ const PLAN_LIMITS: Record<string, { tokensIA: number; bookings: number; apiCalls
 };
 
 export default function DashboardPage() {
-    // ... (lines 31-81 unchanged)
+    const t = useTranslations('dashboard');
+    const { tenant } = useTenant();
+    const { metrics, loading, error: metricsError } = useDashboardMetrics();
+    const { usage } = usePlanUsage();
+
+    const planName = tenant?.plan || 'LITE';
+    const limits = PLAN_LIMITS[planName] || PLAN_LIMITS['LITE'];
+
+    const weekLabels = metrics?.daily.map(d => new Date(d.date).toLocaleDateString()) || [];
+    const chartSeries = [
+        {
+            name: t('metrics.bookings'),
+            type: 'column',
+            fill: 'solid',
+            data: metrics?.daily.map(d => d.bookings) || [],
+        },
+        {
+            name: t('metrics.messages'),
+            type: 'area',
+            fill: 'gradient',
+            data: metrics?.daily.map(d => d.messages) || [],
+        },
+    ];
+
+    const bookingStatusData = [
+        { label: t('status.confirmed'), value: metrics?.summary.confirmed || 0 },
+        { label: t('status.pending'), value: metrics?.summary.pending || 0 },
+        { label: t('status.cancelled'), value: metrics?.summary.cancelled || 0 },
+        { label: t('status.noShow'), value: metrics?.summary.noShow || 0 },
+    ];
 
     // Plan usage data
     const planLimitsData = [
