@@ -101,7 +101,7 @@ export default function OnboardingPage() {
     };
 
     const handleFinish = () => {
-        router.push('/dashboard');
+        router.push('/bookings');
     };
 
     return (

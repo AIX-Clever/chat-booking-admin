@@ -42,8 +42,8 @@ export default function LoginPage() {
             try {
                 const { getCurrentUser } = await import('aws-amplify/auth');
                 await getCurrentUser();
-                // If no error, user is signed in, redirect to dashboard
-                router.push('/dashboard');
+                // If no error, user is signed in, redirect to bookings
+                router.push('/bookings');
             } catch {
                 // Not signed in, do nothing
                 console.log('No active session found');
@@ -74,7 +74,7 @@ export default function LoginPage() {
             });
 
             if (isSignedIn) {
-                router.push('/dashboard');
+                router.push('/bookings');
             } else {
                 console.log('Login incomplete, next step:', nextStep);
                 setError(`Login incompleto. Paso requerido: ${nextStep.signInStep}`);
