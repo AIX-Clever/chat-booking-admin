@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -16,6 +17,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 // Removed unused date-fns imports
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS, GET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
+import { useTenant } from '../../context/TenantContext';
 
 import {
     Typography,
@@ -119,11 +121,15 @@ const getProviderColor = (providerId: string) => {
 
 const STATUSES = ['All', 'confirmed', 'pending', 'cancelled', 'completed', 'no_show'];
 
-const client = generateClient();
+// NOTE: generateClient() moved inside the component to avoid SSR initialization issues
 
 export default function BookingsPage() {
     const t = useTranslations('bookings');
     const tCommon = useTranslations('common');
+
+    // Generate client inside component to ensure Amplify is configured
+    const client = React.useMemo(() => generateClient(), []);
+
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -134,6 +140,7 @@ export default function BookingsPage() {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [hasMounted, setHasMounted] = React.useState(false);
     const [sortBy, setSortBy] = React.useState<'closest' | 'furthest'>('closest');
+    const { loading: tenantLoading, tenant } = useTenant(); // Wait for tenant context to be ready
 
     const getTimeRemaining = (dateString: string) => {
         const target = new Date(dateString).getTime();
@@ -153,24 +160,63 @@ export default function BookingsPage() {
         return { text: t('timeLeft.inDays', { days }), color: 'default' as const };
     };
 
+
+
     React.useEffect(() => {
         setHasMounted(true);
-        fetchServices();
-        fetchProviders();
-        fetchRooms();
+        // Only fetch when tenant context is FULLY loaded (auth is ready AND tenant is populated)
+        if (!tenantLoading && tenant) {
+            // Small delay to ensure Amplify session is fully restored
+            const timer = setTimeout(() => {
+                fetchServices();
+                fetchProviders();
+                fetchRooms();
+            }, 500);
+            return () => clearTimeout(timer);
+        } else if (!tenantLoading && !tenant) {
+            // No tenant means not authenticated, stop loading
+            setLoading(false);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [tenantLoading, tenant]);
 
-    const fetchProviders = async () => {
+    const fetchProviders = async (retryCount = 0): Promise<void> => {
+        const MAX_RETRIES = 3;
+        const RETRY_DELAY = 500; // ms
+
+        // Check if user is authenticated before making the request
+        try {
+            const { getCurrentUser } = await import('aws-amplify/auth');
+            await getCurrentUser();
+        } catch {
+            console.log('User not authenticated, skipping providers fetch');
+            setLoading(false);
+            return;
+        }
+
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({ query: LIST_PROVIDERS });
+            const response: any = await client.graphql({
+                query: LIST_PROVIDERS,
+                authMode: 'userPool'
+            });
             const fetchedProviders = response.data.listProviders;
             setProviders(fetchedProviders);
-            // Fetch bookings for all providers initially
-            fetchBookings(fetchedProviders);
+            // Fetch bookings for all providers, or set loading false if empty
+            if (fetchedProviders && fetchedProviders.length > 0) {
+                fetchBookings(fetchedProviders);
+            } else {
+                console.log('No providers found, setting loading to false');
+                setLoading(false);
+            }
         } catch (error) {
-            console.error('Error fetching providers:', error);
+            console.error('Error fetching providers (attempt ' + (retryCount + 1) + '):', error);
+            // Retry with delay if we haven't exceeded max retries
+            if (retryCount < MAX_RETRIES) {
+                console.log('Retrying in ' + RETRY_DELAY + 'ms...');
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                return fetchProviders(retryCount + 1);
+            }
             setLoading(false);
         }
     };
@@ -221,7 +267,8 @@ export default function BookingsPage() {
                             startDate,
                             endDate
                         }
-                    }
+                    },
+                    authMode: 'userPool'
                 });
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

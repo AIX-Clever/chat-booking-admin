@@ -22,12 +22,30 @@ jest.mock('aws-amplify/auth', () => ({
     }),
 }))
 
+// Mock Next-Intl
+jest.mock('next-intl', () => ({
+    useTranslations: () => (key: string) => key,
+}));
+
+// Mock TenantContext
+jest.mock('../../../context/TenantContext', () => ({
+    useTenant: () => ({
+        loading: false,
+        tenant: {
+            tenantId: 'test-tenant',
+            name: 'Test Tenant',
+            plan: 'LITE'
+        }
+    }),
+}));
+
 // Mock the GraphQL queries
 jest.mock('../../../graphql/queries', () => ({
     LIST_PROVIDERS: 'query ListProviders { }',
     LIST_BOOKINGS_BY_PROVIDER: 'query ListBookingsByProvider { }',
     CANCEL_BOOKING: 'mutation CancelBooking { }',
     SEARCH_SERVICES: 'query SearchServices { }',
+    LIST_ROOMS: 'query ListRooms { }',
     CREATE_BOOKING: 'mutation CreateBooking { }',
     CONFIRM_BOOKING: 'mutation ConfirmBooking { }',
     MARK_AS_NO_SHOW: 'mutation MarkAsNoShow { }',
