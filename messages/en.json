@@ -459,6 +459,13 @@
         },
         "general": {
             "title": "General Settings",
+            "publicBookingPage": "Public Booking Page",
+            "profileUrlSlug": "Profile URL (Slug)",
+            "pageWillBeAt": "Your page will be at: {link}",
+            "copyLink": "Copy Link",
+            "copied": "Copied!",
+            "viewPage": "View Page",
+            "shareLinkDescription": "Share this link with your clients so they can book appointments with you.",
             "primaryColor": "Primary Color",
             "custom": "Custom:",
             "position": "Position",

@@ -55,16 +55,16 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
 
                     {/* Public Page Section */}
 
-                    <Typography variant="h6">Public Booking Page</Typography>
+                    <Typography variant="h6">{t('publicBookingPage')}</Typography>
                     <Stack direction="row" spacing={2} alignItems="center">
                         <TextField
-                            label="Profile URL (Slug)"
+                            label={t('profileUrlSlug')}
                             value={slug}
                             onChange={(e) => {
                                 const val = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
                                 setSlug(val);
                             }}
-                            helperText={`Your page will be at: ${publicLink}`}
+                            helperText={t('pageWillBeAt', { link: publicLink })}
                             fullWidth
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">agendar.holalucia.cl/</InputAdornment>,
@@ -78,7 +78,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
                             onClick={handleCopyLink}
                             size="small"
                         >
-                            {copySuccess ? 'Copied!' : 'Copy Link'}
+                            {copySuccess ? t('copied') : t('copyLink')}
                         </Button>
                         <Button
                             variant="outlined"
@@ -88,11 +88,11 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
                             size="small"
                             disabled={!slug}
                         >
-                            View Page
+                            {t('viewPage')}
                         </Button>
                     </Stack>
                     <Typography variant="caption" color="text.secondary">
-                        Share this link with your clients so they can book appointments with you.
+                        {t('shareLinkDescription')}
                     </Typography>
 
                     <Box sx={{ my: 2, height: 1, bgcolor: 'divider' }} />

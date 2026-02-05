@@ -469,6 +469,13 @@
         },
         "general": {
             "title": "Configurações Gerais",
+            "publicBookingPage": "Página Pública de Agendamento",
+            "profileUrlSlug": "URL de Perfil (Slug)",
+            "pageWillBeAt": "Sua página estará em: {link}",
+            "copyLink": "Copiar Link",
+            "copied": "Copiado!",
+            "viewPage": "Ver Página",
+            "shareLinkDescription": "Compartilhe este link com seus clientes para que eles possam agendar consultas com você.",
             "primaryColor": "Cor Primária",
             "custom": "Personalizado:",
             "position": "Posição",

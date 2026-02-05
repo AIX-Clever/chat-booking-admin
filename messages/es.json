@@ -495,6 +495,13 @@
         },
         "general": {
             "title": "Configuración General",
+            "publicBookingPage": "Página Pública de Reservas",
+            "profileUrlSlug": "URL de Perfil (Slug)",
+            "pageWillBeAt": "Tu página estará en: {link}",
+            "copyLink": "Copiar Enlace",
+            "copied": "¡Copiado!",
+            "viewPage": "Ver Página",
+            "shareLinkDescription": "Comparte este enlace con tus clientes para que puedan reservar citas contigo.",
             "primaryColor": "Color Primario",
             "custom": "Personalizado:",
             "position": "Posición",
