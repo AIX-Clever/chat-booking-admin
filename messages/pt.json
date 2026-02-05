@@ -313,6 +313,7 @@
             "name": "Nome",
             "assignedServices": "Serviços Atribuídos",
             "aiDrivers": "Drivers de IA",
+            "linkBio": "Link de Agendamento",
             "timezone": "Fuso Horário",
             "status": "Status",
             "actions": "Ações"
@@ -326,13 +327,17 @@
             "tabs": {
                 "general": "Geral",
                 "services": "Serviços",
-                "aiContext": "Contexto IA"
+                "aiContext": "Contexto IA",
+                "linkBio": "Link Bio",
+                "integrations": "Integrações"
             },
             "general": {
                 "fullName": "Nome Completo",
                 "biography": "Biografia",
+                "professionalLicense": "Licença / Registro (Legal)",
                 "timezone": "Fuso Horário",
-                "providerIsActive": "Profissional Ativo"
+                "providerIsActive": "Profissional Ativo",
+                "uploadPhoto": "Enviar Foto"
             },
             "services": {
                 "assignedServices": "Serviços Atribuídos",

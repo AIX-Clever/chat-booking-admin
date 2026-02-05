@@ -295,11 +295,14 @@
     "providers": {
         "title": "Providers",
         "newProvider": "New Provider",
+        "editProvider": "Edit Provider",
+        "searchPlaceholder": "Search provider...",
         "noProvidersFound": "No providers found.",
         "columns": {
             "name": "Name",
             "assignedServices": "Assigned Services",
             "aiDrivers": "AI Drivers",
+            "linkBio": "Booking Link",
             "timezone": "Timezone",
             "status": "Status",
             "actions": "Actions"
@@ -313,13 +316,17 @@
             "tabs": {
                 "general": "General",
                 "services": "Services",
-                "aiContext": "AI Context"
+                "aiContext": "AI Context",
+                "linkBio": "Bio Link",
+                "integrations": "Integrations"
             },
             "general": {
                 "fullName": "Full Name",
                 "biography": "Biography",
+                "professionalLicense": "License / Registration (Legal)",
                 "timezone": "Timezone",
-                "providerIsActive": "Provider is Active"
+                "providerIsActive": "Provider is Active",
+                "uploadPhoto": "Upload Photo"
             },
             "services": {
                 "assignedServices": "Assigned Services",
