@@ -30,6 +30,22 @@ export class AdminStack extends cdk.Stack {
             },
         });
 
+        // 2b. CloudFront Function for URL Rewrites
+        const rewriteFunction = new cloudfront.Function(this, 'RewriteFunction', {
+            code: cloudfront.FunctionCode.fromInline(`
+                function handler(event) {
+                    var request = event.request;
+                    var uri = request.uri;
+                    if (uri.endsWith('/')) {
+                        request.uri += 'index.html';
+                    } else if (!uri.includes('.')) {
+                        request.uri += '.html';
+                    }
+                    return request;
+                }
+            `),
+        });
+
         // 3. CloudFront Distribution using OAC
         const distribution = new cloudfront.Distribution(this, 'AdminPanelDist', {
             defaultBehavior: {
@@ -37,7 +53,12 @@ export class AdminStack extends cdk.Stack {
                     originAccessControlId: oac.attrId,
                 }),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                functionAssociations: [],
+                functionAssociations: [
+                    {
+                        function: rewriteFunction,
+                        eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+                    }
+                ],
             },
             errorResponses: [
                 {
