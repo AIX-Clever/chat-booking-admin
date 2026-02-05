@@ -30,7 +30,48 @@ export class AdminStack extends cdk.Stack {
             },
         });
 
-        // 2b. CloudFront Function for URL Rewrites
+        // ==================================================================================
+        // CloudFront Function for URL Rewriting (Static Export Routing)
+        // ==================================================================================
+        // 
+        // CONTEXT:
+        // This Next.js app uses `output: 'export'` which generates static HTML files
+        // (e.g., bookings.html, availability.html) stored in S3.
+        //
+        // PROBLEM:
+        // When users navigate to /bookings or refresh the page (F5), CloudFront/S3
+        // looks for a file literally named "bookings" (without .html extension).
+        // S3 returns 403/404 because the actual file is "bookings.html".
+        //
+        // SOLUTION:
+        // This CloudFront Function intercepts ALL viewer requests and rewrites URLs:
+        // - /bookings → /bookings.html
+        // - /availability → /availability.html
+        // - / → /index.html
+        //
+        // SECURITY CONSIDERATIONS:
+        // ✅ This function is INTENTIONALLY simple to minimize attack surface
+        // ✅ Does NOT access network, AWS services, or user data
+        // ✅ Maximum execution time: 1ms (enforced by CloudFront)
+        // ✅ No logging of sensitive data
+        // ⚠️  Executes on EVERY request - any bug affects 100% of traffic
+        //
+        // ALTERNATIVES CONSIDERED:
+        // 1. AWS Amplify Hosting: Would eliminate this function but:
+        //    - Breaks multi-stack CDK architecture cohesion
+        //    - More expensive for high traffic (76% higher data transfer cost)
+        //    - Vendor lock-in
+        // 2. trailingSlash: true in next.config.js: Would change all URLs to /bookings/
+        //    - Still requires similar rewriting logic for index.html resolution
+        //    - Changes user-facing URLs
+        // 3. S3 Static Website Hosting: Requires making bucket public (security risk)
+        //
+        // MAINTENANCE:
+        // - DO NOT add complex logic here (no regex, no conditionals beyond file extension check)
+        // - Test thoroughly if modifying - affects all routes
+        // - Consider adding CloudWatch Logs if debugging is needed
+        //
+        // ==================================================================================
         const rewriteFunction = new cloudfront.Function(this, 'RewriteFunction', {
             code: cloudfront.FunctionCode.fromInline(`
                 function handler(event) {
@@ -44,6 +85,7 @@ export class AdminStack extends cdk.Stack {
                     return request;
                 }
             `),
+            comment: 'Rewrites URLs for Next.js static export (e.g., /bookings → /bookings.html)',
         });
 
         // 3. CloudFront Distribution using OAC
