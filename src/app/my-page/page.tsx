@@ -1,0 +1,363 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import {
+    Box,
+    Typography,
+    Paper,
+    Switch,
+    FormControlLabel,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Divider,
+    IconButton,
+    Tooltip,
+    Alert,
+    CircularProgress,
+    Stack,
+    LinearProgress,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Chip,
+    Container,
+    Drawer,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    SelectChangeEvent,
+} from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
+import PublishIcon from '@mui/icons-material/Publish';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { generateClient } from 'aws-amplify/api';
+import { GET_PUBLIC_LINK_STATUS, SET_PUBLIC_LINK_STATUS, LIST_PROVIDERS } from '../../graphql/queries';
+import { useTenant } from '../../context/TenantContext';
+
+const DRAWER_WIDTH = 340;
+
+interface ChecklistItem {
+    item: string;
+    status: 'COMPLETE' | 'MISSING' | 'RECOMMENDED';
+    label: string;
+    isRequired: boolean;
+}
+
+interface PublicLinkStatus {
+    isPublished: boolean;
+    publishedAt: string | null;
+    slug: string;
+    publicUrl: string;
+    completenessPercentage: number;
+    completenessChecklist: ChecklistItem[];
+}
+
+export default function MyPage() {
+    const { tenant } = useTenant();
+    const [status, setStatus] = useState<PublicLinkStatus | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [toggling, setToggling] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [copySuccess, setCopySuccess] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true);
+
+    // State for professionals
+    const [providers, setProviders] = useState<{ providerId: string, name: string }[]>([]);
+    const [selectedProvider, setSelectedProvider] = useState<string>('all');
+
+    const fetchProviders = async () => {
+        try {
+            const client = generateClient();
+            const response = await client.graphql({
+                query: LIST_PROVIDERS,
+            }) as { data: { listProviders: { providerId: string, name: string }[] } };
+
+            if (response.data?.listProviders) {
+                setProviders(response.data.listProviders);
+            }
+        } catch (err) {
+            console.error('Error fetching providers:', err);
+        }
+    };
+
+    const fetchData = async (providerId: string = 'all') => {
+        try {
+            setLoading(true);
+            setError(null);
+            const client = generateClient();
+            const response = await client.graphql({
+                query: GET_PUBLIC_LINK_STATUS,
+                variables: { providerId: providerId === 'all' ? null : providerId }
+            }) as { data: { getPublicLinkStatus: PublicLinkStatus }, errors?: { message: string }[] };
+
+            if (response.data?.getPublicLinkStatus) {
+                setStatus(response.data.getPublicLinkStatus);
+            } else if (response.errors) {
+                throw new Error(response.errors[0]?.message || 'Error en la respuesta de GraphQL');
+            }
+        } catch (err: unknown) {
+            const error = err as { message?: string };
+            console.error('Error fetching public link status:', error);
+            setError(error.message || 'No se pudo cargar la información del link público.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProviders();
+        fetchData(selectedProvider);
+    }, [selectedProvider]);
+
+    const handleTogglePublication = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.checked;
+        setToggling(true);
+        setError(null);
+
+        try {
+            const client = generateClient();
+            const response = await client.graphql({
+                query: SET_PUBLIC_LINK_STATUS,
+                variables: { isPublished: newValue }
+            }) as { data: { setPublicLinkStatus: { success: boolean, isPublished: boolean, publishedAt: string | null, message?: string } }, errors?: { message: string }[] };
+
+            if (response.data?.setPublicLinkStatus?.success) {
+                if (status) {
+                    setStatus({
+                        ...status,
+                        isPublished: response.data.setPublicLinkStatus.isPublished,
+                        publishedAt: response.data.setPublicLinkStatus.publishedAt,
+                    });
+                } else {
+                    fetchData(selectedProvider);
+                }
+            } else {
+                throw new Error(response.data?.setPublicLinkStatus?.message || 'Error al actualizar el estado.');
+            }
+        } catch (err: unknown) {
+            const error = err as { message?: string, errors?: { message: string }[] };
+            console.error('Error toggling publication:', error);
+            setError(error.errors?.[0]?.message || error.message || 'Error al cambiar el estado de publicación.');
+        } finally {
+            setToggling(false);
+        }
+    };
+
+    const handleCopyLink = () => {
+        if (status?.publicUrl) {
+            navigator.clipboard.writeText(status.publicUrl);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2000);
+        }
+    };
+
+    const handleOpenLink = () => {
+        if (status?.publicUrl) {
+            window.open(status.publicUrl, '_blank');
+        }
+    };
+
+    const handleProviderChange = (event: SelectChangeEvent) => {
+        const newProviderId = event.target.value;
+        setSelectedProvider(newProviderId);
+        fetchData(newProviderId);
+    };
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    const isPlanInactive = tenant?.status !== 'ACTIVE' && tenant?.status !== 'TRIAL';
+
+    return (
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', position: 'relative' }}>
+            {/* Main Content Area */}
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    transition: (theme) => theme.transitions.create('margin', {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.leavingScreen,
+                    }),
+                    marginRight: drawerOpen ? 0 : `-${DRAWER_WIDTH}px`,
+                }}
+            >
+                {/* Top Bar Navigation */}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 2,
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 1100,
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                        bgcolor: 'background.paper',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="h6" fontWeight="bold">Link de Reservas</Typography>
+                        <Chip
+                            label={status?.isPublished ? "Activo" : "Borrador"}
+                            color={status?.isPublished ? "success" : "default"}
+                            size="small"
+                        />
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'action.hover', p: '4px 12px', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>
+                                {status?.publicUrl || 'Cargando...'}
+                            </Typography>
+                            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
+                            <Tooltip title={copySuccess ? "Copiado!" : "Copiar Link"}>
+                                <IconButton size="small" onClick={handleCopyLink} color={copySuccess ? "success" : "primary"}>
+                                    <ContentCopyIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                            <IconButton size="small" onClick={handleOpenLink} color="primary">
+                                <OpenInNewIcon fontSize="small" />
+                            </IconButton>
+                        </Box>
+
+                        <FormControlLabel
+                            control={<Switch checked={status?.isPublished || false} onChange={handleTogglePublication} disabled={toggling || isPlanInactive} color="primary" />}
+                            label={status?.isPublished ? "Publicado" : "Activar"}
+                        />
+
+                        <IconButton onClick={() => setDrawerOpen(!drawerOpen)} color="inherit">
+                            {drawerOpen ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </Box>
+                </Paper>
+
+                <Container maxWidth="lg" sx={{ mt: 4, pb: 8 }}>
+                    {error && <Alert severity="error" sx={{ mb: 4 }} onClose={() => setError(null)}>{error}</Alert>}
+
+                    <Card elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3, minHeight: 600, bgcolor: 'action.hover', position: 'relative' }}>
+                        <CardHeader
+                            title="Vista Previa en Vivo"
+                            titleTypographyProps={{ variant: 'subtitle2', fontWeight: 'bold' }}
+                            action={<Button size="small" startIcon={<OpenInNewIcon />} onClick={handleOpenLink}>Ver real</Button>}
+                        />
+                        <Divider />
+                        <CardContent sx={{ height: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled' }}>
+                            <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
+                            <Typography variant="h6">Renderizando vista previa...</Typography>
+                            {!status?.isPublished && (
+                                <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+                                    <Paper sx={{ p: 4, textAlign: 'center', maxWidth: 400, borderRadius: 3 }}>
+                                        <Typography variant="h6" gutterBottom>Modo Borrador</Typography>
+                                        <Typography variant="body2" color="text.secondary" paragraph>Tu página no es visible. Actívala para recibir reservas.</Typography>
+                                        <Button variant="contained" onClick={() => handleTogglePublication({ target: { checked: true } } as React.ChangeEvent<HTMLInputElement>)} disabled={toggling}>Publicar Ahora</Button>
+                                    </Paper>
+                                </Box>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Container>
+            </Box>
+
+            {/* Right Sidebar Checklist */}
+            <Drawer
+                sx={{
+                    width: DRAWER_WIDTH,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: DRAWER_WIDTH,
+                        boxSizing: 'border-box',
+                        bgcolor: 'background.paper',
+                        borderLeft: '1px solid',
+                        borderColor: 'divider',
+                        boxShadow: -2,
+                        top: '64px', // Offset for main header
+                        height: 'calc(100vh - 64px)',
+                    },
+                }}
+                variant="persistent"
+                anchor="right"
+                open={drawerOpen}
+            >
+                <Box sx={{ p: 3 }}>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom>Checklist de Lanzamiento</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                        Completa estos pasos para que tu página se vea profesional y genere confianza.
+                    </Typography>
+
+                    <Stack spacing={3}>
+                        {/* Multi-professional Selector if applicable */}
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Verificar Checklist para:</InputLabel>
+                            <Select
+                                value={selectedProvider}
+                                label="Verificar Checklist para:"
+                                onChange={handleProviderChange}
+                            >
+                                <MenuItem value="all">General (Negocio)</MenuItem>
+                                {providers.map((p) => (
+                                    <MenuItem key={p.providerId} value={p.providerId}>
+                                        {p.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        <Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                <Typography variant="caption" fontWeight="bold">Progreso Total</Typography>
+                                <Typography variant="caption" fontWeight="bold">{status?.completenessPercentage}%</Typography>
+                            </Box>
+                            <LinearProgress variant="determinate" value={status?.completenessPercentage || 0} sx={{ height: 8, borderRadius: 4 }} />
+                        </Box>
+
+                        <Divider />
+
+                        <List disablePadding>
+                            {status?.completenessChecklist.map((item) => (
+                                <ListItem key={item.item} sx={{ px: 0, py: 1.5, alignItems: 'flex-start' }}>
+                                    <ListItemIcon sx={{ minWidth: 32, mt: 0.5 }}>
+                                        {item.status === 'COMPLETE' ? (
+                                            <CheckCircleIcon color="success" sx={{ fontSize: 20 }} />
+                                        ) : (
+                                            item.isRequired ? <ErrorIcon color="error" sx={{ fontSize: 20 }} /> : <InfoIcon color="warning" sx={{ fontSize: 20 }} />
+                                        )}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={item.label}
+                                        primaryTypographyProps={{ variant: 'body2', fontWeight: 'medium' }}
+                                        secondary={item.isRequired ? "Bloqueante para publicar" : "Recomendado"}
+                                        secondaryTypographyProps={{ variant: 'caption' }}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+
+                        <Alert severity="info" variant="outlined" icon={<PublishIcon />} sx={{ borderRadius: 2 }}>
+                            <Typography variant="caption" sx={{ display: 'block' }}>
+                                <strong>Tip Lucía:</strong> Los negocios con logo y descripción reciben 3x más clics en sus links.
+                            </Typography>
+                        </Alert>
+                    </Stack>
+                </Box>
+            </Drawer>
+        </Box>
+    );
+}

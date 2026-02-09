@@ -14,37 +14,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import { useTranslations } from 'next-intl';
 import PlanGuard from '../../../components/PlanGuard';
 
-// Could be imported from a constants file
-const AI_MODES = [
-    {
-        id: 'fsm',
-        name: 'FSM (Básico)',
-        desc: 'Árbol de decisiones determinista. Ideal para flujos fijos y control total.',
-        price: 'Plan LITE',
-        minPlan: 'LITE'
-    },
-    {
-        id: 'nlp',
-        name: 'NLP Asistido',
-        desc: 'Usa IA ligera para detectar intención y entidades, pero sigue reglas estrictas.',
-        price: 'Plan BUSINESS',
-        minPlan: 'BUSINESS'
-    },
-    {
-        id: 'agent',
-        name: 'Agente Full AI',
-        desc: 'Agente autónomo con razonamiento (Bedrock + Sonnet). Conversación natural.',
-        price: 'Plan ENTERPRISE',
-        minPlan: 'ENTERPRISE'
-    }
-];
-
-const PLAN_LEVELS: Record<string, number> = {
-    'LITE': 1,
-    'PRO': 2,
-    'BUSINESS': 3,
-    'ENTERPRISE': 4
-};
+import { AI_MODES, PLAN_LEVELS } from '../../../constants/settings';
 
 interface AiConfigTabProps {
     aiMode: string;
@@ -59,12 +29,12 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
     const t = useTranslations('settings.ai');
 
     const isPlanSufficient = (minPlan: string) => {
-        return PLAN_LEVELS[currentPlan] >= PLAN_LEVELS[minPlan];
+        return (PLAN_LEVELS[currentPlan] || 0) >= (PLAN_LEVELS[minPlan] || 0);
     };
 
-    const handleSelectAiMode = (mode: typeof AI_MODES[0]) => {
-        if (isPlanSufficient(mode.minPlan)) {
-            setAiMode(mode.id);
+    const handleSelectAiMode = (modeId: string, minPlan: string) => {
+        if (isPlanSufficient(minPlan)) {
+            setAiMode(modeId);
         } else {
             onUpgradeClick();
         }
@@ -84,6 +54,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                 {AI_MODES.map((mode) => {
                     const locked = !isPlanSufficient(mode.minPlan);
                     const active = aiMode === mode.id;
+                    const modeKey = mode.id as 'fsm' | 'nlp' | 'agent';
 
                     return (
                         <Grid item xs={12} md={4} key={mode.id}>
@@ -102,7 +73,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                                         transform: locked ? 'none' : 'translateY(-2px)'
                                     }
                                 }}
-                                onClick={() => handleSelectAiMode(mode)}
+                                onClick={() => handleSelectAiMode(mode.id, mode.minPlan)}
                             >
                                 {locked && (
                                     <Chip
@@ -116,15 +87,15 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: locked ? 2 : 0 }}>
                                     <Typography variant="subtitle1" fontWeight="bold" color={locked ? 'text.secondary' : 'text.primary'}>
-                                        {mode.id === 'fsm' ? t('modes.fsm.name') : mode.id === 'nlp' ? t('modes.nlp.name') : t('modes.agent.name')}
+                                        {t(`modes.${modeKey}.name`)}
                                     </Typography>
-                                    {!locked && <Radio checked={active} value={mode.id} size="small" />}
+                                    {!locked && <Radio checked={active} value={mode.id} size="small" inputProps={{ 'aria-label': mode.id }} />}
                                 </Box>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3, minHeight: 40 }}>
-                                    {mode.id === 'fsm' ? t('modes.fsm.description') : mode.id === 'nlp' ? t('modes.nlp.description') : t('modes.agent.description')}
+                                    {t(`modes.${modeKey}.description`)}
                                 </Typography>
                                 <Chip
-                                    label={mode.id === 'fsm' ? t('plans.lite') : mode.id === 'nlp' ? t('plans.pro') : t('plans.business')}
+                                    label={t(`plans.${mode.minPlan.toLowerCase()}`)}
                                     size="small"
                                     variant={mode.id === 'agent' ? 'filled' : 'outlined'}
                                     color={mode.id === 'agent' ? 'primary' : 'default'}

@@ -4,7 +4,7 @@ import {
     Box,
     Typography,
     Button,
-    Card,
+    Paper,
     TableContainer,
     Table,
     TableHead,
@@ -20,7 +20,8 @@ import {
     DialogActions,
     CircularProgress,
     Alert,
-    InputAdornment
+    InputAdornment,
+    Snackbar
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -28,10 +29,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_API_KEYS, CREATE_API_KEY, REVOKE_API_KEY } from '@/graphql/queries';
-
-interface ApiKeysTabProps {
-    hasMounted: boolean;
-}
 
 interface ApiKey {
     apiKeyId: string;
@@ -42,17 +39,23 @@ interface ApiKey {
     lastUsedAt?: string;
 }
 
-export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
+export default function ApiKeysTab() {
     const client = React.useMemo(() => generateClient(), []);
     const t = useTranslations('settings.apiKeys');
     const tCommon = useTranslations('common');
 
+    const [snackbar, setSnackbar] = React.useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' }>({
+        open: false,
+        message: '',
+        severity: 'info'
+    });
+    const [revokeId, setRevokeId] = React.useState<string | null>(null);
     const [apiKeys, setApiKeys] = React.useState<ApiKey[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [createKeyOpen, setCreateKeyOpen] = React.useState(false);
     const [newKeyName, setNewKeyName] = React.useState('');
-    const [creating, setCreating] = React.useState(false);
     const [createdSecret, setCreatedSecret] = React.useState<string | null>(null);
+    const [creating, setCreating] = React.useState(false);
 
     const fetchKeys = React.useCallback(async () => {
         try {
@@ -66,10 +69,11 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
             setApiKeys(keys);
         } catch (error) {
             console.error('Error fetching API keys:', error);
+            setSnackbar({ open: true, message: t('errorFetching'), severity: 'error' });
         } finally {
             setLoading(false);
         }
-    }, [client]);
+    }, [client, t]);
 
     React.useEffect(() => {
         fetchKeys();
@@ -87,12 +91,33 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
             setCreatedSecret(newKey.apiKey);
             setApiKeys(prev => [newKey, ...prev]);
             setNewKeyName('');
-            // Keep dialog open but switch view to show secret? Or separate dialog?
-            // Will simple use 'createdSecret' state to conditionally render content in the same dialog
+            setSnackbar({ open: true, message: t('keyCreated'), severity: 'success' });
         } catch (error) {
             console.error('Error creating API key:', error);
+            setSnackbar({ open: true, message: t('errorCreating'), severity: 'error' });
         } finally {
             setCreating(false);
+        }
+    };
+
+    const handleRevokeClick = (id: string) => {
+        setRevokeId(id);
+    };
+
+    const handleConfirmRevoke = async () => {
+        if (!revokeId) return;
+        try {
+            await client.graphql({
+                query: REVOKE_API_KEY,
+                variables: { apiKeyId: revokeId }
+            });
+            setApiKeys(prev => prev.map(k => k.apiKeyId === revokeId ? { ...k, status: 'REVOKED' } : k));
+            setSnackbar({ open: true, message: t('keyRevoked'), severity: 'success' });
+        } catch (error) {
+            console.error('Error revoking key:', error);
+            setSnackbar({ open: true, message: t('errorRevoking'), severity: 'error' });
+        } finally {
+            setRevokeId(null);
         }
     };
 
@@ -102,22 +127,14 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
         setNewKeyName('');
     };
 
-    const handleRevokeKey = async (id: string) => {
-        if (!confirm(t('confirmRevoke'))) return; // Simple confirm for now
-
+    const copyToClipboard = async (text: string) => {
         try {
-            await client.graphql({
-                query: REVOKE_API_KEY,
-                variables: { apiKeyId: id }
-            });
-            setApiKeys(prev => prev.map(k => k.apiKeyId === id ? { ...k, status: 'REVOKED' } : k));
-        } catch (error) {
-            console.error('Error revoking key:', error);
+            await navigator.clipboard.writeText(text);
+            setSnackbar({ open: true, message: t('copied'), severity: 'success' });
+        } catch (err) {
+            console.error('Failed to copy keys', err);
+            setSnackbar({ open: true, message: t('errorCopying'), severity: 'error' });
         }
-    };
-
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
     };
 
     if (loading && apiKeys.length === 0) {
@@ -126,53 +143,68 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
 
     return (
         <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+            {/* Header */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h6">{t('title')}</Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => setCreateKeyOpen(true)}>{t('createKey')}</Button>
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={() => setCreateKeyOpen(true)}
+                >
+                    {t('createKey')}
+                </Button>
             </Box>
 
-            <TableContainer component={Card} variant="outlined">
+            {/* List */}
+            <TableContainer component={Paper} variant="outlined">
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>{t('name')}</TableCell>
+                            <TableCell>{tCommon('name')}</TableCell>
                             <TableCell>{t('keyPrefix')}</TableCell>
-                            <TableCell>{t('created')}</TableCell>
-                            <TableCell>{t('status')}</TableCell>
+                            <TableCell>{tCommon('created')}</TableCell>
+                            <TableCell>{tCommon('status')}</TableCell>
                             <TableCell align="right">{tCommon('actions')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {apiKeys.length === 0 ? (
+                        {loading && apiKeys.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} align="center" sx={{ py: 4 }}>
-                                    <Typography color="text.secondary">{t('noKeys')}</Typography>
+                                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                        ) : apiKeys.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                    <Typography color="textSecondary">{t('noKeys')}</Typography>
                                 </TableCell>
                             </TableRow>
                         ) : (
                             apiKeys.map((key) => (
                                 <TableRow key={key.apiKeyId}>
-                                    <TableCell sx={{ fontWeight: 'medium' }}>{key.name || 'API Key'}</TableCell>
+                                    <TableCell>{key.name}</TableCell>
                                     <TableCell sx={{ fontFamily: 'monospace' }}>{key.keyPreview}</TableCell>
-                                    <TableCell>{hasMounted ? new Date(key.createdAt).toLocaleDateString() : key.createdAt}</TableCell>
+                                    <TableCell>{new Date(key.createdAt).toLocaleDateString()}</TableCell>
                                     <TableCell>
                                         <Chip
-                                            label={key.status === 'ACTIVE' ? t('active') : t('revoked')}
+                                            label={tCommon(key.status.toLowerCase())}
                                             color={key.status === 'ACTIVE' ? 'success' : 'default'}
                                             size="small"
                                             sx={{ textTransform: 'capitalize' }}
                                         />
                                     </TableCell>
                                     <TableCell align="right">
-                                        <IconButton
-                                            size="small"
-                                            color="error"
-                                            onClick={() => handleRevokeKey(key.apiKeyId)}
-                                            disabled={key.status !== 'ACTIVE'}
-                                            title={t('revoke')}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
+                                        {key.status === 'ACTIVE' && (
+                                            <IconButton
+                                                size="small"
+                                                color="error"
+                                                onClick={() => handleRevokeClick(key.apiKeyId)}
+                                                title={t('revoke')}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -181,7 +213,7 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
                 </Table>
             </TableContainer>
 
-            {/* Create Key Dialog */}
+            {/* Create Dialog */}
             <Dialog open={createKeyOpen} onClose={handleCloseCreateDialog} maxWidth="sm" fullWidth>
                 <DialogTitle>{createdSecret ? t('createDialog.successTitle') : t('createDialog.title')}</DialogTitle>
                 <DialogContent>
@@ -198,7 +230,7 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
                                     readOnly: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton onClick={() => copyToClipboard(createdSecret)} edge="end">
+                                            <IconButton onClick={() => copyToClipboard(createdSecret)} edge="end" aria-label="copy">
                                                 <ContentCopyIcon />
                                             </IconButton>
                                         </InputAdornment>
@@ -233,6 +265,32 @@ export default function ApiKeysTab({ hasMounted }: ApiKeysTabProps) {
                     )}
                 </DialogActions>
             </Dialog>
+
+            {/* Revoke Confirmation Dialog */}
+            <Dialog open={!!revokeId} onClose={() => setRevokeId(null)}>
+                <DialogTitle>{t('revokeDialog.title')}</DialogTitle>
+                <DialogContent>
+                    <Typography>{t('revokeDialog.content')}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setRevokeId(null)}>{tCommon('cancel')}</Button>
+                    <Button onClick={handleConfirmRevoke} color="error" variant="contained">
+                        {t('revokeDialog.confirm')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Snackbar */}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={() => setSnackbar({ ...snackbar, open: false })}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 }

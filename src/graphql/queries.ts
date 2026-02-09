@@ -615,3 +615,33 @@ export const GET_AVAILABLE_SLOTS = `
     }
   }
 `;
+
+export const GET_PUBLIC_LINK_STATUS = `
+  query GetPublicLinkStatus($providerId: String) {
+    getPublicLinkStatus(providerId: $providerId) {
+      isPublished
+      publishedAt
+      slug
+      publicUrl
+      completenessPercentage
+      completenessChecklist {
+        item
+        status
+        label
+        isRequired
+      }
+    }
+  }
+`;
+
+export const SET_PUBLIC_LINK_STATUS = `
+  mutation SetPublicLinkStatus($isPublished: Boolean!) {
+    setPublicLinkStatus(isPublished: $isPublished) {
+      success
+      isPublished
+      publishedAt
+      message
+    }
+  }
+`;
+

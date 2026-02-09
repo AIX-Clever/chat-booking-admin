@@ -31,6 +31,8 @@ import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
 import ComplianceTab from './tabs/ComplianceTab';
+import { WidgetConfig } from '../../types/settings';
+
 
 // --- Types ---
 
@@ -82,12 +84,17 @@ export default function SettingsPage() {
     const [slug, setSlug] = React.useState('');
 
     // Widget State
-    const [widgetConfig, setWidgetConfig] = React.useState({
+    const [widgetConfig, setWidgetConfig] = React.useState<WidgetConfig>({
         primaryColor: '#2563eb',
         position: 'bottom-right',
         language: 'es',
-        welcomeMessage: '¡Hola! ¿En qué puedo ayudarte hoy?'
+        welcomeMessages: {
+            es: '¡Hola! ¿En qué puedo ayudarte hoy?',
+            en: 'Hello! How can I help you today?',
+            pt: 'Olá! Como posso ajudar você hoje?'
+        }
     });
+
 
     // AI State
     const [aiMode, setAiMode] = React.useState('nlp');
@@ -293,6 +300,7 @@ export default function SettingsPage() {
                                 slug={slug}
                                 setSlug={setSlug}
                                 onSave={handleSaveSettings}
+                                logoUrl={profile?.logoUrl}
                             />
                         </CustomTabPanel>
 
@@ -320,7 +328,7 @@ export default function SettingsPage() {
 
                         {/* --- Tab 3: API Keys --- */}
                         <CustomTabPanel value={tabValue} index={2}>
-                            <ApiKeysTab hasMounted={hasMounted} />
+                            <ApiKeysTab />
                         </CustomTabPanel>
 
                         {/* --- Tab 4: Identity --- */}

@@ -13,35 +13,11 @@ import {
 import Image from 'next/image';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useTranslations } from 'next-intl';
-
-interface ProfileData {
-    centerName: string;
-    bio: string;
-    profession: string;
-    specializations: string[];
-    operatingHours: string;
-    legalName: string;
-    taxId: string;
-    phone1: string;
-    phone2: string;
-    email: string;
-    website: string;
-    address: {
-        street: string;
-        city: string;
-        state: string;
-        zipCode: string;
-        country: string;
-    };
-    timezone: string;
-    logoUrl?: string; // Base64 data URL for now
-}
+import { BusinessProfile } from '../../../types/settings';
 
 interface IdentityTabProps {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    profile: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setProfile: (profile: any) => void;
+    profile: BusinessProfile | null;
+    setProfile: (profile: BusinessProfile) => void;
     onSave: () => void;
 }
 
@@ -56,7 +32,6 @@ const COUNTRIES = [
     { code: 'ES', label: 'España' },
 ];
 
-// Common timezones for LATAM/US/EU
 const TIMEZONES = [
     { value: 'America/Santiago', label: 'Santiago (Chile)' },
     { value: 'America/Mexico_City', label: 'Ciudad de México' },
@@ -73,15 +48,12 @@ const TIMEZONES = [
 export default function IdentityTab({ profile, setProfile, onSave }: IdentityTabProps) {
     const t = useTranslations('settings.identity');
 
-    // Local state to handle form inputs before updating parent state
-    const [formData, setFormData] = useState<ProfileData>({
+    const [formData, setFormData] = useState<BusinessProfile>({
         centerName: '',
         bio: '',
         profession: '',
         specializations: [],
         operatingHours: '',
-        legalName: '',
-        taxId: '',
         phone1: '',
         phone2: '',
         email: '',
@@ -98,21 +70,17 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
 
     useEffect(() => {
         if (profile) {
-            setFormData(prev => ({
-                ...prev,
-                ...profile,
-                address: { ...prev.address, ...(profile.address || {}) }
-            }));
+            setFormData(profile);
         }
     }, [profile]);
 
-    const handleChange = (field: keyof ProfileData, value: any) => {
+    const handleChange = (field: keyof BusinessProfile, value: any) => {
         const newData = { ...formData, [field]: value };
         setFormData(newData);
         setProfile(newData);
     };
 
-    const handleAddressChange = (field: string, value: string) => {
+    const handleAddressChange = (field: keyof BusinessProfile['address'], value: string) => {
         const newAddress = { ...formData.address, [field]: value };
         const newData = { ...formData, address: newAddress };
         setFormData(newData);

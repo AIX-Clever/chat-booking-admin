@@ -30,15 +30,17 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChatIcon from '@mui/icons-material/Chat';
+import PublicIcon from '@mui/icons-material/Public';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import LanguageSelector from '../LanguageSelector';
 import PlanBadge from '../common/PlanBadge';
-
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { useTenant } from '../../context/TenantContext';
+import PremiumButton from '../ui/PremiumButton';
+import { navigateTo } from '../../utils/navigation';
 
 const drawerWidth = 240;
 
@@ -201,6 +203,60 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         checkTenantAuthorization();
     }, [authStatus, signOut, router]);
 
+    // Status Guard: If tenant exists but is not ACTIVE, block access
+    if (tenant && tenant.status !== 'ACTIVE' && pathname !== '/settings') {
+        // Allow settings if they need to manage billing, but for PENDING_PAYMENT we should redirect to onboarding or show a block
+        if (tenant.status === 'PENDING_PAYMENT') {
+            return (
+                <Box sx={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 3,
+                    textAlign: 'center',
+                    background: theme.palette.mode === 'dark'
+                        ? 'linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%)'
+                        : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+                }}>
+                    <Typography variant="h4" gutterBottom fontWeight="bold">
+                        ¡Casi listo! 🚀
+                    </Typography>
+                    <Typography variant="h6" sx={{ mb: 4, opacity: 0.8, maxWidth: 600 }}>
+                        Tu cuenta ha sido creada exitosamente, pero aún no está activa. Para comenzar a usar Hola Lucía, por favor completa el pago inicial.
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <PremiumButton
+                            variant="primary"
+                            onClick={() => {
+                                const onboardingUrl = process.env.NEXT_PUBLIC_ONBOARDING_URL || 'https://onboarding.holalucia.cl';
+                                navigateTo(`${onboardingUrl}?status=pending_payment&tenantId=${tenant.tenantId}`);
+                            }}
+                        >
+                            Completar Pago
+                        </PremiumButton>
+                        <PremiumButton
+                            variant="ghost"
+                            onClick={handleLogout}
+                        >
+                            Cerrar Sesión
+                        </PremiumButton>
+                    </Box>
+                </Box>
+            );
+        }
+
+        // For SUSPENDED or other statuses
+        return (
+            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyItems: 'center', p: 5 }}>
+                <Typography variant="h4" color="error">Cuenta {tenant.status}</Typography>
+                <Typography variant="body1">Por favor contacta a soporte para más información.</Typography>
+                <PremiumButton onClick={handleLogout} sx={{ mt: 2 }}>Cerrar Sesión</PremiumButton>
+            </Box>
+        );
+    }
+
     const operationsItems = [
         { text: t('bookings'), icon: <CalendarMonthIcon />, path: '/bookings' },
         { text: t('availability'), icon: <EditCalendarIcon />, path: '/availability' },
@@ -224,6 +280,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     const widgetItems = [
         { text: t('chatWidget'), icon: <ChatIcon />, path: '/widgets/chat' },
+        { text: t('myPage'), icon: <PublicIcon />, path: '/my-page' },
     ];
 
     const systemItems = [
@@ -301,11 +358,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                                 {tenantName}
                             </Typography>
                         )}
-                        {/* Debugging Plan Badge Visibility */}
-                        {(() => {
-                            console.log('MainLayout rendering. Tenant:', tenant);
-                            return null;
-                        })()}
                         {(tenant?.plan) && (
                             <PlanBadge plan={tenant.plan} />
                         )}

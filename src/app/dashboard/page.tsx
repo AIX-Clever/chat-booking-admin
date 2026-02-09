@@ -10,6 +10,9 @@ import { useDashboardMetrics, usePlanUsage } from '../../hooks/useDashboardMetri
 import { useTenant } from '../../context/TenantContext';
 import FunnelChart from '../../components/dashboard/FunnelChart';
 import PeakHoursHeatmap from '../../components/dashboard/PeakHoursHeatmap';
+import { usePlanFeatures } from '../../hooks/usePlanFeatures';
+import UpgradeModal from '../../components/common/UpgradeModal';
+import { useState } from 'react';
 
 // Icons
 import PaidIcon from '@mui/icons-material/Paid';
@@ -18,23 +21,21 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import EventIcon from '@mui/icons-material/Event';
 
-// Plan limits by plan type (these could come from tenant settings)
-const PLAN_LIMITS: Record<string, { tokensIA: number; bookings: number; apiCalls: number }> = {
-    FREE: { tokensIA: 0, bookings: 50, apiCalls: 500 },
-    LITE: { tokensIA: 0, bookings: 50, apiCalls: 500 }, // No AI, matched with usage hook
-    PRO: { tokensIA: 20000, bookings: 500, apiCalls: 10000 },
-    BUSINESS: { tokensIA: 100000, bookings: 5000, apiCalls: 100000 },
-    ENTERPRISE: { tokensIA: 1000000, bookings: 50000, apiCalls: 1000000 },
-};
 
 export default function DashboardPage() {
     const t = useTranslations('dashboard');
-    const { tenant } = useTenant();
+    useTenant();
     const { metrics, error: metricsError } = useDashboardMetrics();
     const { usage } = usePlanUsage();
 
-    const planName = tenant?.plan || 'LITE';
-    const limits = PLAN_LIMITS[planName] || PLAN_LIMITS['LITE'];
+    const [upgradeOpen, setUpgradeOpen] = useState(false);
+
+    const planFeatures = usePlanFeatures({
+        messages: usage?.messages || 0,
+        bookings: usage?.bookings || 0
+    });
+
+    const planName = planFeatures.plan;
 
     const weekLabels = metrics?.daily.map(d => new Date(d.date).toLocaleDateString()) || [];
     const chartSeries = [
@@ -64,19 +65,19 @@ export default function DashboardPage() {
         {
             label: t('planMetrics.tokensIA'),
             usage: usage?.tokensIA || 0,
-            limit: limits.tokensIA,
+            limit: planFeatures.plan === 'ENTERPRISE' ? 5000000 : planFeatures.plan === 'BUSINESS' ? 500000 : 100000,
             color: 'warning' as const
         },
         {
             label: t('planMetrics.bookings'),
             usage: usage?.bookings || 0,
-            limit: limits.bookings,
+            limit: planFeatures.maxBookings,
             color: 'primary' as const
         },
         {
             label: t('planMetrics.messages'),
             usage: usage?.messages || 0,
-            limit: limits.apiCalls,
+            limit: planFeatures.maxMessages,
             color: 'info' as const
         },
     ].filter(item => item.limit > 0); // Hide metrics not applicable to the plan
@@ -190,6 +191,14 @@ export default function DashboardPage() {
                     />
                 </Grid>
             </Grid>
+
+            {/* Upgrade Modal */}
+            <UpgradeModal
+                open={upgradeOpen}
+                onClose={() => setUpgradeOpen(false)}
+                feature="USAGE"
+                currentPlan={planName}
+            />
         </>
     );
 }
