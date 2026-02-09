@@ -181,8 +181,8 @@ export default function MyPage() {
         );
     }
 
-    // @ts-ignore - The property status exists in the response but its type might not be fully synchronized
-    const tenantStatus = (tenant as any)?.status;
+    // @ts-expect-error - The property status exists in the response but its type might not be fully synchronized in the Tenant interface
+    const tenantStatus = (tenant as { status?: string })?.status;
     const isPlanInactive = tenantStatus !== 'ACTIVE' && tenantStatus !== 'TRIAL';
 
     return (
