@@ -355,6 +355,12 @@ export default function MyPage() {
                                 <strong>Tip Lucía:</strong> Los negocios con logo y descripción reciben 3x más clics en sus links.
                             </Typography>
                         </Alert>
+
+                        <Alert severity="success" variant="outlined" icon={<InfoIcon />} sx={{ borderRadius: 2 }}>
+                            <Typography variant="caption" sx={{ display: 'block' }}>
+                                <strong>Tip de Reservas:</strong> Pega tu URL en la bio de <strong>Instagram</strong> o como sitio web en <strong>Facebook</strong> para aumentar tus reservas hasta en un 50%.
+                            </Typography>
+                        </Alert>
                     </Stack>
                 </Box>
             </Drawer>
