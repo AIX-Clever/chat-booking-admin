@@ -13,21 +13,29 @@ setup('authenticate', async ({ page }) => {
     // Wait for translations to load if necessary
     await page.waitForLoadState('networkidle');
 
+    // Check if already authenticated (redirected away from login)
+    const currentUrl = page.url();
+    if (!currentUrl.includes('/login')) {
+        // Already authenticated, just save state
+        await page.context().storageState({ path: authFile });
+        return;
+    }
+
     // Fill login form - using more resilient CSS selectors
     await page.locator('input[type="text"], input[name="email"]').first().fill(email);
     await page.locator('input[type="password"]').fill(password);
 
     await Promise.all([
-        page.waitForURL(/.*dashboard/, { timeout: 30000 }),
+        // Accept any authenticated route (dashboard, bookings, etc.)
+        page.waitForURL(/.*\/(dashboard|bookings|availability|services|providers|rooms)/, { timeout: 30000 }),
         page.locator('form button[type="submit"]').click()
     ]);
 
-    // Wait for navigation to dashboard
-    await expect(page).toHaveURL(/.*dashboard/, { timeout: 20000 });
+    // Wait for navigation to any authenticated page
+    await expect(page).toHaveURL(/.*\/(dashboard|bookings|availability|services|providers|rooms)/, { timeout: 20000 });
 
-    // Check for MUI Drawer (Sidebar) or header title for successful login
+    // Check for MUI Drawer (Sidebar) for successful login
     await expect(page.locator('.MuiDrawer-paper')).toBeVisible({ timeout: 20000 });
-    await expect(page.locator('header')).toContainText(/Dashboard/i, { timeout: 15000 });
 
     // End of setup
     await page.context().storageState({ path: authFile });

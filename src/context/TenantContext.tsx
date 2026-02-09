@@ -11,6 +11,7 @@ export interface Tenant {
     name: string;
     slug: string;
     plan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE'; // Expanded based on known plans
+    status: 'ACTIVE' | 'PENDING_PAYMENT' | 'SUSPENDED' | 'TRIAL' | 'CANCELLED';
     settings?: string; // JSON string
     createdAt: string;
 }

@@ -14,16 +14,16 @@ import SendIcon from '@mui/icons-material/Send';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChatIcon from '@mui/icons-material/Chat';
 
+import { WidgetConfig } from '../../../types/settings';
+
 interface WidgetPreviewProps {
-    widgetConfig: {
-        primaryColor: string;
-        position: string;
-        language: string;
-        welcomeMessage: string;
-    };
+    widgetConfig: WidgetConfig;
+    logoUrl?: string;
 }
 
-export default function WidgetPreview({ widgetConfig }: WidgetPreviewProps) {
+export default function WidgetPreview({ widgetConfig, logoUrl }: WidgetPreviewProps) {
+    const welcomeText = widgetConfig.welcomeMessages?.[widgetConfig.language] || widgetConfig.welcomeMessage || '...';
+
     return (
         <Card variant="outlined" sx={{ p: 0, bgcolor: '#f1f5f9', height: 500, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', borderRadius: 3 }}>
             <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #e2e8f0', bgcolor: 'white' }}>
@@ -56,7 +56,12 @@ export default function WidgetPreview({ widgetConfig }: WidgetPreviewProps) {
                 {/* Header */}
                 <Box sx={{ p: 2, bgcolor: widgetConfig.primaryColor, color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 32, height: 32 }}><AutoAwesomeIcon sx={{ fontSize: 18 }} /></Avatar>
+                        <Avatar
+                            src={logoUrl}
+                            sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 32, height: 32 }}
+                        >
+                            {!logoUrl && <AutoAwesomeIcon sx={{ fontSize: 18 }} />}
+                        </Avatar>
                         <Box>
                             <Typography variant="subtitle2" sx={{ lineHeight: 1.2 }}>Chat Support</Typography>
                             <Typography variant="caption" sx={{ opacity: 0.8 }}>Online</Typography>
@@ -69,7 +74,7 @@ export default function WidgetPreview({ widgetConfig }: WidgetPreviewProps) {
                 <Box sx={{ flex: 1, p: 2, bgcolor: '#f8fafc', overflowY: 'auto' }}>
                     <Stack spacing={2} alignItems="flex-start">
                         <Box sx={{ bgcolor: 'white', p: 1.5, borderRadius: '0 12px 12px 12px', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', maxWidth: '85%' }}>
-                            <Typography variant="body2" color="text.secondary">{widgetConfig.welcomeMessage}</Typography>
+                            <Typography variant="body2" color="text.secondary">{welcomeText}</Typography>
                         </Box>
                     </Stack>
                 </Box>

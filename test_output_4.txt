@@ -1,0 +1,177 @@
+
+> chat-booking-admin-panel@1.0.0 test
+> jest src/app/settings/tabs/__tests__/ApiKeysTab.test.tsx
+
+FAIL src/app/settings/tabs/__tests__/ApiKeysTab.test.tsx
+  ApiKeysTab
+    ✓ renders loading state initially (26 ms)
+    ✓ renders empty state when no keys (22 ms)
+    ✓ renders list of api keys (26 ms)
+    ✓ opens create dialog and creates a new key (59 ms)
+    ✕ handles copy to clipboard (48 ms)
+    ✓ revokes a key (24 ms)
+    ✓ handles errors gracefully (10 ms)
+
+  ● ApiKeysTab › handles copy to clipboard
+
+    TestingLibraryElementError: Unable to find an element with the text: copied. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body[39m
+      [33mstyle[39m=[32m"padding-right: 1024px; overflow: hidden;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"MuiBox-root css-0"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"MuiBox-root css-nznorp"[39m
+          [36m>[39m
+            [36m<h6[39m
+              [33mclass[39m=[32m"MuiTypography-root MuiTypography-h6 css-2ulfj5-MuiTypography-root"[39m
+            [36m>[39m
+              [0mtitle[0m
+            [36m</h6>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-sghohy-MuiButtonBase-root-MuiButton-root"[39m
+              [33mtabindex[39m=[32m"0"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"[39m
+                  [33mdata-testid[39m=[32m"AddIcon"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [0mcreateKey[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"[39m
+              [36m/>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"MuiPaper-root MuiPaper-outlined MuiPaper-rounded MuiCard-root MuiTableContainer-root css-sxv3cj-MuiPaper-root-MuiCard-root-MuiTableContainer-root"[39m
+          [36m>[39m
+            [36m<table[39m
+              [33mclass[39m=[32m"MuiTable-root css-rqglhn-MuiTable-root"[39m
+            [36m>[39m
+              [36m<thead[39m
+                [33mclass[39m=[32m"MuiTableHead-root css-15wwp11-MuiTableHead-root"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"[39m
+                [36m>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mname[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mkeyPrefix[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mcreated[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mstatus[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeMedium css-1azl6jz-MuiTableCell-root"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mactions[0m
+                  [36m</th>[39m
+                [36m</tr>[39m
+              [36m</thead>[39m
+              [36m<tbody[39m
+                [33mclass[39m=[32m"MuiTableBody-root css-apqrd9-MuiTableBody-root"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"MuiTableRow-root css-1q1u3t4-MuiTableRow-root"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-17281dl-MuiTableCell-root"[39m
+                  [36m>[39m
+                    [0mNew Key[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1my7w09-MuiTableCell-root"[39m
+                  [36m>[39m
+                    [0mnew-preview[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"[39m
+                  [36m>[39m
+                    [0m2/9/2026[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-lk68b9-MuiChip-root"[39m
+                    [36m>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"MuiChip-label MuiChip-labelSmall css-wjsjww-MuiChip-label"[39m
+                      [36m>[39m
+                        [0mactive[0m
+                      [36m</span>[39m
+                    [36m</div>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"MuiTableCell-root MuiTableCell-body MuiTableCell-alignRight MuiTableCell-sizeMedium css-177gid-MuiTableCell-root"[39m
+                  [36m>[39m
+                    [36m<button[39m
+                      [33mclass[39m=[32m"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorError MuiIconButton-sizeSmall css-1mk6yu1-MuiButtonBase-root-MuiIconButton-root"[39m
+                      [33mtabindex[39m=[32m"0"[39m
+                      [33mtitle[39m=[32m"revoke"[39m
+                      [33mtype[39m=[32m"button"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mclass[39m=[32m"MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"[39m
+                        [33mdata-testid[39m=[32m"DeleteIcon"[39m
+                        [33mfocusable[39m=[32m"false"[39m
+                        [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [36m>[39m
+    ...
+
+      157 |
+      158 |         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-key-123');
+    > 159 |         expect(screen.getByText('copied')).toBeInTheDocument();
+          |                       ^
+      160 |     });
+      161 |
+      162 |     it('revokes a key', async () => {
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.getByText (src/app/settings/tabs/__tests__/ApiKeysTab.test.tsx:159:23)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        0.603 s, estimated 1 s
+Ran all test suites matching src/app/settings/tabs/__tests__/ApiKeysTab.test.tsx.

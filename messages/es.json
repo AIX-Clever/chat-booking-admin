@@ -34,7 +34,8 @@
         "workflows": "Flujos",
         "categories": "Categorías",
         "widgets": "Interfaces",
-        "chatWidget": "Integración Web"
+        "chatWidget": "Integración Web",
+        "myPage": "Mi Página"
     },
     "widgets": {
         "chat": {
@@ -671,6 +672,14 @@
             "upgradeTo": "Contratar Plan {plan}",
             "whatYouGet": "LO QUE OBTIENES CON {plan}:",
             "maybeLater": "Quizás más tarde"
+        },
+        "awareness": {
+            "title": "Límite de Uso Cercano",
+            "description": "Estás llegando a la capacidad máxima de tu plan actual. Para asegurar un servicio sin interrupciones, considera actualizar tu plan.",
+            "messages": "Uso de Mensajes",
+            "bookings": "Uso de Reservas",
+            "upgradeNow": "Actualizar Plan",
+            "maybeLater": "Entendido"
         }
     }
 }

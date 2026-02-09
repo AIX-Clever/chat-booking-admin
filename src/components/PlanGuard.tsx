@@ -6,6 +6,7 @@ import UpgradeContent from './common/UpgradeContent';
 import { generateClient } from 'aws-amplify/api';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { SUBSCRIBE } from '../graphql/queries';
+import { navigateTo, getCurrentUrl } from '../utils/navigation';
 
 const client = generateClient();
 
@@ -65,13 +66,13 @@ export default function PlanGuard({
                 variables: {
                     planId: target.toLowerCase(),
                     email: email,
-                    backUrl: window.location.href
+                    backUrl: getCurrentUrl()
                 }
             });
 
             const initPoint = response.data?.subscribe?.initPoint;
             if (initPoint) {
-                window.location.href = initPoint;
+                navigateTo(initPoint);
             } else {
                 console.error("No initPoint returned from subscription");
             }

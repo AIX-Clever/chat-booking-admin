@@ -13,8 +13,8 @@ const customJestConfig = {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
     testMatch: [
-        '**/__tests__/**/*.(test|spec).[jt]s?(x)',
-        '**/?(*.)+(spec|test).[jt]s?(x)'
+        '**/__tests__/**/*.(test).[jt]s?(x)',
+        '**/?(*.)+(test).[jt]s?(x)'
     ],
     collectCoverageFrom: [
         'src/**/*.{js,jsx,ts,tsx}',
@@ -24,10 +24,10 @@ const customJestConfig = {
     ],
     coverageThreshold: {
         global: {
-            branches: 50,
-            functions: 50,
-            lines: 50,
-            statements: 50,
+            branches: 80,
+            functions: 80,
+            lines: 80,
+            statements: 80,
         },
     },
 }

@@ -31,7 +31,8 @@
         "categories": "Categories",
         "widgets": "Interfaces",
         "chatWidget": "Chat Bot (Lucia)",
-        "bookingWidget": "Booking Page"
+        "bookingWidget": "Booking Page",
+        "myPage": "My Page"
     },
     "widgets": {
         "chat": {

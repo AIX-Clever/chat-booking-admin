@@ -119,6 +119,15 @@ export default function MyPage() {
         fetchData(selectedProvider);
     }, [selectedProvider]);
 
+    // Auto-select provider for LITE plan
+    useEffect(() => {
+        if (tenant?.plan === 'LITE' && providers.length > 0 && selectedProvider === 'all') {
+            const firstProviderId = providers[0].providerId;
+            setSelectedProvider(firstProviderId);
+            fetchData(firstProviderId);
+        }
+    }, [tenant, providers, selectedProvider]);
+
     const handleTogglePublication = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.checked;
         setToggling(true);
@@ -332,21 +341,30 @@ export default function MyPage() {
 
                     <Stack spacing={3}>
                         {/* Multi-professional Selector if applicable */}
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Verificar Checklist para:</InputLabel>
-                            <Select
-                                value={selectedProvider}
-                                label="Verificar Checklist para:"
-                                onChange={handleProviderChange}
-                            >
-                                <MenuItem value="all">General (Negocio)</MenuItem>
-                                {providers.map((p) => (
-                                    <MenuItem key={p.providerId} value={p.providerId}>
-                                        {p.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        {tenant?.plan !== 'LITE' ? (
+                            <FormControl fullWidth size="small">
+                                <InputLabel>Verificar Checklist para:</InputLabel>
+                                <Select
+                                    value={selectedProvider}
+                                    label="Verificar Checklist para:"
+                                    onChange={handleProviderChange}
+                                >
+                                    <MenuItem value="all">General (Negocio)</MenuItem>
+                                    {providers.map((p) => (
+                                        <MenuItem key={p.providerId} value={p.providerId}>
+                                            {p.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        ) : (
+                            <Box sx={{ p: 2, bgcolor: 'primary.main', borderRadius: 2, color: 'primary.contrastText' }}>
+                                <Typography variant="caption" fontWeight="bold" sx={{ opacity: 0.9 }}>MODO PROFESIONAL (Plan Lite)</Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                    Gestionando checklist para: <strong>{providers.find(p => p.providerId === selectedProvider)?.name || 'Cargando...'}</strong>
+                                </Typography>
+                            </Box>
+                        )}
 
                         <Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>

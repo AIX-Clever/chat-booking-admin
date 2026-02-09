@@ -6,6 +6,7 @@ import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { LIST_FAQS, CREATE_FAQ, UPDATE_FAQ, DELETE_FAQ } from '../../graphql/queries';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import PlanGuard from '../../components/PlanGuard';
 import {
     Typography,
     Button,
@@ -199,7 +200,7 @@ export default function FAQsPage() {
     );
 
     return (
-        <>
+        <PlanGuard minPlan="PRO" featureName="Gestión de FAQs" upgradeFeature="USAGE" variant="overlay">
             <ConfirmDialog
                 open={confirmOpen}
                 title={confirmConfig.title}
@@ -381,6 +382,6 @@ export default function FAQsPage() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </>
+        </PlanGuard>
     );
 }

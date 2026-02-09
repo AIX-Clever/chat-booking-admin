@@ -4,6 +4,7 @@ import { generateClient } from 'aws-amplify/api';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { SUBSCRIBE } from '../../graphql/queries';
 import UpgradeContent, { UpgradeFeature } from './UpgradeContent';
+import { navigateTo, getCurrentUrl } from '../../utils/navigation';
 
 const client = generateClient();
 
@@ -35,13 +36,13 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                 variables: {
                     planId: targetPlan.toLowerCase(), // 'pro' or 'business'
                     email: email,
-                    backUrl: window.location.href
+                    backUrl: getCurrentUrl()
                 }
             });
 
             const initPoint = response.data?.subscribe?.initPoint;
             if (initPoint) {
-                window.location.href = initPoint;
+                navigateTo(initPoint);
             } else {
                 console.error("No initPoint returned from subscription");
             }
