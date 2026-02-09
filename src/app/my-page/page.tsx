@@ -260,18 +260,45 @@ export default function MyPage() {
                             action={<Button size="small" startIcon={<OpenInNewIcon />} onClick={handleOpenLink}>Ver real</Button>}
                         />
                         <Divider />
-                        <CardContent sx={{ height: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled' }}>
-                            <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
-                            <Typography variant="h6">Renderizando vista previa...</Typography>
+                        <CardContent sx={{ height: 600, p: 0, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
                             {!status?.isPublished && (
-                                <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-                                    <Paper sx={{ p: 4, textAlign: 'center', maxWidth: 400, borderRadius: 3 }}>
-                                        <Typography variant="h6" gutterBottom>Modo Borrador</Typography>
-                                        <Typography variant="body2" color="text.secondary" paragraph>Tu página no es visible. Actívala para recibir reservas.</Typography>
-                                        <Button variant="contained" onClick={() => handleTogglePublication({ target: { checked: true } } as React.ChangeEvent<HTMLInputElement>)} disabled={toggling}>Publicar Ahora</Button>
-                                    </Paper>
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bgcolor: 'warning.light',
+                                    color: 'warning.contrastText',
+                                    py: 1,
+                                    px: 2,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    zIndex: 3,
+                                    boxShadow: 1
+                                }}>
+                                    <Stack direction="row" spacing={1} alignItems="center">
+                                        <VisibilityIcon fontSize="small" />
+                                        <Typography variant="caption" fontWeight="bold">MODO BORRADOR - No visible al público</Typography>
+                                    </Stack>
+                                    <Button
+                                        size="small"
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ py: 0, fontSize: '0.7rem' }}
+                                        onClick={() => handleTogglePublication({ target: { checked: true } } as React.ChangeEvent<HTMLInputElement>)}
+                                        disabled={toggling}
+                                    >
+                                        Publicar Ahora
+                                    </Button>
                                 </Box>
                             )}
+
+                            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled', bgcolor: 'action.hover' }}>
+                                <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
+                                <Typography variant="h6">Renderizando vista previa...</Typography>
+                                <Typography variant="caption">Tu página se verá increíble aquí pronto</Typography>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Container>
