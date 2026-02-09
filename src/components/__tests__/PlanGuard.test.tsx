@@ -29,6 +29,7 @@ jest.mock('../../utils/navigation', () => ({
 
 // Mock UpgradeContent to simplify PlanGuard testing
 jest.mock('../common/UpgradeContent', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function MockUpgradeContent({ onUpgrade, loading }: any) {
         return (
             <div>

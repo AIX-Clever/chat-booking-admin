@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import UpgradeModal from '../UpgradeModal';
 import { generateClient } from 'aws-amplify/api';
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import { navigateTo, getCurrentUrl } from '../../../utils/navigation';
+import { navigateTo } from '../../../utils/navigation';
 
 // Mock Amplify
 jest.mock('aws-amplify/api', () => ({
@@ -25,6 +25,7 @@ jest.mock('../../../utils/navigation', () => ({
 
 // Mock UpgradeContent to simplify testing UpgradeModal logic
 jest.mock('../UpgradeContent', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function MockUpgradeContent({ onUpgrade, onClose, loading }: any) {
         return (
             <div>
@@ -41,6 +42,7 @@ describe('UpgradeModal component', () => {
     const defaultProps = {
         open: true,
         onClose: mockOnClose,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         feature: 'AI_CHAT' as any,
         currentPlan: 'LITE'
     };

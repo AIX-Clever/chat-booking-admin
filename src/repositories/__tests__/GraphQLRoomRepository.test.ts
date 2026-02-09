@@ -1,4 +1,5 @@
 // We use require for the repository to ensure it's loaded AFTER the mock
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let GraphQLRoomRepository: any;
 const mockGraphql = jest.fn();
 
@@ -10,9 +11,11 @@ jest.mock('aws-amplify/api', () => ({
 }));
 
 describe('GraphQLRoomRepository', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let repository: any;
 
     beforeAll(() => {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         GraphQLRoomRepository = require('../GraphQLRoomRepository').GraphQLRoomRepository;
     });
 
@@ -86,7 +89,8 @@ describe('GraphQLRoomRepository', () => {
             const createdRoom = { roomId: '2', ...input };
             mockGraphql.mockResolvedValue({ data: { createRoom: createdRoom } });
 
-            const result = await repository.createRoom(input as any);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const result = await repository.createRoom(input as unknown as any);
 
             expect(mockGraphql).toHaveBeenCalledWith(expect.objectContaining({
                 variables: {
@@ -100,7 +104,8 @@ describe('GraphQLRoomRepository', () => {
 
         it('should throw error on failure', async () => {
             mockGraphql.mockRejectedValue(new Error('Create Error'));
-            await expect(repository.createRoom({ name: 'fail' } as any)).rejects.toThrow('Create Error');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await expect(repository.createRoom({ name: 'fail' } as unknown as any)).rejects.toThrow('Create Error');
         });
     });
 
@@ -109,14 +114,16 @@ describe('GraphQLRoomRepository', () => {
             const input = { roomId: '1', name: 'Updated' };
             mockGraphql.mockResolvedValue({ data: { updateRoom: input } });
 
-            const result = await repository.updateRoom(input as any);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const result = await repository.updateRoom(input as unknown as any);
 
             expect(result.name).toBe('Updated');
         });
 
         it('should throw error on failure', async () => {
             mockGraphql.mockRejectedValue(new Error('Update Error'));
-            await expect(repository.updateRoom({ roomId: '1' } as any)).rejects.toThrow('Update Error');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await expect(repository.updateRoom({ roomId: '1' } as unknown as any)).rejects.toThrow('Update Error');
         });
     });
 

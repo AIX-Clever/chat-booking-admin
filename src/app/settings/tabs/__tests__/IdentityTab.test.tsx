@@ -11,6 +11,7 @@ jest.mock('next-intl', () => ({
 // Mock next/image
 jest.mock('next/image', () => ({
     __esModule: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     default: ({ src, alt }: any) => <img src={src} alt={alt} />,
 }));
 
@@ -116,8 +117,10 @@ describe('IdentityTab', () => {
         const readerMock = {
             readAsDataURL: jest.fn(),
             result: 'data:image/png;base64,hello',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onloadend: null as any,
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         window.FileReader = jest.fn().mockImplementation(() => readerMock) as any;
 
         render(
@@ -136,6 +139,7 @@ describe('IdentityTab', () => {
 
         // Manually trigger onloadend
         if (readerMock.onloadend) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             readerMock.onloadend({} as any);
         }
 

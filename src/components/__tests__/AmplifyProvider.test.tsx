@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AmplifyProvider from '../AmplifyProvider';
 import { Amplify } from 'aws-amplify';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Authenticator } from '@aws-amplify/ui-react';
 
 // Mock Amplify
@@ -15,6 +16,7 @@ jest.mock('aws-amplify', () => ({
 // Mock Authenticator.Provider
 jest.mock('@aws-amplify/ui-react', () => ({
     Authenticator: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Provider: ({ children }: any) => <div data-testid="auth-provider">{children}</div>
     }
 }));

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PropertiesTab from '../PropertiesTab';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -184,6 +184,7 @@ describe('PropertiesTab', () => {
             slug: '',
             widgetConfig: {
                 ...mockWidgetConfig,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 welcomeMessages: undefined as any
             }
         };

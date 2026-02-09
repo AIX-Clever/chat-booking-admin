@@ -1,0 +1,70 @@
+
+> chat-booking-admin-panel@1.0.0 lint
+> next lint
+
+
+./src/app/bookings/page.tsx
+420:8  Warning: React Hook React.useEffect has a missing dependency: 'fetchProviderSchedule'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/services/page.tsx
+170:8  Warning: React Hook React.useEffect has a missing dependency: 'formData.requiredRoomIds'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/settings/billing/page.tsx
+44:8  Warning: React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/settings/tabs/__tests__/IdentityTab.test.tsx
+14:29  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:37  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+119:32  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+121:79  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+139:40  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/settings/tabs/__tests__/PropertiesTab.test.tsx
+2:37  Error: 'within' is defined but never used.  @typescript-eslint/no-unused-vars
+187:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/users/page.tsx
+103:8  Warning: React Hook React.useCallback has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/Layout/__tests__/MainLayout.test.tsx
+2:37  Error: 'waitFor' is defined but never used.  @typescript-eslint/no-unused-vars
+6:10  Error: 'fetchUserAttributes' is defined but never used.  @typescript-eslint/no-unused-vars
+7:10  Error: 'generateClient' is defined but never used.  @typescript-eslint/no-unused-vars
+9:10  Error: 'useTranslations' is defined but never used.  @typescript-eslint/no-unused-vars
+50:54  Error: Component definition is missing display name  react/display-name
+51:43  Error: Component definition is missing display name  react/display-name
+52:43  Error: Component definition is missing display name  react/display-name
+52:54  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/__tests__/AmplifyProvider.test.tsx
+6:10  Error: 'Authenticator' is defined but never used.  @typescript-eslint/no-unused-vars
+18:34  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/__tests__/OperatingHoursEditor.test.tsx
+8:46  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+28:42  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/__tests__/PlanGuard.test.tsx
+32:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/common/__tests__/ToastContext.test.tsx
+2:37  Error: 'act' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/common/__tests__/UpgradeContent.test.tsx
+11:71  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/common/__tests__/UpgradeModal.test.tsx
+7:22  Error: 'getCurrentUrl' is defined but never used.  @typescript-eslint/no-unused-vars
+28:73  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+44:31  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/repositories/__tests__/GraphQLRoomRepository.test.ts
+2:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+13:21  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+16:33  Error: A `require()` style import is forbidden.  @typescript-eslint/no-require-imports
+89:65  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+103:68  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+112:65  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+119:67  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules

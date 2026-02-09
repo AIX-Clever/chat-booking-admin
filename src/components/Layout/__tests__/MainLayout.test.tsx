@@ -1,12 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MainLayout from '../MainLayout';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { fetchUserAttributes } from 'aws-amplify/auth';
-import { generateClient } from 'aws-amplify/api';
 import { usePathname, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useTenant } from '../../../context/TenantContext';
 import { navigateTo } from '../../../utils/navigation';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -47,9 +44,17 @@ jest.mock('../../../utils/navigation', () => ({
 }));
 
 // Mock sub-components to reduce noise
-jest.mock('../../ThemeSwitcher/ThemeSwitcher', () => () => <div data-testid="theme-switcher">ThemeSwitcher</div>);
-jest.mock('../../LanguageSelector', () => () => <div data-testid="language-selector">LanguageSelector</div>);
-jest.mock('../../common/PlanBadge', () => ({ plan }: any) => <div data-testid="plan-badge">{plan}</div>);
+const ThemeSwitcherMock = () => <div data-testid="theme-switcher">ThemeSwitcher</div>;
+ThemeSwitcherMock.displayName = 'ThemeSwitcherMock';
+jest.mock('../../ThemeSwitcher/ThemeSwitcher', () => ThemeSwitcherMock);
+
+const LanguageSelectorMock = () => <div data-testid="language-selector">LanguageSelector</div>;
+LanguageSelectorMock.displayName = 'LanguageSelectorMock';
+jest.mock('../../LanguageSelector', () => LanguageSelectorMock);
+
+const PlanBadgeMock = ({ plan }: { plan: string }) => <div data-testid="plan-badge">{plan}</div>;
+PlanBadgeMock.displayName = 'PlanBadgeMock';
+jest.mock('../../common/PlanBadge', () => PlanBadgeMock);
 
 const renderWithTheme = (ui: React.ReactElement) => {
     return render(

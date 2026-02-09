@@ -8,6 +8,7 @@ const theme = createTheme();
 
 // Mock next-intl
 jest.mock('next-intl', () => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     useTranslations: jest.fn().mockReturnValue((key: string, params?: any) => {
         if (params?.plan) return `${key} ${params.plan}`;
         return key;

@@ -5,6 +5,7 @@ import { OperatingHoursEditor } from '../OperatingHoursEditor';
 
 // Mock MUI X Date Pickers to avoid complexity
 jest.mock('@mui/x-date-pickers/TimePicker', () => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TimePicker: ({ label, value, onChange }: any) => {
         const timeStr = value ? value.getHours().toString().padStart(2, '0') + ':' + value.getMinutes().toString().padStart(2, '0') : '';
         return (
@@ -25,6 +26,7 @@ jest.mock('@mui/x-date-pickers/TimePicker', () => ({
 }));
 
 jest.mock('@mui/x-date-pickers/LocalizationProvider', () => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     LocalizationProvider: ({ children }: any) => <div>{children}</div>
 }));
 
