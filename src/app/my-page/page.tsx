@@ -181,7 +181,9 @@ export default function MyPage() {
         );
     }
 
-    const isPlanInactive = tenant?.status !== 'ACTIVE' && tenant?.status !== 'TRIAL';
+    // @ts-ignore - The property status exists in the response but its type might not be fully synchronized
+    const tenantStatus = (tenant as any)?.status;
+    const isPlanInactive = tenantStatus !== 'ACTIVE' && tenantStatus !== 'TRIAL';
 
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', position: 'relative' }}>
