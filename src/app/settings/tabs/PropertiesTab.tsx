@@ -61,7 +61,7 @@ export default function PropertiesTab({ widgetConfig, setWidgetConfig, slug, set
         const newMessages = {
             ...(widgetConfig.welcomeMessages || {}),
             [lang]: value
-        };
+        } as WelcomeMessages;
         setWidgetConfig({ ...widgetConfig, welcomeMessages: newMessages });
     };
 
