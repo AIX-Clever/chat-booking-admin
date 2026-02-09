@@ -22,7 +22,7 @@ import { useTranslations } from 'next-intl';
 // Also import internal preview
 import WidgetPreview from '../components/WidgetPreview';
 import PlanGuard from '@/components/PlanGuard';
-import { WidgetConfig } from '../../../types/settings';
+import { WidgetConfig, WelcomeMessages } from '../../../types/settings';
 
 const COLOR_PRESETS = [
     { name: 'Default Blue', value: '#2563eb' },
