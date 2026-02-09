@@ -5,8 +5,6 @@ import {
     Box,
     Typography,
     Paper,
-    Switch,
-    FormControlLabel,
     Button,
     Card,
     CardContent,
@@ -36,12 +34,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
-import PublishIcon from '@mui/icons-material/Publish';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { generateClient } from 'aws-amplify/api';
-import { GET_PUBLIC_LINK_STATUS, SET_PUBLIC_LINK_STATUS, LIST_PROVIDERS } from '../../graphql/queries';
+import { GET_PUBLIC_LINK_STATUS, LIST_PROVIDERS } from '../../graphql/queries';
 import { useTenant } from '../../context/TenantContext';
 
 const DRAWER_WIDTH = 340;
@@ -66,7 +63,7 @@ export default function MyPage() {
     const { tenant } = useTenant();
     const [status, setStatus] = useState<PublicLinkStatus | null>(null);
     const [loading, setLoading] = useState(true);
-    const [toggling, setToggling] = useState(false);
+
     const [error, setError] = useState<string | null>(null);
     const [copySuccess, setCopySuccess] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(true);
@@ -128,39 +125,7 @@ export default function MyPage() {
         }
     }, [tenant, providers, selectedProvider]);
 
-    const handleTogglePublication = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.checked;
-        setToggling(true);
-        setError(null);
 
-        try {
-            const client = generateClient();
-            const response = await client.graphql({
-                query: SET_PUBLIC_LINK_STATUS,
-                variables: { isPublished: newValue }
-            }) as { data: { setPublicLinkStatus: { success: boolean, isPublished: boolean, publishedAt: string | null, message?: string } }, errors?: { message: string }[] };
-
-            if (response.data?.setPublicLinkStatus?.success) {
-                if (status) {
-                    setStatus({
-                        ...status,
-                        isPublished: response.data.setPublicLinkStatus.isPublished,
-                        publishedAt: response.data.setPublicLinkStatus.publishedAt,
-                    });
-                } else {
-                    fetchData(selectedProvider);
-                }
-            } else {
-                throw new Error(response.data?.setPublicLinkStatus?.message || 'Error al actualizar el estado.');
-            }
-        } catch (err: unknown) {
-            const error = err as { message?: string, errors?: { message: string }[] };
-            console.error('Error toggling publication:', error);
-            setError(error.errors?.[0]?.message || error.message || 'Error al cambiar el estado de publicación.');
-        } finally {
-            setToggling(false);
-        }
-    };
 
     const handleCopyLink = () => {
         if (status?.publicUrl) {
@@ -248,10 +213,7 @@ export default function MyPage() {
                             </IconButton>
                         </Box>
 
-                        <FormControlLabel
-                            control={<Switch checked={status?.isPublished || false} onChange={handleTogglePublication} disabled={toggling || isPlanInactive} color="primary" />}
-                            label={status?.isPublished ? "Publicado" : "Activar"}
-                        />
+
 
                         <IconButton onClick={() => setDrawerOpen(!drawerOpen)} color="inherit">
                             {drawerOpen ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -270,38 +232,7 @@ export default function MyPage() {
                         />
                         <Divider />
                         <CardContent sx={{ height: 600, p: 0, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-                            {!status?.isPublished && (
-                                <Box sx={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bgcolor: 'warning.light',
-                                    color: 'warning.contrastText',
-                                    py: 1,
-                                    px: 2,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    zIndex: 3,
-                                    boxShadow: 1
-                                }}>
-                                    <Stack direction="row" spacing={1} alignItems="center">
-                                        <VisibilityIcon fontSize="small" />
-                                        <Typography variant="caption" fontWeight="bold">MODO BORRADOR - No visible al público</Typography>
-                                    </Stack>
-                                    <Button
-                                        size="small"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ py: 0, fontSize: '0.7rem' }}
-                                        onClick={() => handleTogglePublication({ target: { checked: true } } as React.ChangeEvent<HTMLInputElement>)}
-                                        disabled={toggling}
-                                    >
-                                        Publicar Ahora
-                                    </Button>
-                                </Box>
-                            )}
+
 
                             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled', bgcolor: 'action.hover' }}>
                                 <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
