@@ -1,9 +1,8 @@
-
 export interface WelcomeMessages {
-    es: string;
-    en: string;
-    pt: string;
-    [key: string]: string;
+    es?: string;
+    en?: string;
+    pt?: string;
+    [key: string]: string | undefined;
 }
 
 export interface WidgetConfig {
