@@ -48,6 +48,7 @@ interface ChecklistItem {
     status: 'COMPLETE' | 'MISSING' | 'RECOMMENDED';
     label: string;
     isRequired: boolean;
+    actionUrl?: string; // New field for deep linking
 }
 
 interface PublicLinkStatus {
@@ -320,9 +321,19 @@ export default function MyPage() {
                                     <ListItemText
                                         primary={item.label}
                                         primaryTypographyProps={{ variant: 'body2', fontWeight: 'medium' }}
-                                        secondary={item.isRequired ? "Bloqueante para publicar" : "Recomendado"}
-                                        secondaryTypographyProps={{ variant: 'caption' }}
+                                        secondary={item.isRequired ? "Esencial para reservas" : "Recomendado"}
+                                        secondaryTypographyProps={{ variant: 'caption', color: item.isRequired ? 'error.main' : 'text.secondary' }}
                                     />
+                                    {item.status !== 'COMPLETE' && item.actionUrl && (
+                                        <Button
+                                            size="small"
+                                            variant="outlined"
+                                            href={item.actionUrl}
+                                            sx={{ ml: 1, minWidth: 'auto', px: 1, py: 0.5, fontSize: '0.7rem' }}
+                                        >
+                                            Corregir
+                                        </Button>
+                                    )}
                                 </ListItem>
                             ))}
                         </List>
