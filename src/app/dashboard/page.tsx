@@ -30,10 +30,7 @@ export default function DashboardPage() {
 
     const [upgradeOpen, setUpgradeOpen] = useState(false);
 
-    const planFeatures = usePlanFeatures({
-        messages: usage?.messages || 0,
-        bookings: usage?.bookings || 0
-    });
+    const planFeatures = usePlanFeatures();
 
     const planName = planFeatures.plan;
 
