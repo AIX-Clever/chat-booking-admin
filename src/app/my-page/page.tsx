@@ -327,7 +327,7 @@ export default function MyPage() {
                             ))}
                         </List>
 
-                        <Alert severity="info" variant="outlined" icon={<PublishIcon />} sx={{ borderRadius: 2 }}>
+                        <Alert severity="info" variant="outlined" icon={<InfoIcon />} sx={{ borderRadius: 2 }}>
                             <Typography variant="caption" sx={{ display: 'block' }}>
                                 <strong>Tip Lucía:</strong> Los negocios con logo y descripción reciben 3x más clics en sus links.
                             </Typography>
