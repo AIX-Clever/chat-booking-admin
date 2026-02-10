@@ -156,8 +156,7 @@ export default function MyPage() {
         );
     }
 
-    const tenantStatus = (tenant as { status?: string })?.status;
-    const isPlanInactive = tenantStatus !== 'ACTIVE' && tenantStatus !== 'TRIAL';
+
 
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', position: 'relative' }}>
