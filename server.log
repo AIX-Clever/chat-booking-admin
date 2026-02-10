@@ -1,0 +1,64 @@
+
+> chat-booking-admin-panel@1.0.0 dev
+> next dev -H 0.0.0.0
+
+  ▲ Next.js 14.2.33
+  - Local:        http://localhost:3000
+  - Network:      http://0.0.0.0:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1239ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.4s (4878 modules)
+ GET / 200 in 3640ms
+ GET / 200 in 14ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1097ms (5018 modules)
+ GET /login 200 in 1259ms
+ ○ Compiling /bookings ...
+ ✓ Compiled /bookings in 1223ms (6008 modules)
+ ○ Compiling /availability ...
+ ✓ Compiled /availability in 1210ms (7408 modules)
+Amplify has not been configured. Please call Amplify.configure() before using this service.
+ GET /availability 200 in 1491ms
+ GET /availability 200 in 1493ms
+ GET /availability 200 in 1493ms
+ GET /availability 200 in 1493ms
+ GET /availability 200 in 1494ms
+ GET /availability 200 in 1497ms
+ GET /availability 200 in 15ms
+ GET /bookings 200 in 27ms
+ GET /bookings 200 in 18ms
+ GET /bookings 200 in 24ms
+ GET /bookings 200 in 17ms
+ GET /bookings 200 in 22ms
+ GET /bookings 200 in 12ms
+ ○ Compiling /rooms ...
+ ✓ Compiled /rooms in 1272ms (7424 modules)
+Amplify has not been configured. Please call Amplify.configure() before using this service.
+ GET /rooms 200 in 1522ms
+ ○ Compiling /services ...
+ ✓ Compiled /services in 628ms (7440 modules)
+Amplify has not been configured. Please call Amplify.configure() before using this service.
+ GET /services 200 in 816ms
+ GET /services 200 in 12ms
+ GET / 200 in 20ms
+ GET / 200 in 10ms
+ GET / 200 in 23ms
+ GET / 200 in 26ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.6s (8246 modules)
+ GET / 200 in 102ms
+ GET / 200 in 102ms
+ ○ Compiling /providers ...
+ ✓ Compiled /providers in 2.5s (8322 modules)
+Amplify has not been configured. Please call Amplify.configure() before using this service.
+Amplify has not been configured. Please call Amplify.configure() before using this service.
+ GET /providers 200 in 2336ms
+ GET / 200 in 24ms
+ GET / 200 in 20ms
+ GET / 200 in 13ms
+ GET / 200 in 28ms
+ GET / 200 in 24ms
+ GET / 200 in 16ms

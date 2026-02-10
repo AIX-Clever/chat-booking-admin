@@ -21,3 +21,12 @@ export const DOWNGRADE_PLAN = `
     }
   }
 `;
+
+export const CHECK_PAYMENT_STATUS = `
+  query CheckPaymentStatus($tenantId: ID!) {
+    checkPaymentStatus(tenantId: $tenantId) {
+      status
+      message
+    }
+  }
+`;

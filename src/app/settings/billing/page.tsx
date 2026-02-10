@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { GET_TENANT, UPDATE_TENANT, SUBSCRIBE } from '../../../graphql/queries';
-import { LIST_INVOICES } from '../../../graphql/billing-queries';
+import { CHECK_PAYMENT_STATUS, LIST_INVOICES } from '../../../graphql/billing-queries';
 import {
     Business as BuildingOffice2Icon,
     Description as DocumentTextIcon,
     CreditCard as CreditCardIcon,
-    Download as ArrowDownTrayIcon
+    Download as ArrowDownTrayIcon,
+    Refresh as RefreshIcon
 } from '@mui/icons-material';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
@@ -28,6 +29,7 @@ export default function BillingPage() {
     const { user } = useAuthenticator((context) => [context.user]);
     const [loading, setLoading] = useState(true);
     const [tenant, setTenant] = useState<any>(null);
+    const [tenantId, setTenantId] = useState<string | null>(null);
     const [invoices, setInvoices] = useState<Invoice[]>([]);
 
     // Billing Info Form State
@@ -38,6 +40,7 @@ export default function BillingPage() {
         city: ''
     });
     const [isSaving, setIsSaving] = useState(false);
+    const [isCheckingPayment, setIsCheckingPayment] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -48,17 +51,18 @@ export default function BillingPage() {
             if (!user) return;
 
             const session = await fetchAuthSession();
-            const tenantId = session.tokens?.idToken?.payload['custom:tenantId'] as string | undefined;
+            const tId = session.tokens?.idToken?.payload['custom:tenantId'] as string | undefined;
 
-            if (!tenantId) {
+            if (!tId) {
                 console.error("No tenant ID found in user session");
                 // Fallback or retry?
                 return;
             }
+            setTenantId(tId);
 
             const tenantData: any = await client.graphql({
                 query: GET_TENANT,
-                variables: { tenantId }
+                variables: { tenantId: tId }
             });
 
             const t = tenantData.data.getTenant;
@@ -157,6 +161,32 @@ export default function BillingPage() {
         } catch (err) {
             console.error('Subscribe error:', err);
             alert('Error al procesar la solicitud');
+        }
+    }
+
+    async function handleCheckPaymentStatus() {
+        if (!tenantId) return;
+        setIsCheckingPayment(true);
+        try {
+            const result: any = await client.graphql({
+                query: CHECK_PAYMENT_STATUS,
+                variables: { tenantId }
+            });
+            const response = result.data.checkPaymentStatus;
+
+            if (response.status === 'PAID' || response.status === 'AUTHORIZED') {
+                alert('¡Pago confirmado! Tu suscripción ha sido activada.');
+                fetchData(); // Refresh data
+            } else if (response.status === 'PENDING') {
+                alert('Tu pago está en proceso. Por favor verifica nuevamente en unos minutos.');
+            } else {
+                alert(`Estado del pago: ${response.message || 'No encontrado'}`);
+            }
+        } catch (err) {
+            console.error('Check payment status error:', err);
+            alert('Error al verificar el estado del pago');
+        } finally {
+            setIsCheckingPayment(false);
         }
     }
 
@@ -280,11 +310,20 @@ export default function BillingPage() {
                 {/* Right Column: Invoice History */}
                 <div className="md:col-span-1">
                     <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-100">
-                        <div className="p-4 border-b border-gray-100 bg-gray-50">
+                        <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                             <h3 className="text-base font-medium text-gray-900 flex items-center">
                                 <DocumentTextIcon className="h-5 w-5 mr-2 text-gray-400" />
                                 Historial de Pagos
                             </h3>
+                            <button
+                                onClick={handleCheckPaymentStatus}
+                                disabled={isCheckingPayment}
+                                className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center font-medium disabled:opacity-50"
+                                title="Verificar si tu último pago se procesó correctamente"
+                            >
+                                <RefreshIcon className={`h-4 w-4 mr-1 ${isCheckingPayment ? 'animate-spin' : ''}`} />
+                                {isCheckingPayment ? 'Verificando...' : 'Revisar Pago'}
+                            </button>
                         </div>
                         <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
                             {invoices.length === 0 ? (
