@@ -101,6 +101,7 @@ export class AdminStack extends cdk.Stack {
                         eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
                     }
                 ],
+                compress: true,
             },
             errorResponses: [
                 {
@@ -114,6 +115,10 @@ export class AdminStack extends cdk.Stack {
                     responsePagePath: '/index.html',
                 },
             ],
+
+            enableLogging: true,
+            enableIpv6: true,
+            httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
         });
 
         // 4. Add Bucket Policy for OAC
