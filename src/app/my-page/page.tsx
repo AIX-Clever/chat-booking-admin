@@ -235,11 +235,19 @@ export default function MyPage() {
                         <CardContent sx={{ height: 600, p: 0, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
 
 
-                            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled', bgcolor: 'action.hover' }}>
-                                <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
-                                <Typography variant="h6">Renderizando vista previa...</Typography>
-                                <Typography variant="caption">Tu página se verá increíble aquí pronto</Typography>
-                            </Box>
+                            {status?.publicUrl ? (
+                                <iframe
+                                    src={status.publicUrl}
+                                    style={{ width: '100%', height: '100%', border: 'none' }}
+                                    title="Vista Previa"
+                                />
+                            ) : (
+                                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'text.disabled', bgcolor: 'action.hover' }}>
+                                    <VisibilityIcon sx={{ fontSize: 64, mb: 2, opacity: 0.2 }} />
+                                    <Typography variant="h6">Vista previa no disponible</Typography>
+                                    <Typography variant="caption">Completa la configuración para ver tu página</Typography>
+                                </Box>
+                            )}
                         </CardContent>
                     </Card>
                 </Container>
