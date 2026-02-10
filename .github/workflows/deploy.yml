@@ -36,6 +36,7 @@ jobs:
           NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
           NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://gn6cbrywdnecbgdg6mg4lhi6xm.appsync-api.us-east-1.amazonaws.com/graphql
           NEXT_PUBLIC_AWS_REGION: us-east-1
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
