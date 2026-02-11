@@ -37,11 +37,67 @@ import { useToast } from '../common/ToastContext';
 
 const client = generateClient();
 
+interface ClientIdentifier {
+    type: string;
+    value: string;
+}
+
+interface ClientContact {
+    system: string;
+    value: string;
+    use?: string;
+}
+
+interface ClientName {
+    given: string;
+    family: string;
+}
+
+interface ClientInsurance {
+    provider: string;
+    type: string;
+}
+
+interface ClientAddress {
+    text: string;
+    lat?: number;
+    lng?: number;
+}
+
+interface Client {
+    id: string;
+    names: ClientName;
+    identifiers: ClientIdentifier[];
+    contactInfo?: ClientContact[];
+    birthDate?: string;
+    gender?: string;
+    occupation?: string;
+    healthInsurance?: ClientInsurance;
+    address?: ClientAddress;
+    providerIds?: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface Provider {
+    providerId: string;
+    name: string;
+    photoUrlThumbnail?: string;
+}
+
+interface Booking {
+    bookingId: string;
+    start: string;
+    serviceId: string;
+    providerId: string;
+    status: string;
+}
+
 interface ClientFormProps {
     open: boolean;
     onClose: () => void;
     onSuccess: () => void;
-    initialData?: any;
+    initialData?: Client | null;
 }
 
 const IDENTIFIER_TYPES = [
@@ -63,8 +119,8 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
     const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [providers, setProviders] = useState<any[]>([]);
-    const [history, setHistory] = useState<any[]>([]);
+    const [providers, setProviders] = useState<Provider[]>([]);
+    const [history, setHistory] = useState<Booking[]>([]);
     const [loadingHistory, setLoadingHistory] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -85,7 +141,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
 
     const fetchProviders = useCallback(async () => {
         try {
-            const result = await client.graphql({ query: LIST_PROVIDERS }) as any;
+            const result = await client.graphql({ query: LIST_PROVIDERS }) as { data: { listProviders: Provider[] } };
             setProviders(result.data.listProviders || []);
         } catch (err) {
             console.error('Error fetching providers:', err);
@@ -100,7 +156,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
             const result = await client.graphql({
                 query: LIST_BOOKINGS_BY_CLIENT,
                 variables: { input: { clientEmail: formData.email } }
-            }) as any;
+            }) as { data: { listBookingsByClient: Booking[] } };
             setHistory(result.data.listBookingsByClient || []);
         } catch (err) {
             console.error('Error fetching history:', err);
@@ -129,8 +185,8 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                 familyName: initialData.names?.family || '',
                 idType: initialData.identifiers?.[0]?.type || 'RUT',
                 idValue: initialData.identifiers?.[0]?.value || '',
-                email: initialData.contactInfo?.find((c: any) => c.system === 'email')?.value || '',
-                phone: initialData.contactInfo?.find((c: any) => c.system === 'phone')?.value || '',
+                email: initialData.contactInfo?.find((c) => c.system === 'email')?.value || '',
+                phone: initialData.contactInfo?.find((c) => c.system === 'phone')?.value || '',
                 birthDate: initialData.birthDate || '',
                 gender: initialData.gender || '',
                 occupation: initialData.occupation || '',
@@ -158,12 +214,16 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         }
     }, [initialData, open]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name as string]: value }));
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name?: string; value: unknown } }) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        if (name) {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setActiveTab(newValue);
     };
 
@@ -172,7 +232,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         setLoading(true);
 
         try {
-            const input: any = {
+            const input: Record<string, unknown> = {
                 names: {
                     given: formData.givenName,
                     family: formData.familyName
@@ -180,15 +240,16 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                 identifiers: [
                     { type: formData.idType, value: formData.idValue }
                 ],
-                contactInfo: [],
+                contactInfo: [] as ClientContact[],
                 providerIds: formData.providerIds
             };
 
+            const contactInfo = input.contactInfo as ClientContact[];
             if (formData.email) {
-                input.contactInfo.push({ system: 'email', value: formData.email });
+                contactInfo.push({ system: 'email', value: formData.email });
             }
             if (formData.phone) {
-                input.contactInfo.push({ system: 'phone', value: formData.phone });
+                contactInfo.push({ system: 'phone', value: formData.phone });
             }
 
             if (formData.birthDate) input.birthDate = formData.birthDate;
@@ -224,9 +285,12 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
 
             onSuccess();
             onClose();
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error saving client:', err);
-            showToast(err.errors?.[0]?.message || 'Error al guardar el cliente', 'error');
+            const errorMessage = err instanceof Error ? err.message : 'Error al guardar el cliente';
+            // If it's a GraphQL error from Amplify
+            const gqlError = err as { errors?: Array<{ message: string }> };
+            showToast(gqlError.errors?.[0]?.message || errorMessage, 'error');
         } finally {
             setLoading(false);
         }
