@@ -44,17 +44,20 @@ jest.mock('../../../utils/navigation', () => ({
 }));
 
 // Mock sub-components to reduce noise
-const ThemeSwitcherMock = () => <div data-testid="theme-switcher">ThemeSwitcher</div>;
-ThemeSwitcherMock.displayName = 'ThemeSwitcherMock';
-jest.mock('../../ThemeSwitcher/ThemeSwitcher', () => ThemeSwitcherMock);
+jest.mock('../../ThemeSwitcher/ThemeSwitcher', () => ({
+    __esModule: true,
+    default: () => <div data-testid="theme-switcher">ThemeSwitcher</div>
+}));
 
-const LanguageSelectorMock = () => <div data-testid="language-selector">LanguageSelector</div>;
-LanguageSelectorMock.displayName = 'LanguageSelectorMock';
-jest.mock('../../LanguageSelector', () => LanguageSelectorMock);
+jest.mock('../../LanguageSelector', () => ({
+    __esModule: true,
+    default: () => <div data-testid="language-selector">LanguageSelector</div>
+}));
 
-const PlanBadgeMock = ({ plan }: { plan: string }) => <div data-testid="plan-badge">{plan}</div>;
-PlanBadgeMock.displayName = 'PlanBadgeMock';
-jest.mock('../../common/PlanBadge', () => PlanBadgeMock);
+jest.mock('../../common/PlanBadge', () => ({
+    __esModule: true,
+    default: ({ plan }: { plan: string }) => <div data-testid="plan-badge">{plan}</div>
+}));
 
 const renderWithTheme = (ui: React.ReactElement) => {
     return render(
