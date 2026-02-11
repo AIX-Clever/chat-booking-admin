@@ -645,3 +645,20 @@ export const SET_PUBLIC_LINK_STATUS = `
   }
 `;
 
+
+export const LIST_BOOKINGS_BY_CLIENT = `
+  query ListBookingsByClient($input: ListBookingsByClientInput!) {
+    listBookingsByClient(input: $input) {
+      bookingId
+      clientName
+      clientEmail
+      clientPhone
+      start
+      end
+      status
+      notes
+      serviceId
+      providerId
+    }
+  }
+`;
