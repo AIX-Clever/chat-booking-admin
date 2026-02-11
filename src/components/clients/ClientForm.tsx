@@ -28,7 +28,8 @@ import {
     TableHead,
     TableRow,
     Chip,
-    Avatar
+    Avatar,
+    SelectChangeEvent
 } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
 import { CREATE_CLIENT, UPDATE_CLIENT } from '../../graphql/client-queries';
@@ -214,10 +215,15 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         }
     }, [initialData, open]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name?: string; value: unknown } }) => {
-        const target = e.target;
-        const name = target.name;
-        const value = target.value;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        if (name) {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleSelectChange = (e: SelectChangeEvent<string | string[]>) => {
+        const { name, value } = e.target;
         if (name) {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
@@ -344,7 +350,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                                             name="idType"
                                             value={formData.idType}
                                             label="Tipo Identificación"
-                                            onChange={handleChange as any}
+                                            onChange={handleSelectChange}
                                         >
                                             {IDENTIFIER_TYPES.map(type => (
                                                 <MenuItem key={type.value} value={type.value}>
@@ -377,7 +383,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                                     name="providerIds"
                                     value={formData.providerIds}
                                     label="Seleccione Profesionales"
-                                    onChange={handleChange as any}
+                                    onChange={handleSelectChange}
                                     renderValue={(selected) => (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                             {(selected as string[]).map((value) => {
@@ -447,7 +453,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                                             name="gender"
                                             value={formData.gender}
                                             label="Género"
-                                            onChange={handleChange as any}
+                                            onChange={handleSelectChange}
                                         >
                                             {GENDERS.map(g => (
                                                 <MenuItem key={g.value} value={g.value}>
