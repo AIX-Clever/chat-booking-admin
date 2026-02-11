@@ -22,41 +22,9 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Visibility as VisibilityIcon } from '@mui/icons-material';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_CLIENTS } from '../../graphql/client-queries';
-import ClientForm from '../../components/clients/ClientForm';
+import ClientForm, { Client } from '../../components/clients/ClientForm';
 
 const client = generateClient();
-
-interface ClientIdentifier {
-    type: string;
-    value: string;
-}
-
-interface ClientContact {
-    system: string;
-    value: string;
-    use?: string;
-}
-
-interface Client {
-    id: string;
-    names: {
-        given: string;
-        family: string;
-    };
-    identifiers: ClientIdentifier[];
-    contactInfo?: ClientContact[];
-    birthDate?: string;
-    gender?: string;
-    occupation?: string;
-    healthInsurance?: {
-        provider: string;
-        type: string;
-    };
-    address?: {
-        text: string;
-    };
-    createdAt: string;
-}
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>([]);

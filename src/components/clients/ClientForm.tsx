@@ -38,34 +38,34 @@ import { useToast } from '../common/ToastContext';
 
 const client = generateClient();
 
-interface ClientIdentifier {
+export interface ClientIdentifier {
     type: string;
     value: string;
 }
 
-interface ClientContact {
+export interface ClientContact {
     system: string;
     value: string;
     use?: string;
 }
 
-interface ClientName {
+export interface ClientName {
     given: string;
     family: string;
 }
 
-interface ClientInsurance {
+export interface ClientInsurance {
     provider: string;
     type: string;
 }
 
-interface ClientAddress {
+export interface ClientAddress {
     text: string;
     lat?: number;
     lng?: number;
 }
 
-interface Client {
+export interface Client {
     id: string;
     names: ClientName;
     identifiers: ClientIdentifier[];
