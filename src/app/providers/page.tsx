@@ -43,8 +43,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
 import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
 import { Paper, Snackbar, Alert, Tooltip } from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { PlanGuard } from '../../components/PlanGuard';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
-import { useDashboardMetrics, usePlanUsage } from '../../hooks/useDashboardMetrics';
+import { useDashboardMetrics } from '../../hooks/useDashboardMetrics';
 
 // --- Types ---
 

@@ -46,7 +46,7 @@ export default function BillingPage() {
         fetchData();
     }, [user, fetchData]);
 
-    async function fetchData() {
+    const fetchData = React.useCallback(async () => {
         try {
             if (!user) return;
 
@@ -92,7 +92,7 @@ export default function BillingPage() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [user]);
 
     async function handleSaveBillingInfo(e: React.FormEvent) {
         e.preventDefault();
