@@ -38,7 +38,9 @@ export const LIST_BOOKINGS_BY_PROVIDER = `
 export const GET_SERVICE = `
   query GetService($serviceId: ID!) {
      getService(serviceId: $serviceId) {
+        serviceId
         name
+        description
      }
 }
 `;
@@ -80,6 +82,7 @@ export const CREATE_SERVICE = `
     createService(input: $input) {
       serviceId
       name
+      description
       category
       durationMinutes
       price
@@ -93,6 +96,7 @@ export const SEARCH_SERVICES = `
     searchServices(text: $text, availableOnly: $availableOnly) {
       serviceId
       name
+      description
       durationMinutes
       category
       price
