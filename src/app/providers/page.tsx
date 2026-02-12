@@ -137,7 +137,7 @@ export default function ProvidersPage() {
 
     // Plan Enforcement
     const planFeatures = usePlanFeatures();
-    const { planUsage } = usePlanUsage();
+    const { usage: planUsage } = usePlanUsage();
 
     // Confirmation Dialog State
     const [confirmOpen, setConfirmOpen] = React.useState(false);
