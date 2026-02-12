@@ -491,6 +491,10 @@ export const LIST_ROOMS = `
       description
       capacity
       status
+      isVirtual
+      minDuration
+      maxDuration
+      operatingHours
       metadata
       createdAt
       updatedAt
@@ -500,49 +504,60 @@ export const LIST_ROOMS = `
 
 export const GET_ROOM = `
   query GetRoom($roomId: ID!) {
-    tenantId
-    name
-    description
-    capacity
-    status
-    metadata
-    createdAt
-    updatedAt
+    getRoom(roomId: $roomId) {
+      roomId
+      tenantId
+      name
+      description
+      capacity
+      status
+      isVirtual
+      minDuration
+      maxDuration
+      operatingHours
+      metadata
+      createdAt
+      updatedAt
+    }
   }
-}
 `;
 
 export const CREATE_ROOM = `
   mutation CreateRoom($input: CreateRoomInput!) {
-  createRoom(input: $input) {
-    roomId
-    name
-    description
-    capacity
-    status
-    isVirtual
-    minDuration
-    maxDuration
-    operatingHours
+    createRoom(input: $input) {
+      roomId
+      name
+      description
+      capacity
+      status
+      isVirtual
+      minDuration
+      maxDuration
+      operatingHours
+      metadata
+      createdAt
+      updatedAt
+    }
   }
-}
 `;
 
 export const UPDATE_ROOM = `
   mutation UpdateRoom($input: UpdateRoomInput!) {
-  updateRoom(input: $input) {
-    roomId
-    name
-    description
-    capacity
-    status
-    isVirtual
-    minDuration
-    maxDuration
-    operatingHours
-    updatedAt
+    updateRoom(input: $input) {
+      roomId
+      name
+      description
+      capacity
+      status
+      isVirtual
+      minDuration
+      maxDuration
+      operatingHours
+      metadata
+      createdAt
+      updatedAt
+    }
   }
-}
 `;
 
 export const DELETE_ROOM = `
