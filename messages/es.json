@@ -367,6 +367,9 @@
                 "specialtiesHelper": "Condiciones específicas o áreas de experiencia.",
                 "languages": "Idiomas",
                 "languagesPlaceholder": "Seleccionar o escribir idiomas"
+            },
+            "integrations": {
+                "awareness": "Solo puedes vincular calendarios una vez que el profesional ha sido creado y guardado."
             }
         },
         "deleteDialog": {

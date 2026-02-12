@@ -883,20 +883,26 @@ export default function ProvidersPage() {
                     {/* Tab 4: Integrations */}
                     <CustomTabPanel value={tabValue} index={4}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <PlanGuard minPlan="PRO" featureName="Integración de Calendarios" variant="overlay" upgradeFeature="AI">
-                                <GoogleCalendarCard
-                                    providerId={formData.id}
-                                    tenantId={tenantId}
-                                    isConnected={!!formData.hasGoogleCalendar}
-                                    onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
-                                />
-                                <MicrosoftCalendarCard
-                                    providerId={formData.id}
-                                    tenantId={tenantId}
-                                    isConnected={!!formData.hasMicrosoftCalendar}
-                                    onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
-                                />
-                            </PlanGuard>
+                            {!currentProvider ? (
+                                <Alert severity="info" variant="outlined">
+                                    {t('dialog.integrations.awareness')}
+                                </Alert>
+                            ) : (
+                                <PlanGuard minPlan="PRO" featureName="Integración de Calendarios" variant="overlay" upgradeFeature="AI">
+                                    <GoogleCalendarCard
+                                        providerId={formData.id}
+                                        tenantId={tenantId}
+                                        isConnected={!!formData.hasGoogleCalendar}
+                                        onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
+                                    />
+                                    <MicrosoftCalendarCard
+                                        providerId={formData.id}
+                                        tenantId={tenantId}
+                                        isConnected={!!formData.hasMicrosoftCalendar}
+                                        onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
+                                    />
+                                </PlanGuard>
+                            )}
                         </Box>
                     </CustomTabPanel>
 
