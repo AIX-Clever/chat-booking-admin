@@ -167,7 +167,7 @@ export default function ServicesPage() {
         if (arraysDifferent) {
             setFormData(prev => ({ ...prev, requiredRoomIds: compatibleRoomIds }));
         }
-    }, [formData.locationType, rooms]); // Removed formData.requiredRoomIds from dependencies to prevent loop
+    }, [formData.locationType, rooms, formData.requiredRoomIds]);
 
 
 

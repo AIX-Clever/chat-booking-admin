@@ -44,7 +44,7 @@ export default function BillingPage() {
 
     useEffect(() => {
         fetchData();
-    }, [user]);
+    }, [user, fetchData]);
 
     async function fetchData() {
         try {

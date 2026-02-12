@@ -100,7 +100,7 @@ export default function UsersPage() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         if (!tenantLoading) {
