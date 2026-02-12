@@ -86,3 +86,16 @@ export const UPDATE_CLIENT = `
     }
   }
 `;
+export const LIST_CLIENT_AUDIT_LOGS = `
+  query ListClientAuditLogs($clientId: ID!) {
+    listClientAuditLogs(clientId: $clientId) {
+      field
+      oldValue
+      newValue
+      source
+      sourceId
+      changedBy
+      timestamp
+    }
+  }
+`;

@@ -1,0 +1,347 @@
+deploy	Set up job	﻿2026-02-11T01:10:18.8910272Z Current runner version: '2.331.0'
+deploy	Set up job	2026-02-11T01:10:18.8934053Z ##[group]Runner Image Provisioner
+deploy	Set up job	2026-02-11T01:10:18.8934894Z Hosted Compute Agent
+deploy	Set up job	2026-02-11T01:10:18.8935568Z Version: 20260123.484
+deploy	Set up job	2026-02-11T01:10:18.8936442Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+deploy	Set up job	2026-02-11T01:10:18.8937162Z Build Date: 2026-01-23T19:41:17Z
+deploy	Set up job	2026-02-11T01:10:18.8937848Z Worker ID: {c873e0c2-4c0e-4507-9877-cb13280bd3b9}
+deploy	Set up job	2026-02-11T01:10:18.8938586Z Azure Region: westus3
+deploy	Set up job	2026-02-11T01:10:18.8939149Z ##[endgroup]
+deploy	Set up job	2026-02-11T01:10:18.8940604Z ##[group]Operating System
+deploy	Set up job	2026-02-11T01:10:18.8941252Z Ubuntu
+deploy	Set up job	2026-02-11T01:10:18.8941756Z 24.04.3
+deploy	Set up job	2026-02-11T01:10:18.8942286Z LTS
+deploy	Set up job	2026-02-11T01:10:18.8942833Z ##[endgroup]
+deploy	Set up job	2026-02-11T01:10:18.8943317Z ##[group]Runner Image
+deploy	Set up job	2026-02-11T01:10:18.8943917Z Image: ubuntu-24.04
+deploy	Set up job	2026-02-11T01:10:18.8944466Z Version: 20260201.15.1
+deploy	Set up job	2026-02-11T01:10:18.8945432Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260201.15/images/ubuntu/Ubuntu2404-Readme.md
+deploy	Set up job	2026-02-11T01:10:18.8947456Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260201.15
+deploy	Set up job	2026-02-11T01:10:18.8948380Z ##[endgroup]
+deploy	Set up job	2026-02-11T01:10:18.8949437Z ##[group]GITHUB_TOKEN Permissions
+deploy	Set up job	2026-02-11T01:10:18.8951233Z Contents: read
+deploy	Set up job	2026-02-11T01:10:18.8951906Z Metadata: read
+deploy	Set up job	2026-02-11T01:10:18.8952445Z ##[endgroup]
+deploy	Set up job	2026-02-11T01:10:18.8954530Z Secret source: Actions
+deploy	Set up job	2026-02-11T01:10:18.8955278Z Prepare workflow directory
+deploy	Set up job	2026-02-11T01:10:18.9279208Z Prepare all required actions
+deploy	Set up job	2026-02-11T01:10:18.9316965Z Getting action download info
+deploy	Set up job	2026-02-11T01:10:19.3724943Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+deploy	Set up job	2026-02-11T01:10:19.4674760Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+deploy	Set up job	2026-02-11T01:10:19.5555600Z Download action repository 'aws-actions/configure-aws-credentials@v4' (SHA:7474bc4690e29a8392af63c5b98e7449536d5c3a)
+deploy	Set up job	2026-02-11T01:10:20.4881224Z Complete job name: deploy
+deploy	Checkout repo	﻿2026-02-11T01:10:20.5602350Z ##[group]Run actions/checkout@v4
+deploy	Checkout repo	2026-02-11T01:10:20.5603305Z with:
+deploy	Checkout repo	2026-02-11T01:10:20.5603808Z   repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:20.5604586Z   token: ***
+deploy	Checkout repo	2026-02-11T01:10:20.5605046Z   ssh-strict: true
+deploy	Checkout repo	2026-02-11T01:10:20.5605497Z   ssh-user: git
+deploy	Checkout repo	2026-02-11T01:10:20.5606132Z   persist-credentials: true
+deploy	Checkout repo	2026-02-11T01:10:20.5606653Z   clean: true
+deploy	Checkout repo	2026-02-11T01:10:20.5607115Z   sparse-checkout-cone-mode: true
+deploy	Checkout repo	2026-02-11T01:10:20.5607662Z   fetch-depth: 1
+deploy	Checkout repo	2026-02-11T01:10:20.5608113Z   fetch-tags: false
+deploy	Checkout repo	2026-02-11T01:10:20.5608588Z   show-progress: true
+deploy	Checkout repo	2026-02-11T01:10:20.5609050Z   lfs: false
+deploy	Checkout repo	2026-02-11T01:10:20.5609470Z   submodules: false
+deploy	Checkout repo	2026-02-11T01:10:20.5609956Z   set-safe-directory: true
+deploy	Checkout repo	2026-02-11T01:10:20.5610715Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:20.6711313Z Syncing repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:20.6714355Z ##[group]Getting Git version info
+deploy	Checkout repo	2026-02-11T01:10:20.6715287Z Working directory is '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-02-11T01:10:20.6716816Z [command]/usr/bin/git version
+deploy	Checkout repo	2026-02-11T01:10:20.6770936Z git version 2.52.0
+deploy	Checkout repo	2026-02-11T01:10:20.6797044Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:20.6812375Z Temporarily overriding HOME='/home/runner/work/_temp/2b7a2a88-204d-475c-9c31-5550c5b50bf7' before making global git config changes
+deploy	Checkout repo	2026-02-11T01:10:20.6815137Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Checkout repo	2026-02-11T01:10:20.6826208Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:20.6863595Z Deleting the contents of '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-02-11T01:10:20.6867249Z ##[group]Initializing the repository
+deploy	Checkout repo	2026-02-11T01:10:20.6872290Z [command]/usr/bin/git init /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:20.6977746Z hint: Using 'master' as the name for the initial branch. This default branch name
+deploy	Checkout repo	2026-02-11T01:10:20.6979088Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+deploy	Checkout repo	2026-02-11T01:10:20.6980427Z hint: to use in all of your new repositories, which will suppress this warning,
+deploy	Checkout repo	2026-02-11T01:10:20.6981635Z hint: call:
+deploy	Checkout repo	2026-02-11T01:10:20.6982446Z hint:
+deploy	Checkout repo	2026-02-11T01:10:20.6983122Z hint: 	git config --global init.defaultBranch <name>
+deploy	Checkout repo	2026-02-11T01:10:20.6984337Z hint:
+deploy	Checkout repo	2026-02-11T01:10:20.6985525Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+deploy	Checkout repo	2026-02-11T01:10:20.6987632Z hint: 'development'. The just-created branch can be renamed via this command:
+deploy	Checkout repo	2026-02-11T01:10:20.6989189Z hint:
+deploy	Checkout repo	2026-02-11T01:10:20.6989983Z hint: 	git branch -m <name>
+deploy	Checkout repo	2026-02-11T01:10:20.6990877Z hint:
+deploy	Checkout repo	2026-02-11T01:10:20.6992039Z hint: Disable this message with "git config set advice.defaultBranchName false"
+deploy	Checkout repo	2026-02-11T01:10:20.6994325Z Initialized empty Git repository in /home/runner/work/chat-booking-admin/chat-booking-admin/.git/
+deploy	Checkout repo	2026-02-11T01:10:20.6998059Z [command]/usr/bin/git remote add origin https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:20.7029663Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:20.7031094Z ##[group]Disabling automatic garbage collection
+deploy	Checkout repo	2026-02-11T01:10:20.7034424Z [command]/usr/bin/git config --local gc.auto 0
+deploy	Checkout repo	2026-02-11T01:10:20.7063036Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:20.7064553Z ##[group]Setting up auth
+deploy	Checkout repo	2026-02-11T01:10:20.7070749Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Checkout repo	2026-02-11T01:10:20.7101464Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Checkout repo	2026-02-11T01:10:20.7432013Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Checkout repo	2026-02-11T01:10:20.7464365Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Checkout repo	2026-02-11T01:10:20.7680694Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Checkout repo	2026-02-11T01:10:20.7719597Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Checkout repo	2026-02-11T01:10:20.7939214Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+deploy	Checkout repo	2026-02-11T01:10:20.7972556Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:20.7974038Z ##[group]Fetching the repository
+deploy	Checkout repo	2026-02-11T01:10:20.7982198Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +fdd5bac840a06cf1346ebc372c485d9573c0041b:refs/remotes/origin/dev
+deploy	Checkout repo	2026-02-11T01:10:21.4318441Z From https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-02-11T01:10:21.4319542Z  * [new ref]         fdd5bac840a06cf1346ebc372c485d9573c0041b -> origin/dev
+deploy	Checkout repo	2026-02-11T01:10:21.4349940Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:21.4350782Z ##[group]Determining the checkout info
+deploy	Checkout repo	2026-02-11T01:10:21.4352091Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:21.4357051Z [command]/usr/bin/git sparse-checkout disable
+deploy	Checkout repo	2026-02-11T01:10:21.4395972Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+deploy	Checkout repo	2026-02-11T01:10:21.4420844Z ##[group]Checking out the ref
+deploy	Checkout repo	2026-02-11T01:10:21.4424528Z [command]/usr/bin/git checkout --progress --force -B dev refs/remotes/origin/dev
+deploy	Checkout repo	2026-02-11T01:10:21.4634699Z Switched to a new branch 'dev'
+deploy	Checkout repo	2026-02-11T01:10:21.4637319Z branch 'dev' set up to track 'origin/dev'.
+deploy	Checkout repo	2026-02-11T01:10:21.4645765Z ##[endgroup]
+deploy	Checkout repo	2026-02-11T01:10:21.4680623Z [command]/usr/bin/git log -1 --format=%H
+deploy	Checkout repo	2026-02-11T01:10:21.4702790Z fdd5bac840a06cf1346ebc372c485d9573c0041b
+deploy	Setup Node.js	﻿2026-02-11T01:10:21.4954990Z ##[group]Run actions/setup-node@v4
+deploy	Setup Node.js	2026-02-11T01:10:21.4955617Z with:
+deploy	Setup Node.js	2026-02-11T01:10:21.4956166Z   node-version: 20
+deploy	Setup Node.js	2026-02-11T01:10:21.4956626Z   always-auth: false
+deploy	Setup Node.js	2026-02-11T01:10:21.4957082Z   check-latest: false
+deploy	Setup Node.js	2026-02-11T01:10:21.4957695Z   token: ***
+deploy	Setup Node.js	2026-02-11T01:10:21.4958133Z ##[endgroup]
+deploy	Setup Node.js	2026-02-11T01:10:21.6722231Z Found in cache @ /opt/hostedtoolcache/node/20.20.0/x64
+deploy	Setup Node.js	2026-02-11T01:10:21.6728380Z ##[group]Environment details
+deploy	Setup Node.js	2026-02-11T01:10:22.0093577Z node: v20.20.0
+deploy	Setup Node.js	2026-02-11T01:10:22.0094664Z npm: 10.8.2
+deploy	Setup Node.js	2026-02-11T01:10:22.0095513Z yarn: 1.22.22
+deploy	Setup Node.js	2026-02-11T01:10:22.0097235Z ##[endgroup]
+deploy	Install and Build App	﻿2026-02-11T01:10:22.0231769Z ##[group]Run npm ci
+deploy	Install and Build App	2026-02-11T01:10:22.0232756Z [36;1mnpm ci[0m
+deploy	Install and Build App	2026-02-11T01:10:22.0233872Z [36;1m# Run lint check (if it fails, deployment stops)[0m
+deploy	Install and Build App	2026-02-11T01:10:22.0235793Z [36;1mnpm run lint || echo "Lint failed but proceeding for now (Soft Gate)"[0m
+deploy	Install and Build App	2026-02-11T01:10:22.0237776Z [36;1mnpm run build[0m
+deploy	Install and Build App	2026-02-11T01:10:22.0281946Z shell: /usr/bin/bash -e {0}
+deploy	Install and Build App	2026-02-11T01:10:22.0282989Z env:
+deploy	Install and Build App	2026-02-11T01:10:22.0283882Z   NEXT_PUBLIC_USER_POOL_ID: us-east-1_dG9vi0gz5
+deploy	Install and Build App	2026-02-11T01:10:22.0285455Z   NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
+deploy	Install and Build App	2026-02-11T01:10:22.0288597Z   NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://gn6cbrywdnecbgdg6mg4lhi6xm.appsync-api.us-east-1.amazonaws.com/graphql
+deploy	Install and Build App	2026-02-11T01:10:22.0291195Z   NEXT_PUBLIC_AWS_REGION: us-east-1
+deploy	Install and Build App	2026-02-11T01:10:22.0293085Z   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ***
+deploy	Install and Build App	2026-02-11T01:10:22.0294223Z ##[endgroup]
+deploy	Install and Build App	2026-02-11T01:10:24.9479447Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+deploy	Install and Build App	2026-02-11T01:10:25.5134001Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+deploy	Install and Build App	2026-02-11T01:10:26.3118948Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+deploy	Install and Build App	2026-02-11T01:10:28.5299232Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+deploy	Install and Build App	2026-02-11T01:10:28.6701147Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+deploy	Install and Build App	2026-02-11T01:10:29.4002536Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-02-11T01:10:29.4952724Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-02-11T01:10:33.3971927Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+deploy	Install and Build App	2026-02-11T01:10:35.0576367Z npm warn deprecated @mui/base@5.0.0-dev.20240529-082515-213b5e33ab: This package has been replaced by @base-ui-components/react
+deploy	Install and Build App	2026-02-11T01:11:09.6255172Z 
+deploy	Install and Build App	2026-02-11T01:11:09.6256075Z added 1012 packages, and audited 1013 packages in 48s
+deploy	Install and Build App	2026-02-11T01:11:09.6256708Z 
+deploy	Install and Build App	2026-02-11T01:11:09.6256942Z 196 packages are looking for funding
+deploy	Install and Build App	2026-02-11T01:11:09.6257437Z   run `npm fund` for details
+deploy	Install and Build App	2026-02-11T01:11:09.9801944Z 
+deploy	Install and Build App	2026-02-11T01:11:09.9802976Z 24 vulnerabilities (6 low, 4 moderate, 14 high)
+deploy	Install and Build App	2026-02-11T01:11:09.9803551Z 
+deploy	Install and Build App	2026-02-11T01:11:09.9803821Z To address all issues, run:
+deploy	Install and Build App	2026-02-11T01:11:09.9804375Z   npm audit fix
+deploy	Install and Build App	2026-02-11T01:11:09.9804685Z 
+deploy	Install and Build App	2026-02-11T01:11:09.9804959Z Run `npm audit` for details.
+deploy	Install and Build App	2026-02-11T01:11:10.1546202Z 
+deploy	Install and Build App	2026-02-11T01:11:10.1547583Z > chat-booking-admin-panel@1.0.0 lint
+deploy	Install and Build App	2026-02-11T01:11:10.1556719Z > next lint
+deploy	Install and Build App	2026-02-11T01:11:10.1556950Z 
+deploy	Install and Build App	2026-02-11T01:11:13.4588344Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+deploy	Install and Build App	2026-02-11T01:11:13.4592672Z This information is used to shape Next.js' roadmap and prioritize features.
+deploy	Install and Build App	2026-02-11T01:11:13.4594415Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+deploy	Install and Build App	2026-02-11T01:11:13.4595530Z https://nextjs.org/telemetry
+deploy	Install and Build App	2026-02-11T01:11:13.4596300Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8106491Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8107504Z ./src/app/bookings/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:13.8110147Z 420:8  Warning: React Hook React.useEffect has a missing dependency: 'fetchProviderSchedule'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:13.8112125Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8112373Z ./src/app/services/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:13.8114352Z 170:8  Warning: React Hook React.useEffect has a missing dependency: 'formData.requiredRoomIds'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:13.8115731Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8116229Z ./src/app/settings/billing/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:13.8117687Z 47:8  Warning: React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:13.8118373Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8118606Z ./src/app/settings/tabs/__tests__/IdentityTab.test.tsx
+deploy	Install and Build App	2026-02-11T01:11:13.8120481Z 15:37  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+deploy	Install and Build App	2026-02-11T01:11:13.8122058Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8122215Z ./src/app/users/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:13.8123149Z 103:8  Warning: React Hook React.useCallback has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:13.8124081Z 
+deploy	Install and Build App	2026-02-11T01:11:13.8124978Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	Install and Build App	2026-02-11T01:11:14.0187764Z 
+deploy	Install and Build App	2026-02-11T01:11:14.0188261Z > chat-booking-admin-panel@1.0.0 build
+deploy	Install and Build App	2026-02-11T01:11:14.0188777Z > next build
+deploy	Install and Build App	2026-02-11T01:11:14.0189026Z 
+deploy	Install and Build App	2026-02-11T01:11:14.5657021Z   ▲ Next.js 14.2.33
+deploy	Install and Build App	2026-02-11T01:11:14.5661324Z 
+deploy	Install and Build App	2026-02-11T01:11:14.6176571Z    Creating an optimized production build ...
+deploy	Install and Build App	2026-02-11T01:11:51.5656351Z  ✓ Compiled successfully
+deploy	Install and Build App	2026-02-11T01:11:51.5668261Z    Linting and checking validity of types ...
+deploy	Install and Build App	2026-02-11T01:11:53.3038715Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3040405Z ./src/app/bookings/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:53.3043158Z 420:8  Warning: React Hook React.useEffect has a missing dependency: 'fetchProviderSchedule'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:53.3045601Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3047034Z ./src/app/services/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:53.3049006Z 170:8  Warning: React Hook React.useEffect has a missing dependency: 'formData.requiredRoomIds'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:53.3050193Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3050424Z ./src/app/settings/billing/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:53.3051786Z 47:8  Warning: React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:53.3052738Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3053087Z ./src/app/settings/tabs/__tests__/IdentityTab.test.tsx
+deploy	Install and Build App	2026-02-11T01:11:53.3055782Z 15:37  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+deploy	Install and Build App	2026-02-11T01:11:53.3058494Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3058691Z ./src/app/users/page.tsx
+deploy	Install and Build App	2026-02-11T01:11:53.3060031Z 103:8  Warning: React Hook React.useCallback has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+deploy	Install and Build App	2026-02-11T01:11:53.3061048Z 
+deploy	Install and Build App	2026-02-11T01:11:53.3061947Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	Install and Build App	2026-02-11T01:12:01.4078941Z    Collecting page data ...
+deploy	Install and Build App	2026-02-11T01:12:03.7117795Z    Generating static pages (0/24) ...
+deploy	Install and Build App	2026-02-11T01:12:03.9579041Z Amplify has not been configured. Please call Amplify.configure() before using this service.
+deploy	Install and Build App	2026-02-11T01:12:03.9582243Z Amplify has not been configured. Please call Amplify.configure() before using this service.
+deploy	Install and Build App	2026-02-11T01:12:04.3540874Z Amplify has not been configured. Please call Amplify.configure() before using this service.
+deploy	Install and Build App	2026-02-11T01:12:04.3542620Z Amplify has not been configured. Please call Amplify.configure() before using this service.
+deploy	Install and Build App	2026-02-11T01:12:04.4034658Z    Generating static pages (6/24) 
+deploy	Install and Build App	2026-02-11T01:12:04.4962721Z    Generating static pages (12/24) 
+deploy	Install and Build App	2026-02-11T01:12:04.5621676Z    Generating static pages (18/24) 
+deploy	Install and Build App	2026-02-11T01:12:04.6782173Z  ✓ Generating static pages (24/24)
+deploy	Install and Build App	2026-02-11T01:12:05.0406388Z    Finalizing page optimization ...
+deploy	Install and Build App	2026-02-11T01:12:05.0406931Z    Collecting build traces ...
+deploy	Install and Build App	2026-02-11T01:12:09.5404192Z 
+deploy	Install and Build App	2026-02-11T01:12:09.5441667Z Route (app)                              Size     First Load JS
+deploy	Install and Build App	2026-02-11T01:12:09.5442706Z ┌ ○ /                                    2.25 kB         113 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5443447Z ├ ○ /_not-found                          880 B          88.7 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5444220Z ├ ○ /availability                        10.8 kB         325 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5445001Z ├ ○ /bookings                            19.8 kB         331 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5446602Z ├ ○ /dashboard                           102 kB          349 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5447504Z ├ ○ /faqs                                7.04 kB         247 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5448423Z ├ ○ /knowledge                           8.11 kB         214 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5449327Z ├ ○ /login                               9 kB            221 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5450222Z ├ ○ /my-page                             6.21 kB         240 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5451118Z ├ ○ /onboarding                          9.17 kB         220 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5476813Z ├ ○ /providers                           16.8 kB         280 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5477727Z ├ ○ /register                            5.04 kB         251 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5478594Z ├ ○ /rooms                               5.97 kB         308 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5479492Z ├ ○ /services                            8.37 kB         246 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5480407Z ├ ○ /settings                            17.8 kB         287 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5481368Z ├ ○ /settings/billing                    5.67 kB         201 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5482301Z ├ ○ /users                               6.53 kB         254 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5483239Z ├ ○ /widgets/booking                     5.11 kB         226 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5484144Z ├ ○ /widgets/chat                        5.12 kB         217 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5485055Z ├ ○ /workflows                           4.62 kB         207 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5486190Z ├ ○ /workflows/detail                    61.7 kB         313 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5487085Z └ ○ /workflows/new                       3.87 kB         237 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5487662Z + First Load JS shared by all            87.9 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5488238Z   ├ chunks/2117-cfbc72d1cbc923b0.js      32 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5488777Z   ├ chunks/fd9d1056-7939e9ddc510e184.js  53.6 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5489340Z   └ other shared chunks (total)          2.25 kB
+deploy	Install and Build App	2026-02-11T01:12:09.5489629Z 
+deploy	Install and Build App	2026-02-11T01:12:09.5489656Z 
+deploy	Install and Build App	2026-02-11T01:12:09.5489932Z ○  (Static)  prerendered as static content
+deploy	Install and Build App	2026-02-11T01:12:09.5490210Z 
+deploy	Configure AWS credentials	﻿2026-02-11T01:12:09.6475385Z ##[group]Run aws-actions/configure-aws-credentials@v4
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6475724Z with:
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6476296Z   role-to-assume: arn:aws:iam::607250385528:role/OICD_GITHUB_ACTION_DEPLOY
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6476655Z   aws-region: us-east-1
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6476860Z   audience: sts.amazonaws.com
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6477096Z   output-env-credentials: true
+deploy	Configure AWS credentials	2026-02-11T01:12:09.6477310Z ##[endgroup]
+deploy	Configure AWS credentials	2026-02-11T01:12:09.9866280Z Assuming role with OIDC
+deploy	Configure AWS credentials	2026-02-11T01:12:10.2918027Z Authenticated as assumedRoleId AROAY2YXRRJ4FJCZEMYSV:GitHubActions
+deploy	Install CDK dependencies	﻿2026-02-11T01:12:10.3694979Z ##[group]Run npm ci
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3695238Z [36;1mnpm ci[0m
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3729251Z shell: /usr/bin/bash -e {0}
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3729496Z env:
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3729682Z   AWS_DEFAULT_REGION: us-east-1
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3729925Z   AWS_REGION: us-east-1
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3730580Z   AWS_ACCESS_KEY_ID: ***
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3730910Z   AWS_SECRET_ACCESS_KEY: ***
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3735442Z   AWS_SESSION_TOKEN: ***
+deploy	Install CDK dependencies	2026-02-11T01:12:10.3735669Z ##[endgroup]
+deploy	Install CDK dependencies	2026-02-11T01:12:14.5121424Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+deploy	Install CDK dependencies	2026-02-11T01:12:14.6062641Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9178575Z 
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9179358Z added 299 packages, and audited 336 packages in 5s
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9179861Z 
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9180228Z 37 packages are looking for funding
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9180733Z   run `npm fund` for details
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9198185Z 
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9198518Z 1 low severity vulnerability
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9198795Z 
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9198971Z To address all issues, run:
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9199384Z   npm audit fix
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9201105Z 
+deploy	Install CDK dependencies	2026-02-11T01:12:15.9201607Z Run `npm audit` for details.
+deploy	Deploy with CDK	﻿2026-02-11T01:12:15.9424439Z ##[group]Run npx cdk deploy --all --require-approval never
+deploy	Deploy with CDK	2026-02-11T01:12:15.9424886Z [36;1mnpx cdk deploy --all --require-approval never[0m
+deploy	Deploy with CDK	2026-02-11T01:12:15.9457687Z shell: /usr/bin/bash -e {0}
+deploy	Deploy with CDK	2026-02-11T01:12:15.9457938Z env:
+deploy	Deploy with CDK	2026-02-11T01:12:15.9458119Z   AWS_DEFAULT_REGION: us-east-1
+deploy	Deploy with CDK	2026-02-11T01:12:15.9458369Z   AWS_REGION: us-east-1
+deploy	Deploy with CDK	2026-02-11T01:12:15.9458713Z   AWS_ACCESS_KEY_ID: ***
+deploy	Deploy with CDK	2026-02-11T01:12:15.9459041Z   AWS_SECRET_ACCESS_KEY: ***
+deploy	Deploy with CDK	2026-02-11T01:12:15.9463550Z   AWS_SESSION_TOKEN: ***
+deploy	Deploy with CDK	2026-02-11T01:12:15.9463761Z   ENV: dev
+deploy	Deploy with CDK	2026-02-11T01:12:15.9463928Z ##[endgroup]
+deploy	Deploy with CDK	2026-02-11T01:12:22.3512620Z 
+deploy	Deploy with CDK	2026-02-11T01:12:22.3514270Z ✨  Synthesis time: 5.37s
+deploy	Deploy with CDK	2026-02-11T01:12:22.3514643Z 
+deploy	Deploy with CDK	2026-02-11T01:12:23.2319533Z current credentials could not be used to assume 'arn:aws:iam::607250385528:role/cdk-hnb659fds-deploy-role-607250385528-us-east-1', but are for the right account. Proceeding anyway.
+deploy	Deploy with CDK	2026-02-11T01:12:23.5341232Z ChatBooking-Admin: start: Building DeployAdminPanel/Asset1
+deploy	Deploy with CDK	2026-02-11T01:12:23.5346944Z ChatBooking-Admin: success: Built DeployAdminPanel/Asset1
+deploy	Deploy with CDK	2026-02-11T01:12:23.5359031Z ChatBooking-Admin: start: Building ChatBooking-Admin Template
+deploy	Deploy with CDK	2026-02-11T01:12:23.5359922Z ChatBooking-Admin: success: Built ChatBooking-Admin Template
+deploy	Deploy with CDK	2026-02-11T01:12:23.8498417Z ChatBooking-Admin: start: Publishing ChatBooking-Admin Template (607250385528-us-east-1-bba8f4c7)
+deploy	Deploy with CDK	2026-02-11T01:12:23.8523127Z ChatBooking-Admin: start: Publishing DeployAdminPanel/Asset1 (607250385528-us-east-1-5d4e94f6)
+deploy	Deploy with CDK	2026-02-11T01:12:24.0944720Z current credentials could not be used to assume 'arn:aws:iam::607250385528:role/cdk-hnb659fds-file-publishing-role-607250385528-us-east-1', but are for the right account. Proceeding anyway.
+deploy	Deploy with CDK	2026-02-11T01:12:24.0997462Z current credentials could not be used to assume 'arn:aws:iam::607250385528:role/cdk-hnb659fds-file-publishing-role-607250385528-us-east-1', but are for the right account. Proceeding anyway.
+deploy	Deploy with CDK	2026-02-11T01:12:25.1129222Z ChatBooking-Admin: success: Published ChatBooking-Admin Template (607250385528-us-east-1-bba8f4c7)
+deploy	Deploy with CDK	2026-02-11T01:12:25.5418289Z ChatBooking-Admin: success: Published DeployAdminPanel/Asset1 (607250385528-us-east-1-5d4e94f6)
+deploy	Deploy with CDK	2026-02-11T01:12:25.5428309Z ChatBooking-Admin: deploying... [1/1]
+deploy	Deploy with CDK	2026-02-11T01:12:25.8022864Z current credentials could not be used to assume 'arn:aws:iam::607250385528:role/cdk-hnb659fds-deploy-role-607250385528-us-east-1', but are for the right account. Proceeding anyway.
+deploy	Deploy with CDK	2026-02-11T01:12:27.5226409Z ChatBooking-Admin: creating CloudFormation changeset...
+deploy	Deploy with CDK	2026-02-11T01:12:27.8591429Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8592371Z NOTICES         (What's this? https://github.com/aws/aws-cdk/wiki/CLI-Notices)
+deploy	Deploy with CDK	2026-02-11T01:12:27.8592939Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8596085Z 34892	CDK CLI will collect telemetry data on command usage starting at version 2.1100.0 (unless opted out)
+deploy	Deploy with CDK	2026-02-11T01:12:27.8596817Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8597509Z 	Overview: We do not collect customer content and we anonymize the
+deploy	Deploy with CDK	2026-02-11T01:12:27.8598304Z 	          telemetry we do collect. See the attached issue for more
+deploy	Deploy with CDK	2026-02-11T01:12:27.8599065Z 	          information on what data is collected, why, and how to
+deploy	Deploy with CDK	2026-02-11T01:12:27.8599524Z 	          opt-out. Telemetry will NOT be collected for any CDK CLI
+deploy	Deploy with CDK	2026-02-11T01:12:27.8599947Z 	          version prior to version 2.1100.0 - regardless of
+deploy	Deploy with CDK	2026-02-11T01:12:27.8600392Z 	          opt-in/out. You can also preview the telemetry we will start
+deploy	Deploy with CDK	2026-02-11T01:12:27.8600819Z 	          collecting by logging it to a local file, by adding
+deploy	Deploy with CDK	2026-02-11T01:12:27.8601251Z 	          `--unstable=telemetry --telemetry-file=my/local/file` to any
+deploy	Deploy with CDK	2026-02-11T01:12:27.8601727Z 	          `cdk` command.
+deploy	Deploy with CDK	2026-02-11T01:12:27.8601979Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8602215Z 	Affected versions: cli: >=2.0.0 <2.1100.0
+deploy	Deploy with CDK	2026-02-11T01:12:27.8602453Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8602684Z 	More information at: https://github.com/aws/aws-cdk/issues/34892
+deploy	Deploy with CDK	2026-02-11T01:12:27.8602959Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8602966Z 
+deploy	Deploy with CDK	2026-02-11T01:12:27.8604080Z If you don’t want to see a notice anymore, use "cdk acknowledge <id>". For example, "cdk acknowledge 34892".
+deploy	Deploy with CDK	2026-02-11T01:12:27.8606090Z ❌  ChatBooking-Admin failed: ValidationError: Stack:arn:aws:cloudformation:us-east-1:607250385528:stack/ChatBooking-Admin/f72f5fb0-d5fb-11f0-8809-0ebec566510b is in UPDATE_ROLLBACK_FAILED state and can not be updated.
+deploy	Deploy with CDK	2026-02-11T01:12:27.8876857Z ##[error]Process completed with exit code 1.
+deploy	Post Configure AWS credentials	﻿2026-02-11T01:12:27.8978539Z Post job cleanup.
+deploy	Post Checkout repo	﻿2026-02-11T01:12:28.0279111Z Post job cleanup.
+deploy	Post Checkout repo	2026-02-11T01:12:28.1211797Z [command]/usr/bin/git version
+deploy	Post Checkout repo	2026-02-11T01:12:28.1247734Z git version 2.52.0
+deploy	Post Checkout repo	2026-02-11T01:12:28.1290824Z Temporarily overriding HOME='/home/runner/work/_temp/3bae2dff-e4f7-4d9f-a5ca-b46b16bbc2a9' before making global git config changes
+deploy	Post Checkout repo	2026-02-11T01:12:28.1292398Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Post Checkout repo	2026-02-11T01:12:28.1304168Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Post Checkout repo	2026-02-11T01:12:28.1337463Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Post Checkout repo	2026-02-11T01:12:28.1370176Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Post Checkout repo	2026-02-11T01:12:28.1599201Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Post Checkout repo	2026-02-11T01:12:28.1621588Z http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-02-11T01:12:28.1634277Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-02-11T01:12:28.1665490Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Post Checkout repo	2026-02-11T01:12:28.1884684Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Post Checkout repo	2026-02-11T01:12:28.1914645Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Complete job	﻿2026-02-11T01:12:28.2253789Z Cleaning up orphan processes

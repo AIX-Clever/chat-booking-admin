@@ -32,9 +32,11 @@ import {
     SelectChangeEvent
 } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
-import { CREATE_CLIENT, UPDATE_CLIENT } from '../../graphql/client-queries';
+import { CREATE_CLIENT, UPDATE_CLIENT, LIST_CLIENT_AUDIT_LOGS } from '../../graphql/client-queries';
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_CLIENT } from '../../graphql/queries';
 import { useToast } from '../common/ToastContext';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const client = generateClient();
 
@@ -94,6 +96,16 @@ interface Booking {
     status: string;
 }
 
+interface AuditLog {
+    field: string;
+    oldValue: string;
+    newValue: string;
+    source: string;
+    sourceId: string;
+    changedBy: string;
+    timestamp: string;
+}
+
 interface ClientFormProps {
     open: boolean;
     onClose: () => void;
@@ -123,6 +135,8 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
     const [providers, setProviders] = useState<Provider[]>([]);
     const [history, setHistory] = useState<Booking[]>([]);
     const [loadingHistory, setLoadingHistory] = useState(false);
+    const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+    const [loadingAudit, setLoadingAudit] = useState(false);
 
     const [formData, setFormData] = useState({
         givenName: '',
@@ -166,6 +180,23 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         }
     }, [initialData, formData.email]);
 
+    const fetchAuditLogs = useCallback(async () => {
+        if (!initialData?.id) return;
+
+        try {
+            setLoadingAudit(true);
+            const result = await client.graphql({
+                query: LIST_CLIENT_AUDIT_LOGS,
+                variables: { clientId: initialData.id }
+            }) as { data: { listClientAuditLogs: AuditLog[] } };
+            setAuditLogs(result.data.listClientAuditLogs || []);
+        } catch (err) {
+            console.error('Error fetching audit logs:', err);
+        } finally {
+            setLoadingAudit(false);
+        }
+    }, [initialData?.id]);
+
     useEffect(() => {
         if (open) {
             fetchProviders();
@@ -177,7 +208,10 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         if (activeTab === 1 && open) {
             fetchHistory();
         }
-    }, [activeTab, open, fetchHistory]);
+        if (activeTab === 2 && open) {
+            fetchAuditLogs();
+        }
+    }, [activeTab, open, fetchHistory, fetchAuditLogs]);
 
     useEffect(() => {
         if (initialData) {
@@ -312,7 +346,8 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                         </Typography>
                         <Tabs value={activeTab} onChange={handleTabChange}>
                             <Tab label="Información" />
-                            <Tab label="Historial de Citas" disabled={!initialData && !formData.email} />
+                            <Tab label="Citas" disabled={!initialData && !formData.email} />
+                            <Tab label="Auditoría" disabled={!initialData} />
                         </Tabs>
                     </Box>
                 </DialogTitle>
@@ -549,6 +584,61 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                                                     </TableRow>
                                                 ))
                                             )}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            )}
+                        </Box>
+                    )}
+                    {activeTab === 2 && (
+                        <Box sx={{ mt: 2 }}>
+                            {loadingAudit ? (
+                                <Box display="flex" justifyContent="center" p={5}>
+                                    <CircularProgress />
+                                </Box>
+                            ) : auditLogs.length === 0 ? (
+                                <Box p={3} textAlign="center">
+                                    <Typography color="textSecondary">No hay registros de auditoría para este cliente.</Typography>
+                                </Box>
+                            ) : (
+                                <TableContainer component={Paper} variant="outlined">
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow sx={{ bgcolor: 'action.hover' }}>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Fecha</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Campo</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Anterior</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Nuevo</TableCell>
+                                                <TableCell sx={{ fontWeight: 'bold' }}>Origen</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {auditLogs.map((log, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                                        {format(new Date(log.timestamp), 'dd MMM, HH:mm', { locale: es })}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Chip label={log.field} size="small" variant="outlined" />
+                                                    </TableCell>
+                                                    <TableCell sx={{ color: 'text.secondary', fontStyle: 'italic' }}>
+                                                        {log.oldValue || <Typography variant="caption" color="text.disabled">vacio</Typography>}
+                                                    </TableCell>
+                                                    <TableCell sx={{ fontWeight: 'medium' }}>
+                                                        {log.newValue}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Box display="flex" alignItems="center" gap={1}>
+                                                            <Typography variant="body2">{log.source}</Typography>
+                                                            {log.sourceId !== 'ui' && (
+                                                                <Typography variant="caption" color="text.disabled">
+                                                                    #{log.sourceId.substring(0, 8)}
+                                                                </Typography>
+                                                            )}
+                                                        </Box>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
