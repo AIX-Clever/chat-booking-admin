@@ -76,6 +76,7 @@ export interface PlanUsage {
     messages: number;
     bookings: number;
     tokensIA: number;
+    providers: number;
 }
 
 export function useDashboardMetrics() {
@@ -186,7 +187,7 @@ export function usePlanUsage() {
             setError(errorMessage);
 
             // Return empty usage as fallback
-            setUsage({ messages: 0, bookings: 0, tokensIA: 0 });
+            setUsage({ messages: 0, bookings: 0, tokensIA: 0, providers: 0 });
         } finally {
             setLoading(false);
         }

@@ -47,7 +47,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { PlanGuard } from '../../components/PlanGuard';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
-import { useDashboardMetrics } from '../../hooks/useDashboardMetrics';
+import { usePlanUsage } from '../../hooks/useDashboardMetrics';
 
 // --- Types ---
 
