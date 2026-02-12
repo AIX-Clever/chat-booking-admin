@@ -363,6 +363,7 @@ export const GET_PLAN_USAGE = `
       messages
       bookings
       tokensIA
+      providers
     }
   }
 `;

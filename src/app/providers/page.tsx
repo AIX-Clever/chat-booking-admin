@@ -42,10 +42,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
 import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
-import PlanGuard from '../../components/PlanGuard';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import LinkIcon from '@mui/icons-material/Link';
-import { Paper, Snackbar, Alert } from '@mui/material';
+import { Paper, Snackbar, Alert, Tooltip } from '@mui/material';
+import { usePlanFeatures } from '../../hooks/usePlanFeatures';
+import { useDashboardMetrics, usePlanUsage } from '../../hooks/useDashboardMetrics';
 
 // --- Types ---
 
@@ -359,6 +358,31 @@ export default function ProvidersPage() {
         }
     };
 
+    const handleAddNew = () => {
+        if (!planFeatures.canCreateProvider) {
+            showSnackbar(`Límite alcanzado: Tu plan ${planFeatures.plan} permite hasta ${planFeatures.maxProviders} profesionales.`, 'warning');
+            return;
+        }
+        setCurrentProvider(null);
+        setFormData({
+            id: '',
+            name: '',
+            bio: '',
+            serviceIds: [],
+            timezone: 'America/Santiago',
+            active: true,
+            slug: '',
+            aiDrivers: {
+                traits: [],
+                languages: ['Español'],
+                specialties: []
+            },
+            professionalLicense: ''
+        });
+        setTabValue(0);
+        setOpen(true);
+    };
+
     const handleSave = async () => {
         try {
             // Securely fetch ID Token
@@ -478,9 +502,18 @@ export default function ProvidersPage() {
                         DEBUG API: {process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT}
                     </Typography>
                 </Box>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
-                    {t('newProvider')}
-                </Button>
+                <Tooltip title={!planFeatures.canCreateProvider ? `Límite de ${planFeatures.maxProviders} profesionales alcanzado para el plan ${planFeatures.plan}. Sube de nivel para agregar más.` : ""}>
+                    <span>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            onClick={handleAddNew}
+                            disabled={!planFeatures.canCreateProvider}
+                        >
+                            Nuevo Profesional
+                        </Button>
+                    </span>
+                </Tooltip>
             </Box>
 
             <Card>
