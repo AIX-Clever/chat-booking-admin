@@ -390,7 +390,7 @@ export default function BookingsPage() {
 
     const [workingDays, setWorkingDays] = React.useState<number[]>([]);
 
-    const fetchProviderSchedule = async (providerId: string) => {
+    const fetchProviderSchedule = React.useCallback(async (providerId: string) => {
         if (!providerId) return;
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -409,7 +409,7 @@ export default function BookingsPage() {
         } catch (error) {
             console.error('Error fetching provider schedule:', error);
         }
-    };
+    }, [client]);
 
     React.useEffect(() => {
         if (newBookingData.providerId) {
@@ -417,7 +417,7 @@ export default function BookingsPage() {
         } else {
             setWorkingDays([]);
         }
-    }, [newBookingData.providerId]);
+    }, [newBookingData.providerId, fetchProviderSchedule]);
 
 
     const CustomDay = (props: PickersDayProps<Date>) => {

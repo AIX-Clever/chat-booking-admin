@@ -135,6 +135,10 @@ export default function ProvidersPage() {
     // Tab State
     const [tabValue, setTabValue] = React.useState(0);
 
+    // Plan Enforcement
+    const planFeatures = usePlanFeatures();
+    const { planUsage } = usePlanUsage();
+
     // Confirmation Dialog State
     const [confirmOpen, setConfirmOpen] = React.useState(false);
     const [confirmConfig, setConfirmConfig] = React.useState<{
