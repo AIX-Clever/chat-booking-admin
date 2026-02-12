@@ -35,7 +35,7 @@ import {
     Tab,
     CircularProgress
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import LinkIcon from '@mui/icons-material/Link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -43,9 +43,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
 import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
 import { Paper, Snackbar, Alert, Tooltip } from '@mui/material';
-import LinkIcon from '@mui/icons-material/Link';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { PlanGuard } from '../../components/PlanGuard';
+import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
+import PlanGuard from '../../components/PlanGuard';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
 import { usePlanUsage } from '../../hooks/useDashboardMetrics';
 
@@ -137,7 +136,7 @@ export default function ProvidersPage() {
 
     // Plan Enforcement
     const planFeatures = usePlanFeatures();
-    const { usage: planUsage } = usePlanUsage();
+    usePlanUsage(); // Called to trigger fetch but usage not needed directly in this view yet
 
     // Confirmation Dialog State
     const [confirmOpen, setConfirmOpen] = React.useState(false);
