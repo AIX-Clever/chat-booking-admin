@@ -288,7 +288,7 @@ export default function MyPage() {
                                     label="Verificar Checklist para:"
                                     onChange={handleProviderChange}
                                 >
-                                    <MenuItem value="all">General (Negocio)</MenuItem>
+                                    <MenuItem value="all">Página del Centro (General)</MenuItem>
                                     {providers.map((p) => (
                                         <MenuItem key={p.providerId} value={p.providerId}>
                                             {p.name}

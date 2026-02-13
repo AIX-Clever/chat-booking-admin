@@ -12,16 +12,17 @@ interface PlanBadgeProps {
 
 const PlanBadge = ({ plan, showIcon = true }: PlanBadgeProps) => {
     const theme = useTheme();
-    console.log('🔍 PlanBadge rendered with plan:', plan);
+    const normalizedPlan = (plan || '').toUpperCase() as PlanType;
+    console.log('🔍 PlanBadge rendered with plan:', plan, 'normalized:', normalizedPlan);
 
     // Psychology: Lite is simple, Pro is "wow"
-    const isPremium = plan === 'PRO' || plan === 'BUSINESS' || plan === 'ENTERPRISE';
+    const isPremium = ['PRO', 'BUSINESS', 'ENTERPRISE'].includes(normalizedPlan);
 
     if (!isPremium) {
         return (
-            <Tooltip title={`Plan ${plan}`}>
+            <Tooltip title={`Plan ${plan || 'Desconocido'}`}>
                 <Chip
-                    label={plan}
+                    label={plan || 'LITE'}
                     size="small"
                     variant="outlined"
                     sx={{

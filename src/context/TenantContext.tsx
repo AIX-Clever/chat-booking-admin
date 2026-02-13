@@ -64,6 +64,7 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
                     });
 
                     if (response.data && response.data.getTenant) {
+                        console.log('✅ Tenant data loaded in context:', response.data.getTenant);
                         setTenant(response.data.getTenant);
                     }
                 })(),
