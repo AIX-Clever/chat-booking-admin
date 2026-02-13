@@ -367,7 +367,7 @@ export default function ProvidersPage() {
 
     const handleAddNew = () => {
         if (!planFeatures.canCreateProvider) {
-            showSnackbar(`Límite alcanzado: Tu plan ${planFeatures.plan} permite hasta ${planFeatures.maxProviders} profesionales.`, 'warning');
+            showSnackbar(`Límite alcanzado: Tu plan ${planFeatures.plan} permite hasta ${planFeatures.maxProviders} profesionales.`, 'info');
             return;
         }
         setCurrentProvider(null);
