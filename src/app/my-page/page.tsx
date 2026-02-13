@@ -280,7 +280,18 @@ export default function MyPage() {
 
                     <Stack spacing={3}>
                         {/* Multi-professional Selector if applicable */}
-                        {tenant?.plan !== 'LITE' ? (
+                        {!tenant ? (
+                            <Box sx={{ p: 2, bgcolor: 'action.hover', borderRadius: 2 }}>
+                                <Typography variant="body2" color="text.secondary">Cargando información del plan...</Typography>
+                            </Box>
+                        ) : tenant.plan === 'LITE' ? (
+                            <Box sx={{ p: 2, bgcolor: 'primary.main', borderRadius: 2, color: 'primary.contrastText' }}>
+                                <Typography variant="caption" fontWeight="bold" sx={{ opacity: 0.9 }}>MODO PROFESIONAL (Plan Lite)</Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                    Gestionando checklist para: <strong>{providers.find(p => p.providerId === selectedProvider)?.name || 'Cargando...'}</strong>
+                                </Typography>
+                            </Box>
+                        ) : (
                             <FormControl fullWidth size="small">
                                 <InputLabel>Verificar Checklist para:</InputLabel>
                                 <Select
@@ -296,13 +307,6 @@ export default function MyPage() {
                                     ))}
                                 </Select>
                             </FormControl>
-                        ) : (
-                            <Box sx={{ p: 2, bgcolor: 'primary.main', borderRadius: 2, color: 'primary.contrastText' }}>
-                                <Typography variant="caption" fontWeight="bold" sx={{ opacity: 0.9 }}>MODO PROFESIONAL (Plan Lite)</Typography>
-                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                                    Gestionando checklist para: <strong>{providers.find(p => p.providerId === selectedProvider)?.name || 'Cargando...'}</strong>
-                                </Typography>
-                            </Box>
                         )}
 
                         <Box>
