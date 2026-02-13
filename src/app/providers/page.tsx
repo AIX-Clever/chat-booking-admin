@@ -39,6 +39,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import GoogleCalendarCard from '../../components/integrations/GoogleCalendarCard';
 import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalendarCard';
