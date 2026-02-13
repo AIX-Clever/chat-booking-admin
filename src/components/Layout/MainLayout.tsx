@@ -160,8 +160,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         setOpen(false);
     };
 
-    const handleLogout = () => {
-        signOut();
+    const handleLogout = async () => {
+        await signOut();
+        router.push('/login');
     };
 
     React.useEffect(() => {
