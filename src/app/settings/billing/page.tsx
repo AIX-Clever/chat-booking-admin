@@ -42,10 +42,6 @@ export default function BillingPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isCheckingPayment, setIsCheckingPayment] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, [user, fetchData]);
-
     const fetchData = React.useCallback(async () => {
         try {
             if (!user) return;
@@ -93,6 +89,10 @@ export default function BillingPage() {
             setLoading(false);
         }
     }, [user]);
+
+    useEffect(() => {
+        fetchData();
+    }, [user, fetchData]);
 
     async function handleSaveBillingInfo(e: React.FormEvent) {
         e.preventDefault();
