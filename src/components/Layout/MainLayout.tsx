@@ -306,14 +306,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         <Typography variant="h6" noWrap component="div">
                             {allMenuItems.find(item => pathname.startsWith(item.path))?.text || 'Dashboard'}
                         </Typography>
-                        {tenantName && (
+                        {tenant?.name && (
                             <Typography variant="subtitle1" component="div" sx={{
                                 opacity: 0.7,
-                                borderLeft: '1px solid rgba(255,255,255,0.3)',
+                                borderLeft: `1px solid ${theme.palette.divider}`,
                                 pl: 2,
                                 fontWeight: 'medium'
                             }}>
-                                {tenantName}
+                                {tenant.name}
                             </Typography>
                         )}
                         {(tenant?.plan) && (
@@ -328,16 +328,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <Box sx={{ flexGrow: 1, ml: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', opacity: open ? 1 : 0, transition: 'opacity 0.2s', overflow: 'hidden' }}>
-                        <Typography variant="subtitle1" noWrap sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
-                            {tenant?.name || 'Hola Lucia'}
-                        </Typography>
-                        {tenant?.plan && (
-                            <Box sx={{ mt: 0.5 }}>
-                                <PlanBadge plan={tenant.plan} showIcon={false} />
-                            </Box>
-                        )}
-                    </Box>
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, ml: 2, opacity: open ? 1 : 0, transition: 'opacity 0.2s', whiteSpace: 'nowrap', overflow: 'hidden', fontWeight: 'bold' }}>
+                        Hola Lucia
+                    </Typography>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
