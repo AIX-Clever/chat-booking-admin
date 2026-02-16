@@ -328,9 +328,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, ml: 2, opacity: open ? 1 : 0, transition: 'opacity 0.2s', whiteSpace: 'nowrap', overflow: 'hidden', fontWeight: 'bold' }}>
-                        Hola Lucia
-                    </Typography>
+                    <Box sx={{ flexGrow: 1, ml: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', opacity: open ? 1 : 0, transition: 'opacity 0.2s', overflow: 'hidden' }}>
+                        <Typography variant="subtitle1" noWrap sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
+                            {tenant?.name || 'Hola Lucia'}
+                        </Typography>
+                        {tenant?.plan && (
+                            <Box sx={{ mt: 0.5 }}>
+                                <PlanBadge plan={tenant.plan} showIcon={false} />
+                            </Box>
+                        )}
+                    </Box>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
