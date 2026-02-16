@@ -38,8 +38,8 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
                 return;
             }
 
-            const attributes = await fetchUserAttributes();
-            // We keep attributes for frontend use if needed, but not for the API call
+            await fetchUserAttributes();
+            // We keep the call for side effects if any, but removed the unused variable
 
             const client = generateClient();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
