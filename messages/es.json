@@ -343,7 +343,6 @@
             "tabs": {
                 "general": "General",
                 "services": "Servicios",
-                "services": "Servicios",
                 "aiContext": "Contexto IA",
                 "linkBio": "Link Bio",
                 "integrations": "Integraciones"
@@ -351,8 +350,6 @@
             "general": {
                 "fullName": "Nombre Completo",
                 "biography": "Biografía",
-                "professionalLicense": "N° Registro / Colegiado (Legal)",
-                "timezone": "Zona Horaria",
                 "professionalLicense": "N° Registro / Colegiado (Legal)",
                 "timezone": "Zona Horaria",
                 "providerIsActive": "Profesional Activo",
@@ -568,139 +565,135 @@
                     "name": "Agente Full AI",
                     "description": "Agente autónomo con razonamiento (Bedrock + Sonnet). Conversación natural."
                 }
-            },
-            "plans": {
-                "lite": "Plan LITE",
-                "pro": "Plan PRO",
-                "business": "Plan BUSINESS"
-            }
-        },
-        "apiKeys": {
-            "title": "Claves API Activas",
-            "createKey": "Crear Clave",
-            "name": "Nombre",
-            "keyPrefix": "Prefijo de Clave",
-            "created": "Creado",
-            "status": "Estado",
-            "actions": "Acciones",
-            "active": "Activa",
-            "revoked": "Revocada",
-            "noKeys": "No tienes claves API activas.",
-            "revoke": "Revocar",
-            "confirmRevoke": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
-            "createDialog": {
-                "title": "Crear Nueva Clave API",
-                "label": "Nombre de la Clave (ej. App Móvil)",
-                "successTitle": "¡Clave API Creada!",
-                "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
-                "secretLabel": "Tu Clave API (Secreto)"
-            },
-            "revokeDialog": {
-                "title": "Revocar Clave API",
-                "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
-                "confirm": "Revocar"
             }
         }
     },
-    "workflows": {
-        "title": "Editor de Flujos",
-        "newWorkflow": "Nuevo Flujo",
-        "saveWorkflow": "Guardar Flujo",
-        "deleteWorkflow": "Eliminar Flujo",
-        "deleteConfirmation": "¿Estás seguro de que deseas eliminar este flujo?",
-        "noDescription": "Sin descripción",
-        "noWorkflowsFound": "No se encontraron flujos.",
-        "nodes": {
-            "start": "Inicio",
-            "message": "Mensaje",
-            "question": "Pregunta",
-            "action": "Acción",
-            "condition": "Condición",
-            "end": "Fin"
-        }
-    },
-    "auth": {
-        "login": {
-            "title": "Iniciar Sesión",
-            "subtitle": "Panel de Administración",
-            "email": "Email",
-            "password": "Contraseña",
-            "forgotPassword": "¿Olvidaste tu contraseña?",
-            "noAccount": "¿No tienes cuenta?",
-            "signUp": "Registrarse",
-            "signIn": "Iniciar Sesión",
-            "resetPasswordTitle": "Restablecer Contraseña",
-            "resetPasswordSubtitle": "Ingresa tu email para recibir un código de verificación",
-            "sendCode": "Enviar Código",
-            "verificationCode": "Código de Verificación",
-            "newPassword": "Nueva Contraseña",
-            "confirmReset": "Cambiar Contraseña",
-            "codeSent": "Código enviado a tu correo",
-            "passwordChanged": "Contraseña cambiada exitosamente. Ya puedes iniciar sesión.",
-            "backToLogin": "Volver al inicio"
+    "apiKeys": {
+        "title": "Claves API Activas",
+        "createKey": "Crear Clave",
+        "name": "Nombre",
+        "keyPrefix": "Prefijo de Clave",
+        "created": "Creado",
+        "status": "Estado",
+        "actions": "Acciones",
+        "active": "Activa",
+        "revoked": "Revocada",
+        "noKeys": "No tienes claves API activas.",
+        "revoke": "Revocar",
+        "confirmRevoke": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
+        "createDialog": {
+            "title": "Crear Nueva Clave API",
+            "label": "Nombre de la Clave (ej. App Móvil)",
+            "successTitle": "¡Clave API Creada!",
+            "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
+            "secretLabel": "Tu Clave API (Secreto)"
         },
-        "register": {
-            "title": "Crear Cuenta",
-            "companyName": "Nombre de la Empresa",
-            "alreadyHaveAccount": "¿Ya tienes cuenta?",
-            "signIn": "Iniciar sesión",
-            "heroTitle": "Inicia tu Negocio de Chat",
-            "heroSubtitle": "Crea agentes de reserva con IA para cualquier negocio en segundos.",
-            "getStarted": "Comenzar",
-            "noCreditCard": "No requiere tarjeta de crédito. Plan gratuito para siempre.",
-            "email": "Correo Electrónico",
-            "password": "Contraseña",
-            "createAccount": "Crear Cuenta",
-            "errorAccountExists": "La cuenta ya existe. Por favor inicia sesión.",
-            "errorRegistrationFailed": "El registro falló. Por favor intenta de nuevo."
-        }
-    },
-    "planGuard": {
-        "unlockPremium": "Desbloquear Capacidades Premium",
-        "featureAvailable": "{featureName} está disponible exclusivamente en el plan {plan} y superior. Actualiza para acceder a funciones avanzadas de automatización e IA.",
-        "upgradeTo": "Actualizar a {plan}"
-    },
-    "upgradeModal": {
-        "unlockAi": {
-            "title": "Desbloquea Inteligencia Artificial",
-            "description": "Entrena a tu asistente con tus propios documentos y deja que maneje preguntas complejas automáticamente.",
-            "benefit1": "Base de Conocimiento Personalizada",
-            "benefit2": "Respuestas RAG Inteligentes",
-            "benefit3": "Soporte Automatizado 24/7"
-        },
-        "team": {
-            "title": "Trabaja en Equipo",
-            "description": "Escala tus operaciones invitando a miembros de tu equipo para gestionar chats y reservas.",
-            "benefit1": "Hasta 5 Miembros de Equipo",
-            "benefit2": "Acceso Basado en Roles",
-            "benefit3": "Bandeja de Entrada Compartida"
-        },
-        "usage": {
-            "title": "Aumenta la Capacidad",
-            "description": "Te estás acercando a los límites de tu plan. Actualiza para seguir creciendo sin interrupciones.",
-            "benefit1": "4x Capacidad de Reservas",
-            "benefit2": "4x Volumen de Mensajes",
-            "benefit3": "Soporte Prioritario"
-        },
-        "workflow": {
-            "title": "Flujos Avanzados",
-            "description": "Crea flujos de conversación sofisticados con pasos lógicos e IA.",
-            "benefit1": "Pasos de Lógica IA",
-            "benefit2": "Ramificación Compleja",
-            "benefit3": "Extracción de Datos"
-        },
-        "common": {
-            "upgradeTo": "Contratar Plan {plan}",
-            "whatYouGet": "LO QUE OBTIENES CON {plan}:",
-            "maybeLater": "Quizás más tarde"
-        },
-        "awareness": {
-            "title": "Límite de Uso Cercano",
-            "description": "Estás llegando a la capacidad máxima de tu plan actual. Para asegurar un servicio sin interrupciones, considera actualizar tu plan.",
-            "messages": "Uso de Mensajes",
-            "bookings": "Uso de Reservas",
-            "upgradeNow": "Actualizar Plan",
-            "maybeLater": "Entendido"
+        "revokeDialog": {
+            "title": "Revocar Clave API",
+            "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
+            "confirm": "Revocar"
         }
     }
+},
+"workflows": {
+    "title": "Editor de Flujos",
+    "newWorkflow": "Nuevo Flujo",
+    "saveWorkflow": "Guardar Flujo",
+    "deleteWorkflow": "Eliminar Flujo",
+    "deleteConfirmation": "¿Estás seguro de que deseas eliminar este flujo?",
+    "noDescription": "Sin descripción",
+    "noWorkflowsFound": "No se encontraron flujos.",
+    "nodes": {
+        "start": "Inicio",
+        "message": "Mensaje",
+        "question": "Pregunta",
+        "action": "Acción",
+        "condition": "Condición",
+        "end": "Fin"
+    }
+},
+"auth": {
+    "login": {
+        "title": "Iniciar Sesión",
+        "subtitle": "Panel de Administración",
+        "email": "Email",
+        "password": "Contraseña",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "noAccount": "¿No tienes cuenta?",
+        "signUp": "Registrarse",
+        "signIn": "Iniciar Sesión",
+        "resetPasswordTitle": "Restablecer Contraseña",
+        "resetPasswordSubtitle": "Ingresa tu email para recibir un código de verificación",
+        "sendCode": "Enviar Código",
+        "verificationCode": "Código de Verificación",
+        "newPassword": "Nueva Contraseña",
+        "confirmReset": "Cambiar Contraseña",
+        "codeSent": "Código enviado a tu correo",
+        "passwordChanged": "Contraseña cambiada exitosamente. Ya puedes iniciar sesión.",
+        "backToLogin": "Volver al inicio"
+    },
+    "register": {
+        "title": "Crear Cuenta",
+        "companyName": "Nombre de la Empresa",
+        "alreadyHaveAccount": "¿Ya tienes cuenta?",
+        "signIn": "Iniciar sesión",
+        "heroTitle": "Inicia tu Negocio de Chat",
+        "heroSubtitle": "Crea agentes de reserva con IA para cualquier negocio en segundos.",
+        "getStarted": "Comenzar",
+        "noCreditCard": "No requiere tarjeta de crédito. Plan gratuito para siempre.",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "createAccount": "Crear Cuenta",
+        "errorAccountExists": "La cuenta ya existe. Por favor inicia sesión.",
+        "errorRegistrationFailed": "El registro falló. Por favor intenta de nuevo."
+    }
+},
+"planGuard": {
+    "unlockPremium": "Desbloquear Capacidades Premium",
+    "featureAvailable": "{featureName} está disponible exclusivamente en el plan {plan} y superior. Actualiza para acceder a funciones avanzadas de automatización e IA.",
+    "upgradeTo": "Actualizar a {plan}"
+},
+"upgradeModal": {
+    "unlockAi": {
+        "title": "Desbloquea Inteligencia Artificial",
+        "description": "Entrena a tu asistente con tus propios documentos y deja que maneje preguntas complejas automáticamente.",
+        "benefit1": "Base de Conocimiento Personalizada",
+        "benefit2": "Respuestas RAG Inteligentes",
+        "benefit3": "Soporte Automatizado 24/7"
+    },
+    "team": {
+        "title": "Trabaja en Equipo",
+        "description": "Escala tus operaciones invitando a miembros de tu equipo para gestionar chats y reservas.",
+        "benefit1": "Hasta 5 Miembros de Equipo",
+        "benefit2": "Acceso Basado en Roles",
+        "benefit3": "Bandeja de Entrada Compartida"
+    },
+    "usage": {
+        "title": "Aumenta la Capacidad",
+        "description": "Te estás acercando a los límites de tu plan. Actualiza para seguir creciendo sin interrupciones.",
+        "benefit1": "4x Capacidad de Reservas",
+        "benefit2": "4x Volumen de Mensajes",
+        "benefit3": "Soporte Prioritario"
+    },
+    "workflow": {
+        "title": "Flujos Avanzados",
+        "description": "Crea flujos de conversación sofisticados con pasos lógicos e IA.",
+        "benefit1": "Pasos de Lógica IA",
+        "benefit2": "Ramificación Compleja",
+        "benefit3": "Extracción de Datos"
+    },
+    "common": {
+        "upgradeTo": "Contratar Plan {plan}",
+        "whatYouGet": "LO QUE OBTIENES CON {plan}:",
+        "maybeLater": "Quizás más tarde"
+    },
+    "awareness": {
+        "title": "Límite de Uso Cercano",
+        "description": "Estás llegando a la capacidad máxima de tu plan actual. Para asegurar un servicio sin interrupciones, considera actualizar tu plan.",
+        "messages": "Uso de Mensajes",
+        "bookings": "Uso de Reservas",
+        "upgradeNow": "Actualizar Plan",
+        "maybeLater": "Entendido"
+    }
+}
 }

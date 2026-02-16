@@ -12,7 +12,13 @@
         "noData": "Sem dados",
         "actions": "Ações",
         "confirm": "Confirmar",
-        "close": "Fechar"
+        "close": "Fechar",
+        "done": "Concluído",
+        "next": "Próximo",
+        "back": "Voltar",
+        "name": "Nome",
+        "created": "Criado",
+        "status": "Status"
     },
     "nav": {
         "dashboard": "Painel",
@@ -31,7 +37,8 @@
         "categories": "Categorias",
         "widgets": "Interfaces",
         "chatWidget": "Chat Bot (Lucia)",
-        "bookingWidget": "Página de Agendamento"
+        "bookingWidget": "Página de Agendamento",
+        "myPage": "Minha Página"
     },
     "widgets": {
         "chat": {
@@ -354,6 +361,10 @@
                 "specialtiesHelper": "Condições específicas ou áreas de especialização.",
                 "languages": "Idiomas",
                 "languagesPlaceholder": "Selecionar ou digitar idiomas"
+            },
+            "integrations": {
+                "title": "Configuração de Calendário",
+                "awareness": "Você só pode vincular calendários depois que o profissional for criado e salvo."
             }
         },
         "deleteDialog": {
@@ -529,7 +540,8 @@
             "plans": {
                 "lite": "Plano LITE",
                 "pro": "Plano PRO",
-                "business": "Plano BUSINESS"
+                "business": "Plano BUSINESS",
+                "enterprise": "Plano ENTERPRISE"
             }
         },
         "apiKeys": {
@@ -547,7 +559,15 @@
             "confirmRevoke": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
             "createDialog": {
                 "title": "Criar Nova Chave API",
-                "label": "Nome da Chave (ex. Produção Web)"
+                "label": "Nome da Chave (ex. Produção Web)",
+                "successTitle": "Chave API Criada!",
+                "warning": "Por favor, copie sua chave API agora. Você não poderá vê-la novamente por motivos de segurança.",
+                "secretLabel": "Sua Chave API (Segredo)"
+            },
+            "revokeDialog": {
+                "title": "Revogar Chave API",
+                "content": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
+                "confirm": "Revogar"
             }
         }
     },
