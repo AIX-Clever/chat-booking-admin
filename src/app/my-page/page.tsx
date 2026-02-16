@@ -40,8 +40,26 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { generateClient } from 'aws-amplify/api';
 import { GET_PUBLIC_LINK_STATUS, LIST_PROVIDERS } from '../../graphql/queries';
 import ClientOnly from '../../components/common/ClientOnly';
+import { useTenant } from '../../context/TenantContext';
 
-// ... (imports remain the same, removing useState/useEffect for hasMounted if possible, or just wrapping)
+const DRAWER_WIDTH = 340;
+
+interface ChecklistItem {
+    item: string;
+    status: 'COMPLETE' | 'MISSING' | 'RECOMMENDED';
+    label: string;
+    isRequired: boolean;
+    actionUrl?: string; // New field for deep linking
+}
+
+interface PublicLinkStatus {
+    isPublished: boolean;
+    publishedAt: string | null;
+    slug: string;
+    publicUrl: string;
+    completenessPercentage: number;
+    completenessChecklist: ChecklistItem[];
+}
 
 export default function MyPage() {
     const { tenant } = useTenant();
