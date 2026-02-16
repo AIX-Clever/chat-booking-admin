@@ -649,6 +649,7 @@ export const GET_PUBLIC_LINK_STATUS = `
         status
         label
         isRequired
+        actionUrl
       }
     }
   }

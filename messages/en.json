@@ -12,7 +12,15 @@
         "noData": "No data",
         "actions": "Actions",
         "confirm": "Confirm",
-        "close": "Close"
+        "close": "Close",
+        "done": "Done",
+        "next": "Next",
+        "back": "Back",
+        "name": "Name",
+        "created": "Created",
+        "status": "Status",
+        "active": "Active",
+        "revoked": "Revoked"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -554,10 +562,28 @@
             "actions": "Actions",
             "active": "Active",
             "revoked": "Revoked",
+            "noKeys": "You have no active API keys.",
+            "revoke": "Revoke",
+            "confirmRevoke": "Are you sure you want to revoke this API key? This action cannot be undone.",
             "createDialog": {
                 "title": "Create New API Key",
-                "label": "Key Name (e.g. Website Production)"
-            }
+                "label": "Key Name (e.g. Website Production)",
+                "successTitle": "API Key Created!",
+                "warning": "Please copy your API key now. You will not be able to see it again for security reasons.",
+                "secretLabel": "Your API Key (Secret)"
+            },
+            "revokeDialog": {
+                "title": "Revoke API Key",
+                "content": "Are you sure you want to revoke this API key? This action cannot be undone.",
+                "confirm": "Revoke"
+            },
+            "errorFetching": "Error loading API keys",
+            "keyCreated": "API Key created successfully",
+            "errorCreating": "Error creating API key",
+            "keyRevoked": "API Key revoked successfully",
+            "errorRevoking": "Error revoking API key",
+            "copied": "Key copied to clipboard",
+            "errorCopying": "Error copying key"
         }
     },
     "workflows": {

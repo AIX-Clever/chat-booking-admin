@@ -18,7 +18,9 @@
         "back": "Voltar",
         "name": "Nome",
         "created": "Criado",
-        "status": "Status"
+        "status": "Status",
+        "active": "Ativo",
+        "revoked": "Revogado"
     },
     "nav": {
         "dashboard": "Painel",
@@ -575,9 +577,9 @@
             "actions": "Ações",
             "active": "Ativo",
             "revoked": "Revogado",
-            "noKeys": "Você não tem chaves API ativas.",
+            "noKeys": "Você não tem chaves de API ativas.",
             "revoke": "Revogar",
-            "confirmRevoke": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
+            "confirmRevoke": "Tem certeza que deseja revogar esta chave de API? Esta ação não pode ser desfeita.",
             "createDialog": {
                 "title": "Criar Nova Chave API",
                 "label": "Nome da Chave (ex. Produção Web)",
@@ -589,7 +591,14 @@
                 "title": "Revogar Chave API",
                 "content": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
                 "confirm": "Revogar"
-            }
+            },
+            "errorFetching": "Erro ao carregar chaves de API",
+            "keyCreated": "Chave de API criada com sucesso",
+            "errorCreating": "Erro ao criar chave de API",
+            "keyRevoked": "Chave de API revogada com sucesso",
+            "errorRevoking": "Erro ao revogar chave de API",
+            "copied": "Chave copiada para a área de transferência",
+            "errorCopying": "Erro ao copiar chave"
         }
     },
     "workflows": {

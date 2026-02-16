@@ -18,7 +18,9 @@
         "back": "Atrás",
         "name": "Nombre",
         "created": "Creado",
-        "status": "Estado"
+        "status": "Estado",
+        "active": "Activo",
+        "revoked": "Revocado"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -599,7 +601,14 @@
             "title": "Revocar Clave API",
             "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
             "confirm": "Revocar"
-        }
+        },
+        "errorFetching": "Error al cargar las claves API",
+        "keyCreated": "Clave API creada exitosamente",
+        "errorCreating": "Error al crear la clave API",
+        "keyRevoked": "Clave API revocada exitosamente",
+        "errorRevoking": "Error al revocar la clave API",
+        "copied": "Clave copiada al portapapeles",
+        "errorCopying": "Error al copiar la clave"
     },
     "workflows": {
         "title": "Editor de Flujos",

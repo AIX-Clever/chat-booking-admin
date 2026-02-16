@@ -322,7 +322,7 @@ export default function MyPage() {
                         <Divider />
 
                         <List disablePadding>
-                            {status?.completenessChecklist.map((item) => (
+                            {(status?.completenessChecklist || []).map((item) => (
                                 <ListItem key={item.item} sx={{ px: 0, py: 1.5, alignItems: 'flex-start' }}>
                                     <ListItemIcon sx={{ minWidth: 32, mt: 0.5 }}>
                                         {item.status === 'COMPLETE' ? (
