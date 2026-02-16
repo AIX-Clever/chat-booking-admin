@@ -133,7 +133,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const pathname = usePathname();
     const router = useRouter();
     const { authStatus, signOut } = useAuthenticator();
-    const [tenantName, setTenantName] = React.useState<string>('');
+
     const { tenant } = useTenant();
 
     React.useEffect(() => {
@@ -155,11 +155,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         router.push('/login');
     };
 
-    React.useEffect(() => {
-        if (authStatus === 'authenticated' && tenant) {
-            setTenantName(tenant.name);
-        }
-    }, [authStatus, tenant]);
+
 
     // Status Guard: If tenant exists but is not ACTIVE, block access
     if (tenant && tenant.status !== 'ACTIVE' && pathname !== '/settings') {
