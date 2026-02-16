@@ -82,7 +82,7 @@ export default function WebIntegrationPage() {
 
                 {/* TAB 1: EMBED (Available for PRO+) */}
                 <CustomTabPanel value={value} index={0}>
-                    <PlanGuard minPlan="PRO" featureName="Botón de Reserva (Embed)" variant="block">
+                    <PlanGuard minPlan="BUSINESS" featureName="Botón de Reserva (Embed)" variant="block">
                         <Grid container spacing={4}>
                             <Grid item xs={12} md={8}>
                                 <Alert severity="info" sx={{ mb: 3 }}>

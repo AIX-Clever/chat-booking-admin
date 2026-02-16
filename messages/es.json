@@ -375,6 +375,7 @@
                 "languagesPlaceholder": "Seleccionar o escribir idiomas"
             },
             "integrations": {
+                "title": "Configuración de Calendario",
                 "awareness": "Solo puedes vincular calendarios una vez que el profesional ha sido creado y guardado."
             }
         },

@@ -46,6 +46,7 @@ import MicrosoftCalendarCard from '../../components/integrations/MicrosoftCalend
 import { Paper, Snackbar, Alert, Tooltip } from '@mui/material';
 import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
 import PlanGuard from '../../components/PlanGuard';
+import ActionRequiredGuard from '../../components/common/ActionRequiredGuard';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
 import { usePlanUsage } from '../../hooks/useDashboardMetrics';
 
@@ -883,12 +884,12 @@ export default function ProvidersPage() {
 
                     {/* Tab 4: Integrations */}
                     <CustomTabPanel value={tabValue} index={4}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            {!currentProvider ? (
-                                <Alert severity="info" variant="outlined">
-                                    {t('dialog.integrations.awareness')}
-                                </Alert>
-                            ) : (
+                        <ActionRequiredGuard
+                            condition={!!currentProvider}
+                            title={t('dialog.integrations.title') || "Acción Requerida"}
+                            message={t('dialog.integrations.awareness')}
+                        >
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                 <PlanGuard minPlan="PRO" featureName="Integración de Calendarios" variant="overlay" upgradeFeature="AI">
                                     <GoogleCalendarCard
                                         providerId={formData.id}
@@ -903,8 +904,8 @@ export default function ProvidersPage() {
                                         onDisconnect={() => { showSnackbar("Función de desconexión próximamente", "info"); }}
                                     />
                                 </PlanGuard>
-                            )}
-                        </Box>
+                            </Box>
+                        </ActionRequiredGuard>
                     </CustomTabPanel>
 
                 </DialogContent>
