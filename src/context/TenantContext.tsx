@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 import { GET_TENANT } from '../graphql/queries';
 
 // Define types based on schema
@@ -70,6 +71,20 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         refreshTenant();
+
+        // Listen for auth events (signIn, signOut)
+        const hubListener = Hub.listen('auth', ({ payload }) => {
+            console.log('[TenantContext] Auth event:', payload.event);
+            if (payload.event === 'signedIn') {
+                console.log('[TenantContext] User signed in, refreshing tenant...');
+                refreshTenant();
+            } else if (payload.event === 'signedOut') {
+                console.log('[TenantContext] User signed out, clearing tenant...');
+                setTenant(null);
+            }
+        });
+
+        return () => hubListener();
     }, []);
 
     return (
