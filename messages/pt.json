@@ -438,10 +438,10 @@
         "saveError": "Erro ao salvar configurações.",
         "upgradeAlert": "Entre em contato com vendas para atualizar!",
         "tabs": {
-            "general": "Geral",
-            "ai": "Inteligência Artificial",
-            "apiKeys": "Chaves API",
-            "identity": "Identidade"
+            "general": "Personalização",
+            "ai": "Inteligência",
+            "apiKeys": "API",
+            "identity": "Perfil"
         },
         "identity": {
             "generalInfo": "Informações Gerais",
@@ -477,6 +477,27 @@
             "uploadButton": "Enviar Imagem",
             "uploadRecommended": "PNG ou JPG, máx 2MB (Proporção 1:1 recomendada)",
             "save": "Salvar Dados"
+        },
+        "compliance": {
+            "title": "Conformidade e Regulamentações",
+            "subtitle": "Gerencie a identidade legal e a conformidade regulatória do seu negócio.",
+            "legalInfo": "Informações Legais e de Faturamento",
+            "legalName": "Razão Social / Nome Legal",
+            "taxId": "Identificador Fiscal (Tax ID)",
+            "taxIdTooltip": "Identificador tributário nacional (RUT, RFC, CNPJ, CUIT, etc.)",
+            "professionalInfo": "Identificação Profissional",
+            "gdpr": "Privacidade e Dados (GDPR/LGPD)",
+            "professionalLicense": "Nº de Registro / Licença",
+            "privacyOfficer": "Encarregado de Proteção de Dados (DPO)",
+            "cookieConsent": "Consentimento de Cookies",
+            "cookieStatus": "O banner de cookies está ativo em seu site público.",
+            "privacyPolicyUrlLabel": "URL da Política de Privacidade Externa",
+            "privacyPolicyUrlPlaceholder": "https://...",
+            "professionalLicensePlaceholder": "Ex: Registro Sanitário #12345",
+            "professionalLicenseHelper": "Importante para profissões regulamentadas.",
+            "dpoContactPlaceholder": "Nome ou Email de contato",
+            "cookieBannerLabel": "Habilitado",
+            "saveButton": "Salvar Alterações de Conformidade"
         },
         "general": {
             "title": "Configurações Gerais",

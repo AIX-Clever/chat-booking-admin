@@ -447,11 +447,11 @@
         "saveError": "Error al guardar la configuración.",
         "upgradeAlert": "¡Contacta a ventas para actualizar!",
         "tabs": {
-            "general": "General",
-            "ai": "Inteligencia Artificial",
-            "apiKeys": "Claves API",
-            "identity": "Identidad",
-            "compliance": "Cumplimiento (Legal)"
+            "general": "Personalización",
+            "ai": "Inteligencia",
+            "apiKeys": "API",
+            "identity": "Perfil",
+            "compliance": "Legal"
         },
         "identity": {
             "title": "Perfil e Identidad",
@@ -499,7 +499,14 @@
             "professionalLicense": "N° Registro / Colegiado (Global)",
             "privacyOfficer": "Delegado de Protección de Datos (DPO)",
             "cookieConsent": "Consentimiento de Cookies",
-            "cookieStatus": "El banner de cookies está activo en tu sitio público."
+            "cookieStatus": "El banner de cookies está activo en tu sitio público.",
+            "privacyPolicyUrlLabel": "URL Política de Privacidad Externa",
+            "privacyPolicyUrlPlaceholder": "https://...",
+            "professionalLicensePlaceholder": "Ej: Registro Sanitario #12345",
+            "professionalLicenseHelper": "Importante para profesiones reguladas.",
+            "dpoContactPlaceholder": "Nombre o Email de contacto",
+            "cookieBannerLabel": "Habilitado",
+            "saveButton": "Guardar Cambios de Cumplimiento"
         },
         "general": {
             "title": "Configuración General",

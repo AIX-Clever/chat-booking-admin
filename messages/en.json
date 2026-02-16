@@ -417,10 +417,10 @@
         "saveError": "Failed to save settings.",
         "upgradeAlert": "Contact sales to upgrade!",
         "tabs": {
-            "general": "General",
-            "ai": "Artificial Intelligence",
-            "apiKeys": "API Keys",
-            "identity": "Center Identity"
+            "general": "Customization",
+            "ai": "Intelligence",
+            "apiKeys": "API",
+            "identity": "Profile"
         },
         "identity": {
             "generalInfo": "General Information",
@@ -457,6 +457,27 @@
             "uploadButton": "Upload Image",
             "uploadRecommended": "PNG or JPG, max 2MB (1:1 ratio recommended)",
             "save": "Save Identity"
+        },
+        "compliance": {
+            "title": "Compliance & Regulations",
+            "subtitle": "Manage legal identity and regulatory compliance.",
+            "legalInfo": "Legal & Billing Info",
+            "legalName": "Legal Name / Company Name",
+            "taxId": "Tax ID",
+            "taxIdTooltip": "National Tax Identifier (RUT, RFC, CNPJ, CUIT, etc.)",
+            "professionalInfo": "Professional Identification",
+            "gdpr": "Privacy & Data (GDPR/DPA)",
+            "professionalLicense": "Registry / License No.",
+            "privacyOfficer": "Data Protection Officer (DPO)",
+            "cookieConsent": "Cookie Consent",
+            "cookieStatus": "Cookie banner is active on your public site.",
+            "privacyPolicyUrlLabel": "External Privacy Policy URL",
+            "privacyPolicyUrlPlaceholder": "https://...",
+            "professionalLicensePlaceholder": "Ex: Health Registry #12345",
+            "professionalLicenseHelper": "Important for regulated professions.",
+            "dpoContactPlaceholder": "Name or Contact Email",
+            "cookieBannerLabel": "Enabled",
+            "saveButton": "Save Compliance Changes"
         },
         "general": {
             "title": "General Settings",

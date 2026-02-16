@@ -66,10 +66,11 @@ export default function SettingsPage() {
     // Initial tab logic
     const getInitialTab = () => {
         const tabParam = searchParams.get('tab');
-        if (tabParam === 'ai') return 1;
-        if (tabParam === 'keys') return 2;
-        if (tabParam === 'identity') return 3;
-        if (tabParam === 'compliance') return 4;
+        if (tabParam === 'identity' || tabParam === 'profile') return 0;
+        if (tabParam === 'general' || tabParam === 'customization') return 1;
+        if (tabParam === 'ai') return 2;
+        if (tabParam === 'compliance' || tabParam === 'legal') return 3;
+        if (tabParam === 'keys' || tabParam === 'api') return 4;
         return 0;
     };
 
@@ -259,6 +260,8 @@ export default function SettingsPage() {
 
     if (!hasMounted) return null;
 
+    const showApiKeys = currentPlan !== 'LITE';
+
     return (
         <>
             <Typography variant="h4" sx={{ mb: 4 }}>{t('title')}</Typography>
@@ -283,12 +286,14 @@ export default function SettingsPage() {
 
             <Paper sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs">
+                    <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs" scrollButtons="auto" variant="scrollable">
+                        <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
                         <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
-                        <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
-                        <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
                         <Tab label={t('tabs.compliance')} icon={<Box component="span" sx={{ fontSize: '1.2rem' }}>⚖️</Box>} iconPosition="start" />
+                        {showApiKeys && (
+                            <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
+                        )}
                     </Tabs>
                 </Box>
 
@@ -298,8 +303,13 @@ export default function SettingsPage() {
                     </Box>
                 ) : (
                     <>
-                        {/* --- Tab 1: Widget & Branding --- */}
+                        {/* --- Tab 0: Identity (Profile) --- */}
                         <CustomTabPanel value={tabValue} index={0}>
+                            <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
+                        </CustomTabPanel>
+
+                        {/* --- Tab 1: Widget & Branding (Customization) --- */}
+                        <CustomTabPanel value={tabValue} index={1}>
                             <PropertiesTab
                                 widgetConfig={widgetConfig}
                                 setWidgetConfig={setWidgetConfig}
@@ -310,8 +320,8 @@ export default function SettingsPage() {
                             />
                         </CustomTabPanel>
 
-                        {/* --- Tab 2: AI Configuration --- */}
-                        <CustomTabPanel value={tabValue} index={1}>
+                        {/* --- Tab 2: AI Configuration (Intelligence) --- */}
+                        <CustomTabPanel value={tabValue} index={2}>
                             <AiConfigTab
                                 aiMode={aiMode}
                                 setAiMode={(mode) => {
@@ -332,20 +342,17 @@ export default function SettingsPage() {
                             </Box>
                         </CustomTabPanel>
 
-                        {/* --- Tab 3: API Keys --- */}
-                        <CustomTabPanel value={tabValue} index={2}>
-                            <ApiKeysTab />
-                        </CustomTabPanel>
-
-                        {/* --- Tab 4: Identity --- */}
+                        {/* --- Tab 3: Compliance (Legal) --- */}
                         <CustomTabPanel value={tabValue} index={3}>
-                            <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
-                        </CustomTabPanel>
-
-                        {/* --- Tab 5: Compliance --- */}
-                        <CustomTabPanel value={tabValue} index={4}>
                             <ComplianceTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
+
+                        {/* --- Tab 4: API Keys (Conditional) --- */}
+                        {showApiKeys && (
+                            <CustomTabPanel value={tabValue} index={4}>
+                                <ApiKeysTab />
+                            </CustomTabPanel>
+                        )}
                     </>
                 )}
 

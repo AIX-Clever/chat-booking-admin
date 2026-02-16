@@ -125,8 +125,8 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                                 label={t('professionalLicense')}
                                 value={formData.professionalLicense}
                                 onChange={(e) => handleChange('professionalLicense', e.target.value)}
-                                placeholder="Ej: Registro Sanitario #12345"
-                                helperText="Importante para profesiones reguladas."
+                                placeholder={t('professionalLicensePlaceholder')}
+                                helperText={t('professionalLicenseHelper')}
                             />
                         </Box>
                     </Paper>
@@ -142,10 +142,10 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                             <Grid item xs={12} md={6}>
                                 <TextField
                                     fullWidth
-                                    label="URL Política de Privacidad Externa"
+                                    label={t('privacyPolicyUrlLabel')}
                                     value={formData.privacyPolicyUrl}
                                     onChange={(e) => handleChange('privacyPolicyUrl', e.target.value)}
-                                    placeholder="https://..."
+                                    placeholder={t('privacyPolicyUrlPlaceholder')}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -154,7 +154,7 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                                     label={t('privacyOfficer')}
                                     value={formData.dpoContact}
                                     onChange={(e) => handleChange('dpoContact', e.target.value)}
-                                    placeholder="Nombre o Email de contacto"
+                                    placeholder={t('dpoContactPlaceholder')}
                                 />
                             </Grid>
                         </Grid>
@@ -184,7 +184,7 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                                         color="primary"
                                     />
                                 }
-                                label="Habilitado"
+                                label={t('cookieBannerLabel')}
                             />
                         </Box>
                     </Paper>
@@ -193,7 +193,7 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
 
             <Box sx={{ mt: 4 }}>
                 <Button variant="contained" onClick={onSave} size="large">
-                    Guardar Cambios de Cumplimiento
+                    {t('saveButton')}
                 </Button>
             </Box>
         </Box>
