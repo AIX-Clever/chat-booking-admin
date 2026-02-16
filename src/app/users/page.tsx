@@ -61,6 +61,7 @@ export default function UsersPage() {
     const t = useTranslations('users');
     const tCommon = useTranslations('common');
     const { tenant, loading: tenantLoading } = useTenant();
+    console.log('[UsersPage] Initial render - tenant:', tenant, 'tenantLoading:', tenantLoading);
     const [users, setUsers] = useState<TenantUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -92,6 +93,7 @@ export default function UsersPage() {
             });
 
             const typedResponse = response as { data: { listTenantUsers: TenantUser[] } };
+            console.log('[UsersPage] LIST_TENANT_USERS response:', typedResponse);
             setUsers(typedResponse.data.listTenantUsers || []);
             setError(null);
         } catch (err) {
@@ -103,7 +105,9 @@ export default function UsersPage() {
     }, [t]);
 
     useEffect(() => {
+        console.log('[UsersPage] useEffect triggered - tenantLoading:', tenantLoading);
         if (!tenantLoading) {
+            console.log('[UsersPage] Calling fetchUsers()...');
             fetchUsers();
         }
     }, [tenantLoading, fetchUsers]);
@@ -254,6 +258,7 @@ export default function UsersPage() {
     const plan = tenant?.plan || 'LITE';
     const maxUsers = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS];
     const activeUsers = users.filter(u => u.status !== 'INACTIVE').length;
+    console.log('[UsersPage] Plan calculation - plan:', plan, 'maxUsers:', maxUsers, 'activeUsers:', activeUsers);
     const canInviteMore = maxUsers === -1 || activeUsers < maxUsers;
 
     if (tenantLoading || loading) {
