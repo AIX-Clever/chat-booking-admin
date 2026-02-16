@@ -628,7 +628,12 @@
             "forgotPassword": "Esqueceu a senha?",
             "noAccount": "Não tem uma conta?",
             "signUp": "Cadastrar-se",
-            "signIn": "Entrar"
+            "signIn": "Entrar",
+            "newPasswordRequired": "Nova Senha Necessária",
+            "newPasswordSubtitle": "Você deve alterar sua senha temporária para uma segura.",
+            "confirmPassword": "Confirmar Senha",
+            "setPassword": "Definir Senha",
+            "passwordMismatch": "As senhas não coincidem"
         },
         "register": {
             "title": "Criar Conta",

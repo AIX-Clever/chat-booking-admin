@@ -34,7 +34,8 @@ export default function LoginPage() {
         email: '',
         password: ''
     });
-
+    const [showNewPassword, setShowNewPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
     React.useEffect(() => {
         // Check if user is already signed in
@@ -105,7 +106,7 @@ export default function LoginPage() {
     const handleCompleteNewPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         if (newPasswordData.password !== newPasswordData.confirmPassword) {
-            setError('Las contraseñas no coinciden');
+            setError(t('passwordMismatch'));
             return;
         }
         setLoading(true);
@@ -247,13 +248,13 @@ export default function LoginPage() {
                         <Typography variant="h5" fontWeight="bold" gutterBottom>
                             {view === 'login' ? 'Bienvenido de nuevo' :
                                 view === 'forgot' ? t('resetPasswordTitle') :
-                                    view === 'newPassword' ? 'Nueva Contraseña Requerida' :
+                                    view === 'newPassword' ? t('newPasswordRequired') :
                                         t('confirmReset')}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {view === 'login' ? 'Ingresa tus credenciales para acceder al panel.' :
                                 view === 'forgot' ? t('resetPasswordSubtitle') :
-                                    view === 'newPassword' ? 'Debes cambiar tu contraseña temporal por una segura.' :
+                                    view === 'newPassword' ? t('newPasswordSubtitle') :
                                         'Ingresa el código que te enviamos y tu nueva contraseña.'}
                         </Typography>
                     </Box>
@@ -404,26 +405,83 @@ export default function LoginPage() {
                             <Stack spacing={3}>
                                 <TextField
                                     fullWidth
-                                    label="Nueva Contraseña"
-                                    type="password"
+                                    label={t('newPasswordRequired')}
+                                    type={showNewPassword ? 'text' : 'password'}
                                     value={newPasswordData.password}
-                                    onChange={(e) => setNewPasswordData({ ...newPasswordData, password: e.target.value })}
+                                    onChange={(e) => {
+                                        setNewPasswordData({ ...newPasswordData, password: e.target.value });
+                                        setError('');
+                                    }}
+                                    error={!!error && error.includes(t('passwordMismatch'))}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockOutlineIcon color="action" />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                                    edge="end"
+                                                >
+                                                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                                 <TextField
                                     fullWidth
-                                    label="Confirmar Contraseña"
-                                    type="password"
+                                    label={t('confirmPassword')}
+                                    type={showConfirmPassword ? 'text' : 'password'}
                                     value={newPasswordData.confirmPassword}
-                                    onChange={(e) => setNewPasswordData({ ...newPasswordData, confirmPassword: e.target.value })}
+                                    onChange={(e) => {
+                                        setNewPasswordData({ ...newPasswordData, confirmPassword: e.target.value });
+                                        setError('');
+                                    }}
+                                    error={
+                                        (!!newPasswordData.confirmPassword && newPasswordData.password !== newPasswordData.confirmPassword) ||
+                                        (!!error && error.includes(t('passwordMismatch')))
+                                    }
+                                    helperText={
+                                        newPasswordData.confirmPassword && newPasswordData.password !== newPasswordData.confirmPassword
+                                            ? t('passwordMismatch')
+                                            : ''
+                                    }
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockOutlineIcon color="action" />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    edge="end"
+                                                >
+                                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                                 <Button
                                     fullWidth
                                     variant="contained"
                                     type="submit"
-                                    disabled={loading}
-                                    sx={{ height: 48, textTransform: 'none' }}
+                                    disabled={loading || newPasswordData.password !== newPasswordData.confirmPassword}
+                                    sx={{
+                                        height: 48,
+                                        textTransform: 'none',
+                                        background: 'linear-gradient(to right, #10b981, #059669)',
+                                        '&:hover': {
+                                            background: 'linear-gradient(to right, #059669, #047857)',
+                                        }
+                                    }}
                                 >
-                                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Establecer Contraseña'}
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : t('setPassword')}
                                 </Button>
                                 <Button variant="text" onClick={() => setView('login')} sx={{ textTransform: 'none' }}>
                                     {t('backToLogin')}

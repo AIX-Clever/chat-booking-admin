@@ -613,7 +613,12 @@
             "forgotPassword": "Forgot password?",
             "noAccount": "Don't have an account?",
             "signUp": "Sign up",
-            "signIn": "Sign In"
+            "signIn": "Sign In",
+            "newPasswordRequired": "New Password Required",
+            "newPasswordSubtitle": "You must change your temporary password to a secure one.",
+            "confirmPassword": "Confirm Password",
+            "setPassword": "Set Password",
+            "passwordMismatch": "Passwords do not match"
         },
         "register": {
             "title": "Create Account",
