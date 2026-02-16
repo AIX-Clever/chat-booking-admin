@@ -30,18 +30,21 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
 
     const refreshTenant = async () => {
         setLoading(true);
+        console.log('[TenantContext] Refreshing tenant...');
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
             if (!token) {
+                console.log('[TenantContext] No token found, skipping fetch');
                 setLoading(false);
                 return;
             }
 
+            console.log('[TenantContext] Token found, fetching user attributes...');
             await fetchUserAttributes();
-            // We keep the call for side effects if any, but removed the unused variable
 
             const client = generateClient();
+            console.log('[TenantContext] Executing GET_TENANT query...');
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: GET_TENANT,
@@ -50,11 +53,16 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
                 authToken: token
             });
 
+            console.log('[TenantContext] GET_TENANT response:', response);
+
             if (response.data && response.data.getTenant) {
+                console.log('[TenantContext] Setting tenant:', response.data.getTenant);
                 setTenant(response.data.getTenant);
+            } else {
+                console.warn('[TenantContext] Tenant data missing in response:', response);
             }
         } catch (err) {
-            console.error('Error fetching tenant in context:', err);
+            console.error('[TenantContext] Error fetching tenant:', err);
         } finally {
             setLoading(false);
         }
