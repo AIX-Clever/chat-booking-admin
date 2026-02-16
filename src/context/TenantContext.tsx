@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
-import { fetchAuthSession } from 'aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { GET_TENANT } from '../graphql/queries';
 
 // Define types based on schema
@@ -16,62 +16,45 @@ export interface Tenant {
     createdAt: string;
 }
 
-interface TenantContextType {
+interface TenantContextValue {
     tenant: Tenant | null;
     loading: boolean;
     refreshTenant: () => Promise<void>;
 }
 
-const TenantContext = createContext<TenantContextType | undefined>(undefined);
+const TenantContext = createContext<TenantContextValue | undefined>(undefined);
 
 export function TenantProvider({ children }: { children: React.ReactNode }) {
     const [tenant, setTenant] = useState<Tenant | null>(null);
     const [loading, setLoading] = useState(true);
 
     const refreshTenant = async () => {
+        setLoading(true);
         try {
-            // Create a timeout promise
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Tenant refresh timeout')), 10000);
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            const attributes = await fetchUserAttributes();
+            const tenantIdAttr = attributes['custom:tenantId'];
+
+            const client = generateClient();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GET_TENANT,
+                variables: { tenantId: tenantIdAttr || null },
+                authMode: 'userPool',
+                authToken: token
             });
 
-            // Race between the fetch and the timeout
-            await Promise.race([
-                (async () => {
-                    let token: string | undefined;
-                    try {
-                        const session = await fetchAuthSession();
-                        token = session.tokens?.idToken?.toString();
-                    } catch (authErr) {
-                        console.warn('Failed to get auth session for TenantContext:', authErr);
-                        // If no session, stop here to avoid API errors
-                        setLoading(false);
-                        return;
-                    }
-
-                    if (!token) {
-                        setLoading(false);
-                        return;
-                    }
-
-                    const client = generateClient();
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const response: any = await client.graphql({
-                        query: GET_TENANT,
-                        variables: { tenantId: null },
-                        authMode: 'userPool',
-                        authToken: token
-                    });
-
-                    if (response.data && response.data.getTenant) {
-                        console.log('✅ Tenant data loaded in context:', response.data.getTenant);
-                        setTenant(response.data.getTenant);
-                    }
-                })(),
-                timeoutPromise
-            ]);
-        } catch (error) {
-            console.error('Error fetching tenant context:', error);
+            if (response.data && response.data.getTenant) {
+                setTenant(response.data.getTenant);
+            }
+        } catch (err) {
+            console.error('Error fetching tenant in context:', err);
         } finally {
             setLoading(false);
         }
@@ -95,3 +78,4 @@ export function useTenant() {
     }
     return context;
 }
+

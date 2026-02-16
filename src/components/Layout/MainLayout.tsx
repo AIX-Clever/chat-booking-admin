@@ -125,16 +125,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { fetchUserAttributes } from 'aws-amplify/auth';
-import { generateClient } from 'aws-amplify/api';
-const GET_TENANT_NAME = `
-  query GetTenant($tenantId: ID) {
-    getTenant(tenantId: $tenantId) {
-      tenantId
-      name
-    }
-  }
-`;
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const theme = useTheme();
@@ -166,43 +156,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     };
 
     React.useEffect(() => {
-        async function checkTenantAuthorization() {
-            if (authStatus === 'authenticated') {
-                try {
-                    const attributes = await fetchUserAttributes();
-                    const tenantId = attributes['custom:tenantId'];
-
-                    if (!tenantId) {
-                        console.warn('User has no tenant association. Signing out.');
-                        signOut();
-                        router.push('/login?error=no_tenant');
-                        return;
-                    }
-
-                    // Fetch tenant details to get name
-                    try {
-                        const client = generateClient();
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        const response: any = await client.graphql({
-                            query: GET_TENANT_NAME,
-                            variables: { tenantId }
-                        });
-
-                        if (response.data && response.data.getTenant) {
-                            setTenantName(response.data.getTenant.name);
-                        }
-                    } catch (err) {
-                        console.error('Error fetching tenant details:', err);
-                    }
-
-                } catch (error) {
-                    console.error('Error verifying tenant authorization:', error);
-                }
-            }
+        if (authStatus === 'authenticated' && tenant) {
+            setTenantName(tenant.name);
         }
-
-        checkTenantAuthorization();
-    }, [authStatus, signOut, router]);
+    }, [authStatus, tenant]);
 
     // Status Guard: If tenant exists but is not ACTIVE, block access
     if (tenant && tenant.status !== 'ACTIVE' && pathname !== '/settings') {
