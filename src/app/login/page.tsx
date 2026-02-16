@@ -63,6 +63,18 @@ export default function LoginPage() {
         setError('');
     };
 
+
+
+    const [view, setView] = React.useState<'login' | 'forgot' | 'reset' | 'newPassword'>('login');
+    const [resetData, setResetData] = React.useState({
+        code: '',
+        newPassword: ''
+    });
+    const [newPasswordData, setNewPasswordData] = React.useState({
+        password: '',
+        confirmPassword: ''
+    });
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -75,6 +87,9 @@ export default function LoginPage() {
 
             if (isSignedIn) {
                 router.push('/bookings');
+            } else if (nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
+                setView('newPassword');
+                setError('');
             } else {
                 console.log('Login incomplete, next step:', nextStep);
                 setError(`Login incompleto. Paso requerido: ${nextStep.signInStep}`);
@@ -87,11 +102,31 @@ export default function LoginPage() {
         }
     };
 
-    const [view, setView] = React.useState<'login' | 'forgot' | 'reset'>('login');
-    const [resetData, setResetData] = React.useState({
-        code: '',
-        newPassword: ''
-    });
+    const handleCompleteNewPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newPasswordData.password !== newPasswordData.confirmPassword) {
+            setError('Las contraseñas no coinciden');
+            return;
+        }
+        setLoading(true);
+        try {
+            const { confirmSignIn } = await import('aws-amplify/auth');
+            const { isSignedIn, nextStep } = await confirmSignIn({
+                challengeResponse: newPasswordData.password
+            });
+
+            if (isSignedIn) {
+                router.push('/bookings');
+            } else {
+                setError(`Login incompleto. Paso requerido: ${nextStep.signInStep}`);
+            }
+        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            console.error('Complete new password error:', err);
+            setError(err.message || 'Error al establecer la contraseña');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleForgotPassword = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -210,10 +245,16 @@ export default function LoginPage() {
                 >
                     <Box sx={{ mb: 4, textAlign: 'center' }}>
                         <Typography variant="h5" fontWeight="bold" gutterBottom>
-                            {view === 'login' ? 'Bienvenido de nuevo' : view === 'forgot' ? t('resetPasswordTitle') : t('confirmReset')}
+                            {view === 'login' ? 'Bienvenido de nuevo' :
+                                view === 'forgot' ? t('resetPasswordTitle') :
+                                    view === 'newPassword' ? 'Nueva Contraseña Requerida' :
+                                        t('confirmReset')}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {view === 'login' ? 'Ingresa tus credenciales para acceder al panel.' : view === 'forgot' ? t('resetPasswordSubtitle') : 'Ingresa el código que te enviamos y tu nueva contraseña.'}
+                            {view === 'login' ? 'Ingresa tus credenciales para acceder al panel.' :
+                                view === 'forgot' ? t('resetPasswordSubtitle') :
+                                    view === 'newPassword' ? 'Debes cambiar tu contraseña temporal por una segura.' :
+                                        'Ingresa el código que te enviamos y tu nueva contraseña.'}
                         </Typography>
                     </Box>
 
@@ -352,6 +393,39 @@ export default function LoginPage() {
                                     {loading ? <CircularProgress size={24} color="inherit" /> : t('confirmReset')}
                                 </Button>
                                 <Button variant="text" onClick={() => setView('forgot')} sx={{ textTransform: 'none' }}>
+                                    {t('backToLogin')}
+                                </Button>
+                            </Stack>
+                        </form>
+                    )}
+
+                    {view === 'newPassword' && (
+                        <form onSubmit={handleCompleteNewPassword}>
+                            <Stack spacing={3}>
+                                <TextField
+                                    fullWidth
+                                    label="Nueva Contraseña"
+                                    type="password"
+                                    value={newPasswordData.password}
+                                    onChange={(e) => setNewPasswordData({ ...newPasswordData, password: e.target.value })}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Confirmar Contraseña"
+                                    type="password"
+                                    value={newPasswordData.confirmPassword}
+                                    onChange={(e) => setNewPasswordData({ ...newPasswordData, confirmPassword: e.target.value })}
+                                />
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={loading}
+                                    sx={{ height: 48, textTransform: 'none' }}
+                                >
+                                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Establecer Contraseña'}
+                                </Button>
+                                <Button variant="text" onClick={() => setView('login')} sx={{ textTransform: 'none' }}>
                                     {t('backToLogin')}
                                 </Button>
                             </Stack>
