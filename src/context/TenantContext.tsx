@@ -39,13 +39,13 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
             }
 
             const attributes = await fetchUserAttributes();
-            const tenantIdAttr = attributes['custom:tenantId'];
+            // We keep attributes for frontend use if needed, but not for the API call
 
             const client = generateClient();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({
                 query: GET_TENANT,
-                variables: { tenantId: tenantIdAttr || null },
+                variables: {}, // No longer passing tenantId explicitly
                 authMode: 'userPool',
                 authToken: token
             });

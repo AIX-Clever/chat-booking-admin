@@ -73,7 +73,12 @@ describe('TenantContext', () => {
         }, { timeout: 3000 });
 
         expect(screen.getByTestId('tenant-plan')).toHaveTextContent('PRO');
-        expect(mockGraphql).toHaveBeenCalled();
+        expect(mockGraphql).toHaveBeenCalledWith({
+            query: expect.any(String),
+            variables: {}, // Verify NO variables are passed
+            authMode: 'userPool',
+            authToken: 'mock-token'
+        });
     });
 
     it('should handle auth session failure gracefully', async () => {
