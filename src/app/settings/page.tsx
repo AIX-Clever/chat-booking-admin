@@ -240,9 +240,15 @@ export default function SettingsPage() {
 
             // Settings saved successfully - stop loading
             setLoading(false);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error saving settings:', error);
-            setError(t('saveError'));
+            // Extract message from GraphQL error
+            const apiMessage = error.errors?.[0]?.message || error.message;
+            if (apiMessage && (apiMessage.includes('link personalizado') || apiMessage.includes('slug'))) {
+                setError(apiMessage);
+            } else {
+                setError(t('saveError'));
+            }
             setLoading(false);
         }
     };
