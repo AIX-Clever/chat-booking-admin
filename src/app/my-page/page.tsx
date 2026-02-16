@@ -64,6 +64,7 @@ export default function MyPage() {
     const { tenant } = useTenant();
     const [status, setStatus] = useState<PublicLinkStatus | null>(null);
     const [loading, setLoading] = useState(true);
+    const [hasMounted, setHasMounted] = useState(false);
 
     const [error, setError] = useState<string | null>(null);
     const [copySuccess, setCopySuccess] = useState(false);
@@ -113,6 +114,7 @@ export default function MyPage() {
     };
 
     useEffect(() => {
+        setHasMounted(true);
         fetchProviders();
         fetchData(selectedProvider);
     }, [selectedProvider]);
@@ -126,7 +128,7 @@ export default function MyPage() {
         }
     }, [tenant, providers, selectedProvider]);
 
-
+    if (!hasMounted) return null;
 
     const handleCopyLink = () => {
         if (status?.publicUrl) {

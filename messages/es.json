@@ -13,10 +13,12 @@
         "actions": "Acciones",
         "confirm": "Confirmar",
         "close": "Cerrar",
-        "close": "Cerrar",
         "done": "Listo",
         "next": "Siguiente",
-        "back": "Atrás"
+        "back": "Atrás",
+        "name": "Nombre",
+        "created": "Creado",
+        "status": "Estado"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -178,6 +180,10 @@
         "planMetrics": {
             "tokensIA": "Tokens IA (Mensual)",
             "bookings": "Reservas (Mensual)",
+            "messages": "Mensajes"
+        },
+        "metrics": {
+            "bookings": "Reservas",
             "messages": "Mensajes"
         },
         "funnel": {
@@ -542,6 +548,12 @@
             "ragRequirement": "Las funciones RAG requieren modo NLP o Agente Completo.",
             "changeNotice": "Los cambios en el Modo de IA generalmente se aplican instantáneamente, pero las conversaciones activas pueden finalizar su sesión con el modelo anterior.",
             "saveAiSettings": "Guardar Configuración de IA",
+            "plans": {
+                "lite": "Plan LITE",
+                "pro": "Plan PRO",
+                "business": "Plan BUSINESS",
+                "enterprise": "Plan ENTERPRISE"
+            },
             "modes": {
                 "fsm": {
                     "name": "FSM (Básico)",
@@ -581,6 +593,11 @@
                 "successTitle": "¡Clave API Creada!",
                 "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
                 "secretLabel": "Tu Clave API (Secreto)"
+            },
+            "revokeDialog": {
+                "title": "Revocar Clave API",
+                "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
+                "confirm": "Revocar"
             }
         }
     },

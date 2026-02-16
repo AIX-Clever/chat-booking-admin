@@ -24,6 +24,7 @@ import EventIcon from '@mui/icons-material/Event';
 
 export default function DashboardPage() {
     const t = useTranslations('dashboard');
+    const [hasMounted, setHasMounted] = useState(false);
     useTenant();
     const { metrics, error: metricsError } = useDashboardMetrics();
     const { usage } = usePlanUsage();
@@ -34,16 +35,24 @@ export default function DashboardPage() {
 
     const planName = planFeatures.plan;
 
-    const weekLabels = metrics?.daily.map(d => new Date(d.date).toLocaleDateString()) || [];
+    // Use hasMounted to avoid hydration mismatch with local formatting
+    const weekLabels = hasMounted
+        ? (metrics?.daily.map(d => new Date(d.date).toLocaleDateString()) || [])
+        : [];
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
     const chartSeries = [
         {
-            name: t('metrics.bookings'),
+            name: t('planMetrics.bookings'),
             type: 'column',
             fill: 'solid',
             data: metrics?.daily.map(d => d.bookings) || [],
         },
         {
-            name: t('metrics.messages'),
+            name: t('planMetrics.messages'),
             type: 'area',
             fill: 'gradient',
             data: metrics?.daily.map(d => d.messages) || [],
@@ -85,7 +94,7 @@ export default function DashboardPage() {
     return (
         <>
             <Typography variant="h4" sx={{ mb: 5 }}>
-                {t('welcome')} 👋
+                {hasMounted ? `${t('welcome')} 👋` : ''}
             </Typography>
 
             {metricsError && (
