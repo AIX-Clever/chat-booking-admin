@@ -359,7 +359,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 {/* Version Number */}
                 <Box sx={{ px: 2.5, py: 1.5, opacity: open ? 0.6 : 0 }}>
                     <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
-                        v1.2.1
+                        v1.2.2
                     </Typography>
                 </Box>
                 <List>
