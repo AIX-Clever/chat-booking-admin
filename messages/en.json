@@ -664,6 +664,13 @@
             "benefit2": "Complex Branching",
             "benefit3": "Data Extraction"
         },
+        "integrations": {
+            "title": "Advanced Synchronization",
+            "description": "Sync your bookings with Google and Outlook Calendar to avoid conflicts.",
+            "benefit1": "Two-way Synchronization",
+            "benefit2": "Multiple Calendars",
+            "benefit3": "Automatic Blocking"
+        },
         "common": {
             "upgradeTo": "Upgrade to {plan}",
             "whatYouGet": "WHAT YOU GET WITH {plan}:",

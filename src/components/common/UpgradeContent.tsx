@@ -13,9 +13,10 @@ import GroupIcon from '@mui/icons-material/Group';
 import SpeedIcon from '@mui/icons-material/Speed';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useTranslations } from 'next-intl';
 
-export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW';
+export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW' | 'INTEGRATIONS';
 
 interface UpgradeContentProps {
     feature: UpgradeFeature;
@@ -66,6 +67,13 @@ export default function UpgradeContent({
                 icon: AutoAwesomeIcon, // Reusing AI icon
                 benefits: [t('workflow.benefit1'), t('workflow.benefit2'), t('workflow.benefit3')],
                 color: '#3B82F6' // Blue
+            },
+            'INTEGRATIONS': {
+                title: t('integrations.title'),
+                description: t('integrations.description'),
+                icon: CalendarMonthIcon,
+                benefits: [t('integrations.benefit1'), t('integrations.benefit2'), t('integrations.benefit3')],
+                color: '#F59E0B' // Amber/Orange
             }
         };
         return configs[feature];

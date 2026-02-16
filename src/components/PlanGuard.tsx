@@ -45,7 +45,7 @@ export default function PlanGuard({
     }
 
     const currentPlan = tenant?.plan || 'LITE';
-    const currentLevel = PLAN_LEVELS[currentPlan] || 1;
+    const currentLevel = PLAN_LEVELS[currentPlan.toUpperCase()] || 1;
     const requiredLevel = PLAN_LEVELS[minPlan];
 
     const handleUpgrade = async () => {

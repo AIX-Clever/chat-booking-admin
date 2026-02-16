@@ -697,6 +697,13 @@
             "benefit2": "Ramificación Compleja",
             "benefit3": "Extracción de Datos"
         },
+        "integrations": {
+            "title": "Sincronización Avanzada",
+            "description": "Sincroniza tus reservas con Google y Outlook Calendar para evitar conflictos.",
+            "benefit1": "Sincronización Bidireccional",
+            "benefit2": "Múltiples Calendarios",
+            "benefit3": "Bloqueo Automático"
+        },
         "common": {
             "upgradeTo": "Contratar Plan {plan}",
             "whatYouGet": "LO QUE OBTIENES CON {plan}:",
