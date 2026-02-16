@@ -428,7 +428,8 @@
             "general": "Customization",
             "ai": "Intelligence",
             "apiKeys": "API",
-            "identity": "Profile"
+            "identity": "Profile",
+            "compliance": "Legal"
         },
         "identity": {
             "generalInfo": "General Information",

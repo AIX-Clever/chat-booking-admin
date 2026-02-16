@@ -443,7 +443,8 @@
             "general": "Personalização",
             "ai": "Inteligência",
             "apiKeys": "API",
-            "identity": "Perfil"
+            "identity": "Perfil",
+            "compliance": "Legal"
         },
         "identity": {
             "generalInfo": "Informações Gerais",

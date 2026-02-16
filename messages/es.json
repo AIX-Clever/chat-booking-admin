@@ -575,40 +575,40 @@
                     "description": "Agente autónomo con razonamiento (Bedrock + Sonnet). Conversación natural."
                 }
             }
+        },
+        "apiKeys": {
+            "title": "Claves API Activas",
+            "createKey": "Crear Clave",
+            "name": "Nombre",
+            "keyPrefix": "Prefijo de Clave",
+            "created": "Creado",
+            "status": "Estado",
+            "actions": "Acciones",
+            "active": "Activa",
+            "revoked": "Revocada",
+            "noKeys": "No tienes claves API activas.",
+            "revoke": "Revocar",
+            "confirmRevoke": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
+            "createDialog": {
+                "title": "Crear Nueva Clave API",
+                "label": "Nombre de la Clave (ej. App Móvil)",
+                "successTitle": "¡Clave API Creada!",
+                "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
+                "secretLabel": "Tu Clave API (Secreto)"
+            },
+            "revokeDialog": {
+                "title": "Revocar Clave API",
+                "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
+                "confirm": "Revocar"
+            },
+            "errorFetching": "Error al cargar las claves API",
+            "keyCreated": "Clave API creada exitosamente",
+            "errorCreating": "Error al crear la clave API",
+            "keyRevoked": "Clave API revocada exitosamente",
+            "errorRevoking": "Error al revocar la clave API",
+            "copied": "Clave copiada al portapapeles",
+            "errorCopying": "Error al copiar la clave"
         }
-    },
-    "apiKeys": {
-        "title": "Claves API Activas",
-        "createKey": "Crear Clave",
-        "name": "Nombre",
-        "keyPrefix": "Prefijo de Clave",
-        "created": "Creado",
-        "status": "Estado",
-        "actions": "Acciones",
-        "active": "Activa",
-        "revoked": "Revocada",
-        "noKeys": "No tienes claves API activas.",
-        "revoke": "Revocar",
-        "confirmRevoke": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
-        "createDialog": {
-            "title": "Crear Nueva Clave API",
-            "label": "Nombre de la Clave (ej. App Móvil)",
-            "successTitle": "¡Clave API Creada!",
-            "warning": "Por favor, copia tu clave de API ahora. No podrás volver a verla por razones de seguridad.",
-            "secretLabel": "Tu Clave API (Secreto)"
-        },
-        "revokeDialog": {
-            "title": "Revocar Clave API",
-            "content": "¿Estás seguro de que deseas revocar esta clave API? Esta acción no se puede deshacer.",
-            "confirm": "Revocar"
-        },
-        "errorFetching": "Error al cargar las claves API",
-        "keyCreated": "Clave API creada exitosamente",
-        "errorCreating": "Error al crear la clave API",
-        "keyRevoked": "Clave API revocada exitosamente",
-        "errorRevoking": "Error al revocar la clave API",
-        "copied": "Clave copiada al portapapeles",
-        "errorCopying": "Error al copiar la clave"
     },
     "workflows": {
         "title": "Editor de Flujos",
