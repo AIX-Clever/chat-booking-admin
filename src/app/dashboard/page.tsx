@@ -12,7 +12,7 @@ import FunnelChart from '../../components/dashboard/FunnelChart';
 import PeakHoursHeatmap from '../../components/dashboard/PeakHoursHeatmap';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
 import UpgradeModal from '../../components/common/UpgradeModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Icons
 import PaidIcon from '@mui/icons-material/Paid';
