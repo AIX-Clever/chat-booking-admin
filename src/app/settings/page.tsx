@@ -57,14 +57,14 @@ function CustomTabPanel(props: TabPanelProps) {
     );
 }
 
-export default function SettingsPage() {
+function SettingsContent() {
     const t = useTranslations('settings');
     const searchParams = useSearchParams();
     const client = React.useMemo(() => generateClient(), []);
     const { refreshTenant } = useTenant();
 
     // Initial tab logic
-    const getInitialTab = () => {
+    const getInitialTab = React.useCallback(() => {
         const tabParam = searchParams.get('tab');
         if (tabParam === 'identity' || tabParam === 'profile') return 0;
         if (tabParam === 'general' || tabParam === 'customization') return 1;
@@ -72,9 +72,13 @@ export default function SettingsPage() {
         if (tabParam === 'compliance' || tabParam === 'legal') return 3;
         if (tabParam === 'keys' || tabParam === 'api') return 4;
         return 0;
-    };
+    }, [searchParams]);
 
-    const [tabValue, setTabValue] = React.useState(getInitialTab);
+    const [tabValue, setTabValue] = React.useState(0);
+
+    React.useEffect(() => {
+        setTabValue(getInitialTab());
+    }, [searchParams]);
     const [hasMounted, setHasMounted] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -92,7 +96,7 @@ export default function SettingsPage() {
         welcomeMessages: {
             es: '¡Hola! ¿En qué puedo ayudarte hoy?',
             en: 'Hello! How can I help you today?',
-            pt: 'Olá! Como posso ajudar você hoje?'
+            pt: 'Olá! Como posso ayudar você hoje?'
         }
     });
 
@@ -297,7 +301,7 @@ export default function SettingsPage() {
                     </Tabs>
                 </Box>
 
-                {loading && !widgetConfig ? (
+                {loading && !profile ? (
                     <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
                         <CircularProgress />
                     </Box>
@@ -358,5 +362,17 @@ export default function SettingsPage() {
 
             </Paper>
         </>
+    );
+}
+
+export default function SettingsPage() {
+    return (
+        <React.Suspense fallback={
+            <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Box>
+        }>
+            <SettingsContent />
+        </React.Suspense>
     );
 }
