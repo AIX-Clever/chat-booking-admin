@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { generateClient } from 'aws-amplify/api';
 import {
     Box,
     TextField,
@@ -9,11 +10,14 @@ import {
     Typography,
     Grid,
     MenuItem,
+    CircularProgress,
 } from '@mui/material';
 import Image from 'next/image';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useTranslations } from 'next-intl';
 import { BusinessProfile } from '../../../types/settings';
+import { GENERATE_PRESIGNED_URL } from '../../../graphql/queries';
+import { resizeImage } from '../../../utils/image';
 
 interface IdentityTabProps {
     profile: BusinessProfile | null;
@@ -47,8 +51,11 @@ const TIMEZONES = [
 
 export default function IdentityTab({ profile, setProfile, onSave }: IdentityTabProps) {
     const t = useTranslations('settings.identity');
+    const client = React.useMemo(() => generateClient(), []);
+    const [isUploading, setIsUploading] = useState(false);
 
     const [formData, setFormData] = useState<BusinessProfile>({
+        // ... (initial state)
         centerName: '',
         bio: '',
         profession: '',
@@ -68,6 +75,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
         timezone: 'America/Santiago',
     });
 
+    // ... (useEffect)
     useEffect(() => {
         if (profile) {
             setFormData(profile);
@@ -87,23 +95,75 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
         setProfile(newData);
     };
 
-    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleLogoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                handleChange('logoUrl', reader.result as string);
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            // 0. Resize Image (Client-Side Optimization)
+            const resizedBlob = await resizeImage(file, 500, 500, 0.9);
+            const resizedFile = new File([resizedBlob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: 'image/jpeg' });
+
+            // 1. Get Presigned URL
+            const fileName = resizedFile.name;
+            const contentType = resizedFile.type;
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await client.graphql({
+                query: GENERATE_PRESIGNED_URL,
+                variables: {
+                    fileName,
+                    contentType
+                },
+                authMode: 'userPool'
+            });
+
+            const uploadUrl = response.data.generatePresignedUrl;
+
+            // 2. Upload to S3
+            const uploadResponse = await fetch(uploadUrl, {
+                method: 'PUT',
+                body: resizedFile, // uploading the resized file
+                headers: {
+                    'Content-Type': contentType
+                }
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Failed to upload image');
+            }
+
+            // 3. Construct Public URL
+            // We parse the Presigned URL to get the S3 hostname dynamically (works for Dev & Prod)
+            const urlObj = new URL(uploadUrl);
+            const s3Hostname = urlObj.hostname; // e.g., chat-booking-assets-dev-xxx.s3.amazonaws.com
+
+            const cfDomain = process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN || 'd3seqwcdtjbt7o.cloudfront.net';
+
+            // Replace S3 hostname with CloudFront domain and remove query params
+            const publicUrl = uploadUrl.replace(s3Hostname, cfDomain).split('?')[0];
+
+            // 4. Update State
+            handleChange('logoUrl', publicUrl);
+
+        } catch (error) {
+            console.error('Error uploading logo:', error);
+            alert("Error uploading image. Please try again.");
+        } finally {
+            setIsUploading(false);
         }
     };
 
     return (
         <Box sx={{ maxWidth: '100%' }}>
+            {/* ... (rest of the component) */}
             <Grid container spacing={4}>
                 {/* --- Left Column: General Info --- */}
                 {/* --- Left Column: Main Configuration --- */}
                 <Grid item xs={12} md={8}>
+                    {/* ... (fields) */}
                     {/* 1. BRANDING & BASIC INFO */}
                     <Box sx={{ mb: 4 }}>
                         <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -308,7 +368,9 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             border: '1px solid',
                             borderColor: 'divider'
                         }}>
-                            {formData.logoUrl ? (
+                            {isUploading ? (
+                                <CircularProgress />
+                            ) : formData.logoUrl ? (
                                 <Image
                                     src={formData.logoUrl}
                                     alt="Logo"
@@ -324,6 +386,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             component="label"
                             variant="outlined"
                             fullWidth
+                            disabled={isUploading}
                         >
                             {t('uploadButton')}
                             <input
