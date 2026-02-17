@@ -20,6 +20,7 @@ import {
     Tooltip
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Visibility as VisibilityIcon } from '@mui/icons-material';
+import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_CLIENTS } from '../../graphql/client-queries';
 import ClientForm, { Client } from '../../components/clients/ClientForm';
@@ -27,6 +28,7 @@ import ClientForm, { Client } from '../../components/clients/ClientForm';
 const client = generateClient();
 
 export default function ClientsPage() {
+    const t = useTranslations('clients');
     const [clients, setClients] = useState<Client[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -70,7 +72,7 @@ export default function ClientsPage() {
         <Box p={3}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h4" component="h1" fontWeight="bold">
-                    Clientes (Ficha)
+                    {t('title')}
                 </Typography>
                 <Button
                     variant="contained"
@@ -78,7 +80,7 @@ export default function ClientsPage() {
                     startIcon={<AddIcon />}
                     onClick={handleCreateClick}
                 >
-                    Nuevo Cliente
+                    {t('newClient')}
                 </Button>
             </Box>
 
@@ -93,11 +95,11 @@ export default function ClientsPage() {
                     <Table>
                         <TableHead>
                             <TableRow sx={{ bgcolor: 'action.hover' }}>
-                                <TableCell sx={{ fontWeight: 'bold' }}>Nombre</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold' }}>Identificación</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold' }}>Contacto</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold' }}>Fecha Creación</TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>{t('table.name')}</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>{t('table.id')}</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>{t('table.contact')}</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>{t('table.date')}</TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 'bold' }}>{t('table.actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -105,7 +107,7 @@ export default function ClientsPage() {
                                 <TableRow>
                                     <TableCell colSpan={5} align="center">
                                         <Typography py={5} color="textSecondary">
-                                            No hay clientes registrados en su sistema.
+                                            {t('noData')}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
@@ -147,7 +149,7 @@ export default function ClientsPage() {
                                             {new Date(c.createdAt).toLocaleDateString()}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Tooltip title="Ver Detalle">
+                                            <Tooltip title={t('tooltips.view')}>
                                                 <IconButton
                                                     size="small"
                                                     color="info"
@@ -156,7 +158,7 @@ export default function ClientsPage() {
                                                     <VisibilityIcon />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title="Editar">
+                                            <Tooltip title={t('tooltips.edit')}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => handleEditClick(c)}
