@@ -404,8 +404,14 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
             </Grid>
 
             <Box sx={{ mt: 4 }}>
-                <Button variant="contained" onClick={onSave} size="large">
-                    {t('save')}
+                <Button
+                    variant="contained"
+                    onClick={onSave}
+                    size="large"
+                    disabled={isUploading}
+                    startIcon={isUploading ? <CircularProgress size={20} color="inherit" /> : null}
+                >
+                    {isUploading ? 'Subiendo Imagen...' : t('save')}
                 </Button>
             </Box>
         </Box>
