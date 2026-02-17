@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
@@ -129,6 +129,7 @@ export default function BookingsPage() {
 
     // Generate client inside component to ensure Amplify is configured
     const client = React.useMemo(() => generateClient(), []);
+    const locale = useLocale();
 
     const [bookings, setBookings] = React.useState<Booking[]>([]);
     const [providers, setProviders] = React.useState<Provider[]>([]);
@@ -786,10 +787,10 @@ export default function BookingsPage() {
                     <Button onClick={handlePrev} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Button onClick={handleToday} startIcon={<TodayIcon />} variant="outlined" size="small">
-                            Hoy
+                            {t('today')}
                         </Button>
                         <Typography variant="h6">
-                            {currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                            {currentDate.toLocaleDateString(locale, { month: 'long', year: 'numeric' })}
                         </Typography>
                     </Box>
                     <Button onClick={handleNext} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
@@ -858,10 +859,10 @@ export default function BookingsPage() {
                     <Button onClick={handlePrev} startIcon={<ArrowBackIosNewIcon />}>{t('actions.prev')}</Button>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Button onClick={handleToday} startIcon={<TodayIcon />} variant="outlined" size="small">
-                            Hoy
+                            {t('today')}
                         </Button>
                         <Typography variant="h6">
-                            {`Semana del ${monday.getDate()} de ${monday.toLocaleDateString('default', { month: 'long' })}`}
+                            {t('weekOf', { day: monday.getDate(), month: monday.toLocaleDateString(locale, { month: 'long' }) })}
                         </Typography>
                     </Box>
                     <Button onClick={handleNext} endIcon={<ArrowForwardIosIcon />}>{t('actions.next')}</Button>
@@ -925,7 +926,7 @@ export default function BookingsPage() {
                                         zIndex: 10
                                     }}>
                                         <Typography variant="subtitle2" fontWeight="bold">
-                                            {dayDate.toLocaleDateString('default', { weekday: 'short' })}
+                                            {dayDate.toLocaleDateString(locale, { weekday: 'short' })}
                                         </Typography>
                                         <Typography variant="body2">
                                             {dayDate.getDate()}
@@ -1067,7 +1068,7 @@ export default function BookingsPage() {
         if (!selectedBooking?.clientPhone) return;
         const date = new Date(selectedBooking.start).toLocaleDateString();
         const time = new Date(selectedBooking.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const text = `Hola ${selectedBooking.clientName}, te recordamos tu cita de ${selectedBooking.serviceName} con ${selectedBooking.providerName} el día ${date} a las ${time}.`;
+        const text = t('whatsappMessage', { name: selectedBooking.clientName, service: selectedBooking.serviceName, provider: selectedBooking.providerName, date, time });
         window.open(`https://wa.me/${selectedBooking.clientPhone}?text=${encodeURIComponent(text)}`, '_blank');
     };
 
@@ -1180,7 +1181,7 @@ export default function BookingsPage() {
                     {/* Room Filter */}
                     <TextField
                         select
-                        label="Sala"
+                        label={t('filters.room')}
                         value={filterRoom}
                         onChange={(e) => setFilterRoom(e.target.value)}
                         size="small"
@@ -1193,7 +1194,7 @@ export default function BookingsPage() {
                             ),
                         }}
                     >
-                        <MenuItem value="all">Todas</MenuItem>
+                        <MenuItem value="all">{t('filters.allRooms')}</MenuItem>
                         {rooms.map((r) => (
                             <MenuItem key={r.roomId} value={r.roomId}>
                                 {r.name}
@@ -1238,7 +1239,7 @@ export default function BookingsPage() {
                 {(viewMode === 'calendar' || viewMode === 'week') && providers.length > 0 && (
                     <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
                         <Typography variant="caption" sx={{ fontWeight: 'medium', color: 'text.secondary' }}>
-                            Profesionales:
+                            {t('professionals')}:
                         </Typography>
                         {providers.map((p) => {
                             const color = getProviderColor(p.providerId);

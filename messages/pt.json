@@ -82,22 +82,22 @@
             "install": "Instalação",
             "installSubtitle": "Copie este código na tag tag &lt;head&gt; do seu site"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "booking": {
             "title": "Página de Agendamento",
             "subtitle": "Configure sua página de destino para agendamentos diretos",
@@ -107,22 +107,22 @@
             "brandingTitle": "Identidade Visual",
             "brandingSubtitle": "Personalize como sua página de agendamento aparece para seus clientes. (Disponível no PRO)"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -153,64 +153,64 @@
             "created": "Criado",
             "actions": "Ações"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "roles": {
             "owner": "Proprietário",
             "admin": "Administrador",
             "user": "Usuário"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "status": {
             "active": "Ativo",
             "inactive": "Inativo",
             "pendingInvitation": "Convite Pendente"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "dialogs": {
             "inviteTitle": "Convidar Novo Usuário",
             "editRoleTitle": "Alterar Função de Usuário",
@@ -225,22 +225,22 @@
             "resetPassword": "Redefinir Senha",
             "sending": "Enviando..."
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "form": {
             "email": "Email",
             "name": "Nome (opcional)",
@@ -250,22 +250,22 @@
             "newRole": "Nova Função",
             "userLabel": "Usuário: {email}"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "messages": {
             "emailRequired": "O email é obrigatório",
             "planLimitError": "Seu plano {plan} permite no máximo {max} usuário(s). Por favor atualize para adicionar mais usuários.",
@@ -273,22 +273,22 @@
             "passwordResetSent": "Email de redefinição enviado para {email}",
             "fetchError": "Erro ao carregar usuários"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -320,22 +320,22 @@
             "active": "Ativa",
             "inactive": "Inativa"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "actions": {
             "save": "Salvar",
             "cancel": "Cancelar",
@@ -344,65 +344,65 @@
             "actions": "Ações",
             "confirmDelete": "Tem certeza que deseja excluir esta sala?"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "errors": {
             "loadFailed": "Erro ao carregar salas",
             "createFailed": "Erro ao criar sala",
             "updateFailed": "Erro ao atualizar sala",
             "deleteFailed": "Erro ao excluir sala"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "success": {
             "created": "Sala criada com sucesso",
             "updated": "Sala atualizada com sucesso",
             "deleted": "Sala excluída com sucesso"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -448,43 +448,43 @@
             "completed": "Concluídas",
             "noShow": "Não Compareceu"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "planMetrics": {
             "tokensIA": "Tokens IA (Mensal)",
             "bookings": "Reservas (Mensal)",
             "messages": "Mensagens"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "funnel": {
             "title": "Funil de Conversão",
             "subtitle": "Taxas de abandono por etapa",
@@ -493,42 +493,42 @@
             "dateSelected": "Data Selecionada",
             "bookingCompleted": "Reserva Concluída"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "peakHours": {
             "title": "Horários de Pico",
             "subtitle": "Densidade de reservas por hora"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -559,22 +559,22 @@
             "noShow": "Não Compareceu",
             "no_show": "Não Compareceu"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "columns": {
             "id": "ID",
             "customer": "Cliente",
@@ -585,46 +585,52 @@
             "status": "Status",
             "actions": "Ações"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "filters": {
             "all": "Todos",
             "provider": "Profissional",
             "statusLabel": "Status",
+            "room": "Sala",
+            "allRooms": "Todas",
             "today": "Hoje",
             "week": "Esta Semana",
             "month": "Este Mês"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "today": "Hoje",
+        "weekOf": "Semana de {day} de {month}",
+        "whatsappMessage": "Olá {name}, lembramos seu agendamento de {service} com {provider} no dia {date} às {time}.",
+        "professionals": "Profissionais",
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "timeLeft": {
             "ended": "Finalizado",
             "inMinutes": "Em {minutes}m",
@@ -632,44 +638,44 @@
             "inDays": "Em {days}d",
             "header": "Tempo Restante"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "dialogs": {
             "detailsTitle": "Detalhes da Reserva",
             "newBookingTitle": "Nova Reserva",
             "cancelTitle": "Cancelar Reserva",
             "cancelContent": "Tem certeza que deseja cancelar a reserva de {name}?"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "form": {
             "clientName": "Nome do Cliente",
             "clientEmail": "E-mail do Cliente",
@@ -682,22 +688,22 @@
             "notes": "Notas",
             "dateTime": "Data e Hora"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "actions": {
             "whatsAppReminder": "Lembrete WhatsApp",
             "confirm": "Confirmar",
@@ -706,43 +712,43 @@
             "prev": "Ant",
             "next": "Próx"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "sorting": {
             "label": "Ordenar por",
             "closest": "Mais próxima",
             "furthest": "Mais distante"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "searchPlaceholder": "Buscar cliente...",
         "noBookingsFound": "Nenhuma reserva encontrada.",
         "availability": {
@@ -758,39 +764,39 @@
                 "saturday": "Sábado",
                 "sunday": "Domingo"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
-        },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -872,42 +878,42 @@
             "status": "Status",
             "actions": "Ações"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "status": {
             "active": "Ativo",
             "inactive": "Inativo"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "servicesCount": "{count} Serviços",
         "dialog": {
             "tabs": {
@@ -917,22 +923,22 @@
                 "linkBio": "Link Bio",
                 "integrations": "Integrações"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "general": {
                 "fullName": "Nome Completo",
                 "biography": "Biografia",
@@ -941,44 +947,44 @@
                 "providerIsActive": "Profissional Ativo",
                 "uploadPhoto": "Enviar Foto"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "services": {
                 "assignedServices": "Serviços Atribuídos",
                 "selectServices": "Selecionar serviços",
                 "description": "Serviços que este profissional está qualificado para realizar.",
                 "helperText": "Atribua serviços específicos para garantir que este profissional receba apenas reservas relevantes."
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "aiContext": {
                 "personalityTraits": "Traços de Personalidade",
                 "traitsPlaceholder": "ex. Paciente, Enérgico",
@@ -989,79 +995,79 @@
                 "languages": "Idiomas",
                 "languagesPlaceholder": "Selecionar ou digitar idiomas"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "integrations": {
                 "title": "Configuração de Calendário",
                 "awareness": "Você só pode vincular calendários depois que o profissional for criado e salvo."
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    }
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "deleteDialog": {
             "title": "Excluir Profissional",
             "message": "Tem certeza de que deseja excluir {name}? Ele será removido de todas as reservas futuras."
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -1094,22 +1100,22 @@
             "saturday": "Sábado",
             "sunday": "Domingo"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "saveChanges": "Salvar Alterações",
         "saved": "Salvo",
         "addSlot": "Adicionar Horário",
@@ -1186,22 +1192,22 @@
             "title": "Excluir FAQ",
             "message": "Tem certeza de que deseja excluir esta FAQ? Esta ação não pode ser desfeita."
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -1231,22 +1237,22 @@
             "identity": "Perfil",
             "compliance": "Legal"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "identity": {
             "generalInfo": "Informações Gerais",
             "centerName": "Nome do Centro",
@@ -1282,22 +1288,22 @@
             "uploadRecommended": "PNG ou JPG, máx 2MB (Proporção 1:1 recomendada)",
             "save": "Salvar Dados"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "compliance": {
             "title": "Conformidade e Regulamentações",
             "subtitle": "Gerencie a identidade legal e a conformidade regulatória do seu negócio.",
@@ -1319,22 +1325,22 @@
             "cookieBannerLabel": "Habilitado",
             "saveButton": "Salvar Alterações de Conformidade"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "general": {
             "title": "Configurações Gerais",
             "publicBookingPage": "Página Pública de Agendamento",
@@ -1355,43 +1361,43 @@
                 "bottomRight": "Inferior Direita",
                 "bottomLeft": "Inferior Esquerda"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "languages": {
                 "es": "Español",
                 "en": "English",
                 "pt": "Português"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "colorPresets": {
                 "defaultBlue": "Azul Padrão",
                 "royalPurple": "Roxo Real",
@@ -1399,39 +1405,39 @@
                 "fieryOrange": "Laranja Intenso",
                 "midnight": "Meia-Noite"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    }
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "ai": {
             "title": "Configurações de IA",
             "intelligenceMode": "Modo de Inteligência",
@@ -1449,118 +1455,118 @@
                     "name": "FSM (Básico)",
                     "description": "Árvore de decisão determinística. Ideal para fluxos fixos e controle total."
                 },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+                "clients": {
+                    "title": "Clientes (Ficha)",
+                    "newClient": "Novo Cliente",
+                    "noData": "Não há clientes registrados em seu sistema.",
+                    "table": {
+                        "name": "Nome",
+                        "id": "Identificação",
+                        "contact": "Contato",
+                        "date": "Data de Criação",
+                        "actions": "Ações"
+                    },
+                    "tooltips": {
+                        "view": "Ver Detalhes",
+                        "edit": "Editar"
+                    }
+                },
                 "nlp": {
                     "name": "NLP Assistido",
                     "description": "Usa IA leve para detectar intenção e entidades, mas segue regras estritas."
                 },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+                "clients": {
+                    "title": "Clientes (Ficha)",
+                    "newClient": "Novo Cliente",
+                    "noData": "Não há clientes registrados em seu sistema.",
+                    "table": {
+                        "name": "Nome",
+                        "id": "Identificação",
+                        "contact": "Contato",
+                        "date": "Data de Criação",
+                        "actions": "Ações"
+                    },
+                    "tooltips": {
+                        "view": "Ver Detalhes",
+                        "edit": "Editar"
+                    }
+                },
                 "agent": {
                     "name": "Agente Full AI",
                     "description": "Agente autônomo com raciocínio (Bedrock + Sonnet). Conversação natural."
                 },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    }
+                "clients": {
+                    "title": "Clientes (Ficha)",
+                    "newClient": "Novo Cliente",
+                    "noData": "Não há clientes registrados em seu sistema.",
+                    "table": {
+                        "name": "Nome",
+                        "id": "Identificação",
+                        "contact": "Contato",
+                        "date": "Data de Criação",
+                        "actions": "Ações"
+                    },
+                    "tooltips": {
+                        "view": "Ver Detalhes",
+                        "edit": "Editar"
+                    }
+                }
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "plans": {
                 "lite": "Plano LITE",
                 "pro": "Plano PRO",
                 "business": "Plano BUSINESS",
                 "enterprise": "Plano ENTERPRISE"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    }
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "apiKeys": {
             "title": "Chaves API Ativas",
             "createKey": "Criar Chave",
@@ -1581,43 +1587,43 @@
                 "warning": "Por favor, copie sua chave API agora. Você não poderá vê-la novamente por motivos de segurança.",
                 "secretLabel": "Sua Chave API (Segredo)"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "revokeDialog": {
                 "title": "Revogar Chave API",
                 "content": "Tem certeza que deseja revogar esta chave API? Esta ação não pode ser desfeita.",
                 "confirm": "Revogar"
             },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
+            "clients": {
+                "title": "Clientes (Ficha)",
+                "newClient": "Novo Cliente",
+                "noData": "Não há clientes registrados em seu sistema.",
+                "table": {
+                    "name": "Nome",
+                    "id": "Identificação",
+                    "contact": "Contato",
+                    "date": "Data de Criação",
+                    "actions": "Ações"
+                },
+                "tooltips": {
+                    "view": "Ver Detalhes",
+                    "edit": "Editar"
+                }
+            },
             "errorFetching": "Erro ao carregar chaves de API",
             "keyCreated": "Chave de API criada com sucesso",
             "errorCreating": "Erro ao criar chave de API",
@@ -1626,22 +1632,22 @@
             "copied": "Chave copiada para a área de transferência",
             "errorCopying": "Erro ao copiar chave"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -1675,22 +1681,22 @@
             "condition": "Condição",
             "end": "Fim"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -1724,22 +1730,22 @@
             "setPassword": "Definir Senha",
             "passwordMismatch": "As senhas não coincidem"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "register": {
             "title": "Criar Conta",
             "companyName": "Nome da Empresa",
@@ -1755,22 +1761,22 @@
             "errorAccountExists": "A conta já existe. Por favor faça login.",
             "errorRegistrationFailed": "O registro falhou. Por favor tente novamente."
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",
@@ -1817,22 +1823,22 @@
             "benefit2": "Respostas Inteligentes RAG",
             "benefit3": "Suporte Automatizado 24/7"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "team": {
             "title": "Trabalhe em Equipe",
             "description": "Escalone suas operações convidando membros da equipe para gerenciar chats e reservas.",
@@ -1840,22 +1846,22 @@
             "benefit2": "Acesso Baseado em Opcões",
             "benefit3": "Caixa de Entrada Compartilhada"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "usage": {
             "title": "Aumentar Capacidade",
             "description": "Você está se aproximando dos limites do seu plano. Atualize para continuar crescendo sem interrupções.",
@@ -1863,22 +1869,22 @@
             "benefit2": "4x Volume de Mensagens",
             "benefit3": "Suporte Prioritário"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "workflow": {
             "title": "Fluxos Avançados",
             "description": "Crie fluxos de conversação sofisticados com etapas lógicas e IA.",
@@ -1886,22 +1892,22 @@
             "benefit2": "Ramificação Complexa",
             "benefit3": "Extração de Dados"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "integrations": {
             "title": "Sincronização Avançada",
             "description": "Sincronize suas reservas com o Google e Outlook Calendar para evitar conflitos.",
@@ -1909,43 +1915,43 @@
             "benefit2": "Múltiplos Calendários",
             "benefit3": "Bloqueio Automático"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
-        }
-    },
         "common": {
             "upgradeTo": "Atualizar para {plan}",
             "whatYouGet": "O QUE VOCÊ RECEBE COM {plan}:",
             "maybeLater": "Talvez mais tarde"
         },
-    "clients": {
-        "title": "Clientes (Ficha)",
-        "newClient": "Novo Cliente",
-        "noData": "Não há clientes registrados em seu sistema.",
-        "table": {
-            "name": "Nome",
-            "id": "Identificação",
-            "contact": "Contato",
-            "date": "Data de Criação",
-            "actions": "Ações"
-        },
-        "tooltips": {
-            "view": "Ver Detalhes",
-            "edit": "Editar"
+        "clients": {
+            "title": "Clientes (Ficha)",
+            "newClient": "Novo Cliente",
+            "noData": "Não há clientes registrados em seu sistema.",
+            "table": {
+                "name": "Nome",
+                "id": "Identificação",
+                "contact": "Contato",
+                "date": "Data de Criação",
+                "actions": "Ações"
+            },
+            "tooltips": {
+                "view": "Ver Detalhes",
+                "edit": "Editar"
+            }
         }
-    }
     },
     "clients": {
         "title": "Clientes (Ficha)",

@@ -82,22 +82,22 @@
             "install": "Installation",
             "installSubtitle": "Copy this code into your website's &lt;head&gt; tag"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "booking": {
             "title": "Booking Page",
             "subtitle": "Configure your landing page for direct bookings",
@@ -107,22 +107,22 @@
             "brandingTitle": "Branding & Visuals",
             "brandingSubtitle": "Customize how your booking page looks to your customers. (Available in PRO)"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -153,64 +153,64 @@
             "created": "Created",
             "actions": "Actions"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "roles": {
             "owner": "Owner",
             "admin": "Admin",
             "user": "User"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "status": {
             "active": "Active",
             "inactive": "Inactive",
             "pendingInvitation": "Pending Invitation"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "dialogs": {
             "inviteTitle": "Invite New User",
             "editRoleTitle": "Change User Role",
@@ -225,22 +225,22 @@
             "resetPassword": "Reset Password",
             "sending": "Sending..."
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "form": {
             "email": "Email",
             "name": "Name (optional)",
@@ -250,22 +250,22 @@
             "newRole": "New Role",
             "userLabel": "User: {email}"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "messages": {
             "emailRequired": "Email is required",
             "planLimitError": "Your plan {plan} allows a maximum of {max} user(s). Please upgrade to add more users.",
@@ -273,22 +273,22 @@
             "passwordResetSent": "Reset email sent to {email}",
             "fetchError": "Error loading users"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -320,22 +320,22 @@
             "active": "Active",
             "inactive": "Inactive"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "actions": {
             "save": "Save",
             "cancel": "Cancel",
@@ -344,65 +344,65 @@
             "actions": "Actions",
             "confirmDelete": "Are you sure you want to delete this room?"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "errors": {
             "loadFailed": "Failed to load rooms",
             "createFailed": "Failed to create room",
             "updateFailed": "Failed to update room",
             "deleteFailed": "Failed to delete room"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "success": {
             "created": "Room created successfully",
             "updated": "Room updated successfully",
             "deleted": "Room deleted successfully"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -448,43 +448,43 @@
             "completed": "Completed",
             "noShow": "No Show"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "planMetrics": {
             "tokensIA": "AI Tokens (Monthly)",
             "bookings": "Bookings (Monthly)",
             "messages": "Messages"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "funnel": {
             "title": "Conversion Funnel",
             "subtitle": "Drop-off rates by step",
@@ -493,42 +493,42 @@
             "dateSelected": "Date Selected",
             "bookingCompleted": "Booking Completed"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "peakHours": {
             "title": "Peak Hours",
             "subtitle": "Booking density by hour"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -557,22 +557,22 @@
             "completed": "Completed",
             "noShow": "No Show"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "columns": {
             "id": "ID",
             "customer": "Customer",
@@ -583,46 +583,52 @@
             "status": "Status",
             "actions": "Actions"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "filters": {
             "all": "All",
             "provider": "Provider",
             "statusLabel": "Status",
+            "room": "Room",
+            "allRooms": "All",
             "today": "Today",
             "week": "This Week",
             "month": "This Month"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "today": "Today",
+        "weekOf": "Week of {month} {day}",
+        "whatsappMessage": "Hi {name}, reminding you of your appointment for {service} with {provider} on {date} at {time}.",
+        "professionals": "Professionals",
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "timeLeft": {
             "ended": "Ended",
             "inMinutes": "In {minutes}m",
@@ -630,44 +636,44 @@
             "inDays": "In {days}d",
             "header": "Time Left"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "dialogs": {
             "detailsTitle": "Booking Details",
             "newBookingTitle": "New Booking",
             "cancelTitle": "Cancel Booking",
             "cancelContent": "Are you sure you want to cancel the booking for {name}?"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "form": {
             "clientName": "Client Name",
             "clientEmail": "Client Email",
@@ -680,22 +686,22 @@
             "notes": "Notes",
             "dateTime": "Date & Time"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "actions": {
             "whatsAppReminder": "WhatsApp Reminder",
             "confirm": "Confirm",
@@ -704,43 +710,43 @@
             "prev": "Prev",
             "next": "Next"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "sorting": {
             "label": "Sort By",
             "closest": "Closest",
             "furthest": "Furthest"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "searchPlaceholder": "Search client...",
         "noBookingsFound": "No bookings found.",
         "availability": {
@@ -748,22 +754,22 @@
             "noSlotsFound": "No slots available for this day.",
             "manualOverrideHelper": "You can enter a time manually if necessary (system will validate if allowed)."
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -845,42 +851,42 @@
             "status": "Status",
             "actions": "Actions"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "status": {
             "active": "Active",
             "inactive": "Inactive"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "servicesCount": "{count} Services",
         "dialog": {
             "tabs": {
@@ -890,22 +896,22 @@
                 "linkBio": "Bio Link",
                 "integrations": "Integrations"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "general": {
                 "fullName": "Full Name",
                 "biography": "Biography",
@@ -914,44 +920,44 @@
                 "providerIsActive": "Provider is Active",
                 "uploadPhoto": "Upload Photo"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "services": {
                 "assignedServices": "Assigned Services",
                 "selectServices": "Select services",
                 "description": "Services this provider is qualified to perform.",
                 "helperText": "Assign specific services to ensure this provider only receives relevant bookings."
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "aiContext": {
                 "personalityTraits": "Personality Traits",
                 "traitsPlaceholder": "e.g. Patient, Energetic",
@@ -962,59 +968,59 @@
                 "languages": "Languages",
                 "languagesPlaceholder": "Select or type languages"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    }
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "deleteDialog": {
             "title": "Delete Provider",
             "message": "Are you sure you want to delete {name}? They will be removed from all future bookings."
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -1047,22 +1053,22 @@
             "saturday": "Saturday",
             "sunday": "Sunday"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "saveChanges": "Save Changes",
         "saved": "Saved",
         "addSlot": "Add Slot",
@@ -1139,22 +1145,22 @@
             "title": "Delete FAQ",
             "message": "Are you sure you want to delete this FAQ? This action cannot be undone."
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -1184,22 +1190,22 @@
             "identity": "Profile",
             "compliance": "Legal"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "identity": {
             "generalInfo": "General Information",
             "centerName": "Center Name",
@@ -1236,22 +1242,22 @@
             "uploadRecommended": "PNG or JPG, max 2MB (1:1 ratio recommended)",
             "save": "Save Identity"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "compliance": {
             "title": "Compliance & Regulations",
             "subtitle": "Manage legal identity and regulatory compliance.",
@@ -1273,22 +1279,22 @@
             "cookieBannerLabel": "Enabled",
             "saveButton": "Save Compliance Changes"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "general": {
             "title": "General Settings",
             "publicBookingPage": "Public Booking Page",
@@ -1309,43 +1315,43 @@
                 "bottomRight": "Bottom Right",
                 "bottomLeft": "Bottom Left"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "languages": {
                 "es": "Español",
                 "en": "English",
                 "pt": "Português"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "colorPresets": {
                 "defaultBlue": "Default Blue",
                 "royalPurple": "Royal Purple",
@@ -1353,39 +1359,39 @@
                 "fieryOrange": "Fiery Orange",
                 "midnight": "Midnight"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    }
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "ai": {
             "title": "AI Settings",
             "intelligenceMode": "Intelligence Mode",
@@ -1403,117 +1409,117 @@
                     "name": "FSM (Basic)",
                     "description": "Deterministic decision tree. Ideal for fixed flows and total control."
                 },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+                "clients": {
+                    "title": "Customers (File)",
+                    "newClient": "New Customer",
+                    "noData": "There are no customers registered in your system.",
+                    "table": {
+                        "name": "Name",
+                        "id": "Identification",
+                        "contact": "Contact",
+                        "date": "Creation Date",
+                        "actions": "Actions"
+                    },
+                    "tooltips": {
+                        "view": "View Detail",
+                        "edit": "Edit"
+                    }
+                },
                 "nlp": {
                     "name": "NLP Assisted",
                     "description": "Uses lightweight AI to detect intent and entities, but follows strict rules."
                 },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+                "clients": {
+                    "title": "Customers (File)",
+                    "newClient": "New Customer",
+                    "noData": "There are no customers registered in your system.",
+                    "table": {
+                        "name": "Name",
+                        "id": "Identification",
+                        "contact": "Contact",
+                        "date": "Creation Date",
+                        "actions": "Actions"
+                    },
+                    "tooltips": {
+                        "view": "View Detail",
+                        "edit": "Edit"
+                    }
+                },
                 "agent": {
                     "name": "Full AI Agent",
                     "description": "Autonomous agent with reasoning (Bedrock + Sonnet). Natural conversation."
                 },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    }
+                "clients": {
+                    "title": "Customers (File)",
+                    "newClient": "New Customer",
+                    "noData": "There are no customers registered in your system.",
+                    "table": {
+                        "name": "Name",
+                        "id": "Identification",
+                        "contact": "Contact",
+                        "date": "Creation Date",
+                        "actions": "Actions"
+                    },
+                    "tooltips": {
+                        "view": "View Detail",
+                        "edit": "Edit"
+                    }
+                }
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "plans": {
                 "lite": "Plan LITE",
                 "pro": "Plan PRO",
                 "business": "Plan BUSINESS"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    }
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "apiKeys": {
             "title": "Active API Keys",
             "createKey": "Create Key",
@@ -1534,43 +1540,43 @@
                 "warning": "Please copy your API key now. You will not be able to see it again for security reasons.",
                 "secretLabel": "Your API Key (Secret)"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "revokeDialog": {
                 "title": "Revoke API Key",
                 "content": "Are you sure you want to revoke this API key? This action cannot be undone.",
                 "confirm": "Revoke"
             },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
+            "clients": {
+                "title": "Customers (File)",
+                "newClient": "New Customer",
+                "noData": "There are no customers registered in your system.",
+                "table": {
+                    "name": "Name",
+                    "id": "Identification",
+                    "contact": "Contact",
+                    "date": "Creation Date",
+                    "actions": "Actions"
+                },
+                "tooltips": {
+                    "view": "View Detail",
+                    "edit": "Edit"
+                }
+            },
             "errorFetching": "Error loading API keys",
             "keyCreated": "API Key created successfully",
             "errorCreating": "Error creating API key",
@@ -1579,22 +1585,22 @@
             "copied": "Key copied to clipboard",
             "errorCopying": "Error copying key"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -1628,22 +1634,22 @@
             "condition": "Condition",
             "end": "End"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -1677,22 +1683,22 @@
             "setPassword": "Set Password",
             "passwordMismatch": "Passwords do not match"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "register": {
             "title": "Create Account",
             "companyName": "Company Name",
@@ -1708,22 +1714,22 @@
             "errorAccountExists": "Account already exists. Please login.",
             "errorRegistrationFailed": "Registration failed. Please try again."
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
@@ -1770,22 +1776,22 @@
             "benefit2": "Smart RAG Responses",
             "benefit3": "24/7 Automated Support"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "team": {
             "title": "Work Together",
             "description": "Scale your operations by inviting your team members to manage chats and bookings.",
@@ -1793,22 +1799,22 @@
             "benefit2": "Role-based Access",
             "benefit3": "Shared Inbox"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "usage": {
             "title": "Increase Capacity",
             "description": "You are approaching your plan limits. Upgrade to keep growing without interruption.",
@@ -1816,22 +1822,22 @@
             "benefit2": "4x Message Volume",
             "benefit3": "Priority Support"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "workflow": {
             "title": "Advanced Workflows",
             "description": "Create sophisticated conversation flows with AI-powered steps and logic.",
@@ -1839,22 +1845,22 @@
             "benefit2": "Complex Branching",
             "benefit3": "Data Extraction"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "integrations": {
             "title": "Advanced Synchronization",
             "description": "Sync your bookings with Google and Outlook Calendar to avoid conflicts.",
@@ -1862,43 +1868,43 @@
             "benefit2": "Multiple Calendars",
             "benefit3": "Automatic Blocking"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
-        }
-    },
         "common": {
             "upgradeTo": "Upgrade to {plan}",
             "whatYouGet": "WHAT YOU GET WITH {plan}:",
             "maybeLater": "Maybe Later"
         },
-    "clients": {
-        "title": "Customers (File)",
-        "newClient": "New Customer",
-        "noData": "There are no customers registered in your system.",
-        "table": {
-            "name": "Name",
-            "id": "Identification",
-            "contact": "Contact",
-            "date": "Creation Date",
-            "actions": "Actions"
-        },
-        "tooltips": {
-            "view": "View Detail",
-            "edit": "Edit"
+        "clients": {
+            "title": "Customers (File)",
+            "newClient": "New Customer",
+            "noData": "There are no customers registered in your system.",
+            "table": {
+                "name": "Name",
+                "id": "Identification",
+                "contact": "Contact",
+                "date": "Creation Date",
+                "actions": "Actions"
+            },
+            "tooltips": {
+                "view": "View Detail",
+                "edit": "Edit"
+            }
         }
-    }
     },
     "clients": {
         "title": "Customers (File)",
