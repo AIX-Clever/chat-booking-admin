@@ -302,6 +302,7 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                             overflow: 'hidden',
                             bgcolor: 'action.hover',
                             display: 'flex',
+                            position: 'relative',
                             alignItems: 'center',
                             justifyContent: 'center',
                             border: '1px solid',
