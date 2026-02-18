@@ -42,6 +42,8 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { useTenant } from '../../context/TenantContext';
 import PremiumButton from '../ui/PremiumButton';
 import { navigateTo } from '../../utils/navigation';
+import { SupportForm } from '@/components/common/SupportForm';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 const drawerWidth = 240;
 
@@ -134,6 +136,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const pathname = usePathname();
     const router = useRouter();
     const { authStatus, signOut } = useAuthenticator();
+    const [supportOpen, setSupportOpen] = React.useState(false);
 
     const { tenant } = useTenant();
 
@@ -358,9 +361,28 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     {renderMenuItems(systemItems)}
                 </List>
                 <Divider sx={{ mt: 'auto' }} />
-                {/* Version Number */}
                 <Box sx={{ px: 2.5, py: 1.5, opacity: open ? 0.6 : 0 }}>
-                    <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+                    <ListItemButton
+                        onClick={() => setSupportOpen(true)}
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 0,
+                            mb: 1
+                        }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <HelpOutlineIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Soporte" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                    <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace', display: 'block', textAlign: 'center' }}>
                         v1.2.7
                     </Typography>
                 </Box>
@@ -399,6 +421,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 <DrawerHeader />
                 {children}
             </Box>
+            <SupportForm open={supportOpen} onClose={() => setSupportOpen(false)} />
         </Box>
     );
 }

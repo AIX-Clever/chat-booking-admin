@@ -27,7 +27,12 @@ setup('authenticate', async ({ page }) => {
 
     await Promise.all([
         // Accept any authenticated route (dashboard, bookings, etc.)
-        page.waitForURL(/.*\/(dashboard|bookings|availability|services|providers|rooms)/, { timeout: 30000 }),
+        page.waitForURL(/.*\/(dashboard|bookings|availability|services|providers|rooms|onboarding)/, { timeout: 45000, waitUntil: 'networkidle' }).then(async () => {
+            await page.screenshot({ path: 'playwright/debug-login-success.png' });
+        }).catch(async (e) => {
+            await page.screenshot({ path: 'playwright/debug-login-fail.png' });
+            throw e;
+        }),
         page.locator('form button[type="submit"]').click()
     ]);
 
