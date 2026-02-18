@@ -346,7 +346,7 @@ export default function UsersPage() {
                                                     <EditIcon fontSize="small" />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip title={user.status === 'PENDING_INVITATION' ? t('dialogs.resendInvitation') : t('dialogs.resetPassword')}>
+                                            <Tooltip title={user.status === 'PENDING_INVITATION' ? t('dialogs.resendInvitation') : (user.status === 'INACTIVE' ? t('dialogs.userInactive') : t('dialogs.resetPassword'))}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={() => {
@@ -354,6 +354,7 @@ export default function UsersPage() {
                                                         setResetDialogOpen(true);
                                                     }}
                                                     color={user.status === 'PENDING_INVITATION' ? "primary" : "warning"}
+                                                    disabled={user.status === 'INACTIVE'}
                                                 >
                                                     {user.status === 'PENDING_INVITATION' ? <PersonAddIcon fontSize="small" /> : <VpnKeyIcon fontSize="small" />}
                                                 </IconButton>
