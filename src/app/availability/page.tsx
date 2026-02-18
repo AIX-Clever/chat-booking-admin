@@ -114,16 +114,26 @@ export default function AvailabilityPage() {
 
 
     const fetchProviders = async () => {
+        setLoading(true);
+        console.log('[AvailabilityPage] Fetching providers...');
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await client.graphql({ query: LIST_PROVIDERS });
-            const fetchedProviders = response.data.listProviders;
+            console.log('[AvailabilityPage] List providers response:', response);
+            const fetchedProviders = response.data?.listProviders || [];
+
             setProviders(fetchedProviders);
             if (fetchedProviders.length > 0) {
+                console.log('[AvailabilityPage] Providers found:', fetchedProviders.length);
                 setSelectedProvider(fetchedProviders[0].providerId);
+            } else {
+                console.log('[AvailabilityPage] No providers found');
             }
         } catch (error: any) {
-            console.error('Error fetching providers:', error);
+            console.error('[AvailabilityPage] Error fetching providers:', error);
+            setProviders([]);
+        } finally {
+            setLoading(false);
         }
     };
 
