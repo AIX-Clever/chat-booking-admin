@@ -211,6 +211,7 @@
             }
         },
         "dialogs": {
+            "removeUserTitle": "Eliminar Usuario",
             "inviteTitle": "Invitar Nuevo Usuario",
             "editRoleTitle": "Cambiar Rol de Usuario",
             "resetPasswordTitle": "Restablecer Contraseña",

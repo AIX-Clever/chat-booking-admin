@@ -37,6 +37,7 @@ import { useTenant } from '../../context/TenantContext';
 import { LIST_TENANT_USERS, INVITE_USER, UPDATE_USER_ROLE, REMOVE_USER, RESET_USER_PASSWORD, RESEND_INVITATION } from '../../graphql/user-queries';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import UpgradeModal from '../../components/common/UpgradeModal';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 interface TenantUser {
     userId: string;
@@ -74,6 +75,10 @@ export default function UsersPage() {
     const [resetDialogOpen, setResetDialogOpen] = useState(false);
     const [userToReset, setUserToReset] = useState<TenantUser | null>(null);
     const [resetting, setResetting] = useState(false);
+
+    // Remove User State
+    const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+    const [userToRemove, setUserToRemove] = useState<TenantUser | null>(null);
 
     // Invite form state
     const [inviteEmail, setInviteEmail] = useState('');
@@ -185,8 +190,13 @@ export default function UsersPage() {
         }
     };
 
-    const handleRemoveUser = async (userId: string) => {
-        if (!confirm(t('dialogs.removeUserConfirm'))) return;
+    const handleRemoveUser = (user: TenantUser) => {
+        setUserToRemove(user);
+        setRemoveDialogOpen(true);
+    };
+
+    const confirmRemoveUser = async () => {
+        if (!userToRemove) return;
 
         try {
             const session = await fetchAuthSession();
@@ -194,11 +204,13 @@ export default function UsersPage() {
 
             await client.graphql({
                 query: REMOVE_USER,
-                variables: { userId },
+                variables: { userId: userToRemove.userId },
                 authToken: token
             });
 
             fetchUsers();
+            setRemoveDialogOpen(false);
+            setUserToRemove(null);
         } catch (err: unknown) {
             console.error('Error removing user:', err);
             const error = err as { errors?: Array<{ message: string }> };
@@ -363,7 +375,7 @@ export default function UsersPage() {
                                             <Tooltip title="Remove User">
                                                 <IconButton
                                                     size="small"
-                                                    onClick={() => handleRemoveUser(user.userId)}
+                                                    onClick={() => handleRemoveUser(user)}
                                                     color="error"
                                                 >
                                                     <DeleteIcon fontSize="small" />
@@ -487,6 +499,20 @@ export default function UsersPage() {
                 onClose={() => setUpgradeModalOpen(false)}
                 feature="TEAM"
                 currentPlan={plan}
+            />
+
+            <ConfirmDialog
+                open={removeDialogOpen}
+                title={t('dialogs.removeUserTitle') || 'Remove User'}
+                content={t('dialogs.removeUserConfirm')}
+                onClose={() => {
+                    setRemoveDialogOpen(false);
+                    setUserToRemove(null);
+                }}
+                onConfirm={confirmRemoveUser}
+                confirmText={tCommon('delete')}
+                cancelText={tCommon('cancel')}
+                confirmColor="error"
             />
         </Box>
     );

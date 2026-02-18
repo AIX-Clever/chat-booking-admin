@@ -212,6 +212,7 @@
             }
         },
         "dialogs": {
+            "removeUserTitle": "Remove User",
             "inviteTitle": "Invite New User",
             "editRoleTitle": "Change User Role",
             "resetPasswordTitle": "Reset Password",
