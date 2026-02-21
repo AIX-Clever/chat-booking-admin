@@ -137,7 +137,7 @@ export default function ServicesPage() {
 
     // Auto-clean incompatible rooms when modality changes
     React.useEffect(() => {
-        if (!formData.requiredRoomIds || formData.requiredRoomIds.length === 0) return;
+        if (!formData.requiredRoomIds || formData.requiredRoomIds.length === 0 || rooms.length === 0) return;
 
         const hasPhysical = formData.locationType?.includes('PHYSICAL');
         const hasOnline = formData.locationType?.includes('ONLINE');
@@ -186,7 +186,12 @@ export default function ServicesPage() {
 
     const handleOpen = (service?: Service) => {
         if (service) {
-            setFormData(service);
+            setFormData({
+                ...service,
+                category: service.category || (categories.length > 0 ? categories[0].name : ''),
+                locationType: service.locationType || ['PHYSICAL'],
+                requiredRoomIds: service.requiredRoomIds || []
+            });
             setCurrentService(service);
         } else {
             setFormData({
@@ -229,7 +234,8 @@ export default function ServicesPage() {
                             durationMinutes: formData.durationMinutes,
                             price: formData.price,
                             available: formData.available,
-                            requiredRoomIds: formData.requiredRoomIds
+                            requiredRoomIds: formData.requiredRoomIds,
+                            locationType: formData.locationType
                         }
                     },
                     authToken: token
@@ -250,7 +256,8 @@ export default function ServicesPage() {
                             category: formData.category,
                             durationMinutes: formData.durationMinutes,
                             price: formData.price,
-                            requiredRoomIds: formData.requiredRoomIds
+                            requiredRoomIds: formData.requiredRoomIds,
+                            locationType: formData.locationType
                         }
                     },
                     authToken: token
@@ -592,6 +599,12 @@ export default function ServicesPage() {
                             </TextField>
                         )}
 
+                        {formData.locationType?.includes('PHYSICAL') && (!formData.requiredRoomIds || formData.requiredRoomIds.length === 0) && (
+                            <Typography variant="caption" color="error" sx={{ mt: -1, ml: 1 }}>
+                                {t('requiredRoomsWarning') || 'Selecciona una sala'}
+                            </Typography>
+                        )}
+
                         <FormControlLabel
                             control={
                                 <Switch
@@ -607,7 +620,11 @@ export default function ServicesPage() {
                     <Button onClick={handleClose} color="inherit">
                         {tCommon('cancel')}
                     </Button>
-                    <Button onClick={handleSave} variant="contained" disabled={!formData.name}>
+                    <Button
+                        onClick={handleSave}
+                        variant="contained"
+                        disabled={!formData.name || (formData.locationType?.includes('PHYSICAL') && (!formData.requiredRoomIds || formData.requiredRoomIds.length === 0))}
+                    >
                         {tCommon('save')}
                     </Button>
                 </DialogActions>

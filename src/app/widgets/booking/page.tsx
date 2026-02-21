@@ -11,7 +11,7 @@ export default function BookingWidgetPage() {
     const t = useTranslations('widgets.booking');
     const { tenant } = useTenant();
 
-    const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://booking.holalucia.cl';
+    const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://agendar.holalucia.cl';
     const publicUrl = `${baseUrl}/${tenant?.slug || ''}`;
 
     const handleCopy = () => {

@@ -13,6 +13,7 @@ export const LIST_PROVIDERS = `
       available
       hasGoogleCalendar
       slug
+      professionalLicense
     }
   }
 `;
@@ -87,6 +88,7 @@ export const CREATE_SERVICE = `
       durationMinutes
       price
       requiredRoomIds
+      locationType
     }
   }
 `;
@@ -273,6 +275,7 @@ export const CREATE_PROVIDER = `
       available
       hasGoogleCalendar
       slug
+      professionalLicense
     }
   }
 `;
@@ -291,6 +294,7 @@ export const UPDATE_PROVIDER = `
       available
       hasGoogleCalendar
       slug
+      professionalLicense
     }
   }
 `;

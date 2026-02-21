@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, Typography, Paper, Grid, IconButton, Tabs, Tab, Alert } from '@mui/material';
+import { Box, Typography, Paper, Grid, IconButton, Tabs, Tab, Alert, Button } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useTranslations } from 'next-intl';
 import PlanGuard from '../../../components/PlanGuard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -39,8 +41,9 @@ export default function WebIntegrationPage() {
     const t = useTranslations('widgets.chat');
     const { tenant } = useTenant();
     const [value, setValue] = useState(0);
+    const [isWidgetLoaded, setIsWidgetLoaded] = useState(false);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://booking.holalucia.cl';
+    const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://agendar.holalucia.cl';
     // Use tenant.slug for iframe, tenant.id for widget script
     const publicUrl = `${baseUrl}/${tenant?.slug || ''}`;
 
@@ -61,6 +64,25 @@ export default function WebIntegrationPage() {
     const handleCopy = (text: string) => {
         navigator.clipboard.writeText(text);
         // Toast could be added here
+    };
+
+    const handleLoadWidget = () => {
+        if (!tenant?.tenantId) return;
+
+        // In a real playground, we inject the script dynamically
+        const script = document.createElement('script');
+        script.src = 'https://widget.holalucia.cl/bundle.js';
+        script.setAttribute('data-tenant-id', tenant.tenantId);
+        script.setAttribute('data-primary-color', '#1976d2');
+        script.setAttribute('data-language', 'es');
+        script.id = 'lucia-widget-script';
+
+        document.body.appendChild(script);
+        setIsWidgetLoaded(true);
+    };
+
+    const handleReload = () => {
+        window.location.reload();
     };
 
     return (
@@ -195,6 +217,48 @@ export default function WebIntegrationPage() {
                                     >
                                         <ContentCopyIcon fontSize="small" />
                                     </IconButton>
+                                </Box>
+
+                                <Box sx={{ mt: 5 }}>
+                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                        Prueba la IA (Playground)
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                        Haz clic en el botón de abajo para activar a Lucia en esta página y probar cómo responde.
+                                    </Typography>
+
+                                    {!isWidgetLoaded ? (
+                                        <Button
+                                            variant="contained"
+                                            size="large"
+                                            startIcon={<PlayArrowIcon />}
+                                            onClick={handleLoadWidget}
+                                            sx={{
+                                                py: 2,
+                                                px: 4,
+                                                borderRadius: 3,
+                                                textTransform: 'none',
+                                                fontSize: '1.1rem',
+                                                boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)'
+                                            }}
+                                        >
+                                            Activar Asistente de Prueba
+                                        </Button>
+                                    ) : (
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                            <Alert severity="success" icon={false} sx={{ flexGrow: 1, borderRadius: 2 }}>
+                                                🚀 <strong>¡Lucia está activa!</strong> Busca el icono del chat en la esquina inferior derecha de tu pantalla.
+                                            </Alert>
+                                            <Button
+                                                variant="outlined"
+                                                startIcon={<RestartAltIcon />}
+                                                onClick={handleReload}
+                                                size="small"
+                                            >
+                                                Reiniciar
+                                            </Button>
+                                        </Box>
+                                    )}
                                 </Box>
                             </Grid>
                         </Grid>
