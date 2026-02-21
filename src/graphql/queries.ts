@@ -129,8 +129,8 @@ export const CONFIRM_BOOKING = `
 `;
 
 export const MARK_AS_NO_SHOW = `
-  mutation MarkAsNoShow($input: MarkAsNoShowInput!) {
-    markAsNoShow(input: $input) {
+  mutation MarkAsNoShow($bookingId: ID!) {
+    markAsNoShow(bookingId: $bookingId) {
       bookingId
       status
     }
