@@ -19,6 +19,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChatIcon from '@mui/icons-material/Chat';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useSearchParams } from 'next/navigation';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+
 
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
@@ -31,7 +33,9 @@ import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
 import ComplianceTab from './tabs/ComplianceTab';
+import BillingTab from './tabs/BillingTab';
 import { WidgetConfig } from '../../types/settings';
+
 
 
 // --- Types ---
@@ -70,15 +74,17 @@ function SettingsContent() {
         if (tabParam === 'general' || tabParam === 'customization') return 1;
         if (tabParam === 'ai') return 2;
         if (tabParam === 'compliance' || tabParam === 'legal') return 3;
-        if (tabParam === 'keys' || tabParam === 'api') return 4;
+        if (tabParam === 'billing' || tabParam === 'plan') return 4;
+        if (tabParam === 'keys' || tabParam === 'api') return 5;
         return 0;
+
     }, [searchParams]);
 
     const [tabValue, setTabValue] = React.useState(0);
 
     React.useEffect(() => {
         setTabValue(getInitialTab());
-    }, [searchParams]);
+    }, [searchParams, getInitialTab]);
     const [hasMounted, setHasMounted] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -295,6 +301,7 @@ function SettingsContent() {
                         <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label={t('tabs.compliance')} icon={<Box component="span" sx={{ fontSize: '1.2rem' }}>⚖️</Box>} iconPosition="start" />
+                        <Tab label="Facturación" icon={<CreditCardIcon />} iconPosition="start" />
                         {showApiKeys && (
                             <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
                         )}
@@ -351,12 +358,18 @@ function SettingsContent() {
                             <ComplianceTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
 
-                        {/* --- Tab 4: API Keys (Conditional) --- */}
+                        {/* --- Tab 4: Billing --- */}
+                        <CustomTabPanel value={tabValue} index={4}>
+                            <BillingTab />
+                        </CustomTabPanel>
+
+                        {/* --- Tab 5: API Keys (Conditional) --- */}
                         {showApiKeys && (
-                            <CustomTabPanel value={tabValue} index={4}>
+                            <CustomTabPanel value={tabValue} index={5}>
                                 <ApiKeysTab />
                             </CustomTabPanel>
                         )}
+
                     </>
                 )}
 

@@ -169,17 +169,19 @@ export default function BookingsPage() {
         if (!tenantLoading && tenant) {
             // Small delay to ensure Amplify session is fully restored
             const timer = setTimeout(() => {
+                console.log('DEBUG: Tenant ready, triggering initial fetches');
                 fetchServices();
                 fetchProviders();
                 fetchRooms();
             }, 500);
             return () => clearTimeout(timer);
         } else if (!tenantLoading && !tenant) {
-            // No tenant means not authenticated, stop loading
+            // No tenant means not authenticated or tenant not found, stop loading
+            console.log('DEBUG: No tenant found, stopping loading');
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tenantLoading, tenant]);
+    }, [tenantLoading, tenant?.tenantId]); // Use tenantId to be more specific
 
     const fetchProviders = async (retryCount = 0): Promise<void> => {
         const MAX_RETRIES = 3;
@@ -337,10 +339,18 @@ export default function BookingsPage() {
     const fetchServices = async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({ query: SEARCH_SERVICES, variables: { text: '', availableOnly: true } }); // Fetch available only
+            const response: any = await client.graphql({
+                query: SEARCH_SERVICES,
+                variables: {
+                    text: '',
+                    availableOnly: true
+                },
+                authMode: 'userPool'
+            }); // Fetch available only
             setAvailableServices(response.data.searchServices);
         } catch (error) {
             console.error('Error fetching services:', error);
+            // Don't set loading false here as fetchProviders/fetchBookings handles the main page loader
         }
     };
 

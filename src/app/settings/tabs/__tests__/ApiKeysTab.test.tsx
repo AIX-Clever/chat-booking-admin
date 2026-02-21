@@ -14,6 +14,13 @@ jest.mock('next-intl', () => ({
     useTranslations: () => mockT,
 }));
 
+// Mock PlanGuard
+jest.mock('@/components/PlanGuard', () => {
+    const MockPlanGuard = ({ children }: { children: React.ReactNode }) => <div data-testid="plan-guard">{children}</div>;
+    MockPlanGuard.displayName = 'MockPlanGuard';
+    return MockPlanGuard;
+});
+
 // Mock clipboard
 Object.assign(navigator, {
     clipboard: {

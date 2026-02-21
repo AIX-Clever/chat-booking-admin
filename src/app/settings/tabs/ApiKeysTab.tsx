@@ -29,6 +29,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTranslations } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { LIST_API_KEYS, CREATE_API_KEY, REVOKE_API_KEY } from '@/graphql/queries';
+import PlanGuard from '@/components/PlanGuard';
 
 interface ApiKey {
     apiKeyId: string;
@@ -142,155 +143,157 @@ export default function ApiKeysTab() {
     }
 
     return (
-        <Box>
-            {/* Header */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h6">{t('title')}</Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => setCreateKeyOpen(true)}
-                >
-                    {t('createKey')}
-                </Button>
-            </Box>
+        <PlanGuard minPlan="PRO" upgradeFeature="API">
+            <Box>
+                {/* Header */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                    <Typography variant="h6">{t('title')}</Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => setCreateKeyOpen(true)}
+                    >
+                        {t('createKey')}
+                    </Button>
+                </Box>
 
-            {/* List */}
-            <TableContainer component={Paper} variant="outlined">
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>{tCommon('name')}</TableCell>
-                            <TableCell>{t('keyPrefix')}</TableCell>
-                            <TableCell>{tCommon('created')}</TableCell>
-                            <TableCell>{tCommon('status')}</TableCell>
-                            <TableCell align="right">{tCommon('actions')}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {loading && apiKeys.length === 0 ? (
+                {/* List */}
+                <TableContainer component={Paper} variant="outlined">
+                    <Table>
+                        <TableHead>
                             <TableRow>
-                                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
-                                    <CircularProgress />
-                                </TableCell>
+                                <TableCell>{tCommon('name')}</TableCell>
+                                <TableCell>{t('keyPrefix')}</TableCell>
+                                <TableCell>{tCommon('created')}</TableCell>
+                                <TableCell>{tCommon('status')}</TableCell>
+                                <TableCell align="right">{tCommon('actions')}</TableCell>
                             </TableRow>
-                        ) : apiKeys.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
-                                    <Typography color="textSecondary">{t('noKeys')}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        ) : (
-                            apiKeys.map((key) => (
-                                <TableRow key={key.apiKeyId}>
-                                    <TableCell>{key.name}</TableCell>
-                                    <TableCell sx={{ fontFamily: 'monospace' }}>{key.keyPreview}</TableCell>
-                                    <TableCell>{new Date(key.createdAt).toLocaleDateString()}</TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={tCommon(key.status.toLowerCase())}
-                                            color={key.status === 'ACTIVE' ? 'success' : 'default'}
-                                            size="small"
-                                            sx={{ textTransform: 'capitalize' }}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {key.status === 'ACTIVE' && (
-                                            <IconButton
-                                                size="small"
-                                                color="error"
-                                                onClick={() => handleRevokeClick(key.apiKeyId)}
-                                                title={t('revoke')}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        )}
+                        </TableHead>
+                        <TableBody>
+                            {loading && apiKeys.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                        <CircularProgress />
                                     </TableCell>
                                 </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                            ) : apiKeys.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                        <Typography color="textSecondary">{t('noKeys')}</Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                apiKeys.map((key) => (
+                                    <TableRow key={key.apiKeyId}>
+                                        <TableCell>{key.name}</TableCell>
+                                        <TableCell sx={{ fontFamily: 'monospace' }}>{key.keyPreview}</TableCell>
+                                        <TableCell>{new Date(key.createdAt).toLocaleDateString()}</TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={tCommon(key.status.toLowerCase())}
+                                                color={key.status === 'ACTIVE' ? 'success' : 'default'}
+                                                size="small"
+                                                sx={{ textTransform: 'capitalize' }}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {key.status === 'ACTIVE' && (
+                                                <IconButton
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={() => handleRevokeClick(key.apiKeyId)}
+                                                    title={t('revoke')}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
 
-            {/* Create Dialog */}
-            <Dialog open={createKeyOpen} onClose={handleCloseCreateDialog} maxWidth="sm" fullWidth>
-                <DialogTitle>{createdSecret ? t('createDialog.successTitle') : t('createDialog.title')}</DialogTitle>
-                <DialogContent>
-                    {createdSecret ? (
-                        <Box sx={{ mt: 2 }}>
-                            <Alert severity="warning" sx={{ mb: 2 }}>
-                                {t('createDialog.warning')}
-                            </Alert>
+                {/* Create Dialog */}
+                <Dialog open={createKeyOpen} onClose={handleCloseCreateDialog} maxWidth="sm" fullWidth>
+                    <DialogTitle>{createdSecret ? t('createDialog.successTitle') : t('createDialog.title')}</DialogTitle>
+                    <DialogContent>
+                        {createdSecret ? (
+                            <Box sx={{ mt: 2 }}>
+                                <Alert severity="warning" sx={{ mb: 2 }}>
+                                    {t('createDialog.warning')}
+                                </Alert>
+                                <TextField
+                                    fullWidth
+                                    label={t('createDialog.secretLabel')}
+                                    value={createdSecret}
+                                    InputProps={{
+                                        readOnly: true,
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton onClick={() => copyToClipboard(createdSecret)} edge="end" aria-label="copy">
+                                                    <ContentCopyIcon />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    sx={{ fontFamily: 'monospace' }}
+                                />
+                            </Box>
+                        ) : (
                             <TextField
+                                autoFocus
+                                margin="dense"
+                                label={t('createDialog.label')}
                                 fullWidth
-                                label={t('createDialog.secretLabel')}
-                                value={createdSecret}
-                                InputProps={{
-                                    readOnly: true,
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton onClick={() => copyToClipboard(createdSecret)} edge="end" aria-label="copy">
-                                                <ContentCopyIcon />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                sx={{ fontFamily: 'monospace' }}
+                                value={newKeyName}
+                                onChange={(e) => setNewKeyName(e.target.value)}
+                                placeholder="e.g. Website Integration"
+                                disabled={creating}
                             />
-                        </Box>
-                    ) : (
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label={t('createDialog.label')}
-                            fullWidth
-                            value={newKeyName}
-                            onChange={(e) => setNewKeyName(e.target.value)}
-                            placeholder="e.g. Website Integration"
-                            disabled={creating}
-                        />
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    {createdSecret ? (
-                        <Button onClick={handleCloseCreateDialog} variant="contained">{tCommon('done')}</Button>
-                    ) : (
-                        <>
-                            <Button onClick={handleCloseCreateDialog} disabled={creating}>{tCommon('cancel')}</Button>
-                            <Button onClick={handleCreateKey} variant="contained" disabled={!newKeyName.trim() || creating}>
-                                {creating ? <CircularProgress size={24} /> : tCommon('add')}
-                            </Button>
-                        </>
-                    )}
-                </DialogActions>
-            </Dialog>
+                        )}
+                    </DialogContent>
+                    <DialogActions>
+                        {createdSecret ? (
+                            <Button onClick={handleCloseCreateDialog} variant="contained">{tCommon('done')}</Button>
+                        ) : (
+                            <>
+                                <Button onClick={handleCloseCreateDialog} disabled={creating}>{tCommon('cancel')}</Button>
+                                <Button onClick={handleCreateKey} variant="contained" disabled={!newKeyName.trim() || creating}>
+                                    {creating ? <CircularProgress size={24} /> : tCommon('add')}
+                                </Button>
+                            </>
+                        )}
+                    </DialogActions>
+                </Dialog>
 
-            {/* Revoke Confirmation Dialog */}
-            <Dialog open={!!revokeId} onClose={() => setRevokeId(null)}>
-                <DialogTitle>{t('revokeDialog.title')}</DialogTitle>
-                <DialogContent>
-                    <Typography>{t('revokeDialog.content')}</Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setRevokeId(null)}>{tCommon('cancel')}</Button>
-                    <Button onClick={handleConfirmRevoke} color="error" variant="contained">
-                        {t('revokeDialog.confirm')}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {/* Revoke Confirmation Dialog */}
+                <Dialog open={!!revokeId} onClose={() => setRevokeId(null)}>
+                    <DialogTitle>{t('revokeDialog.title')}</DialogTitle>
+                    <DialogContent>
+                        <Typography>{t('revokeDialog.content')}</Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setRevokeId(null)}>{tCommon('cancel')}</Button>
+                        <Button onClick={handleConfirmRevoke} color="error" variant="contained">
+                            {t('revokeDialog.confirm')}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-            {/* Snackbar */}
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={6000}
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
-        </Box>
+                {/* Snackbar */}
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={6000}
+                    onClose={() => setSnackbar({ ...snackbar, open: false })}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
+            </Box>
+        </PlanGuard>
     );
 }

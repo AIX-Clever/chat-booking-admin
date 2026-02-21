@@ -1854,6 +1854,13 @@
             "benefit2": "Respuestas RAG Inteligentes",
             "benefit3": "Soporte Automatizado 24/7"
         },
+        "api": {
+            "title": "Integraciones y API",
+            "description": "Conecta tu negocio con otras herramientas y automatiza tus procesos mediante el acceso a nuestra API y Webhooks.",
+            "benefit1": "Acceso a API REST",
+            "benefit2": "Webhooks en Tiempo Real",
+            "benefit3": "Integraciones con Terceros"
+        },
         "clients": {
             "title": "Clientes (Ficha)",
             "newClient": "Nuevo Cliente",

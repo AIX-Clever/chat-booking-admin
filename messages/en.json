@@ -1777,6 +1777,13 @@
             "benefit2": "Smart RAG Responses",
             "benefit3": "24/7 Automated Support"
         },
+        "api": {
+            "title": "API & Integrations",
+            "description": "Connect your business with other tools and automate your processes through access to our API and Webhooks.",
+            "benefit1": "REST API Access",
+            "benefit2": "Real-time Webhooks",
+            "benefit3": "Third-party Integrations"
+        },
         "clients": {
             "title": "Customers (File)",
             "newClient": "New Customer",
@@ -1845,6 +1852,13 @@
             "benefit1": "AI Logic Steps",
             "benefit2": "Complex Branching",
             "benefit3": "Data Extraction"
+        },
+        "api": {
+            "title": "Integrations & API",
+            "description": "Connect your business with other tools and automate your processes through access to our API and Webhooks.",
+            "benefit1": "REST API Access",
+            "benefit2": "Real-time Webhooks",
+            "benefit3": "Third-party Integrations"
         },
         "clients": {
             "title": "Customers (File)",

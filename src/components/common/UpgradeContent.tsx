@@ -16,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useTranslations } from 'next-intl';
 
-export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW' | 'INTEGRATIONS';
+export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW' | 'INTEGRATIONS' | 'API';
 
 interface UpgradeContentProps {
     feature: UpgradeFeature;
@@ -74,6 +74,13 @@ export default function UpgradeContent({
                 icon: CalendarMonthIcon,
                 benefits: [t('integrations.benefit1'), t('integrations.benefit2'), t('integrations.benefit3')],
                 color: '#F59E0B' // Amber/Orange
+            },
+            'API': {
+                title: t('api.title'),
+                description: t('api.description'),
+                icon: SpeedIcon, // Or a more suitable icon like Code/Developer
+                benefits: [t('api.benefit1'), t('api.benefit2'), t('api.benefit3')],
+                color: '#6366F1' // Indigo
             }
         };
         return configs[feature];
