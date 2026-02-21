@@ -31,8 +31,10 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('next-intl', () => ({
-    useTranslations: jest.fn().mockReturnValue((key: string) => key)
+    useTranslations: jest.fn().mockReturnValue((key: string) => key),
+    useLocale: jest.fn().mockReturnValue('en'),
 }));
+
 
 jest.mock('../../../context/TenantContext', () => ({
     useTenant: jest.fn()
@@ -58,6 +60,21 @@ jest.mock('../../common/PlanBadge', () => ({
     __esModule: true,
     default: ({ plan }: { plan: string }) => <div data-testid="plan-badge">{plan}</div>
 }));
+
+jest.mock('../../../components/common/ToastContext', () => ({
+    useToast: () => ({ showToast: jest.fn() }),
+}));
+
+// Mock SupportForm (named export) to avoid ToastContext dependency
+jest.mock('@/components/common/SupportForm', () => ({
+    SupportForm: () => <div data-testid="support-form" />,
+}));
+
+jest.mock('../../ui/PremiumButton', () => ({
+    __esModule: true,
+    default: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => <button onClick={onClick}>{children}</button>,
+}));
+
 
 const renderWithTheme = (ui: React.ReactElement) => {
     return render(

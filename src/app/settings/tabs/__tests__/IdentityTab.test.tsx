@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import IdentityTab from '../IdentityTab';
 import { BusinessProfile } from '../../../../types/settings';
 
@@ -14,6 +14,17 @@ jest.mock('next/image', () => ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     default: ({ src, alt }: any) => <img src={src} alt={alt} />,
 }));
+
+// Mock resizeImage utility
+jest.mock('../../../../utils/image', () => ({
+    resizeImage: jest.fn().mockResolvedValue(new Blob(['resized'], { type: 'image/jpeg' })),
+}));
+
+const mockGraphql = jest.fn();
+jest.mock('aws-amplify/api', () => ({
+    generateClient: jest.fn(() => ({ graphql: mockGraphql })),
+}));
+
 
 const mockProfile: BusinessProfile = {
     centerName: 'Test Center',
@@ -114,14 +125,14 @@ describe('IdentityTab', () => {
     });
 
     it('handles logo file change', async () => {
-        const readerMock = {
-            readAsDataURL: jest.fn(),
-            result: 'data:image/png;base64,hello',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onloadend: null as any,
-        };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.FileReader = jest.fn().mockImplementation(() => readerMock) as any;
+        // Setup: mock GraphQL presigned URL response
+        const fakePresignedUrl = 'https://my-bucket.s3.amazonaws.com/logo.jpg?sig=abc123';
+        mockGraphql.mockResolvedValueOnce({
+            data: { generatePresignedUrl: fakePresignedUrl },
+        });
+
+        // Setup: mock global fetch to simulate S3 PUT success
+        global.fetch = jest.fn().mockResolvedValueOnce({ ok: true } as Response);
 
         render(
             <IdentityTab
@@ -131,21 +142,19 @@ describe('IdentityTab', () => {
             />
         );
 
-        const file = new File(['hello'], 'hello.png', { type: 'image/png' });
-        // Find input by its hidden property since MUI often wraps it
+        const file = new File(['hello'], 'logo.png', { type: 'image/png' });
         const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
-        fireEvent.change(input, { target: { files: [file] } });
+        await act(async () => {
+            fireEvent.change(input, { target: { files: [file] } });
+        });
 
-        // Manually trigger onloadend
-        if (readerMock.onloadend) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            readerMock.onloadend({} as any);
-        }
-
-        expect(mockSetProfile).toHaveBeenCalledWith(expect.objectContaining({
-            logoUrl: 'data:image/png;base64,hello'
-        }));
+        await waitFor(() => {
+            // The component constructs a CloudFront URL from the presigned URL
+            expect(mockSetProfile).toHaveBeenCalledWith(expect.objectContaining({
+                logoUrl: expect.stringContaining('cloudfront.net'),
+            }));
+        });
     });
 
     it('renders with null profile (default state)', () => {

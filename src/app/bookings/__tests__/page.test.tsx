@@ -25,7 +25,9 @@ jest.mock('aws-amplify/auth', () => ({
 // Mock Next-Intl
 jest.mock('next-intl', () => ({
     useTranslations: () => (key: string) => key,
+    useLocale: () => 'en',
 }));
+
 
 // Mock TenantContext
 jest.mock('../../../context/TenantContext', () => ({
