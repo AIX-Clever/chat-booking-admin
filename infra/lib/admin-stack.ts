@@ -77,15 +77,19 @@ export class AdminStack extends cdk.Stack {
                 function handler(event) {
                     var request = event.request;
                     var uri = request.uri;
-                    if (uri.endsWith('/')) {
-                        request.uri += 'index.html';
+                    
+                    if (uri === '/') {
+                        request.uri = '/index.html';
+                    } else if (uri.endsWith('/')) {
+                        request.uri = uri.slice(0, -1) + '.html';
                     } else if (!uri.includes('.')) {
-                        request.uri += '.html';
+                        request.uri = uri + '.html';
                     }
+                    
                     return request;
                 }
             `),
-            comment: 'Rewrites URLs for Next.js static export (e.g., /bookings → /bookings.html)',
+            comment: 'Rewrites URLs for Next.js static export (e.g., /bookings or /bookings/ → /bookings.html)',
         });
 
         // 3. CloudFront Distribution using OAC
@@ -106,13 +110,13 @@ export class AdminStack extends cdk.Stack {
             errorResponses: [
                 {
                     httpStatus: 403,
-                    responseHttpStatus: 200,
-                    responsePagePath: '/index.html',
+                    responseHttpStatus: 404,
+                    responsePagePath: '/404.html',
                 },
                 {
                     httpStatus: 404,
-                    responseHttpStatus: 200,
-                    responsePagePath: '/index.html',
+                    responseHttpStatus: 404,
+                    responsePagePath: '/404.html',
                 },
             ],
 
