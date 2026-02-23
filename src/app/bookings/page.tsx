@@ -207,7 +207,7 @@ export default function BookingsPage() {
             setProviders(fetchedProviders);
             // Fetch bookings for all providers, or set loading false if empty
             if (fetchedProviders && fetchedProviders.length > 0) {
-                fetchBookings(fetchedProviders);
+                // Removed explicit fetchBookings call as it's handled by the useEffect on [providers]
             } else {
                 console.log('No providers found, setting loading to false');
                 setLoading(false);
@@ -240,6 +240,10 @@ export default function BookingsPage() {
     };
 
     const fetchBookings = async (currentProviders: Provider[]) => {
+        if (currentProviders.length === 0) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         try {
             const today = new Date();
@@ -251,9 +255,8 @@ export default function BookingsPage() {
                 ? currentProviders
                 : currentProviders.filter(p => p.providerId === filterProvider);
 
-            const allBookings: Booking[] = [];
-
-            for (const provider of providersToFetch) {
+            // Parallelize using Promise.all
+            const bookingPromises = providersToFetch.map(async (provider) => {
                 console.log('DEBUG: Fetching bookings for:', {
                     providerId: provider.providerId,
                     startDate,
@@ -275,7 +278,7 @@ export default function BookingsPage() {
                 });
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const providerBookings = response.data.listBookingsByProvider.map((b: any) => ({
+                return response.data.listBookingsByProvider.map((b: any) => ({
                     id: b.bookingId,
                     clientName: b.clientName,
                     clientEmail: b.clientEmail,
@@ -288,9 +291,10 @@ export default function BookingsPage() {
                     providerId: provider.providerId,
                     roomId: b.roomId
                 }));
-                console.log('Fetched bookings for provider', provider.providerId, providerBookings);
-                allBookings.push(...providerBookings);
-            }
+            });
+
+            const results = await Promise.all(bookingPromises);
+            const allBookings = results.flat();
 
             // Debug logging for Room ID
             console.log('--- BOOKING ROOM DEBUG ---');
