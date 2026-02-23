@@ -50,7 +50,19 @@ jobs:
 
       - name: Deploy with CDK
         working-directory: infra
-        run: npx cdk deploy --all --require-approval never
-        env:
-          ENV: dev # Always deploy to dev environment in current AWS account
-
+        run: |
+          # Map branch to environment variables
+          if [ "${{ github.ref_name }}" == "main" ] || [ "${{ github.ref_name }}" == "prod" ]; then
+            export ENV="prod"
+            export DOMAIN_NAME="control.holalucia.cl"
+          else
+            export ENV="${{ github.ref_name }}"
+            export DOMAIN_NAME="${ENV}.control.holalucia.cl"
+          fi
+          
+          # Pass secrets to CDK
+          export CERTIFICATE_ARN="${{ secrets.CLOUDFRONT_CERTIFICATE_ARN }}"
+          
+          echo "Deploying to environment: $ENV with domain: $DOMAIN_NAME"
+          
+          npx cdk deploy --all --require-approval never

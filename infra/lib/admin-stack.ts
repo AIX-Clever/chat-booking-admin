@@ -6,8 +6,13 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Construct } from 'constructs';
 import * as path from 'path';
 
+interface AdminStackProps extends cdk.StackProps {
+    domainName?: string;
+    certificateArn?: string;
+}
+
 export class AdminStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    constructor(scope: Construct, id: string, props?: AdminStackProps) {
         super(scope, id, props);
 
         // 1. S3 Bucket for hosting
@@ -92,7 +97,20 @@ export class AdminStack extends cdk.Stack {
             comment: 'Rewrites URLs for Next.js static export (e.g., /bookings or /bookings/ → /bookings.html)',
         });
 
-        // 3. CloudFront Distribution using OAC
+        // 3. Optional Custom Domain Configuration
+        let certificate: cdk.aws_certificatemanager.ICertificate | undefined;
+        let domainNames: string[] | undefined;
+
+        if (props?.domainName && props?.certificateArn) {
+            certificate = cdk.aws_certificatemanager.Certificate.fromCertificateArn(
+                this,
+                'AdminCertificate',
+                props.certificateArn
+            );
+            domainNames = [props.domainName];
+        }
+
+        // 4. CloudFront Distribution using OAC
         const distribution = new cloudfront.Distribution(this, 'AdminPanelDist', {
             defaultBehavior: {
                 origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket, {
@@ -107,6 +125,8 @@ export class AdminStack extends cdk.Stack {
                 ],
                 compress: true,
             },
+            domainNames: domainNames,
+            certificate: certificate,
             errorResponses: [
                 {
                     httpStatus: 403,
