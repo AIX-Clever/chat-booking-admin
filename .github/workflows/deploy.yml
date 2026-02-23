@@ -57,7 +57,8 @@ jobs:
           CERT_PROD: ${{ secrets.CLOUDFRONT_CERTIFICATE_ARN_PROD }}
         run: |
           # Map branch to environment variables
-          if [ "${{ github.ref_name }}" == "main" ] || [ "${{ github.ref_name }}" == "prod" ]; then
+          # Currently dev is used as the main deployment branch mapping to the single account production domains
+          if [ "${{ github.ref_name }}" == "main" ] || [ "${{ github.ref_name }}" == "prod" ] || [ "${{ github.ref_name }}" == "dev" ]; then
             export ENV="prod"
             export DOMAIN_NAME="control.holalucia.cl"
             export CERTIFICATE_ARN="$CERT_PROD"
