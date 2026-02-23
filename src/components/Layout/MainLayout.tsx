@@ -217,7 +217,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     const operationsItems = [
         { text: t('bookings'), icon: <CalendarMonthIcon />, path: '/bookings' },
-        { text: t('availability'), icon: <EditCalendarIcon />, path: '/availability' },
         { text: t('clients'), icon: <AssignmentIndIcon />, path: '/clients' },
     ];
 
@@ -225,6 +224,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         { text: t('rooms'), icon: <MeetingRoomIcon />, path: '/rooms' },
         { text: t('services'), icon: <DesignServicesIcon />, path: '/services' },
         { text: t('providers'), icon: <PeopleIcon />, path: '/providers' },
+        { text: t('availability'), icon: <EditCalendarIcon />, path: '/availability' },
     ];
 
     const analyticsItems = [
