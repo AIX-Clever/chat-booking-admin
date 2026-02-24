@@ -33,6 +33,7 @@ import IdentityTab from './tabs/IdentityTab';
 import ComplianceTab from './tabs/ComplianceTab';
 import BillingTab from './tabs/BillingTab';
 import { WidgetConfig } from '../../types/settings';
+import { PLAN_LEVELS } from '../../constants/settings';
 
 
 
@@ -328,7 +329,12 @@ function SettingsContent() {
                                 }}
                             />
                             <Box sx={{ mt: 2 }}>
-                                <Button variant="contained" startIcon={<React.Fragment><Typography variant="button" sx={{ mr: 1 }}>💾</Typography></React.Fragment>} onClick={handleSaveSettings}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<React.Fragment><Typography variant="button" sx={{ mr: 1 }}>💾</Typography></React.Fragment>}
+                                    onClick={handleSaveSettings}
+                                    disabled={(PLAN_LEVELS[currentPlan] || 0) < PLAN_LEVELS['BUSINESS']}
+                                >
                                     {t('ai.saveAiSettings')}
                                 </Button>
                             </Box>
