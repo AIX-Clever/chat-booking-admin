@@ -28,9 +28,15 @@ import {
     FormControl,
     InputLabel,
     SelectChangeEvent,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
@@ -38,7 +44,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { generateClient } from 'aws-amplify/api';
-import { GET_PUBLIC_LINK_STATUS, LIST_PROVIDERS } from '../../graphql/queries';
+import { GET_PUBLIC_LINK_STATUS, LIST_PROVIDERS, UPDATE_TENANT } from '../../graphql/queries';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import ClientOnly from '../../components/common/ClientOnly';
 import { useTenant } from '../../context/TenantContext';
 
@@ -70,6 +77,11 @@ export default function MyPage() {
     const [error, setError] = useState<string | null>(null);
     const [copySuccess, setCopySuccess] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(true);
+
+    // Edit Slug State
+    const [isEditingSlug, setIsEditingSlug] = useState(false);
+    const [draftSlug, setDraftSlug] = useState('');
+    const [isSavingSlug, setIsSavingSlug] = useState(false);
 
     // State for professionals
     const [providers, setProviders] = useState<{ providerId: string, name: string }[]>([]);
@@ -139,6 +151,42 @@ export default function MyPage() {
     const handleOpenLink = () => {
         if (status?.publicUrl) {
             window.open(status.publicUrl, '_blank');
+        }
+    };
+
+    const handleOpenEditSlug = () => {
+        if (status?.slug) {
+            setDraftSlug(status.slug);
+        } else if (tenant?.slug) {
+            setDraftSlug(tenant.slug);
+        }
+        setIsEditingSlug(true);
+    };
+
+    const handleSaveSlug = async () => {
+        try {
+            setIsSavingSlug(true);
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
+            const client = generateClient();
+            await client.graphql({
+                query: UPDATE_TENANT,
+                variables: {
+                    input: {
+                        slug: draftSlug
+                    }
+                },
+                authToken: token
+            });
+
+            setIsEditingSlug(false);
+            fetchData(selectedProvider);
+        } catch (err) {
+            console.error('Error saving slug:', err);
+            alert('Error guardando la URL personalizada');
+        } finally {
+            setIsSavingSlug(false);
         }
     };
 
@@ -212,6 +260,11 @@ export default function MyPage() {
                                 <IconButton size="small" onClick={handleOpenLink} color="primary">
                                     <OpenInNewIcon fontSize="small" />
                                 </IconButton>
+                                <Tooltip title="Editar Enlace">
+                                    <IconButton size="small" onClick={handleOpenEditSlug} color="primary" disabled={status?.slug === undefined && tenant?.slug === undefined}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
                             </Box>
 
                             <IconButton onClick={() => setDrawerOpen(!drawerOpen)} color="inherit">
@@ -361,6 +414,37 @@ export default function MyPage() {
                         </Stack>
                     </Box>
                 </Drawer>
+
+                {/* Edit Slug Dialog */}
+                <Dialog open={isEditingSlug} onClose={() => setIsEditingSlug(false)} maxWidth="sm" fullWidth>
+                    <DialogTitle>Editar Link Público</DialogTitle>
+                    <DialogContent>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3, mt: 1 }}>
+                            Esta es la URL donde tus clientes podrán entrar a tu página de reservas alojada.
+                        </Typography>
+                        <TextField
+                            label="URL de Perfil (Slug)"
+                            value={draftSlug}
+                            onChange={(e) => {
+                                const val = e.target.value
+                                    .toLowerCase()
+                                    .replace(/\s+/g, '-')
+                                    .replace(/[^a-z0-9-]/g, '');
+                                setDraftSlug(val);
+                            }}
+                            fullWidth
+                            InputProps={{
+                                startAdornment: <Typography color="text.secondary" sx={{ mr: 1, pt: 0.2 }}>agendar.holalucia.cl/</Typography>,
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setIsEditingSlug(false)} disabled={isSavingSlug}>Cancelar</Button>
+                        <Button variant="contained" onClick={handleSaveSlug} disabled={!draftSlug || isSavingSlug}>
+                            {isSavingSlug ? 'Guardando...' : 'Guardar'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </ClientOnly>
     );

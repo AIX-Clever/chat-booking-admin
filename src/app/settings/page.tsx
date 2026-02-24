@@ -89,7 +89,6 @@ function SettingsContent() {
 
     // Tenant State
     const [currentPlan, setCurrentPlan] = React.useState('PRO');
-    const [slug, setSlug] = React.useState('');
 
     // Widget State
     const [widgetConfig, setWidgetConfig] = React.useState<WidgetConfig>({
@@ -131,7 +130,6 @@ function SettingsContent() {
             if (tenant) {
                 // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
-                if (tenant.slug) setSlug(tenant.slug);
 
                 if (tenant.settings) {
                     try {
@@ -233,7 +231,6 @@ function SettingsContent() {
                 variables: {
                     input: {
                         name: undefined, // Don't update name
-                        slug: slug,      // Update slug
                         billingEmail: undefined,
                         settings: settingsJson
                     }
