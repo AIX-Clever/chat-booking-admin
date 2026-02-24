@@ -490,13 +490,28 @@ export default function BookingsPage() {
         setNewBookingOpen(true);
     };
 
-    const handleCreateBooking = async () => {
+    const handleCreateBooking = async (forceOverbook: boolean | React.MouseEvent = false) => {
+        const isForced = typeof forceOverbook === 'boolean' ? forceOverbook : false;
+
         setCreateLoading(true);
         try {
             const startDateTime = new Date(`${newBookingData.date}T${newBookingData.time}`);
             const service = availableServices.find(s => s.serviceId === newBookingData.serviceId);
             const duration = service ? service.durationMinutes : 60; // Default or fetched
             const endDateTime = new Date(startDateTime.getTime() + duration * 60000);
+
+            // Overbook validation
+            if (!isForced) {
+                const isSlotAvailable = availableSlots.some(
+                    s => new Date(s.start).getTime() === startDateTime.getTime() && s.isAvailable
+                );
+
+                if (!isSlotAvailable) {
+                    setCreateLoading(false);
+                    setOverbookConfirmOpen(true);
+                    return;
+                }
+            }
 
             // Securely fetch ID Token
             const session = await fetchAuthSession();
@@ -513,7 +528,8 @@ export default function BookingsPage() {
                         clientName: newBookingData.clientName,
                         clientEmail: newBookingData.clientEmail,
                         clientPhone: newBookingData.clientPhone || null,
-                        notes: newBookingData.notes || null
+                        notes: newBookingData.notes || null,
+                        ignoreAvailability: isForced
                     }
                 },
                 authToken: token
@@ -535,6 +551,9 @@ export default function BookingsPage() {
     // Detail Dialog State
     const [detailOpen, setDetailOpen] = React.useState(false);
     const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
+
+    // Confirm Overbook Dialog State
+    const [overbookConfirmOpen, setOverbookConfirmOpen] = React.useState(false);
 
     // Confirm Dialog State
     const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -1507,6 +1526,31 @@ export default function BookingsPage() {
                 </DialogActions>
             </Dialog>
 
+            {/* Confirm Overbook Dialog */}
+            <Dialog open={overbookConfirmOpen} onClose={() => setOverbookConfirmOpen(false)}>
+                <DialogTitle>{t('overbookConfirm.title', 'Confirmar Sobrecupo')}</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        {`¿Estás agendando un sobre cupo para el día ${newBookingData.date}, a las ${newBookingData.time} para: '${providers.find(p => p.providerId === newBookingData.providerId)?.name || 'Profesional'}', estás seguro de sobreagendar?`}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOverbookConfirmOpen(false)} color="inherit">
+                        {tCommon('cancel')}
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setOverbookConfirmOpen(false);
+                            handleCreateBooking(true);
+                        }}
+                        color="error"
+                        variant="contained"
+                    >
+                        {t('overbookConfirm.confirm', 'Forzar Sobrecupo')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             {/* New Booking Dialog */}
             <Dialog open={newBookingOpen} onClose={() => setNewBookingOpen(false)} maxWidth="sm" fullWidth>
                 <DialogTitle>{t('dialogs.newBookingTitle')}</DialogTitle>
@@ -1753,7 +1797,7 @@ export default function BookingsPage() {
                     <Button onClick={() => setNewBookingOpen(false)}>{tCommon('cancel')}</Button>
                     <Button
                         variant="contained"
-                        onClick={handleCreateBooking}
+                        onClick={() => handleCreateBooking(false)}
                         disabled={createLoading || !newBookingData.clientName || !newBookingData.clientEmail || !newBookingData.serviceId || !newBookingData.providerId || !newBookingData.date || !newBookingData.time}
                     >
                         {createLoading ? <CircularProgress size={24} /> : t('newBooking')}
