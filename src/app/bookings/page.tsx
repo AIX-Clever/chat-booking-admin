@@ -86,6 +86,8 @@ interface Booking {
     notes?: string;
     providerId?: string;
     roomId?: string;
+    dteFolio?: string;
+    dtePdfUrl?: string;
 }
 
 interface Provider {
@@ -289,7 +291,9 @@ export default function BookingsPage() {
                     status: b.status.toLowerCase() as BookingStatus,
                     notes: b.notes,
                     providerId: provider.providerId,
-                    roomId: b.roomId
+                    roomId: b.roomId,
+                    dteFolio: b.dteFolio,
+                    dtePdfUrl: b.dtePdfUrl
                 }));
             });
 
@@ -1478,6 +1482,29 @@ export default function BookingsPage() {
                                     <Paper variant="outlined" sx={{ p: 1, bgcolor: 'action.hover' }}>
                                         <Typography variant="body2">{selectedBooking.notes}</Typography>
                                     </Paper>
+                                </Grid>
+                            )}
+                            {selectedBooking.dteFolio && (
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle2" color="text.secondary">Documento tributario (DTE)</Typography>
+                                    <Stack direction="row" spacing={1} alignItems="center">
+                                        <Chip
+                                            label={`Folio: ${selectedBooking.dteFolio}`}
+                                            size="small"
+                                            variant="outlined"
+                                            color="primary"
+                                        />
+                                        {selectedBooking.dtePdfUrl && (
+                                            <Button
+                                                size="small"
+                                                href={selectedBooking.dtePdfUrl}
+                                                target="_blank"
+                                                startIcon={<VisibilityIcon />}
+                                            >
+                                                Ver Boleta
+                                            </Button>
+                                        )}
+                                    </Stack>
                                 </Grid>
                             )}
                         </Grid>

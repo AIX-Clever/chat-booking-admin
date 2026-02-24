@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { GET_TENANT } from '../../../graphql/queries';
-import { LIST_INVOICES } from '../../../graphql/billing-queries';
+import { LIST_INVOICES, GET_INVOICE_DOWNLOAD_URL } from '../../../graphql/billing-queries';
 import {
     Description as DocumentTextIcon,
     CreditCard as CreditCardIcon,
@@ -43,7 +43,8 @@ interface Invoice {
     currency: string;
     status: string;
     date: string;
-    pdfUrl?: string;
+    dteFolio?: string;
+    dtePdfUrl?: string;
 }
 
 export default function BillingTab() {
@@ -63,21 +64,26 @@ export default function BillingTab() {
             if (!tId) return;
 
             // 1. Fetch Tenant (Plan info)
-            const tenantData: any = await client.graphql({
-                query: GET_TENANT,
-                variables: { tenantId: tId }
-            });
-
-            const t = tenantData.data.getTenant;
-            setTenant(t);
+            try {
+                const tenantData: any = await client.graphql({
+                    query: GET_TENANT,
+                    variables: { tenantId: tId }
+                });
+                const t = tenantData.data.getTenant;
+                setTenant(t);
+            } catch (e) {
+                console.warn("Could not fetch tenant", e);
+            }
 
             // 2. Fetch Invoices
             try {
                 const invoicesData: any = await client.graphql({
                     query: LIST_INVOICES
                 });
+                const fetchedInvoices = invoicesData.data.listInvoices || [];
+
                 // Sort by date desc
-                const sorted = (invoicesData.data.listInvoices || []).sort((a: any, b: any) =>
+                const sorted = fetchedInvoices.sort((a: any, b: any) =>
                     new Date(b.date).getTime() - new Date(a.date).getTime()
                 );
                 setInvoices(sorted);
@@ -97,6 +103,24 @@ export default function BillingTab() {
         fetchData();
     }, [user, fetchData]);
 
+    async function handleDownloadInvoice(invoiceId: string) {
+        try {
+            const result: any = await client.graphql({
+                query: GET_INVOICE_DOWNLOAD_URL,
+                variables: { invoiceId }
+            });
+            const url = result.data.getInvoiceDownloadUrl;
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                alert("No se pudo obtener el enlace de descarga.");
+            }
+        } catch (err) {
+            console.error("Error fetching download URL:", err);
+            alert("Error al intentar descargar la factura.");
+        }
+    }
+
     async function handleSubscribe() {
         // Mock subscribe or actual logic
         alert("Redirigiendo a pasarela de pago...");
@@ -105,19 +129,27 @@ export default function BillingTab() {
     // Derived State
     const planDetails = getPlanDetails(tenant?.plan);
 
-    // Calculate "Paid Until"
+    // Calculate "Paid Until" and Status
     const lastPaidInvoice = invoices.find(inv => inv.status === 'PAID');
     let paidUntilDate = new Date();
+    let isTrial = false;
+
     if (lastPaidInvoice) {
         const invoiceDate = new Date(lastPaidInvoice.date);
         paidUntilDate = new Date(invoiceDate);
-        paidUntilDate.setDate(invoiceDate.getDate() + 30);
+        paidUntilDate.setMonth(invoiceDate.getMonth() + 1);
     } else if (tenant?.createdAt) {
-        // Trial or new account
         const created = new Date(tenant.createdAt);
         paidUntilDate = new Date(created);
-        paidUntilDate.setDate(created.getDate() + 30); // 30 days trial/initial
+        paidUntilDate.setDate(created.getDate() + 15); // 15 days standard trial
+        isTrial = true;
     }
+
+    const isExpired = paidUntilDate < new Date();
+    const statusLabel = isExpired ? 'Pago Pendiente' : (isTrial ? 'Periodo de Prueba' : 'Pagos al día');
+    const statusColor = isExpired ? 'error' : (isTrial ? 'info' : 'success');
+    const statusBg = isExpired ? '#fef2f2' : (isTrial ? '#eff6ff' : '#dcfce7');
+    const statusText = isExpired ? '#991b1b' : (isTrial ? '#1e40af' : '#166534');
 
     const formatDate = (date: Date) => {
         return date.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -153,11 +185,16 @@ export default function BillingTab() {
                             {planDetails.name}
                         </Typography>
                     </Box>
-                    <Chip label="Pagos al día" color="success" size="small" sx={{ bgcolor: '#dcfce7', color: '#166534', fontWeight: 'bold' }} />
+                    <Chip
+                        label={statusLabel}
+                        color={statusColor}
+                        size="small"
+                        sx={{ bgcolor: statusBg, color: statusText, fontWeight: 'bold' }}
+                    />
                 </Box>
 
                 <Typography variant="body1" color="text.secondary" sx={{ mb: 0.5 }}>
-                    Capacidad de atención: {planDetails.capacity}
+                    Capacidad profesionales: {planDetails.capacity}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ mb: 0.5 }}>
                     Mensualidad: {formatCurrency(planDetails.price)}
@@ -252,13 +289,13 @@ export default function BillingTab() {
                                                 {invoice.status === 'PAID' ? 'Pagos al dia' : 'Pendiente'}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell>{invoice.invoiceId.substring(0, 8)}</TableCell>
+                                        <TableCell>{invoice.dteFolio || invoice.invoiceId.substring(0, 8)}</TableCell>
                                         <TableCell align="right">
                                             <Button
                                                 variant="contained"
                                                 size="small"
                                                 sx={{ minWidth: '40px', px: 0, bgcolor: '#0284c7' }}
-                                                onClick={() => invoice.pdfUrl ? window.open(invoice.pdfUrl, '_blank') : alert('PDF no disponible')}
+                                                onClick={() => handleDownloadInvoice(invoice.invoiceId)}
                                             >
                                                 <ArrowDownTrayIcon fontSize="small" />
                                             </Button>

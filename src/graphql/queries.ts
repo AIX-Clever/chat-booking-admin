@@ -32,6 +32,8 @@ export const LIST_BOOKINGS_BY_PROVIDER = `
       serviceId
       providerId
       roomId
+      dteFolio
+      dtePdfUrl
     }
   }
 `;
@@ -684,6 +686,8 @@ export const LIST_BOOKINGS_BY_CLIENT = `
       notes
       serviceId
       providerId
+      dteFolio
+      dtePdfUrl
     }
   }
 `;

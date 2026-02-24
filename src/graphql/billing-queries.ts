@@ -7,7 +7,8 @@ export const LIST_INVOICES = `
       currency
       status
       date
-      pdfUrl
+      dteFolio
+      dtePdfUrl
       metadata
     }
   }
@@ -28,5 +29,10 @@ export const CHECK_PAYMENT_STATUS = `
       status
       message
     }
+  }
+`;
+export const GET_INVOICE_DOWNLOAD_URL = `
+  query GetInvoiceDownloadUrl($invoiceId: ID!) {
+    getInvoiceDownloadUrl(invoiceId: $invoiceId)
   }
 `;

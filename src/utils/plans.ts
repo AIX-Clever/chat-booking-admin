@@ -12,26 +12,26 @@ export const PLANS: Record<string, PlanMetadata> = {
     'LITE': {
         id: 'LITE',
         name: 'Plan LITE',
-        capacity: 4,
-        price: 95200, // $95.200
+        capacity: 1,
+        price: 9990,
         currency: 'CLP',
-        features: ['Hasta 4 atenciones simultáneas', 'Soporte básico', 'Widget de reservas']
+        features: ['1 Profesional', '50 Reservas/mes', 'Marca de agua Lucia']
     },
     'PRO': {
         id: 'PRO',
         name: 'Plan PRO',
-        capacity: 10,
-        price: 189990,
+        capacity: 5,
+        price: 29990,
         currency: 'CLP',
-        features: ['Hasta 10 atenciones', 'Soporte prioritario', 'Personalización avanzada']
+        features: ['Hasta 5 Profesionales', '200 Reservas/mes', 'Sin marca de agua']
     },
     'BUSINESS': {
         id: 'BUSINESS',
-        name: 'Plan EMPRESAS',
-        capacity: 50,
-        price: 450000,
+        name: 'Plan BUSINESS',
+        capacity: 20,
+        price: 89990,
         currency: 'CLP',
-        features: ['Multisucursal', 'API Access', 'Account Manager']
+        features: ['Hasta 20 Profesionales', '1.000 Reservas/mes', 'IA NLP / NLP Soportado']
     }
 };
 
