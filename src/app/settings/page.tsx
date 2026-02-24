@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import ChatIcon from '@mui/icons-material/Chat';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useSearchParams } from 'next/navigation';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
@@ -28,7 +27,6 @@ import { UPDATE_TENANT, GET_TENANT } from '../../graphql/queries';
 import { useTenant } from '../../context/TenantContext';
 
 // Import refactored components
-import PropertiesTab from './tabs/PropertiesTab';
 import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
@@ -71,11 +69,10 @@ function SettingsContent() {
     const getInitialTab = React.useCallback(() => {
         const tabParam = searchParams.get('tab');
         if (tabParam === 'identity' || tabParam === 'profile') return 0;
-        if (tabParam === 'general' || tabParam === 'customization') return 1;
-        if (tabParam === 'ai') return 2;
-        if (tabParam === 'compliance' || tabParam === 'legal') return 3;
-        if (tabParam === 'billing' || tabParam === 'plan') return 4;
-        if (tabParam === 'keys' || tabParam === 'api') return 5;
+        if (tabParam === 'ai') return 1;
+        if (tabParam === 'compliance' || tabParam === 'legal') return 2;
+        if (tabParam === 'billing' || tabParam === 'plan') return 3;
+        if (tabParam === 'keys' || tabParam === 'api') return 4;
         return 0;
 
     }, [searchParams]);
@@ -298,7 +295,6 @@ function SettingsContent() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs" scrollButtons="auto" variant="scrollable">
                         <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
-                        <Tab label={t('tabs.general')} icon={<ChatIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label={t('tabs.compliance')} icon={<Box component="span" sx={{ fontSize: '1.2rem' }}>⚖️</Box>} iconPosition="start" />
                         <Tab label="Facturación" icon={<CreditCardIcon />} iconPosition="start" />
@@ -316,23 +312,11 @@ function SettingsContent() {
                     <>
                         {/* --- Tab 0: Identity (Profile) --- */}
                         <CustomTabPanel value={tabValue} index={0}>
-                            <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
+                            <IdentityTab profile={profile} setProfile={setProfile} slug={slug} setSlug={setSlug} onSave={handleSaveSettings} />
                         </CustomTabPanel>
 
-                        {/* --- Tab 1: Widget & Branding (Customization) --- */}
+                        {/* --- Tab 1: AI Configuration (Intelligence) --- */}
                         <CustomTabPanel value={tabValue} index={1}>
-                            <PropertiesTab
-                                widgetConfig={widgetConfig}
-                                setWidgetConfig={setWidgetConfig}
-                                slug={slug}
-                                setSlug={setSlug}
-                                onSave={handleSaveSettings}
-                                logoUrl={profile?.logoUrl}
-                            />
-                        </CustomTabPanel>
-
-                        {/* --- Tab 2: AI Configuration (Intelligence) --- */}
-                        <CustomTabPanel value={tabValue} index={2}>
                             <AiConfigTab
                                 aiMode={aiMode}
                                 setAiMode={(mode) => {
@@ -353,19 +337,19 @@ function SettingsContent() {
                             </Box>
                         </CustomTabPanel>
 
-                        {/* --- Tab 3: Compliance (Legal) --- */}
-                        <CustomTabPanel value={tabValue} index={3}>
+                        {/* --- Tab 2: Compliance (Legal) --- */}
+                        <CustomTabPanel value={tabValue} index={2}>
                             <ComplianceTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
 
-                        {/* --- Tab 4: Billing --- */}
-                        <CustomTabPanel value={tabValue} index={4}>
+                        {/* --- Tab 3: Billing --- */}
+                        <CustomTabPanel value={tabValue} index={3}>
                             <BillingTab />
                         </CustomTabPanel>
 
-                        {/* --- Tab 5: API Keys (Conditional) --- */}
+                        {/* --- Tab 4: API Keys (Conditional) --- */}
                         {showApiKeys && (
-                            <CustomTabPanel value={tabValue} index={5}>
+                            <CustomTabPanel value={tabValue} index={4}>
                                 <ApiKeysTab />
                             </CustomTabPanel>
                         )}

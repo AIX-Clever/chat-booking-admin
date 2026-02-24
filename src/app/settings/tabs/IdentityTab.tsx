@@ -22,6 +22,8 @@ import { resizeImage } from '../../../utils/image';
 interface IdentityTabProps {
     profile: BusinessProfile | null;
     setProfile: (profile: BusinessProfile) => void;
+    slug: string;
+    setSlug: (slug: string) => void;
     onSave: () => void;
 }
 
@@ -49,10 +51,21 @@ const TIMEZONES = [
     { value: 'UTC', label: 'UTC' },
 ];
 
-export default function IdentityTab({ profile, setProfile, onSave }: IdentityTabProps) {
+export default function IdentityTab({ profile, setProfile, slug, setSlug, onSave }: IdentityTabProps) {
     const t = useTranslations('settings.identity');
     const client = React.useMemo(() => generateClient(), []);
     const [isUploading, setIsUploading] = useState(false);
+    const [copySuccess, setCopySuccess] = useState(false);
+
+    const publicLink = `https://agendar.holalucia.cl/${slug || 'tu-slug'}`;
+
+    const handleCopyLink = () => {
+        if (typeof window !== 'undefined' && navigator.clipboard) {
+            navigator.clipboard.writeText(publicLink);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2000);
+        }
+    };
 
     const [formData, setFormData] = useState<BusinessProfile>({
         // ... (initial state)
@@ -164,6 +177,56 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                 {/* --- Left Column: Main Configuration --- */}
                 <Grid item xs={12} md={8}>
                     {/* ... (fields) */}
+                    {/* 0. PUBLIC PAGE SECTION */}
+                    <Box sx={{ mb: 4 }}>
+                        <Typography variant="h6" gutterBottom color="primary.main">
+                            Link Público (Slug)
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            Esta es la URL web que tus clientes verán al visitar tu página de reservas alojada.
+                        </Typography>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="URL de Perfil (Slug)"
+                                    value={slug}
+                                    onChange={(e) => {
+                                        const val = e.target.value
+                                            .toLowerCase()
+                                            .replace(/\s+/g, '-')
+                                            .replace(/[^a-z0-9-]/g, '');
+                                        setSlug(val);
+                                    }}
+                                    helperText={`Tu página estará en: ${publicLink}`}
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: <Typography color="text.secondary" sx={{ mr: 1, pt: 0.2 }}>agendar.holalucia.cl/</Typography>,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={handleCopyLink}
+                                        size="small"
+                                    >
+                                        {copySuccess ? 'Copiado!' : 'Copiar Enlace'}
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        href={publicLink}
+                                        target="_blank"
+                                        size="small"
+                                        disabled={!slug}
+                                    >
+                                        Ver Página
+                                    </Button>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Box>
+
                     {/* 1. BRANDING & BASIC INFO */}
                     <Box sx={{ mb: 4 }}>
                         <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

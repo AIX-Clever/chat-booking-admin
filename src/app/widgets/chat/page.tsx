@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Box, Typography, Paper, Grid, IconButton, Tabs, Tab, Alert, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Paper, Grid, IconButton, Tabs, Tab, Alert, Button, Snackbar } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useTranslations } from 'next-intl';
@@ -11,6 +11,12 @@ import CodeIcon from '@mui/icons-material/Code';
 import ChatIcon from '@mui/icons-material/Chat';
 import { useTenant } from '../../../context/TenantContext';
 
+import { generateClient } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth';
+import { UPDATE_TENANT } from '../../../graphql/queries';
+import WidgetCustomizer from './components/WidgetCustomizer';
+import { WidgetConfig } from '../../../types/settings';
+
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -19,7 +25,6 @@ interface TabPanelProps {
 
 function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
             role="tabpanel"
@@ -39,9 +44,92 @@ function CustomTabPanel(props: TabPanelProps) {
 
 export default function WebIntegrationPage() {
     const t = useTranslations('widgets.chat');
-    const { tenant } = useTenant();
+    const { tenant, refreshTenant } = useTenant();
     const [value, setValue] = useState(0);
     const [isWidgetLoaded, setIsWidgetLoaded] = useState(false);
+
+    // Customization state
+    const client = React.useMemo(() => generateClient(), []);
+    const [loading, setLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [widgetConfig, setWidgetConfig] = useState<WidgetConfig>({
+        primaryColor: '#2563eb',
+        position: 'bottom-right',
+        language: 'es',
+        welcomeMessages: {
+            es: '¡Hola! ¿En qué puedo ayudarte hoy?',
+            en: 'Hello! How can I help you today?',
+            pt: 'Olá! Como posso ajudar você hoje?'
+        }
+    });
+
+    useEffect(() => {
+        if (tenant?.settings) {
+            try {
+                let settings = tenant.settings;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if (typeof settings === 'string') settings = JSON.parse(settings) as any;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if (typeof settings === 'string') settings = JSON.parse(settings) as any;
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const parsedSettings = settings as any;
+                if (parsedSettings.widgetConfig) {
+                    setWidgetConfig(prev => ({ ...prev, ...parsedSettings.widgetConfig }));
+                }
+            } catch (e) {
+                console.warn("Failed to parse tenant settings", e);
+            }
+        }
+    }, [tenant?.settings]);
+
+    const handleSaveSettings = async () => {
+        try {
+            setLoading(true);
+            setErrorMsg(null);
+
+            // Re-parse current settings to preserve aiMode, profile, etc.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            let currentSettings: any = {};
+            if (tenant?.settings) {
+                let s = tenant.settings;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if (typeof s === 'string') s = JSON.parse(s) as any;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                if (typeof s === 'string') s = JSON.parse(s) as any;
+                currentSettings = s || {};
+            }
+
+            const updatedSettings = {
+                ...currentSettings,
+                widgetConfig: widgetConfig
+            };
+
+            const settingsJson = JSON.stringify(updatedSettings);
+
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
+            await client.graphql({
+                query: UPDATE_TENANT,
+                variables: {
+                    input: {
+                        settings: settingsJson
+                    }
+                },
+                authToken: token
+            });
+
+            setSuccessMsg('Configuración visual guardada exitosamente');
+            await refreshTenant();
+        } catch (error) {
+            console.error('Error saving settings:', error);
+            setErrorMsg('Error al guardar la configuración');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const baseUrl = process.env.NEXT_PUBLIC_BOOKING_BASE_URL || 'https://agendar.holalucia.cl';
     // Use tenant.slug for iframe, tenant.id for widget script
@@ -53,8 +141,8 @@ export default function WebIntegrationPage() {
     // Widget Script Code (Tab 2)
     const scriptCode = `<script src="https://widget.holalucia.cl/bundle.js" 
     data-tenant-id="${tenant?.tenantId || 'YOUR_TENANT_ID'}" 
-    data-primary-color="#000000" 
-    data-language="es">
+    data-primary-color="${widgetConfig.primaryColor}" 
+    data-language="${widgetConfig.language}">
 </script>`;
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -63,18 +151,16 @@ export default function WebIntegrationPage() {
 
     const handleCopy = (text: string) => {
         navigator.clipboard.writeText(text);
-        // Toast could be added here
     };
 
     const handleLoadWidget = () => {
         if (!tenant?.tenantId) return;
 
-        // In a real playground, we inject the script dynamically
         const script = document.createElement('script');
         script.src = 'https://widget.holalucia.cl/bundle.js';
         script.setAttribute('data-tenant-id', tenant.tenantId);
-        script.setAttribute('data-primary-color', '#1976d2');
-        script.setAttribute('data-language', 'es');
+        script.setAttribute('data-primary-color', widgetConfig.primaryColor);
+        script.setAttribute('data-language', widgetConfig.language);
         script.id = 'lucia-widget-script';
 
         document.body.appendChild(script);
@@ -87,6 +173,13 @@ export default function WebIntegrationPage() {
 
     return (
         <Box sx={{ p: 3 }}>
+            <Snackbar open={!!successMsg} autoHideDuration={6000} onClose={() => setSuccessMsg(null)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert severity="success" onClose={() => setSuccessMsg(null)}>{successMsg}</Alert>
+            </Snackbar>
+            <Snackbar open={!!errorMsg} autoHideDuration={6000} onClose={() => setErrorMsg(null)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert severity="error" onClose={() => setErrorMsg(null)}>{errorMsg}</Alert>
+            </Snackbar>
+
             <Typography variant="h4" fontWeight="bold" gutterBottom>
                 {t('title')} {/* Integración Web */}
             </Typography>
@@ -118,32 +211,9 @@ export default function WebIntegrationPage() {
                                     Copia y pega este código HTML donde quieras que aparezca el formulario de reserva.
                                 </Typography>
 
-                                <Box
-                                    sx={{
-                                        p: 2,
-                                        bgcolor: 'grey.900',
-                                        color: 'grey.300',
-                                        borderRadius: 1,
-                                        fontFamily: 'monospace',
-                                        fontSize: '0.875rem',
-                                        position: 'relative',
-                                        border: '1px solid',
-                                        borderColor: 'grey.800',
-                                        overflowX: 'auto'
-                                    }}
-                                >
+                                <Box sx={{ p: 2, bgcolor: 'grey.900', color: 'grey.300', borderRadius: 1, fontFamily: 'monospace', fontSize: '0.875rem', position: 'relative', border: '1px solid', borderColor: 'grey.800', overflowX: 'auto' }}>
                                     {iframeCode}
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleCopy(iframeCode)}
-                                        sx={{
-                                            position: 'absolute',
-                                            top: 8,
-                                            right: 8,
-                                            color: 'grey.500',
-                                            '&:hover': { color: 'primary.light' }
-                                        }}
-                                    >
+                                    <IconButton size="small" onClick={() => handleCopy(iframeCode)} sx={{ position: 'absolute', top: 8, right: 8, color: 'grey.500', '&:hover': { color: 'primary.light' } }}>
                                         <ContentCopyIcon fontSize="small" />
                                     </IconButton>
                                 </Box>
@@ -155,15 +225,7 @@ export default function WebIntegrationPage() {
                                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                                         Así es como se verá el formulario de reservas en tu sitio web:
                                     </Typography>
-                                    <Paper
-                                        elevation={3}
-                                        sx={{
-                                            p: 1,
-                                            bgcolor: 'grey.100',
-                                            borderRadius: 2,
-                                            overflow: 'hidden'
-                                        }}
-                                    >
+                                    <Paper elevation={3} sx={{ p: 1, bgcolor: 'grey.100', borderRadius: 2, overflow: 'hidden' }}>
                                         <div dangerouslySetInnerHTML={{ __html: iframeCode }} />
                                     </Paper>
                                 </Box>
@@ -175,97 +237,66 @@ export default function WebIntegrationPage() {
                 {/* TAB 2: AI CHAT (Gated for BUSINESS) */}
                 <CustomTabPanel value={value} index={1}>
                     <PlanGuard minPlan="BUSINESS" featureName="Asistente IA (Lucia)" variant="block" upgradeFeature="AI">
-                        <Grid container spacing={4}>
-                            <Grid item xs={12} md={8}>
-                                <Alert severity="success" sx={{ mb: 3 }}>
-                                    <strong>Desbloquea el poder de la IA.</strong> Este widget no solo agenda, sino que responde preguntas sobre tus servicios y negocio usando tu Base de Conocimiento.
-                                </Alert>
 
-                                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                    Script de Instalación
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                    Agrega este script en el <code>&lt;head&gt;</code> o antes del cierre del <code>&lt;body&gt;</code> de tu sitio web.
-                                </Typography>
+                        <WidgetCustomizer
+                            widgetConfig={widgetConfig}
+                            setWidgetConfig={setWidgetConfig}
+                            onSave={handleSaveSettings}
+                            loading={loading}
+                        />
 
-                                <Box
-                                    sx={{
-                                        p: 2,
-                                        bgcolor: 'grey.900',
-                                        color: 'grey.300',
-                                        borderRadius: 1,
-                                        fontFamily: 'monospace',
-                                        fontSize: '0.875rem',
-                                        position: 'relative',
-                                        border: '1px solid',
-                                        borderColor: 'grey.800',
-                                        overflowX: 'auto',
-                                        whiteSpace: 'pre-wrap'
-                                    }}
-                                >
-                                    {scriptCode}
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleCopy(scriptCode)}
-                                        sx={{
-                                            position: 'absolute',
-                                            top: 8,
-                                            right: 8,
-                                            color: 'grey.500',
-                                            '&:hover': { color: 'primary.light' }
-                                        }}
-                                    >
-                                        <ContentCopyIcon fontSize="small" />
-                                    </IconButton>
-                                </Box>
-
-                                <Box sx={{ mt: 5 }}>
+                        <Box sx={{ mt: 6, pt: 4, borderTop: 1, borderColor: 'divider' }}>
+                            <Grid container spacing={4}>
+                                <Grid item xs={12} md={8}>
                                     <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                        Prueba la IA (Playground)
+                                        Script de Instalación
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                        Haz clic en el botón de abajo para activar a Lucia en esta página y probar cómo responde.
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                        Agrega este script en el <code>&lt;head&gt;</code> o antes del cierre del <code>&lt;body&gt;</code> de tu sitio web. Note que <strong>los colores y el idioma</strong> están incrustados en el snippet.
                                     </Typography>
 
-                                    {!isWidgetLoaded ? (
-                                        <Button
-                                            variant="contained"
-                                            size="large"
-                                            startIcon={<PlayArrowIcon />}
-                                            onClick={handleLoadWidget}
-                                            sx={{
-                                                py: 2,
-                                                px: 4,
-                                                borderRadius: 3,
-                                                textTransform: 'none',
-                                                fontSize: '1.1rem',
-                                                boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)'
-                                            }}
-                                        >
-                                            Activar Asistente de Prueba
-                                        </Button>
-                                    ) : (
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                            <Alert severity="success" icon={false} sx={{ flexGrow: 1, borderRadius: 2 }}>
-                                                🚀 <strong>¡Lucia está activa!</strong> Busca el icono del chat en la esquina inferior derecha de tu pantalla.
-                                            </Alert>
+                                    <Box sx={{ p: 2, bgcolor: 'grey.900', color: 'grey.300', borderRadius: 1, fontFamily: 'monospace', fontSize: '0.875rem', position: 'relative', border: '1px solid', borderColor: 'grey.800', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+                                        {scriptCode}
+                                        <IconButton size="small" onClick={() => handleCopy(scriptCode)} sx={{ position: 'absolute', top: 8, right: 8, color: 'grey.500', '&:hover': { color: 'primary.light' } }}>
+                                            <ContentCopyIcon fontSize="small" />
+                                        </IconButton>
+                                    </Box>
+
+                                    <Box sx={{ mt: 5 }}>
+                                        <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                            Prueba la IA (Playground)
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                            Haz clic en el botón de abajo para activar a Lucia en esta página y probar cómo responde.
+                                        </Typography>
+
+                                        {!isWidgetLoaded ? (
                                             <Button
-                                                variant="outlined"
-                                                startIcon={<RestartAltIcon />}
-                                                onClick={handleReload}
-                                                size="small"
+                                                variant="contained"
+                                                size="large"
+                                                startIcon={<PlayArrowIcon />}
+                                                onClick={handleLoadWidget}
+                                                sx={{ py: 2, px: 4, borderRadius: 3, textTransform: 'none', fontSize: '1.1rem', boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)' }}
                                             >
-                                                Reiniciar
+                                                Activar Asistente de Prueba
                                             </Button>
-                                        </Box>
-                                    )}
-                                </Box>
+                                        ) : (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                <Alert severity="success" icon={false} sx={{ flexGrow: 1, borderRadius: 2 }}>
+                                                    🚀 <strong>¡Lucia está activa!</strong> Busca el icono del chat en la esquina inferior derecha de tu pantalla.
+                                                </Alert>
+                                                <Button variant="outlined" startIcon={<RestartAltIcon />} onClick={handleReload} size="small">
+                                                    Reiniciar
+                                                </Button>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </Box>
                     </PlanGuard>
                 </CustomTabPanel>
             </Paper>
         </Box>
     );
 }
-

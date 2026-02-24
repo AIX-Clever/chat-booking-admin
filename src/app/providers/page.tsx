@@ -230,7 +230,7 @@ export default function ProvidersPage() {
                     try {
                         const urlObj = new URL(fixedPhotoUrl);
                         fixedPhotoUrl = fixedPhotoUrl.replace(urlObj.hostname, cfDomain).split('?')[0];
-                    } catch (e) { /* ignore */ }
+                    } catch { /* ignore */ }
                 }
 
                 return {
@@ -530,7 +530,7 @@ export default function ProvidersPage() {
                         fullWidth
                         placeholder={t('searchPlaceholder')}
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={() => setSearchTerm(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -704,7 +704,7 @@ export default function ProvidersPage() {
                                 label={t('dialog.general.fullName')}
                                 fullWidth
                                 value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                onChange={() => setFormData({ ...formData, name: e.target.value })}
                             />
                             <TextField
                                 label={t('dialog.general.biography')}
@@ -712,13 +712,13 @@ export default function ProvidersPage() {
                                 multiline
                                 rows={3}
                                 value={formData.bio}
-                                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                                onChange={() => setFormData({ ...formData, bio: e.target.value })}
                             />
                             <TextField
                                 label={t('dialog.general.professionalLicense')}
                                 fullWidth
                                 value={formData.professionalLicense}
-                                onChange={(e) => setFormData({ ...formData, professionalLicense: e.target.value })}
+                                onChange={() => setFormData({ ...formData, professionalLicense: e.target.value })}
                                 placeholder="Ej: Colegio Médico N° 123456"
                             />
                             <TextField
@@ -726,7 +726,7 @@ export default function ProvidersPage() {
                                 fullWidth
                                 select
                                 value={formData.timezone}
-                                onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
+                                onChange={() => setFormData({ ...formData, timezone: e.target.value })}
                             >
                                 {TIMEZONES.map((tz) => (
                                     <MenuItem key={tz} value={tz}>
@@ -738,7 +738,7 @@ export default function ProvidersPage() {
                                 control={
                                     <Switch
                                         checked={formData.active}
-                                        onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                                        onChange={() => setFormData({ ...formData, active: e.target.checked })}
                                     />
                                 }
                                 label={formData.active ? t('dialog.general.providerIsActive') : t('dialog.general.providerIsActive')}
@@ -851,7 +851,7 @@ export default function ProvidersPage() {
                                 placeholder="ej: dr-juan-perez"
                                 fullWidth
                                 value={formData.slug}
-                                onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                                onChange={() => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
                                 helperText="Usa solo letras minúsculas, números y guiones."
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">agendar.holalucia.cl/</InputAdornment>,
