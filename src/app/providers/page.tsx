@@ -224,6 +224,15 @@ export default function ProvidersPage() {
                     console.warn('Failed to parse metadata for provider', p.providerId, e);
                 }
 
+                let fixedPhotoUrl = p.photoUrl;
+                if (fixedPhotoUrl && fixedPhotoUrl.includes('.s3.amazonaws.com')) {
+                    const cfDomain = process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN || 'd3seqwcdtjbt7o.cloudfront.net';
+                    try {
+                        const urlObj = new URL(fixedPhotoUrl);
+                        fixedPhotoUrl = fixedPhotoUrl.replace(urlObj.hostname, cfDomain).split('?')[0];
+                    } catch (e) { /* ignore */ }
+                }
+
                 return {
                     id: p.providerId,
                     name: p.name,
@@ -231,7 +240,7 @@ export default function ProvidersPage() {
                     serviceIds: p.serviceIds || [],
                     timezone: p.timezone,
                     active: p.available,
-                    photoUrl: p.photoUrl,
+                    photoUrl: fixedPhotoUrl,
                     photoUrlThumbnail: p.photoUrlThumbnail,
                     hasGoogleCalendar: p.hasGoogleCalendar,
                     hasMicrosoftCalendar: p.hasMicrosoftCalendar,
@@ -329,23 +338,17 @@ export default function ProvidersPage() {
             }
 
             // 3. Construct public URL using CDN
-            // Extract the path (key) from the presigned URL
             try {
                 const urlObj = new URL(presignedUrl);
-                const path = urlObj.pathname; // includes leading slash, e.g. /raw/tenant/uuid-file.jpg
+                const s3Hostname = urlObj.hostname;
+                const cfDomain = process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN || 'd3seqwcdtjbt7o.cloudfront.net';
 
-                const cdnDomain = process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN;
-                let newPhotoUrl = '';
-
-                if (cdnDomain) {
-                    // Use CDN domain with the extracted path
-                    // Ensure protocol is handling correctly (environment variable should not have protocol)
-                    newPhotoUrl = `https://${cdnDomain}${path}`;
-                } else {
-                    // Fallback to S3 URL (without query params)
-                    console.warn("NEXT_PUBLIC_ASSETS_CDN_DOMAIN is missing");
-                    newPhotoUrl = `${urlObj.origin}${path}`;
+                if (!process.env.NEXT_PUBLIC_ASSETS_CDN_DOMAIN) {
+                    console.warn("NEXT_PUBLIC_ASSETS_CDN_DOMAIN is missing, using fallback: " + cfDomain);
                 }
+
+                // Replace S3 hostname with CloudFront domain and remove query params
+                const newPhotoUrl = presignedUrl.replace(s3Hostname, cfDomain).split('?')[0];
 
                 setFormData(prev => ({
                     ...prev,
@@ -353,8 +356,6 @@ export default function ProvidersPage() {
                 }));
             } catch (e) {
                 console.error("Error parsing presigned URL", e);
-                // Fallback: use the raw presigned url but stripped of query params? 
-                // Or just fail gracefully.
             }
 
         } catch (error) {
