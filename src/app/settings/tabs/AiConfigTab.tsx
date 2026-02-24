@@ -116,15 +116,15 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
             {/* RAG Toggle Section */}
             <Box sx={{ mt: 6 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>{t('knowledgeBase')}</Typography>
-                <Card variant="outlined" sx={{ p: 3, opacity: !isPlanSufficient('PRO') ? 0.7 : 1 }}>
+                <Card variant="outlined" sx={{ p: 3, opacity: !isPlanSufficient('BUSINESS') ? 0.7 : 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Box sx={{ pr: 2 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                                <Typography variant="subtitle1" fontWeight="bold" color={!isPlanSufficient('PRO') ? 'text.secondary' : 'text.primary'}>
+                                <Typography variant="subtitle1" fontWeight="bold" color={!isPlanSufficient('BUSINESS') ? 'text.secondary' : 'text.primary'}>
                                     {t('enableKnowledge')}
                                 </Typography>
-                                {!isPlanSufficient('PRO') && (
-                                    <Chip size="small" icon={<LockIcon sx={{ fontSize: 14 }} />} label="Requiere PRO" variant="outlined" />
+                                {!isPlanSufficient('BUSINESS') && (
+                                    <Chip size="small" icon={<LockIcon sx={{ fontSize: 14 }} />} label="Requiere BUSINESS" variant="outlined" />
                                 )}
                             </Box>
                             <Typography variant="body2" color="text.secondary">
@@ -132,17 +132,17 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                             </Typography>
                         </Box>
                         <Switch
-                            checked={ragEnabled && aiMode !== 'fsm' && isPlanSufficient('PRO')}
+                            checked={ragEnabled && aiMode !== 'fsm' && isPlanSufficient('BUSINESS')}
                             onChange={(e) => {
-                                if (isPlanSufficient('PRO')) {
+                                if (isPlanSufficient('BUSINESS')) {
                                     setRagEnabled(e.target.checked);
                                 }
                             }}
-                            disabled={aiMode === 'fsm' || !isPlanSufficient('PRO')}
+                            disabled={aiMode === 'fsm' || !isPlanSufficient('BUSINESS')}
                             color="primary"
                         />
                     </Box>
-                    {aiMode === 'fsm' && isPlanSufficient('PRO') && (
+                    {aiMode === 'fsm' && isPlanSufficient('BUSINESS') && (
                         <Alert severity="warning" sx={{ mt: 2 }}>
                             {t('ragRequirement')}
                         </Alert>

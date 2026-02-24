@@ -2,11 +2,11 @@
 export const AI_MODES = [
     {
         id: 'fsm',
-        minPlan: 'LITE'
+        minPlan: 'BUSINESS'
     },
     {
         id: 'nlp',
-        minPlan: 'PRO'
+        minPlan: 'BUSINESS'
     },
     {
         id: 'agent',
