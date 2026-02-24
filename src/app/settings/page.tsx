@@ -264,8 +264,8 @@ function SettingsContent() {
     };
 
     if (!hasMounted) return null;
-
-    const showApiKeys = currentPlan !== 'LITE';
+    // Temporarily hidden to simplify UX for basic plans. Only needed for B2B Server-to-Server integrations.
+    const showApiKeys = false; // currentPlan !== 'LITE';
 
     return (
         <>
