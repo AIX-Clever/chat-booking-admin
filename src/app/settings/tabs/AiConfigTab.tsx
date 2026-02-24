@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { useTranslations } from 'next-intl';
-import { useTranslations } from 'next-intl';
 
 import { AI_MODES, PLAN_LEVELS } from '../../../constants/settings';
 
