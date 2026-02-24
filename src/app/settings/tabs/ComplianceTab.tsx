@@ -23,7 +23,6 @@ import { useTranslations } from 'next-intl';
 interface ComplianceData {
     legalName: string;
     taxId: string;
-    professionalLicense: string;
     privacyPolicyUrl: string;
     dpoContact: string;
     cookieBannerActive: boolean;
@@ -42,7 +41,6 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
     const [formData, setFormData] = useState<ComplianceData>({
         legalName: '',
         taxId: '',
-        professionalLicense: '',
         privacyPolicyUrl: '',
         dpoContact: '',
         cookieBannerActive: true,
@@ -57,7 +55,6 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                 // Ensure we don't overwrite if they are undefined in profile
                 legalName: profile.legalName || prev.legalName,
                 taxId: profile.taxId || prev.taxId,
-                professionalLicense: profile.professionalLicense || prev.professionalLicense,
                 privacyPolicyUrl: profile.privacyPolicyUrl || prev.privacyPolicyUrl,
                 dpoContact: profile.dpoContact || prev.dpoContact,
                 cookieBannerActive: typeof profile.cookieBannerActive !== 'undefined' ? profile.cookieBannerActive : prev.cookieBannerActive,
@@ -108,25 +105,6 @@ export default function ComplianceTab({ profile, setProfile, onSave }: Complianc
                                         </InputAdornment>
                                     ),
                                 }}
-                            />
-                        </Box>
-                    </Paper>
-                </Grid>
-
-                {/* 2. PROFESSIONAL INFO */}
-                <Grid item xs={12} md={6}>
-                    <Paper variant="outlined" sx={{ p: 3, height: '100%', borderRadius: 3 }}>
-                        <Typography variant="h6" gutterBottom color="primary.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <ShieldIcon fontSize="small" /> {t('professionalInfo')}
-                        </Typography>
-                        <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <TextField
-                                fullWidth
-                                label={t('professionalLicense')}
-                                value={formData.professionalLicense}
-                                onChange={(e) => handleChange('professionalLicense', e.target.value)}
-                                placeholder={t('professionalLicensePlaceholder')}
-                                helperText={t('professionalLicenseHelper')}
                             />
                         </Box>
                     </Paper>

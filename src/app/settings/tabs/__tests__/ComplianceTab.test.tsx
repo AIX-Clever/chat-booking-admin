@@ -23,7 +23,6 @@ describe('ComplianceTab', () => {
     const mockProfile = {
         legalName: 'Test Company',
         taxId: '12345678-9',
-        professionalLicense: 'DDS-12345',
         privacyPolicyUrl: 'https://example.com/privacy',
         dpoContact: 'dpo@example.com',
         cookieBannerActive: true,
@@ -53,14 +52,12 @@ describe('ComplianceTab', () => {
         // Check for section headers (translated keys)
         expect(screen.getByText('title')).toBeInTheDocument();
         expect(screen.getByText('legalInfo')).toBeInTheDocument();
-        expect(screen.getByText('professionalInfo')).toBeInTheDocument();
         expect(screen.getByText('gdpr')).toBeInTheDocument();
         expect(screen.getByText('cookieConsent')).toBeInTheDocument();
 
         // Check for input fields with values
         expect(screen.getByDisplayValue('Test Company')).toBeInTheDocument();
         expect(screen.getByDisplayValue('12345678-9')).toBeInTheDocument();
-        expect(screen.getByDisplayValue('DDS-12345')).toBeInTheDocument();
         expect(screen.getByDisplayValue('https://example.com/privacy')).toBeInTheDocument();
         expect(screen.getByDisplayValue('dpo@example.com')).toBeInTheDocument();
     });
