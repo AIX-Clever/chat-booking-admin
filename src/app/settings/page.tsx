@@ -309,7 +309,7 @@ function SettingsContent() {
                     <>
                         {/* --- Tab 0: Identity (Profile) --- */}
                         <CustomTabPanel value={tabValue} index={0}>
-                            <IdentityTab profile={profile} setProfile={setProfile} slug={slug} setSlug={setSlug} onSave={handleSaveSettings} />
+                            <IdentityTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
                         </CustomTabPanel>
 
                         {/* --- Tab 1: AI Configuration (Intelligence) --- */}
