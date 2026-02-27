@@ -30,7 +30,6 @@ import { useTenant } from '../../context/TenantContext';
 import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
-import ComplianceTab from './tabs/ComplianceTab';
 import BillingTab from './tabs/BillingTab';
 import { WidgetConfig } from '../../types/settings';
 import { PLAN_LEVELS } from '../../constants/settings';
@@ -71,9 +70,8 @@ function SettingsContent() {
         const tabParam = searchParams.get('tab');
         if (tabParam === 'identity' || tabParam === 'profile') return 0;
         if (tabParam === 'ai') return 1;
-        if (tabParam === 'compliance' || tabParam === 'legal') return 2;
-        if (tabParam === 'billing' || tabParam === 'plan') return 3;
-        if (tabParam === 'keys' || tabParam === 'api') return 4;
+        if (tabParam === 'billing' || tabParam === 'plan' || tabParam === 'compliance' || tabParam === 'legal') return 2;
+        if (tabParam === 'keys' || tabParam === 'api') return 3;
         return 0;
 
     }, [searchParams]);
@@ -294,7 +292,6 @@ function SettingsContent() {
                     <Tabs value={tabValue} onChange={handleChangeTab} aria-label="settings tabs" scrollButtons="auto" variant="scrollable">
                         <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
-                        <Tab label={t('tabs.compliance')} icon={<Box component="span" sx={{ fontSize: '1.2rem' }}>⚖️</Box>} iconPosition="start" />
                         <Tab label="Facturación" icon={<CreditCardIcon />} iconPosition="start" />
                         {showApiKeys && (
                             <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
@@ -340,19 +337,14 @@ function SettingsContent() {
                             </Box>
                         </CustomTabPanel>
 
-                        {/* --- Tab 2: Compliance (Legal) --- */}
+                        {/* --- Tab 2: Billing & Legal (Merged) --- */}
                         <CustomTabPanel value={tabValue} index={2}>
-                            <ComplianceTab profile={profile} setProfile={setProfile} onSave={handleSaveSettings} />
-                        </CustomTabPanel>
-
-                        {/* --- Tab 3: Billing --- */}
-                        <CustomTabPanel value={tabValue} index={3}>
                             <BillingTab />
                         </CustomTabPanel>
 
-                        {/* --- Tab 4: API Keys (Conditional) --- */}
+                        {/* --- Tab 3: API Keys (Conditional) --- */}
                         {showApiKeys && (
-                            <CustomTabPanel value={tabValue} index={4}>
+                            <CustomTabPanel value={tabValue} index={3}>
                                 <ApiKeysTab />
                             </CustomTabPanel>
                         )}

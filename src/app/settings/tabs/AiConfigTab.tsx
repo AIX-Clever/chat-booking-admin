@@ -50,7 +50,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
             </Typography>
 
             <Grid container spacing={3}>
-                {AI_MODES.filter(m => m.id !== 'agent').map((mode) => {
+                {AI_MODES.map((mode) => {
                     const locked = !isPlanSufficient(mode.minPlan);
                     const active = aiMode === mode.id;
                     const modeKey = mode.id as 'fsm' | 'nlp' | 'agent';
@@ -72,7 +72,7 @@ export default function AiConfigTab({ aiMode, setAiMode, ragEnabled, setRagEnabl
                                         transform: locked ? 'none' : 'translateY(-2px)'
                                     }
                                 }}
-                                onClick={() => !locked && handleSelectAiMode(mode.id, mode.minPlan)}
+                                onClick={() => handleSelectAiMode(mode.id, mode.minPlan)}
                             >
                                 {locked && (
                                     <Chip

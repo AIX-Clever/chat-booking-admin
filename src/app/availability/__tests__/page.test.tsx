@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import BookingsPage from '../page';
+import AvailabilityPage from '../page';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
@@ -11,23 +11,14 @@ jest.mock('next-intl', () => ({
     useLocale: () => 'es',
 }));
 
-jest.mock('../../../context/TenantContext', () => ({
-    useTenant: () => ({
-        tenant: { tenantId: 't1' },
-        loading: false
-    }),
+jest.mock('../../../components/common/ToastContext', () => ({
+    useToast: () => ({ showToast: jest.fn() }),
 }));
 
 // Mock amplify
 jest.mock('aws-amplify/api', () => ({
     generateClient: jest.fn(() => ({
-        graphql: jest.fn().mockResolvedValue({
-            data: {
-                listProviders: [],
-                listRooms: { listRooms: [] },
-                searchServices: []
-            }
-        }),
+        graphql: jest.fn().mockResolvedValue({ data: { listProviders: [] } }),
     })),
 }));
 
@@ -35,14 +26,15 @@ jest.mock('aws-amplify/auth', () => ({
     fetchAuthSession: jest.fn().mockResolvedValue({}),
 }));
 
-describe('BookingsPage', () => {
+describe('AvailabilityPage', () => {
     it('renders correctly', async () => {
         render(
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <BookingsPage />
+                <AvailabilityPage />
             </LocalizationProvider>
         );
         await waitFor(() => {
+            // Check if anything rendered in the body (MUI renders a lot of divs)
             expect(document.body.innerHTML.length).toBeGreaterThan(100);
         }, { timeout: 10000 });
     }, 20000);

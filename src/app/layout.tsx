@@ -15,15 +15,23 @@ import AmplifyProvider from '../components/AmplifyProvider';
 import { TenantProvider } from '../context/TenantContext';
 import LocaleProvider from '../providers/LocaleProvider';
 import { ToastProvider } from '../components/common/ToastContext';
+import Script from 'next/script';
 
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
     return (
         <html lang="es">
             <body className={inter.className}>
+                {recaptchaKey && (
+                    <Script
+                        src={`https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`}
+                        strategy="beforeInteractive"
+                    />
+                )}
                 <AmplifyProvider>
                     <TenantProvider>
                         <LocaleProvider>

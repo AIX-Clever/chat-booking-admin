@@ -369,7 +369,7 @@ export default function ServicesPage() {
                     <Button variant="outlined" startIcon={<CategoryIcon />} onClick={() => setOpenCategories(true)}>
                         {t('category')}
                     </Button>
-                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
+                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} data-testid="add-service-button">
                         {t('addService')}
                     </Button>
                 </Box>
@@ -382,6 +382,7 @@ export default function ServicesPage() {
                         placeholder={t('searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        inputProps={{ 'data-testid': 'search-services-input' }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

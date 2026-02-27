@@ -1,0 +1,42 @@
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import OnboardingPage from '../page';
+
+// Mock useRouter
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+    useRouter: () => ({
+        push: mockPush,
+    }),
+}));
+
+// Mock Amplify
+jest.mock('aws-amplify/api', () => ({
+    generateClient: jest.fn(),
+}));
+
+jest.mock('aws-amplify/auth', () => ({
+    fetchUserAttributes: jest.fn(),
+    fetchAuthSession: jest.fn(),
+}));
+
+// Mock window.location correctly for JSDOM
+const originalLocation = window.location;
+
+describe('OnboardingPage', () => {
+    beforeAll(() => {
+        delete (window as any).location;
+        window.location = { ...originalLocation, href: '' } as any;
+    });
+
+    afterAll(() => {
+        window.location = originalLocation;
+    });
+
+    it('renders correctly', () => {
+        render(<OnboardingPage />);
+        // Just verify it doesn't crash and renders the layout
+        expect(document.body).toBeInTheDocument();
+    });
+});

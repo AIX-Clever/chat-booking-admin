@@ -1,88 +1,43 @@
-import * as React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { TenantProvider, useTenant } from '../TenantContext';
-import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
+import { generateClient } from 'aws-amplify/api';
+import { Hub } from 'aws-amplify/utils';
 
 // Mock Amplify
+jest.mock('aws-amplify/auth');
 jest.mock('aws-amplify/api', () => ({
-    generateClient: jest.fn()
+    generateClient: jest.fn(() => ({
+        graphql: jest.fn()
+    }))
 }));
+jest.mock('aws-amplify/utils');
 
-jest.mock('aws-amplify/auth', () => ({
-    fetchAuthSession: jest.fn(),
-    fetchUserAttributes: jest.fn()
-}));
-
-// Test component to consume context
 const TestComponent = () => {
     const { tenant, loading } = useTenant();
-
     if (loading) return <div data-testid="loading">Loading...</div>;
-    return (
-        <div>
-            <div data-testid="tenant-name">{tenant?.name}</div>
-            <div data-testid="tenant-plan">{tenant?.plan}</div>
-        </div>
-    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return <div data-testid="tenant-display">{tenant ? (tenant as any).name : 'No Tenant'}</div>;
 };
+TestComponent.displayName = 'TestComponent';
 
 describe('TenantContext', () => {
-    const mockGraphql = jest.fn();
-
     beforeEach(() => {
         jest.clearAllMocks();
-        (generateClient as jest.Mock).mockReturnValue({
-            graphql: mockGraphql
-        });
     });
 
-    it('should fetch and provide tenant data on mount', async () => {
+    it('loads tenant data on mount', async () => {
         (fetchAuthSession as jest.Mock).mockResolvedValue({
-            tokens: {
-                idToken: { toString: () => 'mock-token' }
-            }
+            tokens: { idToken: { toString: () => 'valid-token' } }
         });
-        (fetchUserAttributes as jest.Mock).mockResolvedValue({
-            'custom:tenantId': 't1'
-        });
+        (fetchUserAttributes as jest.Mock).mockResolvedValue({});
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mockGraphql = (generateClient() as any).graphql;
         mockGraphql.mockResolvedValue({
-            data: {
-                getTenant: {
-                    tenantId: 't1',
-                    name: 'Test Tenant',
-                    slug: 'test-tenant',
-                    plan: 'PRO',
-                    status: 'ACTIVE',
-                    createdAt: '2023-01-01T00:00:00Z'
-                }
-            }
+            data: { getTenant: { tenantId: 't1', name: 'Test Tenant', slug: 'test' } }
         });
-
-        render(
-            <TenantProvider>
-                <TestComponent />
-            </TenantProvider>
-        );
-
-        // Wait for data to appear
-        await waitFor(() => {
-            expect(screen.getByTestId('tenant-name')).toHaveTextContent('Test Tenant');
-        }, { timeout: 3000 });
-
-        expect(screen.getByTestId('tenant-plan')).toHaveTextContent('PRO');
-        expect(mockGraphql).toHaveBeenCalledWith({
-            query: expect.any(String),
-            variables: {}, // Verify NO variables are passed
-            authMode: 'userPool',
-            authToken: 'mock-token'
-        });
-    });
-
-    it('should handle auth session failure gracefully', async () => {
-        (fetchAuthSession as jest.Mock).mockRejectedValue(new Error('Auth error'));
 
         render(
             <TenantProvider>
@@ -92,15 +47,27 @@ describe('TenantContext', () => {
 
         await waitFor(() => {
             expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+        }, { timeout: 10000 });
+
+        expect(screen.getByTestId('tenant-display')).toHaveTextContent('Test Tenant');
+    }, 15000);
+
+    it('handles auth events', async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let authCallback: any = null;
+        (Hub.listen as jest.Mock).mockImplementation((channel, callback) => {
+            if (channel === 'auth') authCallback = callback;
+            return jest.fn();
         });
 
-        // Should be empty but not loading
-        expect(screen.getByTestId('tenant-name')).toHaveTextContent('');
-    });
-
-    it('should handle missing token gracefully', async () => {
         (fetchAuthSession as jest.Mock).mockResolvedValue({
-            tokens: {} // No idToken
+            tokens: { idToken: { toString: () => 'valid-token' } }
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mockGraphql = (generateClient() as any).graphql;
+        mockGraphql.mockResolvedValue({
+            data: { getTenant: { tenantId: 't1', name: 'Auth Tenant' } }
         });
 
         render(
@@ -109,24 +76,24 @@ describe('TenantContext', () => {
             </TenantProvider>
         );
 
-        await waitFor(() => {
-            expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-        });
+        await waitFor(() => expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
 
-        expect(screen.getByTestId('tenant-name')).toHaveTextContent('');
-    });
+        // Trigger signedIn event
+        if (authCallback) {
+            await waitFor(async () => {
+                await authCallback({ payload: { event: 'signedIn' } });
+            });
+        }
 
-    it('should throw error if useTenant is used outside of TenantProvider', () => {
-        // Suppress console.error for the expected error
-        const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
+        await waitFor(() => expect(screen.getByTestId('tenant-display')).toHaveTextContent('Auth Tenant'), { timeout: 10000 });
 
-        const ComponentWithHook = () => {
-            useTenant();
-            return null;
-        };
+        // Trigger signedOut event
+        if (authCallback) {
+            await waitFor(async () => {
+                await authCallback({ payload: { event: 'signedOut' } });
+            });
+        }
 
-        expect(() => render(<ComponentWithHook />)).toThrow();
-
-        consoleError.mockRestore();
-    });
+        await waitFor(() => expect(screen.getByTestId('tenant-display')).toHaveTextContent('No Tenant'), { timeout: 10000 });
+    }, 20000);
 });

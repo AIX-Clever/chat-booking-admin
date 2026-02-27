@@ -410,6 +410,7 @@ export default function AvailabilityPage() {
                     startIcon={<SaveIcon />}
                     onClick={handleSave}
                     disabled={isSaved}
+                    data-testid="save-button"
                 >
                     {isSaved ? t('saved') : t('saveChanges')}
                 </Button>
@@ -425,6 +426,8 @@ export default function AvailabilityPage() {
                                 value={selectedProvider || ''}
                                 label={t('selectProvider')}
                                 onChange={(e) => setSelectedProvider(e.target.value)}
+                                data-testid="provider-select"
+                                inputProps={{ 'data-testid': 'provider-select-input' }}
                             >
                                 {providers.map((p) => (
                                     <MenuItem key={p.providerId} value={p.providerId}>{p.name}</MenuItem>

@@ -143,6 +143,7 @@ export class AdminStack extends cdk.Stack {
             enableLogging: true,
             enableIpv6: true,
             httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
+            comment: `Admin App (${process.env.ENV || 'dev'})`,
         });
 
         // 4. Add Bucket Policy for OAC

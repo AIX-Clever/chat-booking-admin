@@ -12,9 +12,12 @@ import {
     Download as ArrowDownTrayIcon,
     CheckCircle as CheckCircleIcon,
     ExpandMore as ExpandMoreIcon,
-    Info as InfoIcon
+    Info as InfoIcon,
+    Shield as ShieldIcon,
+    Cookie as CookieIcon
 } from '@mui/icons-material';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+// import { useTranslations } from 'next-intl';
 import {
     Paper,
     Typography,
@@ -31,8 +34,19 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Skeleton
+    Skeleton,
+    TextField,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Divider,
+    Snackbar,
+    Switch,
+    Grid
 } from '@mui/material';
+import { UPDATE_TENANT } from '../../../graphql/queries';
 import { getPlanDetails } from '../../../utils/plans';
 
 const client = generateClient();
@@ -48,11 +62,34 @@ interface Invoice {
 }
 
 export default function BillingTab() {
+    // const tCommon = useTranslations('common');
+    // const tBilling = useTranslations('settings.billing');
+    // const tLegal = useTranslations('settings.compliance');
     const { user } = useAuthenticator((context) => [context.user]);
     const [loading, setLoading] = useState(true);
     const [tenant, setTenant] = useState<any>(null);
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [loadingInvoices, setLoadingInvoices] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+
+    // Billing Form State
+    const [billingType, setBillingType] = useState<'39' | '33'>('39'); // 39=Boleta, 33=Factura
+    const [billingData, setBillingData] = useState({
+        rut: '',
+        name: '',
+        giro: '',
+        address: '',
+        comuna: '',
+        email: ''
+    });
+
+    // Legal Form State (merged from Compliance)
+    const [legalData, setLegalData] = useState({
+        privacyPolicyUrl: '',
+        dpoContact: '',
+        cookieBannerActive: true
+    });
 
     const fetchData = React.useCallback(async () => {
         try {
@@ -71,6 +108,41 @@ export default function BillingTab() {
                 });
                 const t = tenantData.data.getTenant;
                 setTenant(t);
+
+                // Initialize Billing Form from Settings or Profile (for defaults)
+                const b = t?.settings?.billing;
+                const p = t?.settings?.profile;
+
+                if (b) {
+                    setBillingType(b.tipoDte === '33' ? '33' : '39');
+                    setBillingData({
+                        rut: b.rut || '',
+                        name: b.name || '',
+                        giro: b.giro || '',
+                        address: b.address || '',
+                        comuna: b.comuna || '',
+                        email: b.email || ''
+                    });
+                } else if (p) {
+                    // Pre-populate defaults from profile if billing is not yet set
+                    setBillingData({
+                        rut: p.taxId || '',
+                        name: p.legalName || '',
+                        giro: '', // Not in profile usually
+                        address: p.address?.street || '',
+                        comuna: p.address?.city || '',
+                        email: p.email || t.billingEmail || ''
+                    });
+                }
+
+                // Initialize Legal Data from Profile
+                if (p) {
+                    setLegalData({
+                        privacyPolicyUrl: p.privacyPolicyUrl || '',
+                        dpoContact: p.dpoContact || '',
+                        cookieBannerActive: typeof p.cookieBannerActive !== 'undefined' ? p.cookieBannerActive : true
+                    });
+                }
             } catch (e) {
                 console.warn("Could not fetch tenant", e);
             }
@@ -124,6 +196,59 @@ export default function BillingTab() {
     async function handleSubscribe() {
         // Mock subscribe or actual logic
         alert("Redirigiendo a pasarela de pago...");
+    }
+
+    async function handleSaveBilling() {
+        if (!tenant) return;
+        setSaving(true);
+        try {
+            const currentSettings = tenant.settings || {};
+            const newBilling = {
+                ...billingData,
+                tipoDte: billingType
+            };
+
+            await client.graphql({
+                query: UPDATE_TENANT,
+                variables: {
+                    input: {
+                        settings: JSON.stringify({
+                            ...currentSettings,
+                            billing: newBilling,
+                            profile: {
+                                ...(currentSettings.profile || {}),
+                                ...legalData
+                            }
+                        })
+                    }
+                }
+            });
+
+            setSnackbar({
+                open: true,
+                message: 'Preferencias de facturación guardadas correctamente.',
+                severity: 'success'
+            });
+
+            // Update local state to reflect changes
+            setTenant({
+                ...tenant,
+                settings: {
+                    ...currentSettings,
+                    billing: newBilling
+                }
+            });
+
+        } catch (err) {
+            console.error("Error updating billing preferences:", err);
+            setSnackbar({
+                open: true,
+                message: 'Error al guardar los datos de facturación.',
+                severity: 'error'
+            });
+        } finally {
+            setSaving(false);
+        }
     }
 
     // Derived State
@@ -246,7 +371,173 @@ export default function BillingTab() {
                 </Box>
             </Paper>
 
-            {/* 2. Invoice History */}
+            {/* 2. Billing Settings Card */}
+            <Paper elevation={0} sx={{ p: 3, border: '1px solid #E5E7EB', borderRadius: 2, mb: 4 }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: 2, color: '#0c4a6e' }}>
+                    Preferencias de Facturación
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    Configura cómo deseas recibir los comprobantes de cobro de tu suscripción a Hola Lucia.
+                </Typography>
+
+                <FormControl component="fieldset" sx={{ mb: 4 }}>
+                    <FormLabel component="legend" sx={{ fontWeight: 'bold', mb: 1 }}>Tipo de Documento</FormLabel>
+                    <RadioGroup
+                        row
+                        value={billingType}
+                        onChange={(e: any) => setBillingType(e.target.value)}
+                    >
+                        <FormControlLabel value="39" control={<Radio />} label="Boleta" />
+                        <FormControlLabel value="33" control={<Radio />} label="Factura" />
+                    </RadioGroup>
+                </FormControl>
+
+                {billingType === '33' && (
+                    <Box sx={{ mb: 3 }}>
+                        <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 2 }}>Datos de Facturación</Typography>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
+                            <TextField
+                                label="RUT Empresa"
+                                size="small"
+                                fullWidth
+                                value={billingData.rut}
+                                onChange={(e) => setBillingData({ ...billingData, rut: e.target.value })}
+                                placeholder="76.xxx.xxx-x"
+                            />
+                            <TextField
+                                label="Razón Social"
+                                size="small"
+                                fullWidth
+                                value={billingData.name}
+                                onChange={(e) => setBillingData({ ...billingData, name: e.target.value })}
+                            />
+                            <TextField
+                                label="Giro"
+                                size="small"
+                                fullWidth
+                                value={billingData.giro}
+                                onChange={(e) => setBillingData({ ...billingData, giro: e.target.value })}
+                            />
+                            <TextField
+                                label="Dirección"
+                                size="small"
+                                fullWidth
+                                value={billingData.address}
+                                onChange={(e) => setBillingData({ ...billingData, address: e.target.value })}
+                            />
+                            <TextField
+                                label="Comuna"
+                                size="small"
+                                fullWidth
+                                value={billingData.comuna}
+                                onChange={(e) => setBillingData({ ...billingData, comuna: e.target.value })}
+                            />
+                            <TextField
+                                label="Email Facturación"
+                                size="small"
+                                type="email"
+                                fullWidth
+                                value={billingData.email}
+                                onChange={(e) => setBillingData({ ...billingData, email: e.target.value })}
+                                placeholder="dte@empresa.com"
+                            />
+                        </Box>
+                    </Box>
+                )}
+
+                <Divider sx={{ my: 3 }} />
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button
+                        variant="contained"
+                        onClick={handleSaveBilling}
+                        disabled={saving}
+                        sx={{ textTransform: 'none', fontWeight: 'bold', minWidth: 150 }}
+                    >
+                        {saving ? 'Guardando...' : 'Guardar Preferencias'}
+                    </Button>
+                </Box>
+            </Paper>
+
+            {/* 3. Legal & Privacy Settings (Merged) */}
+            <Paper elevation={0} sx={{ p: 3, border: '1px solid #E5E7EB', borderRadius: 2, mb: 4 }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: 2, color: '#0c4a6e', display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <ShieldIcon fontSize="small" /> Privacidad y Legal
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    Configura la identidad legal y el cumplimiento normativo de tu negocio.
+                </Typography>
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="URL Política de Privacidad"
+                            value={legalData.privacyPolicyUrl}
+                            onChange={(e) => setLegalData({ ...legalData, privacyPolicyUrl: e.target.value })}
+                            placeholder="https://..."
+                            size="small"
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Delegado de Protección de Datos (DPO)"
+                            value={legalData.dpoContact}
+                            onChange={(e) => setLegalData({ ...legalData, dpoContact: e.target.value })}
+                            placeholder="Nombre o Email"
+                            size="small"
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, bgcolor: 'action.hover', borderRadius: 1 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <CookieIcon color="primary" />
+                                <Box>
+                                    <Typography variant="subtitle2" fontWeight="bold">Banner de Cookies</Typography>
+                                    <Typography variant="caption" color="text.secondary">Activa el consentimiento de cookies en tu sitio público.</Typography>
+                                </Box>
+                            </Box>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={legalData.cookieBannerActive}
+                                        onChange={(e) => setLegalData({ ...legalData, cookieBannerActive: e.target.checked })}
+                                        color="primary"
+                                    />
+                                }
+                                label=""
+                                sx={{ mr: 0 }}
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 3 }} />
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button
+                        variant="contained"
+                        onClick={handleSaveBilling}
+                        disabled={saving}
+                        sx={{ textTransform: 'none', fontWeight: 'bold', minWidth: 150 }}
+                    >
+                        {saving ? 'Guardando...' : 'Guardar Privacidad'}
+                    </Button>
+                </Box>
+            </Paper>
+
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={() => setSnackbar({ ...snackbar, open: false })}
+            >
+                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
+
+            {/* 3. Invoice History */}
             <Paper elevation={0} sx={{ border: '1px solid #E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
                 <Box sx={{ p: 2, borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 1 }}>
                     <DocumentTextIcon color="primary" />

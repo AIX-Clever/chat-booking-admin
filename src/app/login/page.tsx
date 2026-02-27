@@ -274,6 +274,7 @@ export default function LoginPage() {
                                     placeholder="admin@lucia.com"
                                     value={formData.email}
                                     onChange={handleChange('email')}
+                                    inputProps={{ 'data-testid': 'email-input' }}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -289,6 +290,7 @@ export default function LoginPage() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={formData.password}
                                     onChange={handleChange('password')}
+                                    inputProps={{ 'data-testid': 'password-input' }}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">

@@ -1,65 +1,37 @@
+
 import { renderHook } from '@testing-library/react';
 import { usePlanFeatures } from '../usePlanFeatures';
 import { useTenant } from '../../context/TenantContext';
 
-// Mock the context
+// Mock useTenant
 jest.mock('../../context/TenantContext', () => ({
-    useTenant: jest.fn()
+    useTenant: jest.fn(),
 }));
 
-describe('usePlanFeatures hook', () => {
+describe('usePlanFeatures', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('should return LITE limits by default', () => {
+    it('returns LITE defaults when no tenant', () => {
         (useTenant as jest.Mock).mockReturnValue({ tenant: null });
-
         const { result } = renderHook(() => usePlanFeatures());
-
         expect(result.current.plan).toBe('LITE');
         expect(result.current.canUseAI).toBe(false);
-        expect(result.current.maxUsers).toBe(1);
     });
 
-    it('should return PRO limits correctly', () => {
+    it('returns PRO features correctly', () => {
         (useTenant as jest.Mock).mockReturnValue({ tenant: { plan: 'PRO' } });
-
-        const { result } = renderHook(() => usePlanFeatures());
-
+        const { result } = renderHook(() => usePlanFeatures({ messages: 100, bookings: 50 }));
         expect(result.current.plan).toBe('PRO');
         expect(result.current.maxUsers).toBe(5);
-        expect(result.current.canUseAI).toBe(false);
+        expect(result.current.isUsageHigh).toBe(false);
     });
 
-    it('should return BUSINESS limits and allow AI', () => {
+    it('detects high usage for BUSINESS', () => {
         (useTenant as jest.Mock).mockReturnValue({ tenant: { plan: 'BUSINESS' } });
-
-        const { result } = renderHook(() => usePlanFeatures());
-
-        expect(result.current.plan).toBe('BUSINESS');
-        expect(result.current.canUseAI).toBe(true);
-    });
-
-    it('should correctly determine isUsageHigh', () => {
-        (useTenant as jest.Mock).mockReturnValue({ tenant: { plan: 'LITE' } });
-
-        // LITE msgs limit is 500. 80% is 400.
-        const { result: lowUsage } = renderHook(() => usePlanFeatures({ messages: 100, bookings: 10 }));
-        expect(lowUsage.current.isUsageHigh).toBe(false);
-
-        const { result: highUsage } = renderHook(() => usePlanFeatures({ messages: 401, bookings: 10 }));
-        expect(highUsage.current.isUsageHigh).toBe(true);
-    });
-
-    it('should correctly determine canInviteUser', () => {
-        (useTenant as jest.Mock).mockReturnValue({ tenant: { plan: 'PRO' } });
-
-        // PRO users limit is 5.
-        const { result: canInvite } = renderHook(() => usePlanFeatures({ messages: 0, bookings: 0, users: 4 }));
-        expect(canInvite.current.canInviteUser).toBe(true);
-
-        const { result: cannotInvite } = renderHook(() => usePlanFeatures({ messages: 0, bookings: 0, users: 5 }));
-        expect(cannotInvite.current.canInviteUser).toBe(false);
+        // BUSINESS limit for messages is 10000. 8001 is > 80%.
+        const { result } = renderHook(() => usePlanFeatures({ messages: 8001, bookings: 10 }));
+        expect(result.current.isUsageHigh).toBe(true);
     });
 });

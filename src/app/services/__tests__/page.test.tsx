@@ -1,69 +1,58 @@
-/**
- * Tests for Services Page
- * @jest-environment jsdom
- */
 
-// import { render, screen, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom'
+import React from 'react';
+import { render, waitFor } from '@testing-library/react';
+import ServicesPage from '../page';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-// Mock the services page component
-// Note: Actual component import will be added after fixing module resolution
-describe('Services Page', () => {
-    describe('Component Rendering', () => {
-        it('should render without crashing', () => {
-            // This is a placeholder test
-            expect(true).toBe(true)
-        })
+// Standardized next-intl mock
+jest.mock('next-intl', () => ({
+    useTranslations: () => (key: string) => key,
+    useLocale: () => 'es',
+}));
 
-        it.skip('should display services list', async () => {
-            // TODO: Implement once GraphQL mocking is set up
-            // const { container } = render(<ServicesPage />)
-            // await waitFor(() => {
-            //   expect(screen.getByText(/services/i)).toBeInTheDocument()
-            // })
-        })
+jest.mock('../../../context/TenantContext', () => ({
+    useTenant: () => ({
+        tenant: { id: 't1' },
+        loading: false
+    }),
+}));
 
-        it.skip('should show no requiredRoomIds GraphQL error', async () => {
-            // TODO: Verify that the GraphQL query doesn't throw FieldUndefined error
-            // This validates the schema fix we applied
-        })
-    })
+jest.mock('../../../components/common/ToastContext', () => ({
+    useToast: () => ({ showToast: jest.fn() }),
+}));
 
-    describe('Service Creation', () => {
-        it.skip('should open create service modal when button is clicked', async () => {
-            // TODO: Implement
-            // const { getByRole } = render(<ServicesPage />)
-            // const createButton = getByRole('button', { name: /create service/i })
-            // fireEvent.click(createButton)
-            // expect(screen.getByRole('dialog')).toBeInTheDocument()
-        })
+// Mock components that might be problematic
+const ConfirmDialog = () => <div data-testid="confirm-dialog">ConfirmDialog</div>;
+ConfirmDialog.displayName = 'ConfirmDialog';
+jest.mock('../../../components/common/ConfirmDialog', () => ConfirmDialog);
 
-        it.skip('should display modality selector (Online/Physical)', async () => {
-            // TODO: Implement
-            // Verify that the LocationType enum selector appears
-        })
+// Mock amplify
+jest.mock('aws-amplify/api', () => ({
+    generateClient: jest.fn(() => ({
+        graphql: jest.fn().mockResolvedValue({
+            data: {
+                searchServices: [],
+                listCategories: [],
+                listRooms: { listRooms: [] }
+            }
+        }),
+    })),
+}));
 
-        it.skip('should show room selector when Physical modality is selected', async () => {
-            // TODO: Implement
-            // Verify conditional rendering of requiredRoomIds field
-        })
-    })
+jest.mock('aws-amplify/auth', () => ({
+    fetchAuthSession: jest.fn().mockResolvedValue({}),
+}));
 
-    describe('GraphQL Integration', () => {
-        it('should have requiredRoomIds field in query', () => {
-            // This validates that our schema update is being used
-            const mockQuery = `
-        query {
-          searchServices(query: "") {
-            serviceId
-            name
-            requiredRoomIds
-            locationType
-          }
-        }
-      `
-            expect(mockQuery).toContain('requiredRoomIds')
-            expect(mockQuery).toContain('locationType')
-        })
-    })
-})
+describe('ServicesPage', () => {
+    it('renders correctly', async () => {
+        render(
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <ServicesPage />
+            </LocalizationProvider>
+        );
+        await waitFor(() => {
+            expect(document.body.innerHTML.length).toBeGreaterThan(100);
+        }, { timeout: 10000 });
+    }, 20000);
+});

@@ -12,6 +12,12 @@ import { REGISTER_TENANT } from '../../graphql/queries';
 
 const client = generateClient();
 
+declare global {
+    interface Window {
+        grecaptcha: unknown;
+    }
+}
+
 export default function RegisterPage() {
     const t = useTranslations('auth.register');
     const router = useRouter();
@@ -27,6 +33,27 @@ export default function RegisterPage() {
         setError(null);
 
         try {
+            // 0. Get reCAPTCHA token
+            let recaptchaToken = null;
+            const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+            if (typeof window !== 'undefined' && window.grecaptcha && recaptchaKey) {
+                try {
+                    recaptchaToken = await new Promise<string>((resolve, reject) => {
+                        window.grecaptcha.ready(async () => {
+                            try {
+                                const token = await window.grecaptcha.execute(recaptchaKey, { action: 'signup' });
+                                resolve(token);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                    console.log('reCAPTCHA token generated');
+                } catch (e) {
+                    console.warn('reCAPTCHA failed, proceeding without token:', e);
+                }
+            }
+
             // 1. Call Register Mutation
             console.log('Registering tenant...');
             const response = await client.graphql({
@@ -35,7 +62,8 @@ export default function RegisterPage() {
                     input: {
                         email,
                         password,
-                        companyName: companyName || undefined
+                        companyName: companyName || undefined,
+                        recaptchaToken: recaptchaToken
                     }
                 },
                 authMode: 'apiKey'
@@ -135,6 +163,7 @@ export default function RegisterPage() {
                             autoFocus
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            inputProps={{ 'data-testid': 'email-input' }}
                         />
                         <TextField
                             margin="normal"
@@ -145,6 +174,7 @@ export default function RegisterPage() {
                             autoComplete="organization"
                             value={companyName}
                             onChange={(e) => setCompanyName(e.target.value)}
+                            inputProps={{ 'data-testid': 'company-input' }}
                         />
                         <TextField
                             margin="normal"
@@ -157,6 +187,7 @@ export default function RegisterPage() {
                             autoComplete="new-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            inputProps={{ 'data-testid': 'password-input' }}
                         />
 
                         <Button

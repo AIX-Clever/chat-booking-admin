@@ -5,7 +5,8 @@ import React, { useState, useEffect } from 'react';
 import {
     Box, Stepper, Step, StepLabel, Button, Typography,
     Container, Paper, TextField, CircularProgress, Alert,
-    Card, CardContent
+    Card, CardContent,
+    FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider
 } from '@mui/material';
 import { generateClient } from 'aws-amplify/api';
 import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
@@ -14,7 +15,7 @@ import { UPDATE_TENANT, CREATE_SERVICE } from '../../graphql/queries';
 
 const client = generateClient();
 
-const steps = ['Brand Your Chat', 'Add First Service', 'Launch'];
+const steps = ['Brand Your Chat', 'Billing Preferences', 'Add First Service', 'Launch'];
 
 export default function OnboardingPage() {
     const router = useRouter();
@@ -32,8 +33,28 @@ export default function OnboardingPage() {
     const [duration, setDuration] = useState('30');
     const [price, setPrice] = useState('0');
 
+    // Billing State
+    const [billingType, setBillingType] = useState<'33' | '39'>('39');
+    const [billingData, setBillingData] = useState({
+        rut: '',
+        name: '',
+        giro: '',
+        address: '',
+        comuna: '',
+        email: ''
+    });
+
     useEffect(() => {
-        // Load initial data
+        // LEGACY ONBOARDING CLEANUP: Redirect to the dedicated onboarding app
+        const onboardingUrl = process.env.NEXT_PUBLIC_ONBOARDING_URL || 'https://onboarding.holalucia.cl';
+        const plan = typeof window !== 'undefined' ? localStorage.getItem('onboarding_plan') : null;
+
+        console.log('[LEGACY_ONBOARDING] Redirecting to dedicated onboarding app...');
+        window.location.href = `${onboardingUrl}${plan ? `?plan=${plan}` : ''}`;
+    }, []);
+
+    useEffect(() => {
+        // Load initial data (keeping for reference but normally unreachable)
         const loadUser = async () => {
             try {
                 const attrs = await fetchUserAttributes();
@@ -72,7 +93,31 @@ export default function OnboardingPage() {
                     authToken: token
                 });
             } else if (activeStep === 1) {
-                // Create Service
+                // Save Billing Preferences
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const settingsUpdate: any = {
+                    billing: {
+                        tipoDte: billingType,
+                        ...(billingType === '33' ? billingData : {})
+                    }
+                };
+
+                // Merge with existing branding if we want to be safe, 
+                // but in onboarding we usually build it step by step.
+                await client.graphql({
+                    query: UPDATE_TENANT,
+                    variables: {
+                        input: {
+                            settings: JSON.stringify({
+                                theme: { primaryColor },
+                                billing: settingsUpdate.billing
+                            })
+                        }
+                    },
+                    authToken: token
+                });
+            } else if (activeStep === 2) {
+                // Create Service (Now Step 2 instead of 1)
                 await client.graphql({
                     query: CREATE_SERVICE,
                     variables: {
@@ -162,6 +207,73 @@ export default function OnboardingPage() {
                             )}
 
                             {activeStep === 1 && (
+                                <Box sx={{ mt: 1 }}>
+                                    <Typography variant="h6" gutterBottom>Billing Preferences</Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                        Choose how you want to receive receipts for your Hola Lucia subscription.
+                                    </Typography>
+
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Document Type</FormLabel>
+                                        <RadioGroup
+                                            row
+                                            value={billingType}
+                                            onChange={(e) => setBillingType(e.target.value as '33' | '39')}
+                                        >
+                                            <FormControlLabel value="39" control={<Radio />} label="Boleta" />
+                                            <FormControlLabel value="33" control={<Radio />} label="Factura" />
+                                        </RadioGroup>
+                                    </FormControl>
+
+                                    {billingType === '33' && (
+                                        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                            <Divider sx={{ mb: 1 }} />
+                                            <Typography variant="subtitle2">Fiscal Data</Typography>
+                                            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                                                <TextField
+                                                    label="RUT Empresa"
+                                                    value={billingData.rut}
+                                                    onChange={(e) => setBillingData({ ...billingData, rut: e.target.value })}
+                                                    fullWidth
+                                                    placeholder="76.123.456-7"
+                                                />
+                                                <TextField
+                                                    label="Razón Social"
+                                                    value={billingData.name}
+                                                    onChange={(e) => setBillingData({ ...billingData, name: e.target.value })}
+                                                    fullWidth
+                                                />
+                                                <TextField
+                                                    label="Giro"
+                                                    value={billingData.giro}
+                                                    onChange={(e) => setBillingData({ ...billingData, giro: e.target.value })}
+                                                    fullWidth
+                                                />
+                                                <TextField
+                                                    label="Dirección"
+                                                    value={billingData.address}
+                                                    onChange={(e) => setBillingData({ ...billingData, address: e.target.value })}
+                                                    fullWidth
+                                                />
+                                                <TextField
+                                                    label="Comuna"
+                                                    value={billingData.comuna}
+                                                    onChange={(e) => setBillingData({ ...billingData, comuna: e.target.value })}
+                                                    fullWidth
+                                                />
+                                                <TextField
+                                                    label="Email Facturación"
+                                                    value={billingData.email}
+                                                    onChange={(e) => setBillingData({ ...billingData, email: e.target.value })}
+                                                    fullWidth
+                                                />
+                                            </Box>
+                                        </Box>
+                                    )}
+                                </Box>
+                            )}
+
+                            {activeStep === 2 && (
                                 <Box component="form" noValidate sx={{ mt: 1 }}>
                                     <Typography variant="h6" gutterBottom>Create your first Service</Typography>
                                     <TextField
@@ -202,7 +314,7 @@ export default function OnboardingPage() {
                                 </Box>
                             )}
 
-                            {activeStep === 2 && (
+                            {activeStep === 3 && (
                                 <Box sx={{ mt: 1 }}>
                                     <Typography variant="h6" gutterBottom>Launch your Widget</Typography>
                                     <Typography variant="body1" paragraph>
