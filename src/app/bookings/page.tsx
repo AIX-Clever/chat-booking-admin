@@ -1555,7 +1555,7 @@ export default function BookingsPage() {
 
             {/* Confirm Overbook Dialog */}
             <Dialog open={overbookConfirmOpen} onClose={() => setOverbookConfirmOpen(false)}>
-                <DialogTitle>{t('overbookConfirm.title', 'Confirmar Sobrecupo')}</DialogTitle>
+                <DialogTitle>{t('overbookConfirm.title')}</DialogTitle>
                 <DialogContent>
                     <Typography>
                         {`¿Estás agendando un sobre cupo para el día ${newBookingData.date}, a las ${newBookingData.time} para: '${providers.find(p => p.providerId === newBookingData.providerId)?.name || 'Profesional'}', estás seguro de sobreagendar?`}
@@ -1573,7 +1573,7 @@ export default function BookingsPage() {
                         color="error"
                         variant="contained"
                     >
-                        {t('overbookConfirm.confirm', 'Forzar Sobrecupo')}
+                        {t('overbookConfirm.confirm')}
                     </Button>
                 </DialogActions>
             </Dialog>
