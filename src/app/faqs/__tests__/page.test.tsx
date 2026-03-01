@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import FAQsPage from '../page';
-import { generateClient } from 'aws-amplify/api';
 
 jest.mock('next-intl', () => ({
     useTranslations: () => (key: string) => key,
@@ -11,7 +10,7 @@ jest.mock('next-intl', () => ({
 const mockGraphql = jest.fn();
 jest.mock('aws-amplify/api', () => ({
     generateClient: jest.fn(() => ({
-        graphql: (...args: any[]) => mockGraphql(...args),
+        graphql: (...args: unknown[]) => mockGraphql(...args),
     })),
 }));
 

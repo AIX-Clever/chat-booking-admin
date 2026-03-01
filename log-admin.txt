@@ -1,0 +1,266 @@
+deploy	Set up job	﻿2026-03-01T15:06:40.6392364Z Current runner version: '2.331.0'
+deploy	Set up job	2026-03-01T15:06:40.6416309Z ##[group]Runner Image Provisioner
+deploy	Set up job	2026-03-01T15:06:40.6417218Z Hosted Compute Agent
+deploy	Set up job	2026-03-01T15:06:40.6417855Z Version: 20260213.493
+deploy	Set up job	2026-03-01T15:06:40.6418481Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+deploy	Set up job	2026-03-01T15:06:40.6419174Z Build Date: 2026-02-13T00:28:41Z
+deploy	Set up job	2026-03-01T15:06:40.6419948Z Worker ID: {3a990180-ab30-4475-b474-9111b4ca31ae}
+deploy	Set up job	2026-03-01T15:06:40.6420585Z Azure Region: westus
+deploy	Set up job	2026-03-01T15:06:40.6421203Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:06:40.6422914Z ##[group]Operating System
+deploy	Set up job	2026-03-01T15:06:40.6423492Z Ubuntu
+deploy	Set up job	2026-03-01T15:06:40.6423951Z 24.04.3
+deploy	Set up job	2026-03-01T15:06:40.6424556Z LTS
+deploy	Set up job	2026-03-01T15:06:40.6425029Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:06:40.6425532Z ##[group]Runner Image
+deploy	Set up job	2026-03-01T15:06:40.6426180Z Image: ubuntu-24.04
+deploy	Set up job	2026-03-01T15:06:40.6426713Z Version: 20260224.36.1
+deploy	Set up job	2026-03-01T15:06:40.6427665Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260224.36/images/ubuntu/Ubuntu2404-Readme.md
+deploy	Set up job	2026-03-01T15:06:40.6429448Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260224.36
+deploy	Set up job	2026-03-01T15:06:40.6430403Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:06:40.6431449Z ##[group]GITHUB_TOKEN Permissions
+deploy	Set up job	2026-03-01T15:06:40.6433347Z Contents: read
+deploy	Set up job	2026-03-01T15:06:40.6434066Z Metadata: read
+deploy	Set up job	2026-03-01T15:06:40.6434594Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:06:40.6437014Z Secret source: Actions
+deploy	Set up job	2026-03-01T15:06:40.6437858Z Prepare workflow directory
+deploy	Set up job	2026-03-01T15:06:40.6756591Z Prepare all required actions
+deploy	Set up job	2026-03-01T15:06:40.6793336Z Getting action download info
+deploy	Set up job	2026-03-01T15:06:41.1475978Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+deploy	Set up job	2026-03-01T15:06:41.2850425Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+deploy	Set up job	2026-03-01T15:06:41.3798590Z Download action repository 'aws-actions/configure-aws-credentials@v4' (SHA:7474bc4690e29a8392af63c5b98e7449536d5c3a)
+deploy	Set up job	2026-03-01T15:06:42.0185097Z Complete job name: deploy
+deploy	Checkout repo	﻿2026-03-01T15:06:42.0925485Z ##[group]Run actions/checkout@v4
+deploy	Checkout repo	2026-03-01T15:06:42.0926361Z with:
+deploy	Checkout repo	2026-03-01T15:06:42.0926800Z   repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.0927580Z   token: ***
+deploy	Checkout repo	2026-03-01T15:06:42.0927950Z   ssh-strict: true
+deploy	Checkout repo	2026-03-01T15:06:42.0928339Z   ssh-user: git
+deploy	Checkout repo	2026-03-01T15:06:42.0928733Z   persist-credentials: true
+deploy	Checkout repo	2026-03-01T15:06:42.0929183Z   clean: true
+deploy	Checkout repo	2026-03-01T15:06:42.0929574Z   sparse-checkout-cone-mode: true
+deploy	Checkout repo	2026-03-01T15:06:42.0930050Z   fetch-depth: 1
+deploy	Checkout repo	2026-03-01T15:06:42.0930424Z   fetch-tags: false
+deploy	Checkout repo	2026-03-01T15:06:42.0930819Z   show-progress: true
+deploy	Checkout repo	2026-03-01T15:06:42.0931237Z   lfs: false
+deploy	Checkout repo	2026-03-01T15:06:42.0931596Z   submodules: false
+deploy	Checkout repo	2026-03-01T15:06:42.0931995Z   set-safe-directory: true
+deploy	Checkout repo	2026-03-01T15:06:42.0932857Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.2038019Z Syncing repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.2040094Z ##[group]Getting Git version info
+deploy	Checkout repo	2026-03-01T15:06:42.2040924Z Working directory is '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-03-01T15:06:42.2042088Z [command]/usr/bin/git version
+deploy	Checkout repo	2026-03-01T15:06:42.2125678Z git version 2.53.0
+deploy	Checkout repo	2026-03-01T15:06:42.2153123Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.2175548Z Temporarily overriding HOME='/home/runner/work/_temp/df701031-3132-4f89-82c4-391a3987773c' before making global git config changes
+deploy	Checkout repo	2026-03-01T15:06:42.2176920Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Checkout repo	2026-03-01T15:06:42.2180737Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.2223679Z Deleting the contents of '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-03-01T15:06:42.2227632Z ##[group]Initializing the repository
+deploy	Checkout repo	2026-03-01T15:06:42.2231698Z [command]/usr/bin/git init /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.2362867Z hint: Using 'master' as the name for the initial branch. This default branch name
+deploy	Checkout repo	2026-03-01T15:06:42.2364561Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+deploy	Checkout repo	2026-03-01T15:06:42.2365854Z hint: to use in all of your new repositories, which will suppress this warning,
+deploy	Checkout repo	2026-03-01T15:06:42.2367052Z hint: call:
+deploy	Checkout repo	2026-03-01T15:06:42.2367666Z hint:
+deploy	Checkout repo	2026-03-01T15:06:42.2368434Z hint: 	git config --global init.defaultBranch <name>
+deploy	Checkout repo	2026-03-01T15:06:42.2369378Z hint:
+deploy	Checkout repo	2026-03-01T15:06:42.2370263Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+deploy	Checkout repo	2026-03-01T15:06:42.2371224Z hint: 'development'. The just-created branch can be renamed via this command:
+deploy	Checkout repo	2026-03-01T15:06:42.2371926Z hint:
+deploy	Checkout repo	2026-03-01T15:06:42.2372542Z hint: 	git branch -m <name>
+deploy	Checkout repo	2026-03-01T15:06:42.2372994Z hint:
+deploy	Checkout repo	2026-03-01T15:06:42.2373868Z hint: Disable this message with "git config set advice.defaultBranchName false"
+deploy	Checkout repo	2026-03-01T15:06:42.2375005Z Initialized empty Git repository in /home/runner/work/chat-booking-admin/chat-booking-admin/.git/
+deploy	Checkout repo	2026-03-01T15:06:42.2380847Z [command]/usr/bin/git remote add origin https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.2419192Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.2419952Z ##[group]Disabling automatic garbage collection
+deploy	Checkout repo	2026-03-01T15:06:42.2424040Z [command]/usr/bin/git config --local gc.auto 0
+deploy	Checkout repo	2026-03-01T15:06:42.2454149Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.2454831Z ##[group]Setting up auth
+deploy	Checkout repo	2026-03-01T15:06:42.2463184Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Checkout repo	2026-03-01T15:06:42.2497118Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Checkout repo	2026-03-01T15:06:42.2872678Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Checkout repo	2026-03-01T15:06:42.2908282Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Checkout repo	2026-03-01T15:06:42.3158479Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Checkout repo	2026-03-01T15:06:42.3192531Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Checkout repo	2026-03-01T15:06:42.3436324Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+deploy	Checkout repo	2026-03-01T15:06:42.3473282Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.3474067Z ##[group]Fetching the repository
+deploy	Checkout repo	2026-03-01T15:06:42.3482770Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +35f8fd63d9664910c17a58e6da4795963db7dede:refs/remotes/origin/dev
+deploy	Checkout repo	2026-03-01T15:06:42.8346274Z From https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:06:42.8347388Z  * [new ref]         35f8fd63d9664910c17a58e6da4795963db7dede -> origin/dev
+deploy	Checkout repo	2026-03-01T15:06:42.8381280Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.8382349Z ##[group]Determining the checkout info
+deploy	Checkout repo	2026-03-01T15:06:42.8383858Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.8388801Z [command]/usr/bin/git sparse-checkout disable
+deploy	Checkout repo	2026-03-01T15:06:42.8430702Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+deploy	Checkout repo	2026-03-01T15:06:42.8458283Z ##[group]Checking out the ref
+deploy	Checkout repo	2026-03-01T15:06:42.8461961Z [command]/usr/bin/git checkout --progress --force -B dev refs/remotes/origin/dev
+deploy	Checkout repo	2026-03-01T15:06:42.8679123Z Switched to a new branch 'dev'
+deploy	Checkout repo	2026-03-01T15:06:42.8680463Z branch 'dev' set up to track 'origin/dev'.
+deploy	Checkout repo	2026-03-01T15:06:42.8689252Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:06:42.8728303Z [command]/usr/bin/git log -1 --format=%H
+deploy	Checkout repo	2026-03-01T15:06:42.8753904Z 35f8fd63d9664910c17a58e6da4795963db7dede
+deploy	Setup Node.js	﻿2026-03-01T15:06:42.9015636Z ##[group]Run actions/setup-node@v4
+deploy	Setup Node.js	2026-03-01T15:06:42.9016284Z with:
+deploy	Setup Node.js	2026-03-01T15:06:42.9016684Z   node-version: 20
+deploy	Setup Node.js	2026-03-01T15:06:42.9017120Z   always-auth: false
+deploy	Setup Node.js	2026-03-01T15:06:42.9017563Z   check-latest: false
+deploy	Setup Node.js	2026-03-01T15:06:42.9018177Z   token: ***
+deploy	Setup Node.js	2026-03-01T15:06:42.9018575Z ##[endgroup]
+deploy	Setup Node.js	2026-03-01T15:06:43.0850018Z Found in cache @ /opt/hostedtoolcache/node/20.20.0/x64
+deploy	Setup Node.js	2026-03-01T15:06:43.0856883Z ##[group]Environment details
+deploy	Setup Node.js	2026-03-01T15:06:43.4712650Z node: v20.20.0
+deploy	Setup Node.js	2026-03-01T15:06:43.4714242Z npm: 10.8.2
+deploy	Setup Node.js	2026-03-01T15:06:43.4715564Z yarn: 1.22.22
+deploy	Setup Node.js	2026-03-01T15:06:43.4717676Z ##[endgroup]
+deploy	Install and Build App	﻿2026-03-01T15:06:43.4883234Z ##[group]Run npm ci
+deploy	Install and Build App	2026-03-01T15:06:43.4884431Z [36;1mnpm ci[0m
+deploy	Install and Build App	2026-03-01T15:06:43.4885743Z [36;1m# Run lint check (if it fails, deployment stops)[0m
+deploy	Install and Build App	2026-03-01T15:06:43.4887844Z [36;1mnpm run lint || echo "Lint failed but proceeding for now (Soft Gate)"[0m
+deploy	Install and Build App	2026-03-01T15:06:43.4889734Z [36;1mnpm run build[0m
+deploy	Install and Build App	2026-03-01T15:06:43.4955819Z shell: /usr/bin/bash -e {0}
+deploy	Install and Build App	2026-03-01T15:06:43.4957066Z env:
+deploy	Install and Build App	2026-03-01T15:06:43.4958140Z   NEXT_PUBLIC_USER_POOL_ID: us-east-1_dG9vi0gz5
+deploy	Install and Build App	2026-03-01T15:06:43.4959907Z   NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
+deploy	Install and Build App	2026-03-01T15:06:43.4963101Z   NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://gn6cbrywdnecbgdg6mg4lhi6xm.appsync-api.us-east-1.amazonaws.com/graphql
+deploy	Install and Build App	2026-03-01T15:06:43.4965919Z   NEXT_PUBLIC_AWS_REGION: us-east-1
+deploy	Install and Build App	2026-03-01T15:06:43.4968002Z   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ***
+deploy	Install and Build App	2026-03-01T15:06:43.4969351Z ##[endgroup]
+deploy	Install and Build App	2026-03-01T15:06:48.0190921Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+deploy	Install and Build App	2026-03-01T15:06:48.3987097Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+deploy	Install and Build App	2026-03-01T15:06:49.1129039Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+deploy	Install and Build App	2026-03-01T15:06:51.1323753Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+deploy	Install and Build App	2026-03-01T15:06:51.2132693Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+deploy	Install and Build App	2026-03-01T15:06:52.0141847Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-03-01T15:06:52.1369265Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-03-01T15:06:56.6799710Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+deploy	Install and Build App	2026-03-01T15:06:58.4732591Z npm warn deprecated @mui/base@5.0.0-dev.20240529-082515-213b5e33ab: This package has been replaced by @base-ui-components/react
+deploy	Install and Build App	2026-03-01T15:07:34.8749717Z 
+deploy	Install and Build App	2026-03-01T15:07:34.8750932Z added 1012 packages, and audited 1013 packages in 51s
+deploy	Install and Build App	2026-03-01T15:07:34.8751663Z 
+deploy	Install and Build App	2026-03-01T15:07:34.8751953Z 196 packages are looking for funding
+deploy	Install and Build App	2026-03-01T15:07:34.8754343Z   run `npm fund` for details
+deploy	Install and Build App	2026-03-01T15:07:35.2470745Z 
+deploy	Install and Build App	2026-03-01T15:07:35.2471885Z 26 vulnerabilities (15 low, 5 moderate, 5 high, 1 critical)
+deploy	Install and Build App	2026-03-01T15:07:35.2472808Z 
+deploy	Install and Build App	2026-03-01T15:07:35.2473083Z To address all issues, run:
+deploy	Install and Build App	2026-03-01T15:07:35.2473642Z   npm audit fix
+deploy	Install and Build App	2026-03-01T15:07:35.2473938Z 
+deploy	Install and Build App	2026-03-01T15:07:35.2474183Z Run `npm audit` for details.
+deploy	Install and Build App	2026-03-01T15:07:35.4034180Z 
+deploy	Install and Build App	2026-03-01T15:07:35.4034831Z > chat-booking-admin-panel@1.2.10 lint
+deploy	Install and Build App	2026-03-01T15:07:35.4035212Z > next lint
+deploy	Install and Build App	2026-03-01T15:07:35.4035474Z 
+deploy	Install and Build App	2026-03-01T15:07:39.0880065Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+deploy	Install and Build App	2026-03-01T15:07:39.0884332Z This information is used to shape Next.js' roadmap and prioritize features.
+deploy	Install and Build App	2026-03-01T15:07:39.0885883Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+deploy	Install and Build App	2026-03-01T15:07:39.0887199Z https://nextjs.org/telemetry
+deploy	Install and Build App	2026-03-01T15:07:39.0887622Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2452816Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2453530Z ./src/app/availability/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2454782Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2455535Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2455909Z ./src/app/bookings/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2457664Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2458169Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2458663Z ./src/app/clients/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2459852Z 15:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2460720Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2460914Z ./src/app/dashboard/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2461482Z 3:26  Error: 'waitFor' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2462487Z 48:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2463175Z 49:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2463845Z 50:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2464504Z 51:63  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2465163Z 52:62  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2465813Z 53:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2466455Z 54:60  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2466803Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2466976Z ./src/app/faqs/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2467560Z 3:26  Error: 'fireEvent' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2468320Z 5:10  Error: 'generateClient' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2469094Z 14:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2469493Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2469662Z ./src/app/knowledge/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2470192Z 12:50  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:07:39.2470926Z 23:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2471332Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2471496Z ./src/app/my-page/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2471962Z 3:26  Error: 'waitFor' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2472812Z 20:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2473211Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2473374Z ./src/app/onboarding/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:07:39.2473867Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:07:39.2474497Z 29:27  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2475156Z 30:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:07:39.2475510Z 
+deploy	Install and Build App	2026-03-01T15:07:39.2475989Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	Install and Build App	2026-03-01T15:07:39.3544286Z Lint failed but proceeding for now (Soft Gate)
+deploy	Install and Build App	2026-03-01T15:07:39.4612533Z 
+deploy	Install and Build App	2026-03-01T15:07:39.4613450Z > chat-booking-admin-panel@1.2.10 build
+deploy	Install and Build App	2026-03-01T15:07:39.4614025Z > next build
+deploy	Install and Build App	2026-03-01T15:07:39.4614256Z 
+deploy	Install and Build App	2026-03-01T15:07:40.0095465Z   ▲ Next.js 14.2.33
+deploy	Install and Build App	2026-03-01T15:07:40.0098641Z 
+deploy	Install and Build App	2026-03-01T15:07:40.0752337Z    Creating an optimized production build ...
+deploy	Install and Build App	2026-03-01T15:08:18.0316501Z  ✓ Compiled successfully
+deploy	Install and Build App	2026-03-01T15:08:18.0330497Z    Linting and checking validity of types ...
+deploy	Install and Build App	2026-03-01T15:08:19.9519548Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9520559Z Failed to compile.
+deploy	Install and Build App	2026-03-01T15:08:19.9529189Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9529656Z ./src/app/availability/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9530564Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9531125Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9531378Z ./src/app/bookings/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9532394Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9533315Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9533574Z ./src/app/clients/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9534481Z 15:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9535060Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9535312Z ./src/app/dashboard/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9536391Z 3:26  Error: 'waitFor' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9537731Z 48:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9538946Z 49:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9539969Z 50:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9540949Z 51:63  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9541969Z 52:62  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9543153Z 53:67  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9544154Z 54:60  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9544684Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9544929Z ./src/app/faqs/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9545784Z 3:26  Error: 'fireEvent' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9546974Z 5:10  Error: 'generateClient' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9548186Z 14:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9548794Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9549049Z ./src/app/knowledge/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9549862Z 12:50  Error: Component definition is missing display name  react/display-name
+deploy	Install and Build App	2026-03-01T15:08:19.9550953Z 23:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9551561Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9551895Z ./src/app/my-page/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9552937Z 3:26  Error: 'waitFor' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9554129Z 20:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9554769Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9555112Z ./src/app/onboarding/__tests__/page.test.tsx
+deploy	Install and Build App	2026-03-01T15:08:19.9556048Z 3:18  Error: 'screen' is defined but never used.  @typescript-eslint/no-unused-vars
+deploy	Install and Build App	2026-03-01T15:08:19.9557358Z 29:27  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9558671Z 30:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	Install and Build App	2026-03-01T15:08:19.9559340Z 
+deploy	Install and Build App	2026-03-01T15:08:19.9560280Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	Install and Build App	2026-03-01T15:08:20.1055437Z ##[error]Process completed with exit code 1.
+deploy	Post Checkout repo	﻿2026-03-01T15:08:20.1184271Z Post job cleanup.
+deploy	Post Checkout repo	2026-03-01T15:08:20.2147823Z [command]/usr/bin/git version
+deploy	Post Checkout repo	2026-03-01T15:08:20.2185537Z git version 2.53.0
+deploy	Post Checkout repo	2026-03-01T15:08:20.2229175Z Temporarily overriding HOME='/home/runner/work/_temp/b7c0e907-0538-474a-8317-cc1b29ee0b90' before making global git config changes
+deploy	Post Checkout repo	2026-03-01T15:08:20.2230130Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Post Checkout repo	2026-03-01T15:08:20.2242068Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Post Checkout repo	2026-03-01T15:08:20.2276547Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Post Checkout repo	2026-03-01T15:08:20.2309464Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Post Checkout repo	2026-03-01T15:08:20.2548841Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Post Checkout repo	2026-03-01T15:08:20.2570409Z http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-03-01T15:08:20.2588005Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-03-01T15:08:20.2624078Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Post Checkout repo	2026-03-01T15:08:20.2888476Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Post Checkout repo	2026-03-01T15:08:20.2924054Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Complete job	﻿2026-03-01T15:08:20.3278420Z Cleaning up orphan processes

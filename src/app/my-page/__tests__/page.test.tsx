@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import MyPage from '../page';
 
 jest.mock('next-intl', () => ({
@@ -17,7 +17,7 @@ jest.mock('../../../context/TenantContext', () => ({
 const mockGraphql = jest.fn();
 jest.mock('aws-amplify/api', () => ({
     generateClient: jest.fn(() => ({
-        graphql: (...args: any[]) => mockGraphql(...args),
+        graphql: (...args: unknown[]) => mockGraphql(...args),
     })),
 }));
 

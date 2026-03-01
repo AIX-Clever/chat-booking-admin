@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import OnboardingPage from '../page';
 
 // Mock useRouter
@@ -26,8 +26,8 @@ const originalLocation = window.location;
 
 describe('OnboardingPage', () => {
     beforeAll(() => {
-        delete (window as any).location;
-        window.location = { ...originalLocation, href: '' } as any;
+        delete (window as unknown as Record<string, unknown>).location;
+        window.location = { ...originalLocation, href: '' } as unknown as Location;
     });
 
     afterAll(() => {

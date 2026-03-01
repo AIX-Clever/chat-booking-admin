@@ -9,7 +9,7 @@ jest.mock('next-intl', () => ({
 }));
 
 // Mock PlanGuard
-jest.mock('../../../components/PlanGuard', () => ({ children }: { children: React.ReactNode }) => <div data-testid="plan-guard-outer">{children}</div>);
+jest.mock('../../../components/PlanGuard', () => function MockPlanGuard({ children }: { children: React.ReactNode }) { return <div data-testid="plan-guard-outer">{children}</div>; });
 
 // Mock queries
 jest.mock('../../../graphql/queries', () => ({
@@ -20,7 +20,7 @@ jest.mock('../../../graphql/queries', () => ({
 const mockGraphql = jest.fn();
 jest.mock('aws-amplify/api', () => ({
     generateClient: jest.fn(() => ({
-        graphql: (...args: any[]) => mockGraphql(...args),
+        graphql: (...args: unknown[]) => mockGraphql(...args),
     })),
 }));
 

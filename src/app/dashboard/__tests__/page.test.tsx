@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import DashboardPage from '../page';
 
 jest.mock('next-intl', () => ({
@@ -45,13 +45,13 @@ jest.mock('../../../context/TenantContext', () => ({
 }));
 
 // Mock components
-jest.mock('../../../components/dashboard/AppWidgetSummary', () => () => <div data-testid="summary-card">AppWidgetSummary</div>);
-jest.mock('../../../components/dashboard/AppWebsiteVisits', () => () => <div data-testid="visits-card">AppWebsiteVisits</div>);
-jest.mock('../../../components/dashboard/AppCurrentVisits', () => () => <div data-testid="current-card">AppCurrentVisits</div>);
-jest.mock('../../../components/dashboard/AppPlanUsage', () => () => <div data-testid="usage-card">AppPlanUsage</div>);
-jest.mock('../../../components/dashboard/FunnelChart', () => () => <div data-testid="funnel-card">FunnelChart</div>);
-jest.mock('../../../components/dashboard/PeakHoursHeatmap', () => () => <div data-testid="heatmap-card">PeakHoursHeatmap</div>);
-jest.mock('../../../components/common/UpgradeModal', () => () => <div data-testid="update-modal">UpgradeModal</div>);
+jest.mock('../../../components/dashboard/AppWidgetSummary', () => function MockAppWidgetSummary() { return <div data-testid="summary-card">AppWidgetSummary</div>; });
+jest.mock('../../../components/dashboard/AppWebsiteVisits', () => function MockAppWebsiteVisits() { return <div data-testid="visits-card">AppWebsiteVisits</div>; });
+jest.mock('../../../components/dashboard/AppCurrentVisits', () => function MockAppCurrentVisits() { return <div data-testid="current-card">AppCurrentVisits</div>; });
+jest.mock('../../../components/dashboard/AppPlanUsage', () => function MockAppPlanUsage() { return <div data-testid="usage-card">AppPlanUsage</div>; });
+jest.mock('../../../components/dashboard/FunnelChart', () => function MockFunnelChart() { return <div data-testid="funnel-card">FunnelChart</div>; });
+jest.mock('../../../components/dashboard/PeakHoursHeatmap', () => function MockPeakHoursHeatmap() { return <div data-testid="heatmap-card">PeakHoursHeatmap</div>; });
+jest.mock('../../../components/common/UpgradeModal', () => function MockUpgradeModal() { return <div data-testid="update-modal">UpgradeModal</div>; });
 
 describe('DashboardPage', () => {
     it('renders dashboard components', async () => {
