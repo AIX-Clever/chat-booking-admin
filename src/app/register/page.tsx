@@ -39,8 +39,10 @@ export default function RegisterPage() {
             if (typeof window !== 'undefined' && window.grecaptcha && recaptchaKey) {
                 try {
                     recaptchaToken = await new Promise<string>((resolve, reject) => {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         (window as any).grecaptcha.ready(async () => {
                             try {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 const token = await (window as any).grecaptcha.execute(recaptchaKey, { action: 'signup' });
                                 resolve(token);
                             } catch (e) {

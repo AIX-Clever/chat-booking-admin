@@ -1,0 +1,199 @@
+deploy	Set up job	﻿2026-03-01T15:43:04.2432681Z Current runner version: '2.331.0'
+deploy	Set up job	2026-03-01T15:43:04.2459561Z ##[group]Runner Image Provisioner
+deploy	Set up job	2026-03-01T15:43:04.2460532Z Hosted Compute Agent
+deploy	Set up job	2026-03-01T15:43:04.2461091Z Version: 20260213.493
+deploy	Set up job	2026-03-01T15:43:04.2461857Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+deploy	Set up job	2026-03-01T15:43:04.2462613Z Build Date: 2026-02-13T00:28:41Z
+deploy	Set up job	2026-03-01T15:43:04.2463424Z Worker ID: {566818b5-1df8-4f07-a787-8cc75620425c}
+deploy	Set up job	2026-03-01T15:43:04.2464121Z Azure Region: westus
+deploy	Set up job	2026-03-01T15:43:04.2464712Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:43:04.2466172Z ##[group]Operating System
+deploy	Set up job	2026-03-01T15:43:04.2466832Z Ubuntu
+deploy	Set up job	2026-03-01T15:43:04.2467377Z 24.04.3
+deploy	Set up job	2026-03-01T15:43:04.2468173Z LTS
+deploy	Set up job	2026-03-01T15:43:04.2468695Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:43:04.2469262Z ##[group]Runner Image
+deploy	Set up job	2026-03-01T15:43:04.2469909Z Image: ubuntu-24.04
+deploy	Set up job	2026-03-01T15:43:04.2470517Z Version: 20260224.36.1
+deploy	Set up job	2026-03-01T15:43:04.2471647Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260224.36/images/ubuntu/Ubuntu2404-Readme.md
+deploy	Set up job	2026-03-01T15:43:04.2473471Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260224.36
+deploy	Set up job	2026-03-01T15:43:04.2474436Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:43:04.2475570Z ##[group]GITHUB_TOKEN Permissions
+deploy	Set up job	2026-03-01T15:43:04.2477403Z Contents: read
+deploy	Set up job	2026-03-01T15:43:04.2478504Z Metadata: read
+deploy	Set up job	2026-03-01T15:43:04.2479139Z ##[endgroup]
+deploy	Set up job	2026-03-01T15:43:04.2481336Z Secret source: Actions
+deploy	Set up job	2026-03-01T15:43:04.2482538Z Prepare workflow directory
+deploy	Set up job	2026-03-01T15:43:04.2804849Z Prepare all required actions
+deploy	Set up job	2026-03-01T15:43:04.2849659Z Getting action download info
+deploy	Set up job	2026-03-01T15:43:04.7654632Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+deploy	Set up job	2026-03-01T15:43:04.9009971Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+deploy	Set up job	2026-03-01T15:43:04.9966482Z Download action repository 'aws-actions/configure-aws-credentials@v4' (SHA:7474bc4690e29a8392af63c5b98e7449536d5c3a)
+deploy	Set up job	2026-03-01T15:43:05.6428580Z Complete job name: deploy
+deploy	Checkout repo	﻿2026-03-01T15:43:05.7146398Z ##[group]Run actions/checkout@v4
+deploy	Checkout repo	2026-03-01T15:43:05.7147283Z with:
+deploy	Checkout repo	2026-03-01T15:43:05.7147759Z   repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:05.7148747Z   token: ***
+deploy	Checkout repo	2026-03-01T15:43:05.7149172Z   ssh-strict: true
+deploy	Checkout repo	2026-03-01T15:43:05.7149593Z   ssh-user: git
+deploy	Checkout repo	2026-03-01T15:43:05.7150021Z   persist-credentials: true
+deploy	Checkout repo	2026-03-01T15:43:05.7150496Z   clean: true
+deploy	Checkout repo	2026-03-01T15:43:05.7150930Z   sparse-checkout-cone-mode: true
+deploy	Checkout repo	2026-03-01T15:43:05.7151435Z   fetch-depth: 1
+deploy	Checkout repo	2026-03-01T15:43:05.7151847Z   fetch-tags: false
+deploy	Checkout repo	2026-03-01T15:43:05.7152298Z   show-progress: true
+deploy	Checkout repo	2026-03-01T15:43:05.7152735Z   lfs: false
+deploy	Checkout repo	2026-03-01T15:43:05.7153144Z   submodules: false
+deploy	Checkout repo	2026-03-01T15:43:05.7153587Z   set-safe-directory: true
+deploy	Checkout repo	2026-03-01T15:43:05.7154299Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:05.8292130Z Syncing repository: AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:05.8294151Z ##[group]Getting Git version info
+deploy	Checkout repo	2026-03-01T15:43:05.8295008Z Working directory is '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-03-01T15:43:05.8296264Z [command]/usr/bin/git version
+deploy	Checkout repo	2026-03-01T15:43:05.8359748Z git version 2.53.0
+deploy	Checkout repo	2026-03-01T15:43:05.8386883Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:05.8402659Z Temporarily overriding HOME='/home/runner/work/_temp/a29be421-7ee5-4159-ba99-a99d411e49b4' before making global git config changes
+deploy	Checkout repo	2026-03-01T15:43:05.8404411Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Checkout repo	2026-03-01T15:43:05.8418750Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:05.8462839Z Deleting the contents of '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	Checkout repo	2026-03-01T15:43:05.8466777Z ##[group]Initializing the repository
+deploy	Checkout repo	2026-03-01T15:43:05.8471125Z [command]/usr/bin/git init /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:05.8568686Z hint: Using 'master' as the name for the initial branch. This default branch name
+deploy	Checkout repo	2026-03-01T15:43:05.8570717Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+deploy	Checkout repo	2026-03-01T15:43:05.8573367Z hint: to use in all of your new repositories, which will suppress this warning,
+deploy	Checkout repo	2026-03-01T15:43:05.8575491Z hint: call:
+deploy	Checkout repo	2026-03-01T15:43:05.8576654Z hint:
+deploy	Checkout repo	2026-03-01T15:43:05.8578174Z hint: 	git config --global init.defaultBranch <name>
+deploy	Checkout repo	2026-03-01T15:43:05.8579957Z hint:
+deploy	Checkout repo	2026-03-01T15:43:05.8581551Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+deploy	Checkout repo	2026-03-01T15:43:05.8583340Z hint: 'development'. The just-created branch can be renamed via this command:
+deploy	Checkout repo	2026-03-01T15:43:05.8584599Z hint:
+deploy	Checkout repo	2026-03-01T15:43:05.8585334Z hint: 	git branch -m <name>
+deploy	Checkout repo	2026-03-01T15:43:05.8586207Z hint:
+deploy	Checkout repo	2026-03-01T15:43:05.8587329Z hint: Disable this message with "git config set advice.defaultBranchName false"
+deploy	Checkout repo	2026-03-01T15:43:05.8589669Z Initialized empty Git repository in /home/runner/work/chat-booking-admin/chat-booking-admin/.git/
+deploy	Checkout repo	2026-03-01T15:43:05.8592638Z [command]/usr/bin/git remote add origin https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:05.8626069Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:05.8627362Z ##[group]Disabling automatic garbage collection
+deploy	Checkout repo	2026-03-01T15:43:05.8631655Z [command]/usr/bin/git config --local gc.auto 0
+deploy	Checkout repo	2026-03-01T15:43:05.8662651Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:05.8663927Z ##[group]Setting up auth
+deploy	Checkout repo	2026-03-01T15:43:05.8670758Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Checkout repo	2026-03-01T15:43:05.8704503Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Checkout repo	2026-03-01T15:43:05.9050832Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Checkout repo	2026-03-01T15:43:05.9082970Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Checkout repo	2026-03-01T15:43:05.9357341Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Checkout repo	2026-03-01T15:43:05.9410077Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Checkout repo	2026-03-01T15:43:05.9706827Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+deploy	Checkout repo	2026-03-01T15:43:05.9752957Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:05.9755322Z ##[group]Fetching the repository
+deploy	Checkout repo	2026-03-01T15:43:05.9764943Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5d55ec57fe413b3cca1025ce438eabf6a37ad849:refs/remotes/origin/dev
+deploy	Checkout repo	2026-03-01T15:43:06.5580731Z From https://github.com/AIX-Clever/chat-booking-admin
+deploy	Checkout repo	2026-03-01T15:43:06.5582360Z  * [new ref]         5d55ec57fe413b3cca1025ce438eabf6a37ad849 -> origin/dev
+deploy	Checkout repo	2026-03-01T15:43:06.5614764Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:06.5616732Z ##[group]Determining the checkout info
+deploy	Checkout repo	2026-03-01T15:43:06.5619414Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:06.5624804Z [command]/usr/bin/git sparse-checkout disable
+deploy	Checkout repo	2026-03-01T15:43:06.5675341Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+deploy	Checkout repo	2026-03-01T15:43:06.5711058Z ##[group]Checking out the ref
+deploy	Checkout repo	2026-03-01T15:43:06.5714905Z [command]/usr/bin/git checkout --progress --force -B dev refs/remotes/origin/dev
+deploy	Checkout repo	2026-03-01T15:43:06.5938769Z Switched to a new branch 'dev'
+deploy	Checkout repo	2026-03-01T15:43:06.5940906Z branch 'dev' set up to track 'origin/dev'.
+deploy	Checkout repo	2026-03-01T15:43:06.5950398Z ##[endgroup]
+deploy	Checkout repo	2026-03-01T15:43:06.5991491Z [command]/usr/bin/git log -1 --format=%H
+deploy	Checkout repo	2026-03-01T15:43:06.6016341Z 5d55ec57fe413b3cca1025ce438eabf6a37ad849
+deploy	Setup Node.js	﻿2026-03-01T15:43:06.6361495Z ##[group]Run actions/setup-node@v4
+deploy	Setup Node.js	2026-03-01T15:43:06.6362862Z with:
+deploy	Setup Node.js	2026-03-01T15:43:06.6363740Z   node-version: 20
+deploy	Setup Node.js	2026-03-01T15:43:06.6364680Z   always-auth: false
+deploy	Setup Node.js	2026-03-01T15:43:06.6365652Z   check-latest: false
+deploy	Setup Node.js	2026-03-01T15:43:06.6366913Z   token: ***
+deploy	Setup Node.js	2026-03-01T15:43:06.6367765Z ##[endgroup]
+deploy	Setup Node.js	2026-03-01T15:43:06.8232899Z Found in cache @ /opt/hostedtoolcache/node/20.20.0/x64
+deploy	Setup Node.js	2026-03-01T15:43:06.8239456Z ##[group]Environment details
+deploy	Setup Node.js	2026-03-01T15:43:07.1749474Z node: v20.20.0
+deploy	Setup Node.js	2026-03-01T15:43:07.1750546Z npm: 10.8.2
+deploy	Setup Node.js	2026-03-01T15:43:07.1750995Z yarn: 1.22.22
+deploy	Setup Node.js	2026-03-01T15:43:07.1753514Z ##[endgroup]
+deploy	Install and Build App	﻿2026-03-01T15:43:07.1905711Z ##[group]Run npm ci
+deploy	Install and Build App	2026-03-01T15:43:07.1906117Z [36;1mnpm ci[0m
+deploy	Install and Build App	2026-03-01T15:43:07.1906511Z [36;1m# Run lint check (if it fails, deployment stops)[0m
+deploy	Install and Build App	2026-03-01T15:43:07.1907107Z [36;1mnpm run lint || echo "Lint failed but proceeding for now (Soft Gate)"[0m
+deploy	Install and Build App	2026-03-01T15:43:07.1907618Z [36;1mnpm run build[0m
+deploy	Install and Build App	2026-03-01T15:43:07.1970374Z shell: /usr/bin/bash -e {0}
+deploy	Install and Build App	2026-03-01T15:43:07.1970805Z env:
+deploy	Install and Build App	2026-03-01T15:43:07.1971163Z   NEXT_PUBLIC_USER_POOL_ID: us-east-1_dG9vi0gz5
+deploy	Install and Build App	2026-03-01T15:43:07.1971735Z   NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
+deploy	Install and Build App	2026-03-01T15:43:07.1972715Z   NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://gn6cbrywdnecbgdg6mg4lhi6xm.appsync-api.us-east-1.amazonaws.com/graphql
+deploy	Install and Build App	2026-03-01T15:43:07.1973623Z   NEXT_PUBLIC_AWS_REGION: us-east-1
+deploy	Install and Build App	2026-03-01T15:43:07.1974382Z   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ***
+deploy	Install and Build App	2026-03-01T15:43:07.1974788Z ##[endgroup]
+deploy	Install and Build App	2026-03-01T15:43:10.5775148Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+deploy	Install and Build App	2026-03-01T15:43:10.9839260Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+deploy	Install and Build App	2026-03-01T15:43:11.8074407Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+deploy	Install and Build App	2026-03-01T15:43:14.0618474Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+deploy	Install and Build App	2026-03-01T15:43:14.2151821Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+deploy	Install and Build App	2026-03-01T15:43:15.1003749Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-03-01T15:43:15.2682275Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	Install and Build App	2026-03-01T15:43:20.0934589Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+deploy	Install and Build App	2026-03-01T15:43:22.0236560Z npm warn deprecated @mui/base@5.0.0-dev.20240529-082515-213b5e33ab: This package has been replaced by @base-ui-components/react
+deploy	Install and Build App	2026-03-01T15:43:59.1414867Z 
+deploy	Install and Build App	2026-03-01T15:43:59.1415819Z added 1012 packages, and audited 1013 packages in 52s
+deploy	Install and Build App	2026-03-01T15:43:59.1416534Z 
+deploy	Install and Build App	2026-03-01T15:43:59.1416828Z 196 packages are looking for funding
+deploy	Install and Build App	2026-03-01T15:43:59.1417310Z   run `npm fund` for details
+deploy	Install and Build App	2026-03-01T15:43:59.5266580Z 
+deploy	Install and Build App	2026-03-01T15:43:59.5270959Z 26 vulnerabilities (15 low, 5 moderate, 5 high, 1 critical)
+deploy	Install and Build App	2026-03-01T15:43:59.5273005Z 
+deploy	Install and Build App	2026-03-01T15:43:59.5273302Z To address all issues, run:
+deploy	Install and Build App	2026-03-01T15:43:59.5273939Z   npm audit fix
+deploy	Install and Build App	2026-03-01T15:43:59.5274339Z 
+deploy	Install and Build App	2026-03-01T15:43:59.5274637Z Run `npm audit` for details.
+deploy	Install and Build App	2026-03-01T15:43:59.7119645Z 
+deploy	Install and Build App	2026-03-01T15:43:59.7120371Z > chat-booking-admin-panel@1.2.10 lint
+deploy	Install and Build App	2026-03-01T15:43:59.7121189Z > next lint
+deploy	Install and Build App	2026-03-01T15:43:59.7121529Z 
+deploy	Install and Build App	2026-03-01T15:44:03.3892343Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+deploy	Install and Build App	2026-03-01T15:44:03.3896446Z This information is used to shape Next.js' roadmap and prioritize features.
+deploy	Install and Build App	2026-03-01T15:44:03.3898810Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+deploy	Install and Build App	2026-03-01T15:44:03.3900547Z https://nextjs.org/telemetry
+deploy	Install and Build App	2026-03-01T15:44:03.3901689Z 
+deploy	Install and Build App	2026-03-01T15:44:03.5273791Z ✔ No ESLint warnings or errors
+deploy	Install and Build App	2026-03-01T15:44:03.7445817Z 
+deploy	Install and Build App	2026-03-01T15:44:03.7446649Z > chat-booking-admin-panel@1.2.10 build
+deploy	Install and Build App	2026-03-01T15:44:03.7447290Z > next build
+deploy	Install and Build App	2026-03-01T15:44:03.7447470Z 
+deploy	Install and Build App	2026-03-01T15:44:04.3081769Z   ▲ Next.js 14.2.33
+deploy	Install and Build App	2026-03-01T15:44:04.3085566Z 
+deploy	Install and Build App	2026-03-01T15:44:04.3739894Z    Creating an optimized production build ...
+deploy	Install and Build App	2026-03-01T15:44:44.1315072Z  ✓ Compiled successfully
+deploy	Install and Build App	2026-03-01T15:44:44.1326017Z    Linting and checking validity of types ...
+deploy	Install and Build App	2026-03-01T15:44:54.8759811Z Failed to compile.
+deploy	Install and Build App	2026-03-01T15:44:54.8764952Z 
+deploy	Install and Build App	2026-03-01T15:44:54.8765576Z ./src/app/register/page.tsx:42:43
+deploy	Install and Build App	2026-03-01T15:44:54.8774065Z Type error: Property 'ready' does not exist on type 'unknown'.
+deploy	Install and Build App	2026-03-01T15:44:54.8774530Z 
+deploy	Install and Build App	2026-03-01T15:44:54.8775164Z [0m [90m 40 |[39m                 [36mtry[39m {[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8777138Z [0m [90m 41 |[39m                     recaptchaToken [33m=[39m [36mawait[39m [36mnew[39m [33mPromise[39m[33m<[39m[33mstring[39m[33m>[39m((resolve[33m,[39m reject) [33m=>[39m {[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8779528Z [0m[31m[1m>[22m[39m[90m 42 |[39m                         window[33m.[39mgrecaptcha[33m.[39mready([36masync[39m () [33m=>[39m {[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8780851Z [0m [90m    |[39m                                           [31m[1m^[22m[39m[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8781785Z [0m [90m 43 |[39m                             [36mtry[39m {[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8783943Z [0m [90m 44 |[39m                                 [36mconst[39m token [33m=[39m [36mawait[39m window[33m.[39mgrecaptcha[33m.[39mexecute(recaptchaKey[33m,[39m { action[33m:[39m [32m'signup'[39m })[33m;[39m[0m
+deploy	Install and Build App	2026-03-01T15:44:54.8785750Z [0m [90m 45 |[39m                                 resolve(token)[33m;[39m[0m
+deploy	Install and Build App	2026-03-01T15:44:54.9574574Z Next.js build worker exited with code: 1 and signal: null
+deploy	Install and Build App	2026-03-01T15:44:55.0975540Z ##[error]Process completed with exit code 1.
+deploy	Post Checkout repo	﻿2026-03-01T15:44:55.1106490Z Post job cleanup.
+deploy	Post Checkout repo	2026-03-01T15:44:55.2080233Z [command]/usr/bin/git version
+deploy	Post Checkout repo	2026-03-01T15:44:55.2118342Z git version 2.53.0
+deploy	Post Checkout repo	2026-03-01T15:44:55.2163756Z Temporarily overriding HOME='/home/runner/work/_temp/7b683287-53ff-4650-ac36-a5619cac623e' before making global git config changes
+deploy	Post Checkout repo	2026-03-01T15:44:55.2165367Z Adding repository directory to the temporary git global config as a safe directory
+deploy	Post Checkout repo	2026-03-01T15:44:55.2178678Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	Post Checkout repo	2026-03-01T15:44:55.2215495Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	Post Checkout repo	2026-03-01T15:44:55.2250305Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	Post Checkout repo	2026-03-01T15:44:55.2516390Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	Post Checkout repo	2026-03-01T15:44:55.2539580Z http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-03-01T15:44:55.2553484Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+deploy	Post Checkout repo	2026-03-01T15:44:55.2587009Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	Post Checkout repo	2026-03-01T15:44:55.2835737Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	Post Checkout repo	2026-03-01T15:44:55.2870626Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	Complete job	﻿2026-03-01T15:44:55.3215926Z Cleaning up orphan processes

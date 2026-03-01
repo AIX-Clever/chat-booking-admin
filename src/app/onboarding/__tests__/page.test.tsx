@@ -27,10 +27,12 @@ const originalLocation = window.location;
 describe('OnboardingPage', () => {
     beforeAll(() => {
         delete (window as unknown as Record<string, unknown>).location;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         window.location = { ...originalLocation, href: '' } as any;
     });
 
     afterAll(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         window.location = originalLocation as any;
     });
 

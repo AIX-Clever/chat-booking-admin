@@ -1,0 +1,208 @@
+deploy	UNKNOWN STEP	﻿2026-03-01T15:51:51.0667829Z Current runner version: '2.331.0'
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0701299Z ##[group]Runner Image Provisioner
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0702841Z Hosted Compute Agent
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0704021Z Version: 20260213.493
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0705166Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0706316Z Build Date: 2026-02-13T00:28:41Z
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0707600Z Worker ID: {2078bfd7-8a64-4497-adf2-2d3152095221}
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0708855Z Azure Region: eastus
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0709794Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0712360Z ##[group]Operating System
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0713356Z Ubuntu
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0714871Z 24.04.3
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0715635Z LTS
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0716408Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0717477Z ##[group]Runner Image
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0718415Z Image: ubuntu-24.04
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0719453Z Version: 20260224.36.1
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0721772Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260224.36/images/ubuntu/Ubuntu2404-Readme.md
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0724403Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260224.36
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0726065Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0727820Z ##[group]GITHUB_TOKEN Permissions
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0730607Z Contents: read
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0731878Z Metadata: read
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0732823Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0735846Z Secret source: Actions
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.0737540Z Prepare workflow directory
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.1214477Z Prepare all required actions
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.1273039Z Getting action download info
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.3872678Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.5463529Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.6403814Z Download action repository 'aws-actions/configure-aws-credentials@v4' (SHA:7474bc4690e29a8392af63c5b98e7449536d5c3a)
+deploy	UNKNOWN STEP	2026-03-01T15:51:51.9627496Z Complete job name: deploy
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0345309Z ##[group]Run actions/checkout@v4
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0346156Z with:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0346614Z   repository: AIX-Clever/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0347331Z   token: ***
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0347723Z   ssh-strict: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0348136Z   ssh-user: git
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0348576Z   persist-credentials: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0349027Z   clean: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0349444Z   sparse-checkout-cone-mode: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0349938Z   fetch-depth: 1
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0350334Z   fetch-tags: false
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0350753Z   show-progress: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0351175Z   lfs: false
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0351835Z   submodules: false
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0352270Z   set-safe-directory: true
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.0353009Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1538566Z Syncing repository: AIX-Clever/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1540312Z ##[group]Getting Git version info
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1541243Z Working directory is '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1542655Z [command]/usr/bin/git version
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1647828Z git version 2.53.0
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1673723Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1694047Z Temporarily overriding HOME='/home/runner/work/_temp/18ead1b9-ccc0-401e-bc12-9e502be442de' before making global git config changes
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1695477Z Adding repository directory to the temporary git global config as a safe directory
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1699160Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1744783Z Deleting the contents of '/home/runner/work/chat-booking-admin/chat-booking-admin'
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1748401Z ##[group]Initializing the repository
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1752540Z [command]/usr/bin/git init /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1884177Z hint: Using 'master' as the name for the initial branch. This default branch name
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1885788Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1887587Z hint: to use in all of your new repositories, which will suppress this warning,
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1888889Z hint: call:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1889595Z hint:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1890500Z hint: 	git config --global init.defaultBranch <name>
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1891130Z hint:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1891860Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1892819Z hint: 'development'. The just-created branch can be renamed via this command:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1893536Z hint:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1893924Z hint: 	git branch -m <name>
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1894372Z hint:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1895372Z hint: Disable this message with "git config set advice.defaultBranchName false"
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1897179Z Initialized empty Git repository in /home/runner/work/chat-booking-admin/chat-booking-admin/.git/
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1900536Z [command]/usr/bin/git remote add origin https://github.com/AIX-Clever/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1936685Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1937821Z ##[group]Disabling automatic garbage collection
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1940450Z [command]/usr/bin/git config --local gc.auto 0
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1969697Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1970752Z ##[group]Setting up auth
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.1976567Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2007406Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2396172Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2426911Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2660631Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2691410Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2933093Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2968644Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2969597Z ##[group]Fetching the repository
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.2978184Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5f49e4fb5f68c4bb4433d391fadf46397a53910a:refs/remotes/origin/dev
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5406199Z From https://github.com/AIX-Clever/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5407888Z  * [new ref]         5f49e4fb5f68c4bb4433d391fadf46397a53910a -> origin/dev
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5444383Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5445704Z ##[group]Determining the checkout info
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5447259Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5452260Z [command]/usr/bin/git sparse-checkout disable
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5499806Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5529164Z ##[group]Checking out the ref
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5533168Z [command]/usr/bin/git checkout --progress --force -B dev refs/remotes/origin/dev
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5753022Z Switched to a new branch 'dev'
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5756354Z branch 'dev' set up to track 'origin/dev'.
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5762976Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5799275Z [command]/usr/bin/git log -1 --format=%H
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.5823934Z 5f49e4fb5f68c4bb4433d391fadf46397a53910a
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6155257Z ##[group]Run actions/setup-node@v4
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6156486Z with:
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6157317Z   node-version: 20
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6158257Z   always-auth: false
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6159219Z   check-latest: false
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6160453Z   token: ***
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.6161312Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.7975354Z Found in cache @ /opt/hostedtoolcache/node/20.20.0/x64
+deploy	UNKNOWN STEP	2026-03-01T15:51:52.7982477Z ##[group]Environment details
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2207612Z node: v20.20.0
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2208163Z npm: 10.8.2
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2208600Z yarn: 1.22.22
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2209777Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2333356Z ##[group]Run npm ci
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2333736Z [36;1mnpm ci[0m
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2334082Z [36;1m# Run lint check (if it fails, deployment stops)[0m
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2334589Z [36;1mnpm run lint || echo "Lint failed but proceeding for now (Soft Gate)"[0m
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2335009Z [36;1mnpm run build[0m
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2402435Z shell: /usr/bin/bash -e {0}
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2402776Z env:
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2403066Z   NEXT_PUBLIC_USER_POOL_ID: us-east-1_dG9vi0gz5
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2403492Z   NEXT_PUBLIC_USER_POOL_CLIENT_ID: 7fst837q5gptanpev9fur88va6
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2404185Z   NEXT_PUBLIC_GRAPHQL_ENDPOINT: https://gn6cbrywdnecbgdg6mg4lhi6xm.appsync-api.us-east-1.amazonaws.com/graphql
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2404820Z   NEXT_PUBLIC_AWS_REGION: us-east-1
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2405487Z   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ***
+deploy	UNKNOWN STEP	2026-03-01T15:51:53.2405782Z ##[endgroup]
+deploy	UNKNOWN STEP	2026-03-01T15:51:56.5251841Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+deploy	UNKNOWN STEP	2026-03-01T15:51:57.0313550Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+deploy	UNKNOWN STEP	2026-03-01T15:51:57.9143720Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+deploy	UNKNOWN STEP	2026-03-01T15:52:00.2324893Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+deploy	UNKNOWN STEP	2026-03-01T15:52:00.2333949Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+deploy	UNKNOWN STEP	2026-03-01T15:52:01.0658152Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	UNKNOWN STEP	2026-03-01T15:52:01.2067510Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+deploy	UNKNOWN STEP	2026-03-01T15:52:05.4176728Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+deploy	UNKNOWN STEP	2026-03-01T15:52:07.1724654Z npm warn deprecated @mui/base@5.0.0-dev.20240529-082515-213b5e33ab: This package has been replaced by @base-ui-components/react
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.4028194Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.4028923Z added 1012 packages, and audited 1013 packages in 50s
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.4029985Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.4030293Z 196 packages are looking for funding
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.4030795Z   run `npm fund` for details
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7677846Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7679060Z 26 vulnerabilities (15 low, 5 moderate, 5 high, 1 critical)
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7679701Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7679960Z To address all issues, run:
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7680479Z   npm audit fix
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7680776Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.7681019Z Run `npm audit` for details.
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.9271073Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.9271988Z > chat-booking-admin-panel@1.2.10 lint
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.9272643Z > next lint
+deploy	UNKNOWN STEP	2026-03-01T15:52:43.9272875Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.5843045Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.5847013Z This information is used to shape Next.js' roadmap and prioritize features.
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.5848682Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.5849852Z https://nextjs.org/telemetry
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.5850372Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7486841Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7487624Z ./src/app/onboarding/__tests__/page.test.tsx
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7488954Z 30:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7490804Z 34:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7492374Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7492588Z ./src/app/register/page.tsx
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7493340Z 42:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7494503Z 44:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7494968Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.7495625Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.8536623Z Lint failed but proceeding for now (Soft Gate)
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.9562980Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.9563652Z > chat-booking-admin-panel@1.2.10 build
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.9564182Z > next build
+deploy	UNKNOWN STEP	2026-03-01T15:52:47.9564321Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:48.5094087Z   ▲ Next.js 14.2.33
+deploy	UNKNOWN STEP	2026-03-01T15:52:48.5097393Z 
+deploy	UNKNOWN STEP	2026-03-01T15:52:48.5727295Z    Creating an optimized production build ...
+deploy	UNKNOWN STEP	2026-03-01T15:53:25.9000976Z  ✓ Compiled successfully
+deploy	UNKNOWN STEP	2026-03-01T15:53:25.9010535Z    Linting and checking validity of types ...
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8039675Z 
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8040219Z Failed to compile.
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8044423Z 
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8044994Z ./src/app/onboarding/__tests__/page.test.tsx
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8046213Z 30:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8047496Z 34:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8048262Z 
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8048472Z ./src/app/register/page.tsx
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8049389Z 42:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8050674Z 44:64  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8051287Z 
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.8052355Z info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.9569574Z ##[error]Process completed with exit code 1.
+deploy	UNKNOWN STEP	2026-03-01T15:53:27.9693756Z Post job cleanup.
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0655614Z [command]/usr/bin/git version
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0692399Z git version 2.53.0
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0736195Z Temporarily overriding HOME='/home/runner/work/_temp/a6c26139-3e21-4b9b-8a92-3f295fc6991c' before making global git config changes
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0737365Z Adding repository directory to the temporary git global config as a safe directory
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0741942Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chat-booking-admin/chat-booking-admin
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0783567Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.0816240Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1058944Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1081066Z http.https://github.com/.extraheader
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1094973Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1127808Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1360996Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1393943Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+deploy	UNKNOWN STEP	2026-03-01T15:53:28.1731337Z Cleaning up orphan processes
