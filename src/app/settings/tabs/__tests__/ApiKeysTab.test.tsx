@@ -57,13 +57,13 @@ describe('ApiKeysTab', () => {
 
     it('renders loading state initially', async () => {
         mockGraphql.mockReturnValue(new Promise(() => { })); // Never resolves
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
         expect(screen.getByRole('progressbar')).toBeInTheDocument();
     });
 
     it('renders empty state when no keys', async () => {
         mockGraphql.mockResolvedValue({ data: { listApiKeys: [] } });
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
 
         await waitFor(() => {
             expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('ApiKeysTab', () => {
 
     it('renders list of api keys', async () => {
         mockGraphql.mockResolvedValue({ data: { listApiKeys: mockApiKeys } });
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
 
         await waitFor(() => {
             expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('ApiKeysTab', () => {
 
     it('opens create dialog and creates a new key', async () => {
         mockGraphql.mockResolvedValueOnce({ data: { listApiKeys: [] } });
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
 
         await waitFor(() => expect(screen.queryByRole('progressbar')).not.toBeInTheDocument());
 
@@ -131,7 +131,7 @@ describe('ApiKeysTab', () => {
 
     it('handles copy to clipboard', async () => {
         mockGraphql.mockResolvedValue({ data: { listApiKeys: [] } });
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
         await waitFor(() => expect(screen.queryByRole('progressbar')).not.toBeInTheDocument());
 
         // Open dialog and reach success state (simulated by mocking state if possible, but easier via flow)
@@ -169,7 +169,7 @@ describe('ApiKeysTab', () => {
 
     it('revokes a key', async () => {
         mockGraphql.mockResolvedValue({ data: { listApiKeys: mockApiKeys } });
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
 
         await waitFor(() => expect(screen.getByText('Test Key 1')).toBeInTheDocument());
 
@@ -200,7 +200,7 @@ describe('ApiKeysTab', () => {
 
     it('handles errors gracefully', async () => {
         mockGraphql.mockRejectedValue(new Error('Fetch failed'));
-        render(<ApiKeysTab hasMounted={true} />);
+        render(<ApiKeysTab />);
 
         await waitFor(() => {
             expect(screen.queryByRole('progressbar')).not.toBeInTheDocument(); // It hides spinner on error in finally block

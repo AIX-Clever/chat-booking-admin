@@ -17,7 +17,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { useTranslations } from 'next-intl';
 
 import WidgetPreview from '../../../settings/components/WidgetPreview';
-import { WidgetConfig, WelcomeMessages } from '../../../types/settings';
+import { WidgetConfig, WelcomeMessages } from '@/types/settings';
 
 const COLOR_PRESETS = [
     { name: 'Default Blue', value: '#2563eb' },

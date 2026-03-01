@@ -39,9 +39,9 @@ export default function RegisterPage() {
             if (typeof window !== 'undefined' && window.grecaptcha && recaptchaKey) {
                 try {
                     recaptchaToken = await new Promise<string>((resolve, reject) => {
-                        window.grecaptcha.ready(async () => {
+                        (window as any).grecaptcha.ready(async () => {
                             try {
-                                const token = await window.grecaptcha.execute(recaptchaKey, { action: 'signup' });
+                                const token = await (window as any).grecaptcha.execute(recaptchaKey, { action: 'signup' });
                                 resolve(token);
                             } catch (e) {
                                 reject(e);

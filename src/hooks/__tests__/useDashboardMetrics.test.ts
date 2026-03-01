@@ -14,15 +14,17 @@ jest.mock('aws-amplify/auth', () => ({
     getCurrentUser: jest.fn().mockResolvedValue({ userId: 'u1' }),
 }));
 
+const getMockedClient = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return generateClient() as any;
+};
+
 describe('useDashboardMetrics', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    const getMockedClient = () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return generateClient() as any;
-    };
+
 
     it('provides fallback data on error', async () => {
         getMockedClient().graphql.mockRejectedValueOnce(new Error('Network error'));

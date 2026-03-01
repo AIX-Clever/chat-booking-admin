@@ -27,11 +27,11 @@ const originalLocation = window.location;
 describe('OnboardingPage', () => {
     beforeAll(() => {
         delete (window as unknown as Record<string, unknown>).location;
-        window.location = { ...originalLocation, href: '' } as unknown as Location;
+        window.location = { ...originalLocation, href: '' } as any;
     });
 
     afterAll(() => {
-        window.location = originalLocation;
+        window.location = originalLocation as any;
     });
 
     it('renders correctly', () => {
