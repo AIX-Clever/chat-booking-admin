@@ -127,6 +127,7 @@ export class AdminStack extends cdk.Stack {
             },
             domainNames: domainNames,
             certificate: certificate,
+            defaultRootObject: 'index.html',
             errorResponses: [
                 {
                     httpStatus: 403,
