@@ -443,7 +443,19 @@ export default function ProvidersPage() {
             showSnackbar(currentProvider ? 'Profesional actualizado' : 'Profesional creado exitosamente');
         } catch (error) {
             console.error('Error saving provider:', error);
-            showSnackbar('Error al guardar el profesional', 'error');
+            // Extract backend error message (AppSync returns errors array)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const graphqlErrors = (error as any)?.errors;
+            if (graphqlErrors?.length > 0) {
+                const backendMessage: string = graphqlErrors[0].message || '';
+                // Strip the DEBUG: prefix that the backend adds for logging
+                const cleanMessage = backendMessage.includes('||')
+                    ? backendMessage.split('||')[1].trim()
+                    : backendMessage;
+                showSnackbar(cleanMessage, 'error');
+            } else {
+                showSnackbar('Error al guardar el profesional', 'error');
+            }
         }
     };
 
