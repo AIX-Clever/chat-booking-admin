@@ -22,7 +22,8 @@ export const LIST_BOOKINGS_BY_PROVIDER = `
   query ListBookingsByProvider($input: ListBookingsByProviderInput!) {
     listBookingsByProvider(input: $input) {
       bookingId
-      clientName
+      clientFirstName
+      clientLastName
       clientEmail
       clientPhone
       start
@@ -115,7 +116,8 @@ export const CREATE_BOOKING = `
   mutation CreateBooking($input: CreateBookingInput!) {
     createBooking(input: $input) {
       bookingId
-      clientName
+      clientFirstName
+      clientLastName
       clientEmail
       start
       status
@@ -677,7 +679,8 @@ export const LIST_BOOKINGS_BY_CLIENT = `
   query ListBookingsByClient($input: ListBookingsByClientInput!) {
     listBookingsByClient(input: $input) {
       bookingId
-      clientName
+      clientFirstName
+      clientLastName
       clientEmail
       clientPhone
       start

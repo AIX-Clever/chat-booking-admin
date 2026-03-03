@@ -282,7 +282,7 @@ export default function BookingsPage() {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return response.data.listBookingsByProvider.map((b: any) => ({
                     id: b.bookingId,
-                    clientName: b.clientName,
+                    clientName: `${b.clientFirstName || ''} ${b.clientLastName || ''}`.trim() || 'Cliente Sin Nombre',
                     clientEmail: b.clientEmail,
                     clientPhone: b.clientPhone,
                     serviceName: b.serviceId, // Storing ID here, resolved in render
@@ -330,7 +330,8 @@ export default function BookingsPage() {
     const [newBookingOpen, setNewBookingOpen] = React.useState(false);
     const [createLoading, setCreateLoading] = React.useState(false);
     const [newBookingData, setNewBookingData] = React.useState({
-        clientName: '',
+        clientFirstName: '',
+        clientLastName: '',
         clientEmail: '',
         clientPhone: '',
         serviceId: '',
@@ -482,7 +483,8 @@ export default function BookingsPage() {
         tomorrow.setHours(9, 0, 0, 0);
 
         setNewBookingData({
-            clientName: '',
+            clientFirstName: '',
+            clientLastName: '',
             clientEmail: '',
             clientPhone: '',
             serviceId: '',
@@ -529,7 +531,8 @@ export default function BookingsPage() {
                         providerId: newBookingData.providerId,
                         start: startDateTime.toISOString(),
                         end: endDateTime.toISOString(),
-                        clientName: newBookingData.clientName,
+                        clientFirstName: newBookingData.clientFirstName.trim(),
+                        clientLastName: newBookingData.clientLastName.trim(),
                         clientEmail: newBookingData.clientEmail,
                         clientPhone: newBookingData.clientPhone || null,
                         notes: newBookingData.notes || null,
@@ -704,7 +707,8 @@ export default function BookingsPage() {
         }
 
         setNewBookingData({
-            clientName: '',
+            clientFirstName: '',
+            clientLastName: '',
             clientEmail: '',
             clientPhone: '',
             serviceId: '',
@@ -1587,8 +1591,16 @@ export default function BookingsPage() {
                             <TextField
                                 label={t('form.clientName')}
                                 fullWidth
-                                value={newBookingData.clientName}
-                                onChange={(e) => setNewBookingData({ ...newBookingData, clientName: e.target.value })}
+                                value={newBookingData.clientFirstName}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, clientFirstName: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                label="Apellidos"
+                                fullWidth
+                                value={newBookingData.clientLastName}
+                                onChange={(e) => setNewBookingData({ ...newBookingData, clientLastName: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -1825,7 +1837,7 @@ export default function BookingsPage() {
                     <Button
                         variant="contained"
                         onClick={() => handleCreateBooking(false)}
-                        disabled={createLoading || !newBookingData.clientName || !newBookingData.clientEmail || !newBookingData.serviceId || !newBookingData.providerId || !newBookingData.date || !newBookingData.time}
+                        disabled={createLoading || !newBookingData.clientFirstName || !newBookingData.clientLastName || !newBookingData.clientEmail || !newBookingData.serviceId || !newBookingData.providerId || !newBookingData.date || !newBookingData.time}
                     >
                         {createLoading ? <CircularProgress size={24} /> : t('newBooking')}
                     </Button>
