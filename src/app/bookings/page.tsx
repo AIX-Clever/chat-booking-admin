@@ -425,7 +425,10 @@ export default function BookingsPage() {
                 'domingo': 0, 'lunes': 1, 'martes': 2, 'miércoles': 3, 'miercoles': 3, 'jueves': 4, 'viernes': 5, 'sábado': 6, 'sabado': 6
             };
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const activeDays = availability.map((a: any) => daysMap[a.dayOfWeek.toLowerCase()]).filter((d: any) => d !== undefined);
+            const activeDays = availability
+                .filter((a: any) => a.timeRanges && a.timeRanges.length > 0)
+                .map((a: any) => daysMap[a.dayOfWeek.toLowerCase()])
+                .filter((d: any) => d !== undefined);
             setWorkingDays(activeDays);
         } catch (error) {
             console.error('Error fetching provider schedule:', error);
@@ -451,16 +454,21 @@ export default function BookingsPage() {
             <Badge
                 key={props.day.toString()}
                 overlap="circular"
-                badgeContent={isWorkingDay ? '•' : undefined}
-                color="primary"
+                variant="dot"
+                color="success" // Or primary, matching the green theme
                 invisible={!isWorkingDay}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 sx={{
                     '& .MuiBadge-badge': {
-                        top: 5,
-                        right: 5,
-                        minWidth: '8px',
-                        height: '8px',
-                        p: 0
+                        bottom: 8, // Adjust carefully to put it below the number
+                        right: '50%',
+                        transform: 'translateX(50%)',
+                        minWidth: '4px',
+                        height: '4px',
+                        p: 0,
                     }
                 }}
             >
