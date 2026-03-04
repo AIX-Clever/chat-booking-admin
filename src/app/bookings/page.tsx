@@ -391,7 +391,12 @@ export default function BookingsPage() {
             // Filter for true availability
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const slots = response.data.getAvailableSlots.filter((s: any) => s.isAvailable);
-            setAvailableSlots(slots);
+
+            // Deduplicate by start time since multiple rooms can be available at the same time
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const uniqueSlots = Array.from(new Map(slots.map((s: any) => [s.start, s])).values());
+
+            setAvailableSlots(uniqueSlots as any);
         } catch (error) {
             console.error('Error fetching slots:', error);
             setAvailableSlots([]);
