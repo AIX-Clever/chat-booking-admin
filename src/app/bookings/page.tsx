@@ -396,7 +396,7 @@ export default function BookingsPage() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const uniqueSlots = Array.from(new Map(slots.map((s: any) => [s.start, s])).values());
 
-            setAvailableSlots(uniqueSlots as any);
+            setAvailableSlots(uniqueSlots as { start: string; end: string; isAvailable: boolean }[]);
         } catch (error) {
             console.error('Error fetching slots:', error);
             setAvailableSlots([]);
@@ -431,9 +431,9 @@ export default function BookingsPage() {
             };
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const activeDays = availability
-                .filter((a: any) => a.timeRanges && a.timeRanges.length > 0)
-                .map((a: any) => daysMap[a.dayOfWeek.toLowerCase()])
-                .filter((d: any) => d !== undefined);
+                .filter((a: { timeRanges: unknown[] }) => a.timeRanges && a.timeRanges.length > 0)
+                .map((a: { dayOfWeek: string }) => daysMap[a.dayOfWeek.toLowerCase()])
+                .filter((d: number | undefined) => d !== undefined);
             setWorkingDays(activeDays);
         } catch (error) {
             console.error('Error fetching provider schedule:', error);
