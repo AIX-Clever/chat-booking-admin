@@ -37,6 +37,9 @@ import { LIST_PROVIDERS, LIST_BOOKINGS_BY_CLIENT } from '../../graphql/queries';
 import { useToast } from '../common/ToastContext';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { isValidEmail } from '../../utils/validators';
+import EmailAutocompleteChips from '../common/EmailAutocompleteChips';
+import PhoneInput from '../common/PhoneInput';
 
 const client = generateClient();
 
@@ -137,6 +140,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
     const [loadingHistory, setLoadingHistory] = useState(false);
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
     const [loadingAudit, setLoadingAudit] = useState(false);
+    const [emailError, setEmailError] = useState('');
 
     const [formData, setFormData] = useState({
         givenName: '',
@@ -253,6 +257,7 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
         const { name, value } = e.target;
         if (name) {
             setFormData(prev => ({ ...prev, [name]: value }));
+            if (name === 'email') setEmailError('');
         }
     };
 
@@ -269,6 +274,12 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (formData.email && !isValidEmail(formData.email)) {
+            setEmailError('Formato de email inválido');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -452,11 +463,19 @@ export default function ClientForm({ open, onClose, onSuccess, initialData }: Cl
                                         type="email"
                                         value={formData.email}
                                         onChange={handleChange}
+                                        error={!!emailError}
+                                        helperText={emailError}
+                                    />
+                                    <EmailAutocompleteChips
+                                        email={formData.email}
+                                        onSelect={(newEmail) => {
+                                            setFormData(prev => ({ ...prev, email: newEmail }));
+                                            setEmailError('');
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
+                                    <PhoneInput
                                         label="Teléfono"
                                         name="phone"
                                         value={formData.phone}

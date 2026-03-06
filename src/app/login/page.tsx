@@ -23,6 +23,8 @@ import LockOutlineIcon from '@mui/icons-material/LockOutlined';
 import { signIn } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { isValidEmail } from '../../utils/validators';
+import EmailAutocompleteChips from '../../components/common/EmailAutocompleteChips';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -30,6 +32,7 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
+    const [emailError, setEmailError] = React.useState('');
     const [formData, setFormData] = React.useState({
         email: '',
         password: ''
@@ -62,6 +65,7 @@ export default function LoginPage() {
     const handleChange = (prop: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [prop]: event.target.value });
         setError('');
+        if (prop === 'email') setEmailError('');
     };
 
 
@@ -78,6 +82,12 @@ export default function LoginPage() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!isValidEmail(formData.email)) {
+            setEmailError('Formato de email inválido');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -132,7 +142,11 @@ export default function LoginPage() {
     const handleForgotPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.email) {
-            setError('Por favor ingresa tu email');
+            setEmailError('Por favor ingresa tu email');
+            return;
+        }
+        if (!isValidEmail(formData.email)) {
+            setEmailError('Formato de email inválido');
             return;
         }
         setLoading(true);
@@ -274,6 +288,8 @@ export default function LoginPage() {
                                     placeholder="admin@lucia.com"
                                     value={formData.email}
                                     onChange={handleChange('email')}
+                                    error={!!emailError}
+                                    helperText={emailError}
                                     inputProps={{ 'data-testid': 'email-input' }}
                                     InputProps={{
                                         startAdornment: (
@@ -281,6 +297,13 @@ export default function LoginPage() {
                                                 <EmailOutlineIcon color="action" />
                                             </InputAdornment>
                                         ),
+                                    }}
+                                />
+                                <EmailAutocompleteChips
+                                    email={formData.email}
+                                    onSelect={(newEmail) => {
+                                        setFormData(prev => ({ ...prev, email: newEmail }));
+                                        setEmailError('');
                                     }}
                                 />
 
@@ -353,6 +376,15 @@ export default function LoginPage() {
                                     value={formData.email}
                                     onChange={handleChange('email')}
                                     placeholder="admin@lucia.com"
+                                    error={!!emailError}
+                                    helperText={emailError}
+                                />
+                                <EmailAutocompleteChips
+                                    email={formData.email}
+                                    onSelect={(newEmail) => {
+                                        setFormData(prev => ({ ...prev, email: newEmail }));
+                                        setEmailError('');
+                                    }}
                                 />
                                 <Button
                                     fullWidth

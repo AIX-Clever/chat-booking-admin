@@ -12,6 +12,8 @@ import { generateClient } from 'aws-amplify/api';
 import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { UPDATE_TENANT, CREATE_SERVICE } from '../../graphql/queries';
+import { isValidEmail } from '../../utils/validators';
+import EmailAutocompleteChips from '../../components/common/EmailAutocompleteChips';
 
 const client = generateClient();
 
@@ -43,6 +45,7 @@ export default function OnboardingPage() {
         comuna: '',
         email: ''
     });
+    const [emailError, setEmailError] = useState('');
 
     useEffect(() => {
         // LEGACY ONBOARDING CLEANUP: Redirect to the dedicated onboarding app
@@ -93,6 +96,12 @@ export default function OnboardingPage() {
                     authToken: token
                 });
             } else if (activeStep === 1) {
+                if (billingType === '33' && !isValidEmail(billingData.email)) {
+                    setEmailError('Formato de email inválido');
+                    setLoading(false);
+                    return;
+                }
+
                 // Save Billing Preferences
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const settingsUpdate: any = {
@@ -264,8 +273,22 @@ export default function OnboardingPage() {
                                                 <TextField
                                                     label="Email Facturación"
                                                     value={billingData.email}
-                                                    onChange={(e) => setBillingData({ ...billingData, email: e.target.value })}
+                                                    onChange={(e) => {
+                                                        setBillingData({ ...billingData, email: e.target.value });
+                                                        setEmailError('');
+                                                    }}
+                                                    error={!!emailError}
+                                                    helperText={emailError}
                                                     fullWidth
+                                                />
+                                            </Box>
+                                            <Box sx={{ gridColumn: '1 / -1' }}>
+                                                <EmailAutocompleteChips
+                                                    email={billingData.email}
+                                                    onSelect={(newEmail) => {
+                                                        setBillingData(prev => ({ ...prev, email: newEmail }));
+                                                        setEmailError('');
+                                                    }}
                                                 />
                                             </Box>
                                         </Box>

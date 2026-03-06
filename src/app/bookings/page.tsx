@@ -16,8 +16,23 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import { es } from 'date-fns/locale';
-import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS, GET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
+import {
+    LIST_PROVIDERS,
+    LIST_ROOMS,
+    LIST_BOOKINGS_BY_PROVIDER,
+    SEARCH_SERVICES,
+    GET_AVAILABLE_SLOTS,
+    GET_PROVIDER_AVAILABILITY,
+    CANCEL_BOOKING,
+    CONFIRM_BOOKING,
+    MARK_AS_NO_SHOW,
+    UPDATE_BOOKING_STATUS,
+    CREATE_BOOKING
+} from '../../graphql/queries';
 import { useTenant } from '../../context/TenantContext';
+import { isValidEmail } from '../../utils/validators';
+import EmailAutocompleteChips from '../../components/common/EmailAutocompleteChips';
+import PhoneInput from '../../components/common/PhoneInput';
 
 import {
     Typography,
@@ -49,8 +64,6 @@ import {
     Menu,
     ListItemIcon,
     ListItemText
-    // FormControl // Unused
-
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BlockIcon from '@mui/icons-material/Block';
@@ -490,6 +503,8 @@ export default function BookingsPage() {
         );
     };
 
+    const [emailError, setEmailError] = React.useState('');
+
     const handleOpenNewBooking = () => {
         // Default to a sane date/time (tomorrow 9am)
         const tomorrow = new Date();
@@ -507,11 +522,17 @@ export default function BookingsPage() {
             time: '09:00',
             notes: ''
         });
+        setEmailError('');
         setNewBookingOpen(true);
     };
 
     const handleCreateBooking = async (forceOverbook: boolean | React.MouseEvent = false) => {
         const isForced = typeof forceOverbook === 'boolean' ? forceOverbook : false;
+
+        if (newBookingData.clientEmail && !isValidEmail(newBookingData.clientEmail)) {
+            setEmailError('Formato de email inválido');
+            return;
+        }
 
         setCreateLoading(true);
         try {
@@ -1631,15 +1652,27 @@ export default function BookingsPage() {
                             <TextField
                                 label={t('form.clientEmail')}
                                 fullWidth
+                                type="email"
                                 value={newBookingData.clientEmail}
-                                onChange={(e) => setNewBookingData({ ...newBookingData, clientEmail: e.target.value })}
+                                onChange={(e) => {
+                                    setNewBookingData({ ...newBookingData, clientEmail: e.target.value });
+                                    setEmailError('');
+                                }}
+                                error={!!emailError}
+                                helperText={emailError}
+                            />
+                            <EmailAutocompleteChips
+                                email={newBookingData.clientEmail}
+                                onSelect={(newEmail) => {
+                                    setNewBookingData({ ...newBookingData, clientEmail: newEmail });
+                                    setEmailError('');
+                                }}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField
+                            <PhoneInput
                                 label={t('form.clientPhone')}
-                                fullWidth
-                                value={newBookingData.clientPhone}
+                                value={newBookingData.clientPhone || ''}
                                 onChange={(e) => setNewBookingData({ ...newBookingData, clientPhone: e.target.value })}
                             />
                         </Grid>

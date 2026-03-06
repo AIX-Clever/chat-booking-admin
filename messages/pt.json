@@ -660,6 +660,10 @@
             "cancelTitle": "Cancelar Reserva",
             "cancelContent": "Tem certeza que deseja cancelar a reserva de {name}?"
         },
+        "overbookConfirm": {
+            "title": "Confirmar Sobreposição",
+            "confirm": "Sobrepor"
+        },
         "clients": {
             "title": "Clientes (Ficha)",
             "newClient": "Novo Cliente",

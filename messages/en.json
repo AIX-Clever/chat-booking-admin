@@ -659,6 +659,10 @@
             "cancelTitle": "Cancel Booking",
             "cancelContent": "Are you sure you want to cancel the booking for {name}?"
         },
+        "overbookConfirm": {
+            "title": "Confirm Overbook",
+            "confirm": "Overbook"
+        },
         "clients": {
             "title": "Customers (File)",
             "newClient": "New Customer",

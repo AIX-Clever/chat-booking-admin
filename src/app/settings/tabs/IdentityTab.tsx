@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import { BusinessProfile } from '../../../types/settings';
 import { GENERATE_PRESIGNED_URL } from '../../../graphql/queries';
 import { resizeImage } from '../../../utils/image';
+import PhoneInput from '../../../components/common/PhoneInput';
 
 interface IdentityTabProps {
     profile: BusinessProfile | null;
@@ -200,19 +201,19 @@ export default function IdentityTab({ profile, setProfile, onSave }: IdentityTab
                         </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
+                                <PhoneInput
                                     label={t('phone1')}
+                                    name="phone1"
                                     value={formData.phone1}
-                                    onChange={(e) => handleChange('phone1', e.target.value)}
+                                    onChange={(e) => handleChange(e.target.name as keyof BusinessProfile, e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
+                                <PhoneInput
                                     label={t('phone2')}
+                                    name="phone2"
                                     value={formData.phone2}
-                                    onChange={(e) => handleChange('phone2', e.target.value)}
+                                    onChange={(e) => handleChange(e.target.name as keyof BusinessProfile, e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>

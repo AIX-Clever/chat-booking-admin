@@ -48,6 +48,8 @@ import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
 import ActionRequiredGuard from '../../components/common/ActionRequiredGuard';
 import { usePlanFeatures } from '../../hooks/usePlanFeatures';
 import { usePlanUsage } from '../../hooks/useDashboardMetrics';
+import { isValidEmail } from '../../utils/validators';
+import EmailAutocompleteChips from '../../components/common/EmailAutocompleteChips';
 
 // --- Types ---
 
@@ -165,6 +167,7 @@ export default function ProvidersPage() {
         },
         professionalLicense: ''
     });
+    const [emailError, setEmailError] = React.useState('');
 
     const [tenantId, setTenantId] = React.useState<string>('');
 
@@ -298,6 +301,7 @@ export default function ProvidersPage() {
             setCurrentProvider(null);
         }
         setOpen(true);
+        setEmailError('');
     };
 
     const handleClose = () => {
@@ -397,6 +401,11 @@ export default function ProvidersPage() {
 
     const handleSave = async () => {
         try {
+            if (formData.email && !isValidEmail(formData.email)) {
+                setEmailError('Formato de email inválido');
+                return;
+            }
+
             // Securely fetch ID Token
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
@@ -741,9 +750,20 @@ export default function ProvidersPage() {
                                 fullWidth
                                 type="email"
                                 value={formData.email || ''}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                onChange={(e) => {
+                                    setFormData({ ...formData, email: e.target.value });
+                                    setEmailError('');
+                                }}
                                 placeholder="correo@ejemplo.com"
-                                helperText="Se usará para enviar notificaciones de nuevas reservas"
+                                helperText={emailError || 'Se usará para enviar notificaciones de nuevas reservas'}
+                                error={!!emailError}
+                            />
+                            <EmailAutocompleteChips
+                                email={formData.email || ''}
+                                onSelect={(newEmail) => {
+                                    setFormData({ ...formData, email: newEmail });
+                                    setEmailError('');
+                                }}
                             />
                             <TextField
                                 label={t('dialog.general.timezone')}
