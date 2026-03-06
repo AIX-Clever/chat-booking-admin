@@ -956,11 +956,21 @@ export default function BookingsPage() {
                     {/* Days Columns */}
                     <Box sx={{ display: 'flex', flexGrow: 1, minWidth: 800 }}>
                         {weekDays.map((dayDate, index) => {
-                            const dateStr = dayDate.toISOString().split('T')[0];
-                            const isToday = new Date().toISOString().split('T')[0] === dateStr;
+                            const year = dayDate.getFullYear();
+                            const month = String(dayDate.getMonth() + 1).padStart(2, '0');
+                            const day = String(dayDate.getDate()).padStart(2, '0');
+                            const dateStr = `${year}-${month}-${day}`;
 
-                            // Filter bookings for this day
-                            const dayBookings = statusFilteredBookings.filter(b => b.start.startsWith(dateStr));
+                            const now = new Date();
+                            const isToday = now.getFullYear() === year && now.getMonth() === dayDate.getMonth() && now.getDate() === dayDate.getDate();
+
+                            // Filter bookings for this day using local time
+                            const dayBookings = statusFilteredBookings.filter(b => {
+                                const bDate = new Date(b.start);
+                                return bDate.getFullYear() === year &&
+                                    bDate.getMonth() === dayDate.getMonth() &&
+                                    bDate.getDate() === dayDate.getDate();
+                            });
 
                             return (
                                 <Box key={dateStr} sx={{ flex: 1, borderRight: index < 6 ? 1 : 0, borderColor: 'divider', minWidth: 100 }}>
