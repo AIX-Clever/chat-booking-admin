@@ -5,6 +5,7 @@ export const LIST_PROVIDERS = `
       providerId
       name
       bio
+      email
       serviceIds
       timezone
       photoUrl
@@ -271,6 +272,7 @@ export const CREATE_PROVIDER = `
       providerId
       name
       bio
+      email
       serviceIds
       timezone
       photoUrl
@@ -290,6 +292,7 @@ export const UPDATE_PROVIDER = `
       providerId
       name
       bio
+      email
       serviceIds
       timezone
       photoUrl

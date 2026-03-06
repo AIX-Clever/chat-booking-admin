@@ -61,6 +61,7 @@ interface Provider {
     id: string;
     name: string;
     bio: string;
+    email?: string;
     serviceIds: string[]; // List of assigned service IDs
     timezone: string;
     active: boolean;
@@ -152,6 +153,7 @@ export default function ProvidersPage() {
         id: '',
         name: '',
         bio: '',
+        email: '',
         serviceIds: [],
         timezone: 'America/Santiago',
         active: true,
@@ -237,6 +239,7 @@ export default function ProvidersPage() {
                     id: p.providerId,
                     name: p.name,
                     bio: p.bio || '',
+                    email: p.email || '',
                     serviceIds: p.serviceIds || [],
                     timezone: p.timezone,
                     active: p.available,
@@ -280,6 +283,7 @@ export default function ProvidersPage() {
                 id: '',
                 name: '',
                 bio: '',
+                email: '',
                 serviceIds: [],
                 timezone: 'America/Santiago',
                 active: true,
@@ -403,6 +407,7 @@ export default function ProvidersPage() {
                     providerId: currentProvider.id,
                     name: formData.name,
                     bio: formData.bio,
+                    email: formData.email || undefined,
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
                     photoUrl: formData.photoUrl,
@@ -424,6 +429,7 @@ export default function ProvidersPage() {
                 const input = {
                     name: formData.name,
                     bio: formData.bio,
+                    email: formData.email || undefined,
                     serviceIds: formData.serviceIds,
                     timezone: formData.timezone,
                     photoUrl: formData.photoUrl,
@@ -518,9 +524,6 @@ export default function ProvidersPage() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 5 }}>
                 <Box>
                     <Typography variant="h4">{t('title')}</Typography>
-                    <Typography variant="caption" sx={{ color: 'red', display: 'block' }}>
-                        DEBUG API: {process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT}
-                    </Typography>
                 </Box>
                 <Tooltip title={!planFeatures.canCreateProvider ? `Límite de ${planFeatures.maxProviders} profesionales alcanzado para el plan ${planFeatures.plan}. Sube de nivel para agregar más.` : ""}>
                     <span>
@@ -732,6 +735,15 @@ export default function ProvidersPage() {
                                 value={formData.professionalLicense}
                                 onChange={(e) => setFormData({ ...formData, professionalLicense: e.target.value })}
                                 placeholder="Ej: Colegio Médico N° 123456"
+                            />
+                            <TextField
+                                label="Email del profesional"
+                                fullWidth
+                                type="email"
+                                value={formData.email || ''}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                placeholder="correo@ejemplo.com"
+                                helperText="Se usará para enviar notificaciones de nuevas reservas"
                             />
                             <TextField
                                 label={t('dialog.general.timezone')}
