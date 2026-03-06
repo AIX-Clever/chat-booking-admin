@@ -1670,6 +1670,7 @@ export default function BookingsPage() {
                                 <DatePicker
                                     label={t('form.date')}
                                     value={newBookingData.date ? new Date(newBookingData.date + 'T00:00:00') : null}
+                                    minDate={new Date()}
                                     onChange={(newValue) => {
                                         if (newValue) {
                                             const dateStr = newValue.toISOString().split('T')[0];
@@ -1718,15 +1719,29 @@ export default function BookingsPage() {
                                     }}>
                                         {/* Morning Segments */}
                                         {(() => {
-                                            const morning = availableSlots.filter(s => {
+                                            const now = new Date();
+                                            const isToday = newBookingData.date === now.toISOString().split('T')[0];
+
+                                            // Filter out past slots when today is selected, then deduplicate by HH:MM
+                                            const seen = new Set<string>();
+                                            const uniqueSlots = availableSlots.filter(s => {
+                                                const slotDate = new Date(s.start);
+                                                if (isToday && slotDate <= now) return false;
+                                                const timeStr = slotDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+                                                if (seen.has(timeStr)) return false;
+                                                seen.add(timeStr);
+                                                return true;
+                                            });
+
+                                            const morning = uniqueSlots.filter(s => {
                                                 const h = new Date(s.start).getHours();
                                                 return h < 12;
                                             });
-                                            const afternoon = availableSlots.filter(s => {
+                                            const afternoon = uniqueSlots.filter(s => {
                                                 const h = new Date(s.start).getHours();
                                                 return h >= 12 && h < 18; // 12pm to 5:59pm
                                             });
-                                            const evening = availableSlots.filter(s => {
+                                            const evening = uniqueSlots.filter(s => {
                                                 const h = new Date(s.start).getHours();
                                                 return h >= 18;
                                             });
