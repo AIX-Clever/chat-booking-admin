@@ -15,7 +15,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-// Removed unused date-fns imports
+import { es } from 'date-fns/locale';
 import { LIST_PROVIDERS, LIST_BOOKINGS_BY_PROVIDER, CANCEL_BOOKING, SEARCH_SERVICES, CREATE_BOOKING, CONFIRM_BOOKING, MARK_AS_NO_SHOW, UPDATE_BOOKING_STATUS, LIST_ROOMS, GET_AVAILABLE_SLOTS, GET_PROVIDER_AVAILABILITY } from '../../graphql/queries';
 import { useTenant } from '../../context/TenantContext';
 
@@ -1666,7 +1666,7 @@ export default function BookingsPage() {
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                                 <DatePicker
                                     label={t('form.date')}
                                     value={newBookingData.date ? new Date(newBookingData.date + 'T00:00:00') : null}
@@ -1830,7 +1830,7 @@ export default function BookingsPage() {
                                 )}
                                 {/* Manual Override */}
                                 <Box sx={{ mt: 2 }}>
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                                         <TimePicker
                                             label={t('form.manualTime')}
                                             value={newBookingData.time ? new Date(`2000-01-01T${newBookingData.time}:00`) : null}
