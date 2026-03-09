@@ -1154,7 +1154,8 @@ export default function BookingsPage() {
         if (!selectedBooking?.clientPhone) return;
         const date = new Date(selectedBooking.start).toLocaleDateString();
         const time = new Date(selectedBooking.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const text = t('whatsappMessage', { name: selectedBooking.clientName, service: selectedBooking.serviceName, provider: selectedBooking.providerName, date, time });
+        const actualServiceName = availableServices.find(s => s.serviceId === selectedBooking.serviceName)?.name || selectedBooking.serviceName;
+        const text = t('whatsappMessage', { name: selectedBooking.clientName, service: actualServiceName, provider: selectedBooking.providerName, date, time });
         window.open(`https://wa.me/${selectedBooking.clientPhone}?text=${encodeURIComponent(text)}`, '_blank');
     };
 
