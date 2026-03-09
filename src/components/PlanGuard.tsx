@@ -48,7 +48,7 @@ export default function PlanGuard({
     const currentLevel = PLAN_LEVELS[currentPlan.toUpperCase()] || 1;
     const requiredLevel = PLAN_LEVELS[minPlan];
 
-    const handleUpgrade = async () => {
+    const handleUpgrade = async (paymentMethod: 'mercadopago' | 'fintoc') => {
         setUpgrading(true);
         try {
             const attrs = await fetchUserAttributes();
@@ -66,7 +66,8 @@ export default function PlanGuard({
                 variables: {
                     planId: target.toLowerCase(),
                     email: email,
-                    backUrl: getCurrentUrl()
+                    backUrl: getCurrentUrl(),
+                    paymentMethod: paymentMethod
                 }
             });
 

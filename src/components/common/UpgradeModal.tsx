@@ -24,7 +24,7 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
     // Determine target plan based on current (Simple logic for now)
     const targetPlan = currentPlan === 'LITE' ? 'PRO' : 'BUSINESS';
 
-    const handleUpgrade = async () => {
+    const handleUpgrade = async (paymentMethod: 'mercadopago' | 'fintoc') => {
         setLoading(true);
         try {
             const attrs = await fetchUserAttributes();
@@ -36,7 +36,8 @@ export default function UpgradeModal({ open, onClose, feature, currentPlan }: Up
                 variables: {
                     planId: targetPlan.toLowerCase(), // 'pro' or 'business'
                     email: email,
-                    backUrl: getCurrentUrl()
+                    backUrl: getCurrentUrl(),
+                    paymentMethod: paymentMethod
                 }
             });
 

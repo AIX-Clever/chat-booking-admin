@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     Box,
     Typography,
@@ -21,7 +21,7 @@ export type UpgradeFeature = 'AI' | 'TEAM' | 'USAGE' | 'WORKFLOW' | 'INTEGRATION
 interface UpgradeContentProps {
     feature: UpgradeFeature;
     targetPlan: string;
-    onUpgrade: () => void;
+    onUpgrade: (paymentMethod: 'mercadopago' | 'fintoc') => void;
     loading?: boolean;
     onClose?: () => void; // If provided, shows Close icon and "Maybe Later" button
     showDismissButton?: boolean; // Explicit control over "Maybe Later" button
@@ -36,6 +36,7 @@ export default function UpgradeContent({
     showDismissButton = true
 }: UpgradeContentProps) {
     const t = useTranslations('upgradeModal');
+    const [paymentMethod, setPaymentMethod] = useState<'mercadopago' | 'fintoc'>('mercadopago');
 
     // Determine config dynamically based on feature and translations
     const config = useMemo(() => {
@@ -164,6 +165,53 @@ export default function UpgradeContent({
                     ))}
                 </Box>
 
+                {/* Payment Method Selector */}
+                <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1.5, textTransform: 'uppercase', color: 'text.secondary', fontSize: '0.75rem' }}>
+                    Método de pago
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, mb: 4 }}>
+                    <Box
+                        onClick={() => setPaymentMethod('mercadopago')}
+                        sx={{
+                            flex: 1,
+                            p: 2,
+                            border: '2px solid',
+                            borderColor: paymentMethod === 'mercadopago' ? config.color : 'divider',
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            bgcolor: paymentMethod === 'mercadopago' ? `${config.color}11` : 'transparent',
+                            transition: 'all 0.2s',
+                            '&:hover': {
+                                borderColor: paymentMethod === 'mercadopago' ? config.color : 'text.disabled'
+                            }
+                        }}
+                    >
+                        <Typography variant="subtitle2" fontWeight="bold">Tarjeta de Débito/Crédito</Typography>
+                        <Typography variant="caption" color="text.secondary">Vía MercadoPago</Typography>
+                    </Box>
+                    <Box
+                        onClick={() => setPaymentMethod('fintoc')}
+                        sx={{
+                            flex: 1,
+                            p: 2,
+                            border: '2px solid',
+                            borderColor: paymentMethod === 'fintoc' ? config.color : 'divider',
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            bgcolor: paymentMethod === 'fintoc' ? `${config.color}11` : 'transparent',
+                            transition: 'all 0.2s',
+                            '&:hover': {
+                                borderColor: paymentMethod === 'fintoc' ? config.color : 'text.disabled'
+                            }
+                        }}
+                    >
+                        <Typography variant="subtitle2" fontWeight="bold">Transferencia Bancaria</Typography>
+                        <Typography variant="caption" color="text.secondary">Vía Fintoc</Typography>
+                    </Box>
+                </Box>
+
                 {/* Actions */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                     {(onClose && showDismissButton) && (
@@ -174,7 +222,7 @@ export default function UpgradeContent({
                     <Button
                         variant="contained"
                         size="large"
-                        onClick={onUpgrade}
+                        onClick={() => onUpgrade(paymentMethod)}
                         disabled={loading}
                         sx={{
                             bgcolor: config.color,
