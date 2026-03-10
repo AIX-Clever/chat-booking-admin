@@ -18,6 +18,13 @@ import LinkOffIcon from '@mui/icons-material/LinkOff';
 // The Connected App SID is injected at build time via env var
 const TWILIO_CONNECTED_APP_SID = process.env.NEXT_PUBLIC_TWILIO_CONNECTED_APP_SID || '';
 
+const PACKAGES = [
+    { name: 'Starter', msgs: 100, price: '$9.990', coverage: 'Hasta 50 pacientes/mes', detail: 'Ideal para clínicas con 1 profesional o menos de 70 citas al mes.', color: 'text.primary' },
+    { name: 'Standard', msgs: 300, price: '$24.990', coverage: 'Hasta 150 pacientes/mes', detail: 'Para clínicas con 1–2 profesionales y agenda activa.', color: 'primary.main' },
+    { name: 'Pro', msgs: 600, price: '$39.990', coverage: 'Hasta 300 pacientes/mes', detail: 'Para clínicas de 2–3 profesionales con alta demanda.', color: 'success.main' },
+] as const;
+type Package = typeof PACKAGES[number];
+
 interface WhatsAppTabProps {
     whatsappEnabled: boolean;
     setWhatsappEnabled: (enabled: boolean) => void;
@@ -36,6 +43,7 @@ export default function WhatsAppTab({
     onSave
 }: WhatsAppTabProps) {
     const [showError, setShowError] = React.useState(false);
+    const [selectedPkg, setSelectedPkg] = React.useState<Package | null>(null);
     const isConnected = !!twilioPhoneNumber;
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,82 +216,103 @@ export default function WhatsAppTab({
                         </Typography>
 
                         {/* Package Cards */}
-                        {[
-                            {
-                                name: 'Starter',
-                                msgs: 100,
-                                price: '$9.990',
-                                coverage: 'Hasta 50 pacientes/mes',
-                                detail: 'Ideal para clínicas con 1 profesional o menos de 70 citas al mes.',
-                                color: 'text.primary',
-                            },
-                            {
-                                name: 'Standard',
-                                msgs: 300,
-                                price: '$24.990',
-                                coverage: 'Hasta 150 pacientes/mes',
-                                detail: 'Para clínicas con 1–2 profesionales y agenda activa.',
-                                color: 'primary.main',
-                            },
-                            {
-                                name: 'Pro',
-                                msgs: 600,
-                                price: '$39.990',
-                                coverage: 'Hasta 300 pacientes/mes',
-                                detail: 'Para clínicas de 2–3 profesionales con alta demanda.',
-                                color: 'success.main',
-                            },
-                        ].map((pkg) => (
-                            <Box
-                                key={pkg.name}
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    border: '1px solid',
-                                    borderColor: 'divider',
-                                    borderRadius: 2,
-                                    px: 2,
-                                    py: 1.5,
-                                    mb: 1.5,
-                                    gap: 1,
-                                    flexWrap: 'wrap',
-                                }}
-                            >
-                                <Box sx={{ flex: 1, minWidth: 0 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.25 }}>
-                                        <Typography variant="subtitle2" fontWeight="bold" color={pkg.color}>
-                                            {pkg.name}
-                                        </Typography>
-                                        <Typography variant="caption" color="text.secondary">
-                                            · {pkg.msgs} mensajes
+                        {PACKAGES.map((pkg) => {
+                            const isSelected = selectedPkg?.name === pkg.name;
+                            return (
+                                <Box
+                                    key={pkg.name}
+                                    onClick={() => setSelectedPkg(isSelected ? null : pkg)}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        border: '2px solid',
+                                        borderColor: isSelected ? 'success.main' : 'divider',
+                                        borderRadius: 2,
+                                        px: 2,
+                                        py: 1.5,
+                                        mb: 1.5,
+                                        gap: 1,
+                                        flexWrap: 'wrap',
+                                        cursor: 'pointer',
+                                        transition: 'border-color 0.2s',
+                                        bgcolor: isSelected ? 'action.selected' : 'transparent',
+                                        '&:hover': { borderColor: 'success.main' },
+                                    }}
+                                >
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.25 }}>
+                                            <Typography variant="subtitle2" fontWeight="bold" color={pkg.color}>
+                                                {pkg.name}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                · {pkg.msgs} mensajes
+                                            </Typography>
+                                            {isSelected && (
+                                                <CheckCircleIcon color="success" sx={{ fontSize: 16 }} />
+                                            )}
+                                        </Box>
+                                        <Typography variant="caption" color="text.secondary" display="block">
+                                            {pkg.coverage} · {pkg.detail}
                                         </Typography>
                                     </Box>
-                                    <Typography variant="caption" color="text.secondary" display="block">
-                                        {pkg.coverage} · {pkg.detail}
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-                                    <Typography variant="subtitle1" fontWeight="bold">
+                                    <Typography variant="subtitle1" fontWeight="bold" sx={{ flexShrink: 0 }}>
                                         {pkg.price}
                                     </Typography>
+                                </Box>
+                            );
+                        })}
+
+                        {/* Bank Transfer Details — shown when a package is selected */}
+                        <Collapse in={!!selectedPkg}>
+                            <Box sx={{
+                                mt: 1,
+                                mb: 1,
+                                border: '1px solid',
+                                borderColor: 'success.main',
+                                borderRadius: 2,
+                                p: 2,
+                                bgcolor: 'action.hover',
+                            }}>
+                                <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
+                                    Datos para transferencia — {selectedPkg?.name} ({selectedPkg?.price})
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontFamily: 'monospace', lineHeight: 2, mb: 1.5 }}>
+                                    Banco: Santander<br />
+                                    Cuenta Corriente: 12345678-9<br />
+                                    RUT: 76.543.210-K<br />
+                                    Nombre: Hola Lucía SpA<br />
+                                    Email: hola@holalucia.cl<br />
+                                    Monto: {selectedPkg?.price} (IVA incl.)
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                                     <Button
                                         size="small"
                                         variant="outlined"
+                                        onClick={() => {
+                                            const text = `Banco: Santander\nCuenta Corriente: 12345678-9\nRUT: 76.543.210-K\nNombre: Hola Lucía SpA\nEmail: hola@holalucia.cl\nMonto: ${selectedPkg?.price} IVA incl. (Bolsa ${selectedPkg?.name} — ${selectedPkg?.msgs} mensajes)`;
+                                            navigator.clipboard.writeText(text);
+                                        }}
+                                    >
+                                        📋 Copiar datos
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        variant="contained"
                                         color="success"
                                         startIcon={<WhatsAppIcon fontSize="small" />}
                                         onClick={() => {
                                             const msg = encodeURIComponent(
-                                                `Hola, quiero contratar la bolsa ${pkg.name} (${pkg.msgs} mensajes - ${pkg.price} IVA incl.). ¿Me pueden indicar los datos para la transferencia?`
+                                                `Hola, realicé la transferencia por la bolsa ${selectedPkg?.name} (${selectedPkg?.msgs} mensajes - ${selectedPkg?.price} IVA incl.). Adjunto comprobante.`
                                             );
                                             window.open(`https://wa.me/56964264770?text=${msg}`, '_blank');
                                         }}
                                     >
-                                        Solicitar
+                                        Ya transferí — Enviar comprobante
                                     </Button>
                                 </Box>
                             </Box>
-                        ))}
+                        </Collapse>
 
                         <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
                             * IVA incluido · 1 crédito = 1 mensaje WhatsApp · Confirmación + Recordatorio = 2 créditos por paciente
