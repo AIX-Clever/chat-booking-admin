@@ -65,7 +65,12 @@ export default function WhatsAppTab({
 
     const parsedRules: NotificationRule[] = React.useMemo(() => {
         try {
-            return whatsappNotificationRules ? JSON.parse(whatsappNotificationRules) : DEFAULT_RULES;
+            if (!whatsappNotificationRules) return DEFAULT_RULES;
+            const parsed = JSON.parse(whatsappNotificationRules);
+            // DynamoDB may return rules as a keyed object instead of array
+            if (Array.isArray(parsed)) return parsed;
+            if (parsed && typeof parsed === 'object') return Object.values(parsed) as NotificationRule[];
+            return DEFAULT_RULES;
         } catch { return DEFAULT_RULES; }
     }, [whatsappNotificationRules]);
 
