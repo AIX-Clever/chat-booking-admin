@@ -326,6 +326,7 @@ export const GET_TENANT = `
       settings
       whatsappQuota
       twilioPhoneNumber
+      whatsappNotificationRules
     }
   }
 `;

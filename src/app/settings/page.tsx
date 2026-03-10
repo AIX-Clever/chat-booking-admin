@@ -117,6 +117,7 @@ function SettingsContent() {
     const [whatsappQuota, setWhatsappQuota] = React.useState(0);
     const [whatsappTenantId, setWhatsappTenantId] = React.useState<string | undefined>(undefined);
     const [twilioPhoneNumber, setTwilioPhoneNumber] = React.useState<string | undefined>(undefined);
+    const [whatsappNotificationRules, setWhatsappNotificationRules] = React.useState<string | undefined>(undefined);
 
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
@@ -141,6 +142,7 @@ function SettingsContent() {
                 setWhatsappQuota(tenant.whatsappQuota ?? 0);
                 if (tenant.tenantId) setWhatsappTenantId(tenant.tenantId);
                 if (tenant.twilioPhoneNumber) setTwilioPhoneNumber(tenant.twilioPhoneNumber);
+                if (tenant.whatsappNotificationRules) setWhatsappNotificationRules(tenant.whatsappNotificationRules);
 
                 if (tenant.settings) {
                     try {
@@ -280,6 +282,27 @@ function SettingsContent() {
         }
     };
 
+    const handleSaveRules = async (rules: unknown[]) => {
+        try {
+            setLoading(true);
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+            await client.graphql({
+                query: UPDATE_TENANT,
+                variables: { input: { whatsappNotificationRules: JSON.stringify(rules) } },
+                authToken: token
+            });
+            setWhatsappNotificationRules(JSON.stringify(rules));
+            setSuccessMsg('Reglas de notificación guardadas.');
+            await refreshTenant();
+        } catch (error: any) {
+            console.error('Error saving rules:', error);
+            setError('Error al guardar las reglas. Intenta de nuevo.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
     };
@@ -374,7 +397,9 @@ function SettingsContent() {
                                 whatsappQuota={whatsappQuota}
                                 twilioPhoneNumber={twilioPhoneNumber}
                                 tenantId={whatsappTenantId}
+                                whatsappNotificationRules={whatsappNotificationRules}
                                 onSave={handleSaveSettings}
+                                onSaveRules={handleSaveRules}
                             />
                         </CustomTabPanel>
 

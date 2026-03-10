@@ -16,6 +16,7 @@ export interface Tenant {
     settings?: string; // JSON string
     whatsappQuota?: number;
     twilioPhoneNumber?: string;
+    whatsappNotificationRules?: string; // AWSJSON string
     createdAt: string;
 }
 

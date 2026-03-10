@@ -25,13 +25,29 @@ const PACKAGES = [
 ] as const;
 type Package = typeof PACKAGES[number];
 
+interface NotificationRule {
+    id: string;
+    name: string;
+    trigger: 'on_booking' | 'hours_before';
+    active: boolean;
+    hours_before: number | null;
+}
+
+const DEFAULT_RULES: NotificationRule[] = [
+    { id: 'on_booking', name: 'Confirmación al reservar', trigger: 'on_booking', active: true, hours_before: null },
+    { id: 'remind_24h', name: 'Recordatorio 24h antes', trigger: 'hours_before', active: true, hours_before: 24 },
+    { id: 'remind_2h', name: 'Recordatorio 2h antes', trigger: 'hours_before', active: false, hours_before: 2 },
+];
+
 interface WhatsAppTabProps {
     whatsappEnabled: boolean;
     setWhatsappEnabled: (enabled: boolean) => void;
     whatsappQuota: number;
     twilioPhoneNumber?: string;
     tenantId?: string;
+    whatsappNotificationRules?: string; // AWSJSON
     onSave: () => void;
+    onSaveRules?: (rules: NotificationRule[]) => void;
 }
 
 export default function WhatsAppTab({
@@ -40,10 +56,26 @@ export default function WhatsAppTab({
     whatsappQuota,
     twilioPhoneNumber,
     tenantId,
-    onSave
+    whatsappNotificationRules,
+    onSave,
+    onSaveRules,
 }: WhatsAppTabProps) {
     const [showError, setShowError] = React.useState(false);
     const [selectedPkg, setSelectedPkg] = React.useState<Package | null>(null);
+
+    const parsedRules: NotificationRule[] = React.useMemo(() => {
+        try {
+            return whatsappNotificationRules ? JSON.parse(whatsappNotificationRules) : DEFAULT_RULES;
+        } catch { return DEFAULT_RULES; }
+    }, [whatsappNotificationRules]);
+
+    const [rules, setRules] = React.useState<NotificationRule[]>(parsedRules);
+    React.useEffect(() => { setRules(parsedRules); }, [whatsappNotificationRules]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const toggleRule = (id: string) => {
+        setRules(prev => prev.map(r => r.id === id ? { ...r, active: !r.active } : r));
+    };
+
     const isConnected = !!twilioPhoneNumber;
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -320,6 +352,62 @@ export default function WhatsAppTab({
                     </Card>
                 </Grid>
             </Grid>
+
+            {/* Notification Rules — full width card */}
+            <Card variant="outlined" sx={{ p: 3, mt: 3 }}>
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 0.5 }}>
+                    Reglas de Notificación
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Configura cuándo se envían los mensajes de WhatsApp para cada reserva.
+                </Typography>
+
+                {rules.map((rule) => (
+                    <Box
+                        key={rule.id}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            borderRadius: 2,
+                            px: 2,
+                            py: 1.5,
+                            mb: 1.5,
+                        }}
+                    >
+                        <Box>
+                            <Typography variant="body2" fontWeight={rule.active ? 'bold' : 'normal'}>
+                                {rule.name}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                {rule.trigger === 'on_booking'
+                                    ? 'Se envía inmediatamente al confirmar la reserva'
+                                    : `Se envía ${rule.hours_before}h antes de la cita`}
+                            </Typography>
+                        </Box>
+                        <Switch
+                            checked={rule.active}
+                            onChange={() => toggleRule(rule.id)}
+                            color="success"
+                        />
+                    </Box>
+                ))}
+
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+                    * Cada mensaje activo consume 1 crédito de tu bolsa. Con Confirmación + Recordatorio 24h = 2 créditos por cita.
+                </Typography>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => onSaveRules?.(rules)}
+                    startIcon={<Typography variant="button">💾</Typography>}
+                >
+                    Guardar Reglas
+                </Button>
+            </Card>
         </Box>
     );
 }
