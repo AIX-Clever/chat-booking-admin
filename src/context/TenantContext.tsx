@@ -14,6 +14,7 @@ export interface Tenant {
     plan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE'; // Expanded based on known plans
     status: 'ACTIVE' | 'PENDING_PAYMENT' | 'SUSPENDED' | 'TRIAL' | 'CANCELLED';
     settings?: string; // JSON string
+    whatsappQuota?: number;
     createdAt: string;
 }
 

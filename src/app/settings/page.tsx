@@ -19,6 +19,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useSearchParams } from 'next/navigation';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 
 import { generateClient } from 'aws-amplify/api';
@@ -31,6 +32,7 @@ import AiConfigTab from './tabs/AiConfigTab';
 import ApiKeysTab from './tabs/ApiKeysTab';
 import IdentityTab from './tabs/IdentityTab';
 import BillingTab from './tabs/BillingTab';
+import WhatsAppTab from './tabs/WhatsAppTab';
 import { WidgetConfig } from '../../types/settings';
 import { PLAN_LEVELS } from '../../constants/settings';
 
@@ -71,7 +73,8 @@ function SettingsContent() {
         if (tabParam === 'identity' || tabParam === 'profile') return 0;
         if (tabParam === 'ai') return 1;
         if (tabParam === 'billing' || tabParam === 'plan' || tabParam === 'compliance' || tabParam === 'legal') return 2;
-        if (tabParam === 'keys' || tabParam === 'api') return 3;
+        if (tabParam === 'whatsapp') return 3;
+        if (tabParam === 'keys' || tabParam === 'api') return 4;
         return 0;
 
     }, [searchParams]);
@@ -109,6 +112,10 @@ function SettingsContent() {
     // Profile State
     const [profile, setProfile] = React.useState<any>(null);
 
+    // WhatsApp State
+    const [whatsappEnabled, setWhatsappEnabled] = React.useState(false);
+    const [whatsappQuota, setWhatsappQuota] = React.useState(0);
+
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
         try {
@@ -129,6 +136,7 @@ function SettingsContent() {
             if (tenant) {
                 // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
+                if (tenant.whatsappQuota !== undefined) setWhatsappQuota(tenant.whatsappQuota);
 
                 if (tenant.settings) {
                     try {
@@ -187,6 +195,9 @@ function SettingsContent() {
                         if (settings.profile) {
                             setProfile(settings.profile);
                         }
+                        if (settings.whatsappEnabled !== undefined) {
+                            setWhatsappEnabled(settings.whatsappEnabled);
+                        }
                     } catch (e) {
                         console.warn("Failed to parse tenant settings JSON", e);
                     }
@@ -218,7 +229,8 @@ function SettingsContent() {
                 ai: {
                     enabled: ragEnabled
                 },
-                profile
+                profile,
+                whatsappEnabled
             };
             const settingsJson = JSON.stringify(settingsObj);
 
@@ -293,6 +305,7 @@ function SettingsContent() {
                         <Tab label={t('tabs.identity')} icon={<BusinessIcon />} iconPosition="start" />
                         <Tab label={t('tabs.ai')} icon={<AutoAwesomeIcon />} iconPosition="start" />
                         <Tab label="Facturación" icon={<CreditCardIcon />} iconPosition="start" />
+                        <Tab label="WhatsApp" icon={<WhatsAppIcon />} iconPosition="start" />
                         {showApiKeys && (
                             <Tab label={t('tabs.apiKeys')} icon={<VpnKeyIcon />} iconPosition="start" />
                         )}
@@ -342,9 +355,19 @@ function SettingsContent() {
                             <BillingTab />
                         </CustomTabPanel>
 
-                        {/* --- Tab 3: API Keys (Conditional) --- */}
+                        {/* --- Tab 3: WhatsApp --- */}
+                        <CustomTabPanel value={tabValue} index={3}>
+                            <WhatsAppTab
+                                whatsappEnabled={whatsappEnabled}
+                                setWhatsappEnabled={setWhatsappEnabled}
+                                whatsappQuota={whatsappQuota}
+                                onSave={handleSaveSettings}
+                            />
+                        </CustomTabPanel>
+
+                        {/* --- Tab 4: API Keys (Conditional) --- */}
                         {showApiKeys && (
-                            <CustomTabPanel value={tabValue} index={3}>
+                            <CustomTabPanel value={tabValue} index={4}>
                                 <ApiKeysTab />
                             </CustomTabPanel>
                         )}

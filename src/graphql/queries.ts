@@ -324,6 +324,7 @@ export const GET_TENANT = `
       plan
       billingEmail
       settings
+      whatsappQuota
     }
   }
 `;
