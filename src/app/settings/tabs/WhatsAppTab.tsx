@@ -200,35 +200,94 @@ export default function WhatsAppTab({
 
                         <Divider sx={{ mb: 3 }} />
 
-                        <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-                            Recarga de Créditos (Manual)
+                        <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                            Recargar Créditos
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                            Por ahora, las recargas se realizan mediante transferencia bancaria. Transfiere el monto deseado a la siguiente cuenta y envíanos el comprobante por WhatsApp para acreditar tus mensajes.
+                            Elige el plan que mejor se adapte a tu clínica. Las recargas se acreditan por transferencia bancaria — envíanos el comprobante por WhatsApp.
                         </Typography>
 
-                        <Box sx={{ bgcolor: 'background.paper', p: 2, borderRadius: 1, border: '1px solid', borderColor: 'divider', mb: 3 }}>
-                            <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                                Banco: Santander<br />
-                                Cuenta Corriente: 12345678-9<br />
-                                RUT: 76.543.210-K<br />
-                                Nombre: Hola Lucía SpA<br />
-                                Email: hola@holalucia.cl
-                            </Typography>
-                        </Box>
+                        {/* Package Cards */}
+                        {[
+                            {
+                                name: 'Starter',
+                                msgs: 100,
+                                price: '$9.990',
+                                coverage: 'Hasta 50 pacientes/mes',
+                                detail: 'Ideal para clínicas con 1 profesional o menos de 70 citas al mes.',
+                                color: 'text.primary',
+                            },
+                            {
+                                name: 'Standard',
+                                msgs: 300,
+                                price: '$24.990',
+                                coverage: 'Hasta 150 pacientes/mes',
+                                detail: 'Para clínicas con 1–2 profesionales y agenda activa.',
+                                color: 'primary.main',
+                            },
+                            {
+                                name: 'Pro',
+                                msgs: 600,
+                                price: '$39.990',
+                                coverage: 'Hasta 300 pacientes/mes',
+                                detail: 'Para clínicas de 2–3 profesionales con alta demanda.',
+                                color: 'success.main',
+                            },
+                        ].map((pkg) => (
+                            <Box
+                                key={pkg.name}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    border: '1px solid',
+                                    borderColor: 'divider',
+                                    borderRadius: 2,
+                                    px: 2,
+                                    py: 1.5,
+                                    mb: 1.5,
+                                    gap: 1,
+                                    flexWrap: 'wrap',
+                                }}
+                            >
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.25 }}>
+                                        <Typography variant="subtitle2" fontWeight="bold" color={pkg.color}>
+                                            {pkg.name}
+                                        </Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            · {pkg.msgs} mensajes
+                                        </Typography>
+                                    </Box>
+                                    <Typography variant="caption" color="text.secondary" display="block">
+                                        {pkg.coverage} · {pkg.detail}
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+                                    <Typography variant="subtitle1" fontWeight="bold">
+                                        {pkg.price}
+                                    </Typography>
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        color="success"
+                                        startIcon={<WhatsAppIcon fontSize="small" />}
+                                        onClick={() => {
+                                            const msg = encodeURIComponent(
+                                                `Hola, quiero recargar la bolsa ${pkg.name} (${pkg.msgs} mensajes - ${pkg.price}). Adjunto comprobante.`
+                                            );
+                                            window.open(`https://wa.me/56964264770?text=${msg}`, '_blank');
+                                        }}
+                                    >
+                                        Comprar
+                                    </Button>
+                                </Box>
+                            </Box>
+                        ))}
 
-                        <Button
-                            variant="outlined"
-                            color="success"
-                            fullWidth
-                            startIcon={<WhatsAppIcon />}
-                            onClick={() => {
-                                window.open("https://wa.me/56964264770?text=Hola,%20quiero%20recargar%20mi%20bolsa%20de%20WhatsApp.%20Adjunto%20mi%20comprobante.", "_blank");
-                            }}
-                            sx={{ mt: 'auto' }}
-                        >
-                            Enviar Comprobante
-                        </Button>
+                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                            * IVA incluido · 1 crédito = 1 mensaje WhatsApp · Confirmación + Recordatorio = 2 créditos por paciente
+                        </Typography>
                     </Card>
                 </Grid>
             </Grid>
