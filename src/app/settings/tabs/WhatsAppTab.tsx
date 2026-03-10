@@ -6,7 +6,9 @@ import {
     Switch,
     Button,
     Grid,
-    Divider
+    Divider,
+    Alert,
+    Collapse
 } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
@@ -23,6 +25,19 @@ export default function WhatsAppTab({
     whatsappQuota,
     onSave
 }: WhatsAppTabProps) {
+    const [showError, setShowError] = React.useState(false);
+
+    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isTurningOn = e.target.checked;
+        if (isTurningOn && whatsappQuota <= 0) {
+            setShowError(true);
+            // Auto hide error after 5s
+            setTimeout(() => setShowError(false), 5000);
+            return;
+        }
+        setShowError(false);
+        setWhatsappEnabled(isTurningOn);
+    };
 
     return (
         <Box>
@@ -49,10 +64,15 @@ export default function WhatsAppTab({
                             </Box>
                             <Switch
                                 checked={whatsappEnabled}
-                                onChange={(e) => setWhatsappEnabled(e.target.checked)}
+                                onChange={handleToggle}
                                 color="success"
                             />
                         </Box>
+                        <Collapse in={showError}>
+                            <Alert severity="warning" sx={{ mb: 2 }}>
+                                <strong>Saldo insuficiente:</strong> Necesitas tener créditos en tu bolsa para habilitar esta opción.
+                            </Alert>
+                        </Collapse>
                         <Divider sx={{ my: 2 }} />
                         <Box sx={{ mt: 2 }}>
                             <Button

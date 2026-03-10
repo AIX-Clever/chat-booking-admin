@@ -223,6 +223,13 @@ function SettingsContent() {
             setLoading(true);
             setError(null);
 
+            // Validation: Cannot save WhatsApp enabled without quota
+            if (whatsappEnabled && (whatsappQuota === undefined || whatsappQuota <= 0)) {
+                setError("Saldo insuficiente: Necesitas tener créditos en tu bolsa de WhatsApp para habilitar esta opción.");
+                setLoading(false);
+                return; // Stop execution
+            }
+
             const settingsObj = {
                 widgetConfig,
                 aiMode,
