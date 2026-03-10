@@ -274,12 +274,12 @@ export default function WhatsAppTab({
                                         startIcon={<WhatsAppIcon fontSize="small" />}
                                         onClick={() => {
                                             const msg = encodeURIComponent(
-                                                `Hola, quiero recargar la bolsa ${pkg.name} (${pkg.msgs} mensajes - ${pkg.price}). Adjunto comprobante.`
+                                                `Hola, quiero contratar la bolsa ${pkg.name} (${pkg.msgs} mensajes - ${pkg.price} IVA incl.). ¿Me pueden indicar los datos para la transferencia?`
                                             );
                                             window.open(`https://wa.me/56964264770?text=${msg}`, '_blank');
                                         }}
                                     >
-                                        Comprar
+                                        Solicitar
                                     </Button>
                                 </Box>
                             </Box>
