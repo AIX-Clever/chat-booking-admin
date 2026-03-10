@@ -115,6 +115,8 @@ function SettingsContent() {
     // WhatsApp State
     const [whatsappEnabled, setWhatsappEnabled] = React.useState(false);
     const [whatsappQuota, setWhatsappQuota] = React.useState(0);
+    const [whatsappTenantId, setWhatsappTenantId] = React.useState<string | undefined>(undefined);
+    const [twilioPhoneNumber, setTwilioPhoneNumber] = React.useState<string | undefined>(undefined);
 
     const fetchTenantData = React.useCallback(async () => {
         setLoading(true);
@@ -137,6 +139,8 @@ function SettingsContent() {
                 // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
                 setWhatsappQuota(tenant.whatsappQuota ?? 0);
+                if (tenant.tenantId) setWhatsappTenantId(tenant.tenantId);
+                if (tenant.twilioPhoneNumber) setTwilioPhoneNumber(tenant.twilioPhoneNumber);
 
                 if (tenant.settings) {
                     try {
@@ -368,6 +372,8 @@ function SettingsContent() {
                                 whatsappEnabled={whatsappEnabled}
                                 setWhatsappEnabled={setWhatsappEnabled}
                                 whatsappQuota={whatsappQuota}
+                                twilioPhoneNumber={twilioPhoneNumber}
+                                tenantId={whatsappTenantId}
                                 onSave={handleSaveSettings}
                             />
                         </CustomTabPanel>

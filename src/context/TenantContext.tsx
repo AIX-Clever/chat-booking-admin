@@ -11,10 +11,11 @@ export interface Tenant {
     tenantId: string;
     name: string;
     slug: string;
-    plan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE'; // Expanded based on known plans
+    plan: 'LITE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
     status: 'ACTIVE' | 'PENDING_PAYMENT' | 'SUSPENDED' | 'TRIAL' | 'CANCELLED';
     settings?: string; // JSON string
     whatsappQuota?: number;
+    twilioPhoneNumber?: string;
     createdAt: string;
 }
 

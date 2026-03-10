@@ -325,6 +325,7 @@ export const GET_TENANT = `
       billingEmail
       settings
       whatsappQuota
+      twilioPhoneNumber
     }
   }
 `;

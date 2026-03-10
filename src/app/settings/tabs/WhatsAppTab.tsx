@@ -8,14 +8,22 @@ import {
     Grid,
     Divider,
     Alert,
-    Collapse
+    Collapse,
+    Chip
 } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
+
+// The Connected App SID is injected at build time via env var
+const TWILIO_CONNECTED_APP_SID = process.env.NEXT_PUBLIC_TWILIO_CONNECTED_APP_SID || '';
 
 interface WhatsAppTabProps {
     whatsappEnabled: boolean;
     setWhatsappEnabled: (enabled: boolean) => void;
     whatsappQuota: number;
+    twilioPhoneNumber?: string;
+    tenantId?: string;
     onSave: () => void;
 }
 
@@ -23,20 +31,46 @@ export default function WhatsAppTab({
     whatsappEnabled,
     setWhatsappEnabled,
     whatsappQuota,
+    twilioPhoneNumber,
+    tenantId,
     onSave
 }: WhatsAppTabProps) {
     const [showError, setShowError] = React.useState(false);
+    const isConnected = !!twilioPhoneNumber;
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isTurningOn = e.target.checked;
         if (isTurningOn && whatsappQuota <= 0) {
             setShowError(true);
-            // Auto hide error after 5s
             setTimeout(() => setShowError(false), 5000);
             return;
         }
         setShowError(false);
         setWhatsappEnabled(isTurningOn);
+    };
+
+    const handleConnect = () => {
+        if (!TWILIO_CONNECTED_APP_SID || !tenantId) {
+            alert('Configuración de Twilio no disponible. Contacta al soporte de Hola Lucía.');
+            return;
+        }
+        // Build Twilio OAuth URL
+        const params = new URLSearchParams({
+            response_type: 'code',
+            client_id: TWILIO_CONNECTED_APP_SID,
+            state: tenantId,
+            scope: 'offline_access',
+        });
+        const twilioAuthUrl = `https://www.twilio.com/authorize/${TWILIO_CONNECTED_APP_SID}?${params.toString()}`;
+        window.location.href = twilioAuthUrl;
+    };
+
+    const handleDisconnect = () => {
+        // Clear the phone number in parent state; user must save to persist
+        // Disconnect is done by saving with empty twilioPhoneNumber in settings
+        if (window.confirm('¿Deseas desconectar tu cuenta de WhatsApp Business? Esta acción desactivará el envío de mensajes desde tu número.')) {
+            setWhatsappEnabled(false);
+        }
     };
 
     return (
@@ -49,6 +83,55 @@ export default function WhatsAppTab({
                 Configura las notificaciones de WhatsApp para tus clientes e incremente la tasa de asistencia
                 a las citas.
             </Typography>
+
+            {/* WABA Connection Status */}
+            <Card variant="outlined" sx={{ p: 3, mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                    <Box>
+                        <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 0.5 }}>
+                            Cuenta de WhatsApp Business
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Conecta tu número de WhatsApp Business para enviar recordatorios desde tu propio número.
+                        </Typography>
+                    </Box>
+                    {isConnected ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                            <Chip
+                                icon={<CheckCircleIcon />}
+                                label={twilioPhoneNumber}
+                                color="success"
+                                variant="outlined"
+                            />
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                size="small"
+                                startIcon={<LinkOffIcon />}
+                                onClick={handleDisconnect}
+                            >
+                                Desconectar
+                            </Button>
+                        </Box>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="success"
+                            startIcon={<WhatsAppIcon />}
+                            onClick={handleConnect}
+                            sx={{ whiteSpace: 'nowrap' }}
+                        >
+                            Conectar WhatsApp Business
+                        </Button>
+                    )}
+                </Box>
+                {!isConnected && (
+                    <Alert severity="info" sx={{ mt: 2 }}>
+                        Sin una cuenta conectada, los mensajes se enviarán desde el número compartido de <strong>Hola Lucía</strong>.
+                        Conecta tu WABA para enviar desde tu propio número.
+                    </Alert>
+                )}
+            </Card>
 
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
@@ -108,7 +191,7 @@ export default function WhatsAppTab({
                             mb: 3
                         }}>
                             <Typography variant="h3" color={whatsappQuota > 0 ? "success.main" : "error.main"} fontWeight="bold">
-                                {whatsappQuota}
+                                {whatsappQuota ?? 0}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 mensajes disponibles
