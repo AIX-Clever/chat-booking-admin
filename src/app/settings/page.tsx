@@ -136,7 +136,7 @@ function SettingsContent() {
             if (tenant) {
                 // if (tenant.tenantId) setTenantId(tenant.tenantId);
                 if (tenant.plan) setCurrentPlan(tenant.plan);
-                if (tenant.whatsappQuota !== undefined) setWhatsappQuota(tenant.whatsappQuota);
+                setWhatsappQuota(tenant.whatsappQuota ?? 0);
 
                 if (tenant.settings) {
                     try {
