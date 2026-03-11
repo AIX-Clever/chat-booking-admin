@@ -384,8 +384,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         </ListItemIcon>
                         <ListItemText primary="Soporte" sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
-                    <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace', display: 'block', textAlign: 'center' }}>
-                        v1.3.0
+                    <Typography variant="caption" color="text.secondary" sx={{ mt: 2, fontFamily: 'monospace' }}>
+                        v1.3.1
                     </Typography>
                 </Box>
                 <List>
