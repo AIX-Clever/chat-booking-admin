@@ -285,7 +285,7 @@ export default function WaitlistPage() {
                     title="Eliminar de Lista de Espera"
                     content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
                     onConfirm={confirmDelete}
-                    onCancel={() => setDeleteConfirmOpen(false)}
+                    onClose={() => setDeleteConfirmOpen(false)}
                     confirmText="Eliminar"
                     cancelText="Cancelar"
                     confirmColor="error"
