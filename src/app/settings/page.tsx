@@ -142,7 +142,7 @@ function SettingsContent() {
                 setWhatsappQuota(tenant.whatsappQuota ?? 0);
                 if (tenant.tenantId) setWhatsappTenantId(tenant.tenantId);
                 if (tenant.twilioPhoneNumber) setTwilioPhoneNumber(tenant.twilioPhoneNumber);
-                if (tenant.whatsappNotificationRules) setWhatsappNotificationRules(tenant.whatsappNotificationRules);
+                // Note: whatsappNotificationRules is kept as fallback but settings.notification_rules is preferred (set below after parsing)
 
                 if (tenant.settings) {
                     try {
@@ -203,6 +203,13 @@ function SettingsContent() {
                         }
                         if (settings.whatsappEnabled !== undefined) {
                             setWhatsappEnabled(settings.whatsappEnabled);
+                        }
+                        // Use settings.notification_rules as canonical source (avoids double-encoding issues in whatsappNotificationRules field)
+                        if (settings.notification_rules) {
+                            setWhatsappNotificationRules(JSON.stringify(settings.notification_rules));
+                        } else if (tenant.whatsappNotificationRules) {
+                            // Fallback: try to normalize the whatsappNotificationRules field
+                            setWhatsappNotificationRules(tenant.whatsappNotificationRules);
                         }
                     } catch (e) {
                         console.warn("Failed to parse tenant settings JSON", e);
