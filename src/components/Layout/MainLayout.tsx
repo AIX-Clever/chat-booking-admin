@@ -32,6 +32,7 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChatIcon from '@mui/icons-material/Chat';
 import PublicIcon from '@mui/icons-material/Public';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -218,6 +219,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const operationsItems = [
         { text: t('bookings'), icon: <CalendarMonthIcon />, path: '/bookings' },
         { text: t('clients'), icon: <AssignmentIndIcon />, path: '/clients' },
+        { text: 'Lista de Espera', icon: <FormatListNumberedIcon />, path: '/waitlist' },
     ];
 
     const resourcesItems = [
