@@ -16,9 +16,11 @@ import {
     TextField,
     IconButton,
     Chip,
-    Tooltip
+    Tooltip,
+    Button,
+    Alert
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { SEARCH_SERVICES } from '../../graphql/queries';
@@ -26,6 +28,7 @@ import { GET_WAITING_LIST_BY_SERVICE, REMOVE_WAITING_LIST_ENTRY } from '../../gr
 import { useTenant } from '../../context/TenantContext';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import PlanGuard from '../../components/PlanGuard';
+import WaitlistForm from '../../components/waitlist/WaitlistForm';
 
 interface WaitlistEntry {
     waitingListId: string;
@@ -52,6 +55,7 @@ export default function WaitlistPage() {
     
     const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
     const [entryToDelete, setEntryToDelete] = React.useState<WaitlistEntry | null>(null);
+    const [formOpen, setFormOpen] = React.useState(false);
     
     const { loading: tenantLoading, tenant } = useTenant();
 
@@ -70,7 +74,7 @@ export default function WaitlistPage() {
             const response: any = await client.graphql({
                 query: SEARCH_SERVICES,
                 variables: { text: '' },
-                authMode: 'userPool' // Need authenticated fetch
+                authMode: 'userPool'
             });
             const fetchedServices = response.data.searchServices || [];
             setServices(fetchedServices);
@@ -81,9 +85,9 @@ export default function WaitlistPage() {
             } else {
                 setLoading(false);
             }
-        } catch (error) {
-            console.error('Error fetching services:', error);
-            setError('Error al cargar servicios');
+        } catch (err) {
+            console.error('Error fetching services:', err);
+            setError('Error al cargar servicios. Por favor intenta nuevamente.');
             setLoading(false);
         }
     };
@@ -92,6 +96,7 @@ export default function WaitlistPage() {
         if (serviceId === 'all' || !serviceId) return;
         
         setLoading(true);
+        setError('');
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
@@ -108,9 +113,9 @@ export default function WaitlistPage() {
             waitlistData.sort((a: WaitlistEntry, b: WaitlistEntry) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
             
             setEntries(waitlistData);
-        } catch (error) {
-            console.error('Error fetching waitlist:', error);
-            setError('Error al cargar la lista de espera');
+        } catch (err) {
+            console.error('Error fetching waitlist:', err);
+            setError('Error al cargar la lista de espera. Verifica tu conexión.');
         } finally {
             setLoading(false);
         }
@@ -142,13 +147,17 @@ export default function WaitlistPage() {
             });
 
             setEntries((prev) => prev.filter(e => e.waitingListId !== entryToDelete.waitingListId));
-        } catch (error) {
-            console.error('Error removing entry:', error);
+        } catch (err) {
+            console.error('Error removing entry:', err);
             alert('Error al eliminar la entrada');
         } finally {
             setDeleteConfirmOpen(false);
             setEntryToDelete(null);
         }
+    };
+
+    const handleCreateClick = () => {
+        setFormOpen(true);
     };
 
     const getDayLabels = (days: string[] | null) => {
@@ -175,15 +184,38 @@ export default function WaitlistPage() {
         }
     };
 
+    const getStatusLabel = (status: string) => {
+        switch (status) {
+            case 'PENDING': return 'En Espera';
+            case 'CONTACTED': return 'Contactado';
+            case 'BOOKED': return 'Agendado';
+            case 'CANCELLED': return 'Cancelado';
+            default: return status; // Fallback
+        }
+    };
+
     return (
         <PlanGuard minPlan="PRO" featureName="Lista de Espera" variant="overlay">
-            <Box p={4} maxWidth="1200px" margin="0 auto">
-                <Typography variant="h4" gutterBottom fontWeight="bold">
-                    Lista de Espera ⏳
+            <Box p={3}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                    <Typography variant="h4" component="h1" fontWeight="bold">
+                        Lista de Espera
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={handleCreateClick}
+                    >
+                        Nuevo en Fila
+                    </Button>
+                </Box>
+                
+                <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 4 }}>
+                    Gestiona y visualiza a los clientes que están esperando que un turno se libere en tu agenda.
                 </Typography>
-                <Typography variant="body1" color="text.secondary" paragraph>
-                    Gestiona los clientes que están esperando un turno disponible.
-                </Typography>
+
+                {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
                 <Box mb={4} display="flex" gap={2} alignItems="center">
                     <TextField
@@ -193,8 +225,8 @@ export default function WaitlistPage() {
                         onChange={(e) => setSelectedServiceId(e.target.value)}
                         variant="outlined"
                         size="small"
-                        sx={{ minWidth: 200 }}
-                        disabled={loading || services.length === 0}
+                        sx={{ minWidth: 250 }}
+                        disabled={services.length === 0}
                     >
                         {services.length === 0 && <MenuItem value="all">Sin servicios</MenuItem>}
                         {services.map((service) => (
@@ -205,42 +237,34 @@ export default function WaitlistPage() {
                     </TextField>
                 </Box>
 
-                {error && (
-                    <Typography color="error" sx={{ mb: 2 }}>
-                        {error}
-                    </Typography>
-                )}
-
-                <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: 2, boxShadow: 3 }}>
-                    <TableContainer sx={{ maxHeight: 600 }}>
-                        <Table stickyHeader>
-                            <TableHead>
+                <TableContainer component={Paper} elevation={2} sx={{ borderRadius: 2 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow sx={{ bgcolor: 'action.hover' }}>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Fecha de Solicitud</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Cliente (ID)</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Días Preferidos</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {loading ? (
                                 <TableRow>
-                                    <TableCell sx={{ fontWeight: 'bold' }}>Fecha de Solicitud</TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold' }}>Cliente (ID)</TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold' }}>Días Preferidos</TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold', width: 100 }} align="center">Acciones</TableCell>
+                                    <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                        <CircularProgress size={30} />
+                                    </TableCell>
                                 </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {loading && (
-                                    <TableRow>
-                                        <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
-                                            <CircularProgress size={30} />
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                                {!loading && entries.length === 0 && (
-                                    <TableRow>
-                                        <TableCell colSpan={5} align="center" sx={{ py: 4 }}>
-                                            <Typography variant="body1" color="text.secondary">
-                                                No hay nadie en la lista de espera para este servicio.
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                                {!loading && entries.map((entry) => (
+                            ) : entries.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} align="center" sx={{ py: 6 }}>
+                                        <Typography variant="body1" color="textSecondary">
+                                            No hay clientes esperando por este servicio en este momento.
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                entries.map((entry) => (
                                     <TableRow key={entry.waitingListId} hover>
                                         <TableCell>
                                             {new Date(entry.createdAt).toLocaleString('es-CL', {
@@ -249,20 +273,22 @@ export default function WaitlistPage() {
                                             })}
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">{entry.clientId}</Typography>
+                                            <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                                                {entry.clientId.substring(0, 8)}...
+                                            </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body2">{getDayLabels(entry.preferredDays)}</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Chip 
-                                                label={entry.contactStatus} 
+                                                label={getStatusLabel(entry.contactStatus)} 
                                                 size="small" 
                                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                 color={getStatusColor(entry.contactStatus) as any} 
                                             />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="right">
                                             <Tooltip title="Eliminar de lista">
                                                 <IconButton 
                                                     size="small" 
@@ -274,21 +300,28 @@ export default function WaitlistPage() {
                                             </Tooltip>
                                         </TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Paper>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
 
                 <ConfirmDialog
                     open={deleteConfirmOpen}
                     title="Eliminar de Lista de Espera"
-                    content="¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer."
+                    content="¿Estás seguro de que deseas eliminar a este cliente de la lista de espera? Esta acción no se puede deshacer."
                     onConfirm={confirmDelete}
                     onClose={() => setDeleteConfirmOpen(false)}
                     confirmText="Eliminar"
                     cancelText="Cancelar"
                     confirmColor="error"
+                />
+
+                <WaitlistForm
+                    open={formOpen}
+                    onClose={() => setFormOpen(false)}
+                    onSuccess={() => fetchWaitlist(selectedServiceId)}
+                    preselectedServiceId={selectedServiceId}
                 />
             </Box>
         </PlanGuard>
