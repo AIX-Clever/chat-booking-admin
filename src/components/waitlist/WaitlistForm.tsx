@@ -13,8 +13,10 @@ import {
     Typography,
     FormGroup,
     FormControlLabel,
-    Checkbox
+    Checkbox,
+    Chip,
 } from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { ADD_TO_WAITING_LIST } from '../../graphql/waitlist-queries';
@@ -57,6 +59,8 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
     const [selectedClientId, setSelectedClientId] = useState('');
     const [selectedServiceId, setSelectedServiceId] = useState(preselectedServiceId || '');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
+    const [requestedDates, setRequestedDates] = useState<string[]>([]);
+    const [newDate, setNewDate] = useState<string>('');
     const [anyDay, setAnyDay] = useState(true);
 
     useEffect(() => {
@@ -69,6 +73,8 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
             // Reset form when closed
             setSelectedClientId('');
             setSelectedDays([]);
+            setRequestedDates([]);
+            setNewDate('');
             setAnyDay(true);
             setError(null);
         }
@@ -124,7 +130,20 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
         setAnyDay(checked);
         if (checked) {
             setSelectedDays([]);
+            setRequestedDates([]);
         }
+    };
+
+    const handleAddDate = () => {
+        if (newDate && !requestedDates.includes(newDate)) {
+            setRequestedDates([...requestedDates, newDate]);
+            setNewDate('');
+            setAnyDay(false);
+        }
+    };
+
+    const handleRemoveDate = (dateToRemove: string) => {
+        setRequestedDates(requestedDates.filter(d => d !== dateToRemove));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -151,6 +170,7 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
                 clientId: selectedClientId,
                 serviceId: selectedServiceId,
                 preferredDays: anyDay ? null : selectedDays.length > 0 ? selectedDays : null,
+                requestedDates: anyDay ? null : requestedDates.length > 0 ? requestedDates : null,
             };
 
             await client.graphql({
@@ -262,6 +282,45 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
                                         />
                                     ))}
                                 </FormGroup>
+
+                                <Typography variant="subtitle2" gutterBottom sx={{ mt: 3 }}>
+                                    Fechas Específicas (Opcional)
+                                </Typography>
+                                <Box sx={{ opacity: anyDay ? 0.5 : 1, pointerEvents: anyDay ? 'none' : 'auto' }}>
+                                    <Box display="flex" gap={1} mb={2}>
+                                        <TextField
+                                            type="date"
+                                            size="small"
+                                            value={newDate}
+                                            onChange={(e) => setNewDate(e.target.value)}
+                                            InputLabelProps={{ shrink: true }}
+                                        />
+                                        <Button 
+                                            variant="outlined" 
+                                            onClick={handleAddDate}
+                                            disabled={!newDate}
+                                            startIcon={<AddIcon />}
+                                        >
+                                            Añadir
+                                        </Button>
+                                    </Box>
+                                    <Box display="flex" gap={1} flexWrap="wrap">
+                                        {requestedDates.map((date) => (
+                                            <Chip
+                                                key={date}
+                                                label={new Date(date).toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                onDelete={() => handleRemoveDate(date)}
+                                                color="primary"
+                                                variant="outlined"
+                                            />
+                                        ))}
+                                        {requestedDates.length === 0 && !anyDay && (
+                                            <Typography variant="body2" color="textSecondary">
+                                                No hay fechas específicas seleccionadas.
+                                            </Typography>
+                                        )}
+                                    </Box>
+                                </Box>
                             </Box>
                         </Box>
                     )}

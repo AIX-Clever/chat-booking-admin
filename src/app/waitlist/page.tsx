@@ -36,6 +36,7 @@ interface WaitlistEntry {
     clientId: string;
     providerId: string | null;
     preferredDays: string[] | null;
+    requestedDates: string[] | null;
     contactStatus: string;
     createdAt: string;
     ttl: number | null;
@@ -219,6 +220,18 @@ export default function WaitlistPage() {
         return days.map(d => map[d] || d).join(', ');
     };
 
+    const formatRequestedDates = (dates: string[] | null) => {
+        if (!dates || dates.length === 0) return 'No especificadas';
+        if (dates.length === 1) {
+            return new Date(dates[0]).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' });
+        }
+        if (dates.length <= 3) {
+            return dates.map(d => new Date(d).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' })).join(', ');
+        }
+        // If more than 3, summarize
+        return `${dates.length} fechas seleccionadas`;
+    };
+
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'PENDING': return 'warning';
@@ -290,6 +303,7 @@ export default function WaitlistPage() {
                                 <TableCell sx={{ fontWeight: 'bold' }}>Cliente</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Profesional</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Días Preferidos</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Fechas Específicas</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Expira</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
@@ -298,13 +312,13 @@ export default function WaitlistPage() {
                         <TableBody>
                             {loading ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
+                                    <TableCell colSpan={8} align="center" sx={{ py: 3 }}>
                                         <CircularProgress size={30} />
                                     </TableCell>
                                 </TableRow>
                             ) : entries.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                                    <TableCell colSpan={8} align="center" sx={{ py: 6 }}>
                                         <Typography variant="body1" color="textSecondary">
                                             No hay clientes esperando por este servicio en este momento.
                                         </Typography>
@@ -331,6 +345,9 @@ export default function WaitlistPage() {
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body2">{getDayLabels(entry.preferredDays)}</Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">{formatRequestedDates(entry.requestedDates)}</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body2">

@@ -9,6 +9,7 @@ export const GET_WAITING_LIST_BY_SERVICE = `
       providerId
       clientId
       preferredDays
+      requestedDates
       contactStatus
       createdAt
       ttl
@@ -25,8 +26,10 @@ export const ADD_TO_WAITING_LIST = `
       providerId
       clientId
       preferredDays
+      requestedDates
       contactStatus
       createdAt
+      ttl
     }
   }
 `;
