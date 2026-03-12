@@ -142,7 +142,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const { tenant } = useTenant();
 
     React.useEffect(() => {
-        if (authStatus === 'unauthenticated' && pathname !== '/login') {
+        if (authStatus === 'unauthenticated' && pathname !== '/login' && pathname !== '/login/') {
             router.push('/login');
         }
     }, [authStatus, pathname, router]);
@@ -251,7 +251,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     const allMenuItems = [...operationsItems, ...resourcesItems, ...analyticsItems, ...aiConfigItems, ...widgetItems, ...systemItems];
 
-    if (pathname === '/login') {
+    if (pathname === '/login' || pathname === '/login/') {
         return (
             <>
                 <CssBaseline />
@@ -385,7 +385,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         <ListItemText primary="Soporte" sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                     <Typography variant="caption" color="text.secondary" sx={{ mt: 2, fontFamily: 'monospace' }}>
-                        v1.3.2
+                        v1.3.3
                     </Typography>
                 </Box>
                 <List>
