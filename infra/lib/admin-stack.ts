@@ -88,9 +88,9 @@ export class AdminStack extends cdk.Stack {
                         return request;
                     }
                     
-                    if (!uri.includes('.')) {
+                    if (uri.indexOf('.') === -1) {
                         /* Force trailing slash for S3 directory indexes */
-                        if (!uri.endsWith('/')) {
+                        if (uri.slice(-1) !== '/') {
                             return {
                                 statusCode: 301,
                                 statusDescription: 'Moved Permanently',
@@ -144,11 +144,13 @@ export class AdminStack extends cdk.Stack {
                     httpStatus: 403,
                     responseHttpStatus: 404,
                     responsePagePath: '/404.html',
+                    ttl: cdk.Duration.seconds(10),
                 },
                 {
                     httpStatus: 404,
                     responseHttpStatus: 404,
                     responsePagePath: '/404.html',
+                    ttl: cdk.Duration.seconds(10),
                 },
             ],
 
