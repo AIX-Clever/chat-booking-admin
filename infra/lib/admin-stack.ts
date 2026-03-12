@@ -85,16 +85,27 @@ export class AdminStack extends cdk.Stack {
                     
                     if (uri === '/') {
                         request.uri = '/index.html';
-                    } else if (uri.endsWith('/')) {
-                        request.uri = uri.slice(0, -1) + '.html';
-                    } else if (!uri.includes('.')) {
-                        request.uri = uri + '.html';
+                        return request;
+                    }
+                    
+                    if (!uri.includes('.')) {
+                        /* Force trailing slash for S3 directory indexes */
+                        if (!uri.endsWith('/')) {
+                            return {
+                                statusCode: 301,
+                                statusDescription: 'Moved Permanently',
+                                headers: {
+                                    'location': { value: uri + '/' }
+                                }
+                            };
+                        }
+                        request.uri = uri + 'index.html';
                     }
                     
                     return request;
                 }
             `),
-            comment: 'Rewrites URLs for Next.js static export (e.g., /bookings or /bookings/ → /bookings.html)',
+            comment: 'Rewrites URLs for Next.js static export with trailingSlash: true (adds /index.html and 301 redirects)',
         });
 
         // 3. Optional Custom Domain Configuration
