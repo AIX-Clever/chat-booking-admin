@@ -23,7 +23,8 @@ import {
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { SEARCH_SERVICES } from '../../graphql/queries';
+import { SEARCH_SERVICES, LIST_PROVIDERS } from '../../graphql/queries';
+import { LIST_CLIENTS } from '../../graphql/client-queries';
 import { GET_WAITING_LIST_BY_SERVICE, REMOVE_WAITING_LIST_ENTRY } from '../../graphql/waitlist-queries';
 import { useTenant } from '../../context/TenantContext';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
@@ -33,9 +34,11 @@ import WaitlistForm from '../../components/waitlist/WaitlistForm';
 interface WaitlistEntry {
     waitingListId: string;
     clientId: string;
+    providerId: string | null;
     preferredDays: string[] | null;
     contactStatus: string;
     createdAt: string;
+    ttl: number | null;
 }
 
 interface Service {
@@ -50,6 +53,10 @@ export default function WaitlistPage() {
     const [services, setServices] = React.useState<Service[]>([]);
     const [selectedServiceId, setSelectedServiceId] = React.useState<string>('all');
     
+    // Dictionaries for mapping IDs to Names
+    const [clientsMap, setClientsMap] = React.useState<Record<string, string>>({});
+    const [providersMap, setProvidersMap] = React.useState<Record<string, string>>({});
+
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState('');
     
@@ -61,34 +68,72 @@ export default function WaitlistPage() {
 
     React.useEffect(() => {
         if (!tenantLoading && tenant) {
-            fetchServices();
+            fetchInitialData();
         } else if (!tenantLoading && !tenant) {
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tenantLoading, tenant]);
 
-    const fetchServices = async () => {
+    const fetchInitialData = async () => {
+        setLoading(true);
         try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+
+            const [servicesRes, providersRes, clientsRes] = await Promise.all([
+                client.graphql({
+                    query: SEARCH_SERVICES,
+                    variables: { text: '' },
+                    authMode: 'userPool'
+                }),
+                client.graphql({
+                    query: LIST_PROVIDERS,
+                    authToken: token
+                }),
+                client.graphql({
+                    query: LIST_CLIENTS,
+                    authToken: token
+                })
+            ]);
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await client.graphql({
-                query: SEARCH_SERVICES,
-                variables: { text: '' },
-                authMode: 'userPool'
-            });
-            const fetchedServices = response.data.searchServices || [];
+            const fetchedServices = (servicesRes as any).data.searchServices || [];
             setServices(fetchedServices);
             
             if (fetchedServices.length > 0) {
                 // Default select the first service
                 setSelectedServiceId(fetchedServices[0].serviceId);
-            } else {
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fetchedProviders = (providersRes as any).data.listProviders || [];
+            const pMap: Record<string, string> = {};
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            fetchedProviders.forEach((p: any) => {
+                pMap[p.providerId] = p.name;
+            });
+            setProvidersMap(pMap);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fetchedClients = (clientsRes as any).data.listClients || [];
+            const cMap: Record<string, string> = {};
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            fetchedClients.forEach((c: any) => {
+                const given = c.names?.given?.join(' ') || '';
+                const family = c.names?.family || '';
+                cMap[c.id] = `${given} ${family}`.trim();
+            });
+            setClientsMap(cMap);
+
+        } catch (err) {
+            console.error('Error fetching initial data:', err);
+            setError('Error al cargar datos. Por favor intenta nuevamente.');
+        } finally {
+            if (selectedServiceId === 'all') {
                 setLoading(false);
             }
-        } catch (err) {
-            console.error('Error fetching services:', err);
-            setError('Error al cargar servicios. Por favor intenta nuevamente.');
-            setLoading(false);
+            // If there's a selectedServiceId, fetchWaitlist will turn off loading
         }
     };
 
@@ -242,8 +287,10 @@ export default function WaitlistPage() {
                         <TableHead>
                             <TableRow sx={{ bgcolor: 'action.hover' }}>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Fecha de Solicitud</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold' }}>Cliente (ID)</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Cliente</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Profesional</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Días Preferidos</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold' }}>Expira</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
                             </TableRow>
@@ -251,13 +298,13 @@ export default function WaitlistPage() {
                         <TableBody>
                             {loading ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                                    <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
                                         <CircularProgress size={30} />
                                     </TableCell>
                                 </TableRow>
                             ) : entries.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} align="center" sx={{ py: 6 }}>
+                                    <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
                                         <Typography variant="body1" color="textSecondary">
                                             No hay clientes esperando por este servicio en este momento.
                                         </Typography>
@@ -273,12 +320,22 @@ export default function WaitlistPage() {
                                             })}
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                                                {entry.clientId.substring(0, 8)}...
+                                            <Typography variant="body2">
+                                                {clientsMap[entry.clientId] || entry.clientId}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {entry.providerId ? (providersMap[entry.providerId] || 'Desconocido') : 'Cualquiera'}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body2">{getDayLabels(entry.preferredDays)}</Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {entry.ttl ? new Date(entry.ttl * 1000).toLocaleDateString('es-CL') : 'Sin expiración'}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Chip 
