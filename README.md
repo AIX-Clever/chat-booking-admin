@@ -71,22 +71,20 @@ Este proyecto usa **Next.js con `output: 'export'`** para generar archivos HTML 
 - **CloudFront**: CDN global con función de reescritura de URLs
 - **OAC (Origin Access Control)**: Seguridad S3-CloudFront
 
-#### CloudFront Function para Ruteo
+#### CloudFront Function para Ruteo y 404s en Next.js App Router
 
-**Problema**: Next.js genera archivos como `bookings.html`, pero las URLs son `/bookings` (sin extensión). Al refrescar (F5), CloudFront busca un archivo literal "bookings" que no existe → 404.
+**Problema**: Next.js App Router con `output: 'export'` genera rutas estáticas complejas. Si un usuario entra a `/bookings/` y refresca la página (F5), S3 y CloudFront devolverán un 404 si no están configurados para entender que deben servir `/bookings/index.html`. Además, Next.js se marea (hydration error/404 client-side) si las rutas del navegador no coinciden exactamente con la convención exportada.
 
-**Solución**: Una CloudFront Function intercepta requests y agrega `.html`:
-- `/bookings` → `/bookings.html`
-- `/` → `/index.html`
+**Solución Implementada**:
+1. **Configuración de Next.js**: Habilitar `trailingSlash: true` en `next.config.js`. Esto obliga a Next.js a exportar todas las rutas como directorios con un `index.html` dentro (ej. `out/bookings/index.html`).
+2. **CloudFront Function (Modo Router)**: Intercepta todas las peticiones entrantes:
+   - Resuelve el root (`/`) apuntando a `/index.html`.
+   - Si la ruta no tiene extensión y no termina en `/`, emite un **Redirect 301** hacia la ruta con slash al final (ej. `/bookings` → `/bookings/`).
+   - Si la ruta termina en `/`, le agrega internamente `index.html` para consultar a S3 (ej. `/bookings/` → `/bookings/index.html`).
+3. **Restricción Crítica (ES5)**: Las CloudFront Functions operan en un motor JavaScript muy restrictivo (ES5.1). El uso de métodos de ES6 como `String.prototype.includes()` o `String.prototype.endsWith()` causarán **crasheos en tiempo de ejecución** en CloudFront, resultando en errores 404 persistentes. La función debe escribirse estrictamente con métodos antiguos (ej. `indexOf` y `slice`).
+4. **Caché de Errores TTL**: Se configuró TTL de 10 segundos en los `errorResponses` del stack de CDK para evitar que los 404 accidentales queden cacheados por 5 minutos en el Edge.
 
-**Código**: Ver `infra/lib/admin-stack.ts` para detalles de implementación y consideraciones de seguridad.
-
-**Alternativas evaluadas**:
-- ❌ AWS Amplify Hosting: Rompe cohesión multi-stack CDK, más caro en tráfico alto
-- ❌ `trailingSlash: true`: Cambia URLs a `/bookings/`, no elimina necesidad de reescritura
-- ❌ S3 Static Website Hosting: Requiere bucket público (riesgo de seguridad)
-
-**Decisión**: Mantener CloudFront Function por ser la solución más segura y económica para nuestra arquitectura multi-stack.
+**Código**: Ver `infra/lib/admin-stack.ts` para la lógica exacta de la función.
 
 ### Despliegue
 
