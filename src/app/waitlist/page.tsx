@@ -78,11 +78,12 @@ export default function WaitlistPage() {
 
     const fetchInitialData = async () => {
         setLoading(true);
+        setError('');
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            const [servicesRes, providersRes, clientsRes] = await Promise.all([
+            const [servicesRes, providersRes, clientsRes] = await Promise.allSettled([
                 client.graphql({
                     query: SEARCH_SERVICES,
                     variables: { text: '' },
@@ -97,44 +98,62 @@ export default function WaitlistPage() {
                     authToken: token
                 })
             ]);
-
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const fetchedServices = (servicesRes as any).data.searchServices || [];
-            setServices(fetchedServices);
             
-            if (fetchedServices.length > 0) {
-                // Default select the first service
-                setSelectedServiceId(fetchedServices[0].serviceId);
+            // Handle Services
+            if (servicesRes.status === 'fulfilled') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fetchedServices = (servicesRes.value as any).data.searchServices || [];
+                setServices(fetchedServices);
+                if (fetchedServices.length > 0 && selectedServiceId === 'all') {
+                    setSelectedServiceId(fetchedServices[0].serviceId);
+                }
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                console.error('Error fetching services:', (servicesRes as any).reason);
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const fetchedProviders = (providersRes as any).data.listProviders || [];
-            const pMap: Record<string, string> = {};
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            fetchedProviders.forEach((p: any) => {
-                pMap[p.providerId] = p.name;
-            });
-            setProvidersMap(pMap);
+            // Handle Providers
+            if (providersRes.status === 'fulfilled') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fetchedProviders = (providersRes.value as any).data.listProviders || [];
+                const pMap: Record<string, string> = {};
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fetchedProviders.forEach((p: any) => {
+                    pMap[p.providerId] = p.name;
+                });
+                setProvidersMap(pMap);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                console.error('Error fetching providers:', (providersRes as any).reason);
+            }
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const fetchedClients = (clientsRes as any).data.listClients || [];
-            const cMap: Record<string, string> = {};
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            fetchedClients.forEach((c: any) => {
-                const given = c.names?.given?.join(' ') || '';
-                const family = c.names?.family || '';
-                cMap[c.id] = `${given} ${family}`.trim();
-            });
-            setClientsMap(cMap);
+            // Handle Clients
+            if (clientsRes.status === 'fulfilled') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fetchedClients = (clientsRes.value as any).data.listClients || [];
+                const cMap: Record<string, string> = {};
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fetchedClients.forEach((c: any) => {
+                    const givenNames = c.names?.given || [];
+                    const given = Array.isArray(givenNames) ? givenNames.join(' ') : (givenNames || '');
+                    const family = c.names?.family || '';
+                    const displayName = `${given} ${family}`.trim() || c.email || c.id;
+                    cMap[c.id] = displayName;
+                });
+                setClientsMap(cMap);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                console.error('Error fetching clients:', (clientsRes as any).reason);
+            }
 
         } catch (err) {
             console.error('Error fetching initial data:', err);
             setError('Error al cargar datos. Por favor intenta nuevamente.');
         } finally {
+            // Only stop loading here if we're not about to trigger fetchWaitlist via useEffect
             if (selectedServiceId === 'all') {
                 setLoading(false);
             }
-            // If there's a selectedServiceId, fetchWaitlist will turn off loading
         }
     };
 

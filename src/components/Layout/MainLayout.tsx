@@ -142,7 +142,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const { tenant } = useTenant();
 
     React.useEffect(() => {
+        console.log('[MainLayout] Auth status:', authStatus, 'Pathname:', pathname);
         if (authStatus === 'unauthenticated' && pathname !== '/login' && pathname !== '/login/') {
+            console.log('[MainLayout] Redirecting to /login due to unauthenticated status');
             router.push('/login');
         }
     }, [authStatus, pathname, router]);
@@ -156,15 +158,28 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     };
 
     const handleLogout = async () => {
-        await signOut();
-        router.push('/login');
+        console.log('[MainLayout] Logout button clicked');
+        try {
+            console.log('[MainLayout] Calling signOut()...');
+            await signOut();
+            console.log('[MainLayout] signOut() completed successfully');
+        } catch (error) {
+            console.error('[MainLayout] Error during signOut:', error);
+        } finally {
+            // Defensive approach: Clear storage and redirect regardless of signOut result
+            console.log('[MainLayout] Performing manual cleanup of storage...');
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            console.log('[MainLayout] Redirecting to /login using router.replace...');
+            router.replace('/login');
+        }
     };
 
 
 
     // Status Guard: If tenant exists but is not ACTIVE, block access
     if (tenant && tenant.status !== 'ACTIVE' && pathname !== '/settings') {
-        // Allow settings if they need to manage billing, but for PENDING_PAYMENT we should redirect to onboarding or show a block
         if (tenant.status === 'PENDING_PAYMENT') {
             return (
                 <Box sx={{
@@ -199,19 +214,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                             variant="ghost"
                             onClick={handleLogout}
                         >
-                            Cerrar Sesión
+                            {t('logout')}
                         </PremiumButton>
                     </Box>
                 </Box>
             );
         }
 
-        // For SUSPENDED or other statuses
         return (
-            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyItems: 'center', p: 5 }}>
+            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 5 }}>
                 <Typography variant="h4" color="error">Cuenta {tenant.status}</Typography>
                 <Typography variant="body1">Por favor contacta a soporte para más información.</Typography>
-                <PremiumButton onClick={handleLogout} sx={{ mt: 2 }}>Cerrar Sesión</PremiumButton>
+                <PremiumButton variant="ghost" onClick={handleLogout} sx={{ mt: 2 }}>
+                    {t('logout')}
+                </PremiumButton>
             </Box>
         );
     }
@@ -385,7 +401,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         <ListItemText primary="Soporte" sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                     <Typography variant="caption" color="text.secondary" sx={{ mt: 2, fontFamily: 'monospace' }}>
-                        v1.3.4
+                        v1.3.5
                     </Typography>
                 </Box>
                 <List>

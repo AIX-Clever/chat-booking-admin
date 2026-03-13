@@ -5,7 +5,6 @@ import {
     DialogContent,
     DialogActions,
     Button,
-    TextField,
     MenuItem,
     Alert,
     CircularProgress,
@@ -15,8 +14,18 @@ import {
     FormControlLabel,
     Checkbox,
     Chip,
+    InputLabel,
+    Select,
+    FormControl,
+    Paper,
 } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { Add as AddIcon } from '@mui/icons-material';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { format, isValid } from 'date-fns';
+import { es, enUS, pt } from 'date-fns/locale';
+import { useLocale } from 'next-intl';
 import { generateClient } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { ADD_TO_WAITING_LIST } from '../../graphql/waitlist-queries';
@@ -49,6 +58,7 @@ const DAYS_OF_WEEK = [
 ];
 
 export default function WaitlistForm({ open, onClose, onSuccess, preselectedServiceId }: WaitlistFormProps) {
+    const locale = useLocale();
     const [loading, setLoading] = useState(false);
     const [fetchingData, setFetchingData] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -60,7 +70,7 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
     const [selectedServiceId, setSelectedServiceId] = useState(preselectedServiceId || '');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [requestedDates, setRequestedDates] = useState<string[]>([]);
-    const [newDate, setNewDate] = useState<string>('');
+    const [newDate, setNewDate] = useState<Date | null>(null);
     const [anyDay, setAnyDay] = useState(true);
 
     useEffect(() => {
@@ -74,7 +84,7 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
             setSelectedClientId('');
             setSelectedDays([]);
             setRequestedDates([]);
-            setNewDate('');
+            setNewDate(null);
             setAnyDay(true);
             setError(null);
         }
@@ -93,72 +103,49 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
                     authMode: 'userPool'
                 }),
                 client.graphql({
-                    query: LIST_CLIENTS
+                    query: LIST_CLIENTS,
+                    authMode: 'userPool'
                 })
             ]);
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const sList = (servicesResponse as any).data.searchServices || [];
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-             const cList = (clientsResponse as any).data.listClients || [];
-
-            setServicesList(sList);
-            setClientsList(cList);
-            
-            // Auto-select if there is exactly one
-            if (sList.length === 1 && (!preselectedServiceId || preselectedServiceId === 'all')) {
-                setSelectedServiceId(sList[0].serviceId);
-            }
+            setServicesList((servicesResponse as { data: { searchServices: Service[] } }).data.searchServices || []);
+            setClientsList((clientsResponse as { data: { listClients: Client[] } }).data.listClients || []);
         } catch (err) {
             console.error('Error fetching form data:', err);
-            setError('Error al cargar datos para el formulario.');
+            setError('Error al cargar servicios o clientes');
         } finally {
             setFetchingData(false);
         }
     };
 
     const handleDayToggle = (day: string) => {
-        setAnyDay(false);
-        setSelectedDays(prev => 
-            prev.includes(day) 
-                ? prev.filter(d => d !== day) 
-                : [...prev, day]
+        setSelectedDays(prev =>
+            prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
         );
-    };
-
-    const handleAnyDayToggle = (checked: boolean) => {
-        setAnyDay(checked);
-        if (checked) {
-            setSelectedDays([]);
-            setRequestedDates([]);
-        }
+        setAnyDay(false);
     };
 
     const handleAddDate = () => {
-        if (newDate && !requestedDates.includes(newDate)) {
-            setRequestedDates([...requestedDates, newDate]);
-            setNewDate('');
-            setAnyDay(false);
+        if (newDate && isValid(newDate)) {
+            const dateStr = format(newDate, 'yyyy-MM-dd');
+            if (!requestedDates.includes(dateStr)) {
+                setRequestedDates([...requestedDates, dateStr]);
+                setNewDate(null);
+                setAnyDay(false);
+            }
         }
     };
 
-    const handleRemoveDate = (dateToRemove: string) => {
-        setRequestedDates(requestedDates.filter(d => d !== dateToRemove));
+    const handleRemoveDate = (date: string) => {
+        setRequestedDates(prev => prev.filter(d => d !== date));
+        if (requestedDates.length === 1 && selectedDays.length === 0) {
+            setAnyDay(true);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (!selectedClientId) {
-            setError('Por favor, selecciona un cliente.');
-            return;
-        }
-        
-        if (!selectedServiceId || selectedServiceId === 'all') {
-            setError('Por favor, selecciona un servicio.');
-            return;
-        }
-
         setLoading(true);
         setError(null);
 
@@ -166,16 +153,18 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
 
-            const input = {
-                clientId: selectedClientId,
-                serviceId: selectedServiceId,
-                preferredDays: anyDay ? null : selectedDays.length > 0 ? selectedDays : null,
-                requestedDates: anyDay ? null : requestedDates.length > 0 ? requestedDates : null,
-            };
-
             await client.graphql({
                 query: ADD_TO_WAITING_LIST,
-                variables: { input },
+                variables: {
+                    input: {
+                        clientId: selectedClientId,
+                        serviceId: selectedServiceId,
+                        requestedDays: anyDay ? [] : selectedDays,
+                        requestedDates: anyDay ? [] : requestedDates,
+                        status: 'PENDING',
+                        notes: ''
+                    }
+                },
                 authToken: token
             });
 
@@ -183,101 +172,107 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
             onClose();
         } catch (err: unknown) {
             console.error('Error adding to waitlist:', err);
-            // Handle AppSync authorization or validation errors
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const awsError = err as any;
-            if (awsError.errors && awsError.errors.length > 0) {
-                setError(awsError.errors[0].message);
-            } else {
-                setError('Ocurrió un error al añadir a la lista de espera.');
-            }
+            const errorMessage = err instanceof Error ? err.message : 'Error al añadir a la lista de espera';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Dialog open={open} onClose={loading ? undefined : onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>Añadir a Lista de Espera</DialogTitle>
-            
+        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             <form onSubmit={handleSubmit}>
-                <DialogContent dividers>
-                    {error && (
-                        <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
-                    )}
+                <DialogTitle sx={{ fontWeight: 'bold' }}>Añadir a Fila de Espera</DialogTitle>
+                <DialogContent>
+                    <Box display="flex" flexDirection="column" gap={3} sx={{ mt: 1 }}>
+                        {error && (
+                            <Alert severity="error" onClose={() => setError(null)}>
+                                {error}
+                            </Alert>
+                        )}
 
-                    {fetchingData ? (
-                        <Box display="flex" justifyContent="center" p={3}>
-                            <CircularProgress />
-                        </Box>
-                    ) : (
-                        <Box display="flex" flexDirection="column" gap={3}>
-                            <TextField
-                                select
-                                label="Cliente"
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Seleccionar Cliente</InputLabel>
+                            <Select
                                 value={selectedClientId}
+                                label="Seleccionar Cliente"
                                 onChange={(e) => setSelectedClientId(e.target.value)}
                                 required
-                                fullWidth
-                                variant="outlined"
+                                disabled={fetchingData}
                             >
-                                {clientsList.length === 0 && (
-                                    <MenuItem value="" disabled>No hay clientes registrados</MenuItem>
-                                )}
-                                {clientsList.map((c) => (
-                                    <MenuItem key={c.id} value={c.id}>
-                                        {c.names.given} {c.names.family}
-                                        {c.identifiers?.length > 0 && ` (${c.identifiers[0].value})`}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                                <MenuItem value=""><em>Seleccione un cliente</em></MenuItem>
+                                {clientsList.map((client) => {
+                                    const given = Array.isArray(client.names?.given) ? client.names.given.join(' ') : (client.names?.given || '');
+                                    const family = client.names?.family || '';
+                                    const email = client.contactInfo?.find(c => c.system === 'email')?.value;
+                                    const displayName = `${given} ${family}`.trim() || email || client.id;
+                                    return (
+                                        <MenuItem key={client.id} value={client.id}>
+                                            {displayName}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
 
-                            <TextField
-                                select
-                                label="Servicio"
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Servicio</InputLabel>
+                            <Select
                                 value={selectedServiceId}
+                                label="Servicio"
                                 onChange={(e) => setSelectedServiceId(e.target.value)}
                                 required
-                                fullWidth
-                                variant="outlined"
+                                disabled={fetchingData}
                             >
-                                {servicesList.length === 0 && (
-                                    <MenuItem value="" disabled>No hay servicios</MenuItem>
-                                )}
-                                {servicesList.map((s) => (
-                                    <MenuItem key={s.serviceId} value={s.serviceId}>
-                                        {s.name}
+                                <MenuItem value=""><em>Seleccione un servicio</em></MenuItem>
+                                {servicesList.map((service) => (
+                                    <MenuItem key={service.serviceId} value={service.serviceId}>
+                                        {service.name}
                                     </MenuItem>
                                 ))}
-                            </TextField>
+                            </Select>
+                        </FormControl>
 
-                            <Box>
-                                <Typography variant="subtitle2" gutterBottom>
-                                    Disponibilidad (Opcional)
+                        <Paper variant="outlined" sx={{ p: 2, bgcolor: alpha('#6366f1', 0.03), borderColor: alpha('#6366f1', 0.1) }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 2, color: 'primary.main' }}>
+                                Preferencias de Disponibilidad
+                            </Typography>
+
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={anyDay}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setAnyDay(true);
+                                                setSelectedDays([]);
+                                                setRequestedDates([]);
+                                            } else {
+                                                setAnyDay(false);
+                                            }
+                                        }}
+                                        color="primary"
+                                    />
+                                }
+                                label={<Typography variant="body2">Cualquier día de la semana</Typography>}
+                            />
+
+                            <Box sx={{ mt: 2 }}>
+                                <Typography variant="caption" color="textSecondary" display="block" mb={1}>
+                                    Días de la semana
                                 </Typography>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox 
-                                            checked={anyDay} 
-                                            onChange={(e) => handleAnyDayToggle(e.target.checked)} 
-                                            color="primary"
-                                        />
-                                    }
-                                    label="Cualquier día de la semana"
-                                />
-                                
                                 <FormGroup row sx={{ ml: 2, mt: 1, opacity: anyDay ? 0.5 : 1, pointerEvents: anyDay ? 'none' : 'auto' }}>
                                     {DAYS_OF_WEEK.map((day) => (
                                         <FormControlLabel
                                             key={day.value}
                                             control={
-                                                <Checkbox 
+                                                <Checkbox
                                                     size="small"
                                                     checked={selectedDays.includes(day.value)}
                                                     onChange={() => handleDayToggle(day.value)}
                                                 />
                                             }
-                                            label={day.label}
+                                            label={<Typography variant="body2">{day.label}</Typography>}
                                             sx={{ width: '45%' }}
                                         />
                                     ))}
@@ -287,34 +282,44 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
                                     Fechas Específicas (Opcional)
                                 </Typography>
                                 <Box sx={{ opacity: anyDay ? 0.5 : 1, pointerEvents: anyDay ? 'none' : 'auto' }}>
-                                    <Box display="flex" gap={1} mb={2}>
-                                        <TextField
-                                            type="date"
-                                            size="small"
-                                            value={newDate}
-                                            onChange={(e) => setNewDate(e.target.value)}
-                                            InputLabelProps={{ shrink: true }}
-                                        />
-                                        <Button 
-                                            variant="outlined" 
-                                            onClick={handleAddDate}
-                                            disabled={!newDate}
-                                            startIcon={<AddIcon />}
-                                        >
-                                            Añadir
-                                        </Button>
-                                    </Box>
+                                    <LocalizationProvider 
+                                        dateAdapter={AdapterDateFns} 
+                                        adapterLocale={locale === 'pt' ? pt : (locale === 'en' ? enUS : es)}
+                                    >
+                                        <Box display="flex" gap={1} mb={2} alignItems="center">
+                                            <DatePicker
+                                                label="Seleccionar Fecha"
+                                                value={newDate}
+                                                onChange={(newValue) => setNewDate(newValue)}
+                                                slotProps={{
+                                                    textField: {
+                                                        size: 'small',
+                                                        fullWidth: true
+                                                    }
+                                                }}
+                                            />
+                                            <Button 
+                                                variant="outlined" 
+                                                onClick={handleAddDate}
+                                                disabled={!newDate}
+                                                startIcon={<AddIcon />}
+                                                sx={{ height: 40 }}
+                                            >
+                                                Añadir
+                                            </Button>
+                                        </Box>
+                                    </LocalizationProvider>
                                     <Box display="flex" gap={1} flexWrap="wrap">
                                         {requestedDates.map((date) => (
                                             <Chip
                                                 key={date}
-                                                label={new Date(date).toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                label={date}
                                                 onDelete={() => handleRemoveDate(date)}
-                                                color="primary"
+                                                size="small"
                                                 variant="outlined"
                                             />
                                         ))}
-                                        {requestedDates.length === 0 && !anyDay && (
+                                        {requestedDates.length === 0 && (
                                             <Typography variant="body2" color="textSecondary">
                                                 No hay fechas específicas seleccionadas.
                                             </Typography>
@@ -322,17 +327,16 @@ export default function WaitlistForm({ open, onClose, onSuccess, preselectedServ
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    )}
+                        </Paper>
+                    </Box>
                 </DialogContent>
-                
                 <DialogActions>
                     <Button onClick={onClose} disabled={loading} color="inherit">
                         Cancelar
                     </Button>
-                    <Button 
-                        type="submit" 
-                        variant="contained" 
+                    <Button
+                        type="submit"
+                        variant="contained"
                         disabled={loading || fetchingData || !selectedClientId || !selectedServiceId || selectedServiceId === 'all'}
                     >
                         {loading ? <CircularProgress size={24} color="inherit" /> : 'Añadir a la Fila'}
