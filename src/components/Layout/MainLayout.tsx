@@ -434,13 +434,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         </ListItemButton>
                     </ListItem>
                 </List>
-                {open && (
-                    <Box sx={{ p: 2, mt: 'auto' }}>
-                        <Typography variant="caption" sx={{ opacity: 0.5 }}>
-                            v1.3.5
-                        </Typography>
-                    </Box>
-                )}
+                <Box sx={{ p: 2, mt: 'auto', textAlign: 'center' }}>
+                    <Typography variant="caption" sx={{ opacity: 0.5 }}>
+                        v1.3.5
+                    </Typography>
+                </Box>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
