@@ -137,6 +137,7 @@ export default function ProvidersPage() {
 
     // Tab State
     const [tabValue, setTabValue] = React.useState(0);
+    const [loading, setLoading] = React.useState(true);
 
     // Plan Enforcement
     const planFeatures = usePlanFeatures();
@@ -190,9 +191,22 @@ export default function ProvidersPage() {
     };
 
     React.useEffect(() => {
-        fetchProviders();
-        fetchServices();
-        fetchTenantId();
+        const fetchAllData = async () => {
+            setLoading(true);
+            try {
+                await Promise.allSettled([
+                    fetchProviders(),
+                    fetchServices(),
+                    fetchTenantId()
+                ]);
+            } catch (error) {
+                console.error('Error fetching initial data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAllData();
     }, []);
 
     const fetchTenantId = async () => {
@@ -579,89 +593,104 @@ export default function ProvidersPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredProviders.map((row) => (
-                                <TableRow key={row.id} hover>
-                                    <TableCell>
-                                        <Stack direction="row" alignItems="center" spacing={2}>
-                                            <Avatar alt={row.name} src={row.photoUrl} >{row.name.charAt(0)}</Avatar>
-                                            <Box>
-                                                <Typography variant="subtitle2" noWrap>
-                                                    {row.name}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 200 }} noWrap>
-                                                    {row.bio}
-                                                </Typography>
-                                                <Typography variant="caption" display="block" color="text.disabled" sx={{ fontSize: '0.65rem' }}>
-                                                    ID: {row.id}
-                                                </Typography>
-                                            </Box>
-                                        </Stack>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Stack direction="row" spacing={1}>
-                                            {row.serviceIds.length > 0 ? (
-                                                <>
-                                                    <Chip label={t('servicesCount', { count: row.serviceIds.length })} size="small" variant="outlined" />
-                                                </>
-                                            ) : (
-                                                <Typography variant="caption" color="text.secondary">No services</Typography>
-                                            )}
-                                        </Stack>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Stack direction="column" spacing={0.5}>
-                                            {row.aiDrivers.traits.length > 0 && (
-                                                <Typography variant="caption" color="text.secondary">
-                                                    {row.aiDrivers.traits.slice(0, 2).join(', ')}{row.aiDrivers.traits.length > 2 ? '...' : ''}
-                                                </Typography>
-                                            )}
-                                            {row.aiDrivers.specialties.length > 0 && (
-                                                <Typography variant="caption" color="primary" sx={{ opacity: 0.8 }}>
-                                                    {row.aiDrivers.specialties.slice(0, 1).join(', ')}{row.aiDrivers.specialties.length > 1 ? '...' : ''}
-                                                </Typography>
-                                            )}
-                                        </Stack>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            variant="outlined"
-                                            size="small"
-                                            onClick={() => handleCopyLink(row.slug)}
-                                            disabled={!row.slug}
-                                            startIcon={<LinkIcon />}
-                                            sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
-                                        >
-                                            {row.slug ? 'Copiar Link' : 'Sin Link'}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell>{row.timezone}</TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={row.active ? t('status.active') : t('status.inactive')}
-                                            color={row.active ? 'success' : 'default'}
-                                            size="small"
-                                            variant="filled"
-                                            sx={{ borderRadius: 1 }}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
-                                            <EditIcon fontSize="small" />
-                                        </IconButton>
-                                        <IconButton size="small" onClick={() => handleDelete(row.id, row.name)} color="error">
-                                            <DeleteIcon fontSize="small" />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                            {filteredProviders.length === 0 && (
+                            {loading ? (
                                 <TableRow>
-                                    <TableCell colSpan={6} align="center" sx={{ py: 3 }}>
-                                        <Typography variant="body1" color="text.secondary">
-                                            {t('noProvidersFound')}
-                                        </Typography>
+                                    <TableCell colSpan={7} align="center" sx={{ py: 5 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                                            <CircularProgress size={40} />
+                                            <Typography variant="body2" color="text.secondary">
+                                                {tCommon('loading')}...
+                                            </Typography>
+                                        </Box>
                                     </TableCell>
                                 </TableRow>
+                            ) : (
+                                <>
+                                    {filteredProviders.map((row) => (
+                                        <TableRow key={row.id} hover>
+                                            <TableCell>
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    <Avatar alt={row.name} src={row.photoUrl} >{row.name.charAt(0)}</Avatar>
+                                                    <Box>
+                                                        <Typography variant="subtitle2" noWrap>
+                                                            {row.name}
+                                                        </Typography>
+                                                        <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 200 }} noWrap>
+                                                            {row.bio}
+                                                        </Typography>
+                                                        <Typography variant="caption" display="block" color="text.disabled" sx={{ fontSize: '0.65rem' }}>
+                                                            ID: {row.id}
+                                                        </Typography>
+                                                    </Box>
+                                                </Stack>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Stack direction="row" spacing={1}>
+                                                    {row.serviceIds.length > 0 ? (
+                                                        <>
+                                                            <Chip label={t('servicesCount', { count: row.serviceIds.length })} size="small" variant="outlined" />
+                                                        </>
+                                                    ) : (
+                                                        <Typography variant="caption" color="text.secondary">No services</Typography>
+                                                    )}
+                                                </Stack>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Stack direction="column" spacing={0.5}>
+                                                    {row.aiDrivers.traits.length > 0 && (
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            {row.aiDrivers.traits.slice(0, 2).join(', ')}{row.aiDrivers.traits.length > 2 ? '...' : ''}
+                                                        </Typography>
+                                                    )}
+                                                    {row.aiDrivers.specialties.length > 0 && (
+                                                        <Typography variant="caption" color="primary" sx={{ opacity: 0.8 }}>
+                                                            {row.aiDrivers.specialties.slice(0, 1).join(', ')}{row.aiDrivers.specialties.length > 1 ? '...' : ''}
+                                                        </Typography>
+                                                    )}
+                                                </Stack>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="outlined"
+                                                    size="small"
+                                                    onClick={() => handleCopyLink(row.slug)}
+                                                    disabled={!row.slug}
+                                                    startIcon={<LinkIcon />}
+                                                    sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
+                                                >
+                                                    {row.slug ? 'Copiar Link' : 'Sin Link'}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>{row.timezone}</TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={row.active ? t('status.active') : t('status.inactive')}
+                                                    color={row.active ? 'success' : 'default'}
+                                                    size="small"
+                                                    variant="filled"
+                                                    sx={{ borderRadius: 1 }}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <IconButton size="small" onClick={() => handleOpen(row)} color="primary">
+                                                    <EditIcon fontSize="small" />
+                                                </IconButton>
+                                                <IconButton size="small" onClick={() => handleDelete(row.id, row.name)} color="error">
+                                                    <DeleteIcon fontSize="small" />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {filteredProviders.length === 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
+                                                <Typography variant="body1" color="text.secondary">
+                                                    {t('noProvidersFound')}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </>
                             )}
                         </TableBody>
                     </Table>
