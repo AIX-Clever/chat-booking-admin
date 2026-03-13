@@ -115,7 +115,7 @@ export default function PlanGuard({
                         alignItems: 'flex-start',
                         justifyContent: 'center',
                         zIndex: 1000,
-                        pt: '4vh', // Position below AppBar, more subtle
+                        pt: '1vh', // Position below AppBar, more subtle
                         overflowY: 'auto'
                     }}>
                         {upgradeCard}
