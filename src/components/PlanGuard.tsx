@@ -114,7 +114,7 @@ export default function PlanGuard({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        zIndex: 1300
+                        zIndex: 1000
                     }}>
                         {upgradeCard}
                     </Box>
