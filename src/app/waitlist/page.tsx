@@ -79,6 +79,7 @@ export default function WaitlistPage() {
     const fetchInitialData = async () => {
         setLoading(true);
         setError('');
+        let finalServiceId = selectedServiceId;
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken?.toString();
@@ -100,7 +101,6 @@ export default function WaitlistPage() {
             ]);
             
             // Handle Services
-            let finalServiceId = selectedServiceId;
             if (servicesRes.status === 'fulfilled') {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fetchedServices = (servicesRes.value as any).data.searchServices || [];
