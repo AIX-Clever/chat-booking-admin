@@ -100,12 +100,14 @@ export default function WaitlistPage() {
             ]);
             
             // Handle Services
+            let finalServiceId = selectedServiceId;
             if (servicesRes.status === 'fulfilled') {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fetchedServices = (servicesRes.value as any).data.searchServices || [];
                 setServices(fetchedServices);
                 if (fetchedServices.length > 0 && selectedServiceId === 'all') {
-                    setSelectedServiceId(fetchedServices[0].serviceId);
+                    finalServiceId = fetchedServices[0].serviceId;
+                    setSelectedServiceId(finalServiceId);
                 }
             } else {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -150,8 +152,7 @@ export default function WaitlistPage() {
             console.error('Error fetching initial data:', err);
             setError('Error al cargar datos. Por favor intenta nuevamente.');
         } finally {
-            // Only stop loading here if we're not about to trigger fetchWaitlist via useEffect
-            if (selectedServiceId === 'all') {
+            if (finalServiceId === 'all') {
                 setLoading(false);
             }
         }
