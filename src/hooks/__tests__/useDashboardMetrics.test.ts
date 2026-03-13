@@ -2,22 +2,23 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useDashboardMetrics, usePlanUsage } from '../useDashboardMetrics';
 import { generateClient } from 'aws-amplify/api';
 
-// Mock amplify/api
-jest.mock('aws-amplify/api', () => ({
-    generateClient: jest.fn(() => ({
+jest.mock('aws-amplify/api', () => {
+    const mockClient = {
         graphql: jest.fn(),
-    })),
-}));
+    };
+    return {
+        generateClient: jest.fn(() => mockClient),
+        mockClient // Export for test usage if needed, but we'll use generateClient().graphql
+    };
+});
 
 // Mock amplify/auth
 jest.mock('aws-amplify/auth', () => ({
     getCurrentUser: jest.fn().mockResolvedValue({ userId: 'u1' }),
 }));
 
-const getMockedClient = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return generateClient() as any;
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getMockedClient = () => (generateClient() as any).mockClient || generateClient();
 
 describe('useDashboardMetrics', () => {
     beforeEach(() => {

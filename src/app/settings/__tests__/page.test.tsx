@@ -15,23 +15,26 @@ jest.mock('../../../context/TenantContext', () => ({
     }),
 }));
 
-// Mock sub-tabs
-const IdentityTab = () => <div data-testid="identity-tab">IdentityTab</div>;
-IdentityTab.displayName = 'IdentityTab';
-const AiConfigTab = () => <div data-testid="ai-tab">AiConfigTab</div>;
-AiConfigTab.displayName = 'AiConfigTab';
-const ComplianceTab = () => <div data-testid="compliance-tab">ComplianceTab</div>;
-ComplianceTab.displayName = 'ComplianceTab';
-const BillingTab = () => <div data-testid="billing-tab">BillingTab</div>;
-BillingTab.displayName = 'BillingTab';
-const ApiKeysTab = () => <div data-testid="keys-tab">ApiKeysTab</div>;
-ApiKeysTab.displayName = 'ApiKeysTab';
-
-jest.mock('../tabs/IdentityTab', () => IdentityTab);
-jest.mock('../tabs/AiConfigTab', () => AiConfigTab);
-jest.mock('../tabs/ComplianceTab', () => ComplianceTab);
-jest.mock('../tabs/BillingTab', () => BillingTab);
-jest.mock('../tabs/ApiKeysTab', () => ApiKeysTab);
+jest.mock('../tabs/IdentityTab', () => {
+    const mockIdentityTab = () => <div data-testid="identity-tab">IdentityTab</div>;
+    mockIdentityTab.displayName = 'IdentityTab';
+    return mockIdentityTab;
+});
+jest.mock('../tabs/AiConfigTab', () => {
+    const mockAiConfigTab = () => <div data-testid="ai-tab">AiConfigTab</div>;
+    mockAiConfigTab.displayName = 'AiConfigTab';
+    return mockAiConfigTab;
+});
+jest.mock('../tabs/BillingTab', () => {
+    const mockBillingTab = () => <div data-testid="billing-tab">BillingTab</div>;
+    mockBillingTab.displayName = 'BillingTab';
+    return mockBillingTab;
+});
+jest.mock('../tabs/ApiKeysTab', () => {
+    const mockApiKeysTab = () => <div data-testid="keys-tab">ApiKeysTab</div>;
+    mockApiKeysTab.displayName = 'ApiKeysTab';
+    return mockApiKeysTab;
+});
 
 describe('SettingsPage', () => {
     it('renders and switches tabs', async () => {

@@ -87,7 +87,7 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
             }
         });
 
-        return () => hubListener();
+        return hubListener;
     }, []);
 
     return (

@@ -7,12 +7,19 @@ import { Hub } from 'aws-amplify/utils';
 
 // Mock Amplify
 jest.mock('aws-amplify/auth');
-jest.mock('aws-amplify/api', () => ({
-    generateClient: jest.fn(() => ({
+jest.mock('aws-amplify/api', () => {
+    const mockClient = {
         graphql: jest.fn()
-    }))
+    };
+    return {
+        generateClient: jest.fn(() => mockClient)
+    };
+});
+jest.mock('aws-amplify/utils', () => ({
+    Hub: {
+        listen: jest.fn(() => jest.fn())
+    }
 }));
-jest.mock('aws-amplify/utils');
 
 const TestComponent = () => {
     const { tenant, loading } = useTenant();

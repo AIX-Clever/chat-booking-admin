@@ -22,10 +22,11 @@ jest.mock('../../../components/common/ToastContext', () => ({
     useToast: () => ({ showToast: jest.fn() }),
 }));
 
-// Mock components that might be problematic
-const ConfirmDialog = () => <div data-testid="confirm-dialog">ConfirmDialog</div>;
-ConfirmDialog.displayName = 'ConfirmDialog';
-jest.mock('../../../components/common/ConfirmDialog', () => ConfirmDialog);
+jest.mock('../../../components/common/ConfirmDialog', () => {
+    const mockConfirmDialog = () => <div data-testid="confirm-dialog">ConfirmDialog</div>;
+    mockConfirmDialog.displayName = 'ConfirmDialog';
+    return mockConfirmDialog;
+});
 
 // Mock amplify
 jest.mock('aws-amplify/api', () => ({
@@ -34,7 +35,7 @@ jest.mock('aws-amplify/api', () => ({
             data: {
                 searchServices: [],
                 listCategories: [],
-                listRooms: { listRooms: [] }
+                listRooms: []
             }
         }),
     })),

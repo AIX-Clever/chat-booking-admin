@@ -18,14 +18,16 @@ jest.mock('next/navigation', () => ({
 jest.mock('aws-amplify/auth', () => ({
     signIn: jest.fn(),
     fetchAuthSession: jest.fn().mockResolvedValue({}),
+    getCurrentUser: jest.fn().mockRejectedValue(new Error('No user')),
 }));
 
 describe('LoginPage', () => {
     it('renders correctly', async () => {
         render(<LoginPage />);
+        // Use more stable data-testids
         await waitFor(() => {
-            // LoginPage usually has a "password" field or a button
-            expect(screen.queryByRole('button') || screen.queryByRole('textbox') || screen.queryByLabelText(/password/i)).not.toBeNull();
+            expect(screen.getByTestId('email-input')).toBeInTheDocument();
+            expect(screen.getByTestId('password-input')).toBeInTheDocument();
         }, { timeout: 10000 });
     }, 15000);
 });

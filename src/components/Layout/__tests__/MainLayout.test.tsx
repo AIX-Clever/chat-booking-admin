@@ -87,6 +87,7 @@ const renderWithTheme = (ui: React.ReactElement) => {
 describe('MainLayout component', () => {
     const mockSignOut = jest.fn();
     const mockPush = jest.fn();
+    const mockReplace = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -95,7 +96,8 @@ describe('MainLayout component', () => {
             signOut: mockSignOut
         });
         (useRouter as jest.Mock).mockReturnValue({
-            push: mockPush
+            push: mockPush,
+            replace: mockReplace
         });
         (usePathname as jest.Mock).mockReturnValue('/dashboard');
         (useTenant as jest.Mock).mockReturnValue({

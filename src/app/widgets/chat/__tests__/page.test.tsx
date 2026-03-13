@@ -8,10 +8,11 @@ jest.mock('next-intl', () => ({
     useTranslations: () => (key: string) => key,
 }));
 
-// Mock PlanGuard
-const PlanGuard = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-PlanGuard.displayName = 'PlanGuard';
-jest.mock('../../../../components/PlanGuard', () => PlanGuard);
+jest.mock('../../../../components/PlanGuard', () => {
+    const mockPlanGuard = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+    mockPlanGuard.displayName = 'PlanGuard';
+    return mockPlanGuard;
+});
 
 // Mock TenantContext
 jest.mock('../../../../context/TenantContext', () => ({
@@ -33,9 +34,11 @@ jest.mock('aws-amplify/auth', () => ({
 }));
 
 // Mock WidgetCustomizer
-const WidgetCustomizer = () => <div data-testid="widget-customizer">WidgetCustomizer</div>;
-WidgetCustomizer.displayName = 'WidgetCustomizer';
-jest.mock('../components/WidgetCustomizer', () => WidgetCustomizer);
+jest.mock('../components/WidgetCustomizer', () => {
+    const mockWidgetCustomizer = () => <div data-testid="widget-customizer">WidgetCustomizer</div>;
+    mockWidgetCustomizer.displayName = 'WidgetCustomizer';
+    return mockWidgetCustomizer;
+});
 
 describe('WebIntegrationPage', () => {
     it('renders correctly', async () => {

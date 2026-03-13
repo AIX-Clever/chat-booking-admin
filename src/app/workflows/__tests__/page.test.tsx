@@ -6,10 +6,11 @@ jest.mock('next-intl', () => ({
     useTranslations: () => (key: string) => key,
 }));
 
-// Mock PlanGuard
-const PlanGuard = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-PlanGuard.displayName = 'PlanGuard';
-jest.mock('../../../components/PlanGuard', () => PlanGuard);
+jest.mock('../../../components/PlanGuard', () => {
+    const mockPlanGuard = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+    mockPlanGuard.displayName = 'PlanGuard';
+    return mockPlanGuard;
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockGraphql = jest.fn<any, any[]>();

@@ -21,20 +21,20 @@ jest.mock('aws-amplify/auth', () => ({
     fetchAuthSession: jest.fn(),
 }));
 
-// Mock window.location correctly for JSDOM
-const originalLocation = window.location;
-
 describe('OnboardingPage', () => {
+    let originalLocation: Location;
+
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     beforeAll(() => {
-        delete (window as unknown as Record<string, unknown>).location;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.location = { ...originalLocation, href: '' } as any;
+        originalLocation = window.location;
+        delete (window as any).location;
+        (window as any).location = new URL('http://localhost');
     });
 
     afterAll(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.location = originalLocation as any;
+        (window as any).location = originalLocation;
     });
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     it('renders correctly', () => {
         render(<OnboardingPage />);
